@@ -1,40 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
     <link rel="icon" href="/3.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles/login.css">
 
 </head>
-<body>
-    <div class="banner">
-        <img src="https://sincomerciariosavare.org.br/wp-content/uploads/2020/05/senai-scaled.jpg" alt="">
-    </div>
-    <div class="campo-login">
-        <div class="titulo-login">
-            <button class="btn-login">LOGIN</button>
-        </div>
-        <form action="/login" method="POST">
-            <div class="form-login">
-                <label for="rn">Codigo RN | Email</label>
-                <input type="text" id="rn" name="rn" placeholder="Codigo SN | Email" required>
-            </div>
-            <div class="form-login">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-            </div>
-            <div class="esqueceu-senha">
-                <a href="#" class="password">Esqueceu a senha?</a>
-            </div>
-            <button type="submit">LOGIN</button>
-        </form> 
-        <p>Ou</p>
-        <div class="primeiro_login">
-            <a href="{{ url_for('primeiro_login') }}" class="button color">Primeiro Login?</a>
 
+<body>
+    <!-- Seção do banner -->
+    <section class="login">
+
+        <div class="banner">
+            <!-- Imagem de banner com formato WebP, usada para exibir uma imagem na parte superior da página -->
+            <img src="/static/img/banner.webp" alt="">
         </div>
-    </div>
+
+        <!-- Seção de login -->
+
+        <div class="campo-login">
+            <!-- Div para o título da área de login, que contém um botão para acessar a página de login -->
+
+            <div class="form-login">
+                <div class="titulo-login">
+                    <!-- Botão que pode ser usado para redirecionar ou abrir a área de login -->
+                    <h3>LOGIN</h3>
+                </div>
+                <!-- Formulário de login -->
+                <form action="/login" method="POST">
+                    <!-- Campo de entrada para o código RN ou email -->
+                    <div class="form-login">
+                        <label for="rn">Codigo RN | Email</label>
+                        <!-- Campo de texto para inserir o código RN ou email -->
+                        <input type="text" id="rn" name="rn" placeholder="Codigo SN | Email" required>
+                    </div>
+
+                    <!-- Campo de entrada para a senha -->
+                    <div class="form-login">
+                        <label for="password">Senha</label>
+                        <!-- Campo de senha para inserir a senha do usuário -->
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+                    </div>
+
+                    <!-- Link para recuperação de senha -->
+                    <div class="esqueceu-senha">
+                        <a href="#" class="password">Esqueceu a senha?</a>
+                    </div>
+
+                    <!-- Botão de submissão do formulário -->
+                    <button class="btn-login" type="submit">LOGIN</button>
+                </form>
+                
+                <!-- Seção para o primeiro login, que oferece um link para novos usuários -->
+                <div class="primeiro-login">
+                    <!-- Link para a página de primeiro login, com uma URL gerada dinamicamente -->
+                    <a href="{{ url_for('primeiro_login') }}" class="button color">Primeiro Login?</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </body>
+
 </html>
