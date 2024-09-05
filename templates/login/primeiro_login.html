@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/styles/primeirologin.css">
     <link rel="icon" href="{{ url_for('static', filename='2.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -12,16 +12,24 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    
+    <div class="botao-voltar">
+        <a href="javascript:history.back()"> <i class="fas fa-arrow-left"></i> Voltar</a>
+    </div>
+
+    <section class="primeiro-login">
+
+        <div class="banner">
+            <!-- Imagem de banner com formato WebP, usada para exibir uma imagem na parte superior da página -->
+            <img src="/static/img/fotoprimeirologin.jpg" alt="">
+        </div>
+
         <div class="login">
             <div class="header">
-                <img src="{{ url_for('static', filename='2.png') }}" alt="Superlist Logo" class="logo">
-                <h1>Entre no nosso sistema de almoxarifado</h1>
+                <img src="{{ url_for('static', filename='2.png') }}" alt="Superlist Logo" class="logo">  
+                <h1>Primeiro Login</h1>
 
             </div>
-
-
-            
             <form action="{{ url_for('primeiro_login') }}" method="POST">  
                 <div class="inputs">
 
@@ -54,6 +62,7 @@
                     </select>
                     
                 </div>
+        
 
                 <div class="campo-input">
                     <input type="password" id="password" name="password" placeholder="Password" required>
@@ -67,10 +76,10 @@
             </form>
         </div>
 
-    </div>
-    <div class="back-button">
-        <a href="javascript:history.back()"> <i class="fas fa-arrow-left"></i> Voltar</a>
-    </div>
+  
+
+
+
     <script>
         const togglePassword = document.querySelector('.toggle-password');
         const passwordInput = document.getElementById('password');
@@ -85,5 +94,8 @@
 
 
     </script>
+</section>
+
+
 </body>
 </html>

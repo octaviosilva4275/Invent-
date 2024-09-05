@@ -1,0 +1,61 @@
+/* Reset básico para garantir uma aparência consistente */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+}
+
+.primeiro-login {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente dentro da altura disponível */
+    height: 100%; /* Altura total da tela */
+    box-sizing: border-box; /* Inclui padding e borda na altura total */
+}
+
+.login{
+   width: 30%;
+   height: 100%;
+    margin: auto;
+}
+.header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner{
+    width: 70%;
+    height: 100%;
+}
+
+.banner img{
+    width: 100%;
+    height: 100%;
+}
+
+
+.right-aligned-form h1 {
+    margin-top: 0;
+}
+
+.campo-input {
+    margin-bottom: 15px;
+}
+
+.campo-input label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.campo-input input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.botao-voltar{
+    position: absolute;
+}
