@@ -119,7 +119,6 @@ body, html {
     content: "\f06e";
     position: relative;
 }
-
 .btn-entrar {
     display: flex;
     justify-content: center;
@@ -131,10 +130,17 @@ body, html {
     background-color: rgba(0, 126, 180, 1);
     color: white;
     border-radius: 5px;
-    margin: 30px auto 0; /* Centraliza o botão no seu contêiner */ 
+    margin: 30px auto 0;
     border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Adiciona transição suave */
 }
 
+.btn-entrar:hover {
+    background-color: rgba(0, 100, 150, 1); /* Cor de fundo ao passar o mouse */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+}
+
+    
 
 /* Seção de login com imagem de fundo e centralização */
 .primeiro-login {
