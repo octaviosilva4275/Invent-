@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Material</title>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+
+
+    <form action="{{ url_for('cadastro_material') }}" method="POST">
+        <h2>Cadastro de Material</h2>
+        <div class="inputs">
+            <label for="descricao">Descrição:</label>
+            <input type="text" id="descricao" name="descricao" placeholder="Ex: Caneta esferográfica azul" required><br><br>
+        </div>
+
+        <div class="inputs">
+            <label for="categoria">Categoria:</label>
+            <select id="categoria" name="categoria" required>
+                <option value="consumiveis">Consumíveis</option>
+                <option value="ferramentas">Ferramentas</option>
+                <option value="equipamentos">Equipamentos</option>
+            </select><br><br>
+        </div>
+
+        <div class="inputs">
+            <label for="localizacao">Localização:</label>
+            <input type="text" id="localizacao" name="localizacao" placeholder="Ex: A1"><br><br>
+        </div>
+
+        <div class="inputs">
+            <label for="estoque_minimo">Estoque Mínimo:</label>
+            <input type="number" id="estoque_minimo" name="estoque_minimo" min="0" placeholder="Ex: 10"><br><br>
+        </div>
+
+        <div class="inputs">
+            <label for="estoque_maximo">Estoque Máximo:</label>
+            <input type="number" id="estoque_maximo" name="estoque_maximo" min="0" placeholder="Ex: 100"><br><br>
+        </div>
+
+
+
+        <button type="submit">Cadastrar</button>
+    </form>
+
+</body>
+</html>
