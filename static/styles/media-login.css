@@ -7,6 +7,14 @@
         width: 100%; /* Ocupa toda a largura disponível */
         height: 100%; /* Ocupa toda a altura disponível */
     }
+
+    .esqueceu-senha a{
+        font-size: 15px; /* Diminui a fonte */
+    }
+
+    .primeiro-login a{
+        font-size: 15px; /* Diminui a fonte */
+    }
 }
 
 @media (max-width: 768px) {
@@ -24,5 +32,13 @@
         width: 70%; /* Ajusta a largura do botão */
         font-size: 14px; /* Reduz o tamanho da fonte do botão */
         padding: 8px 16px; /* Ajusta o preenchimento do botão */
+    }
+
+    .esqueceu-senha a{
+        font-size: 15px;
+    }
+
+    .primeiro-login a{
+        font-size: 15px;
     }
 }

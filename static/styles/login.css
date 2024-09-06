@@ -20,6 +20,7 @@ html {
 /* Estilos para a classe de login */
 .login {
     display: flex;  /* Define o layout flexível */
+    flex-direction: row-reverse; /* Inverte a ordem dos elementos */
     width: 100vw;  /* Ocupa a largura total da tela */
     height: 100vh;  /* Ocupa a altura total da tela */
 }
