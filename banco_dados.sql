@@ -12,7 +12,7 @@ FLUSH PRIVILEGES;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    rn VARCHAR(100) NOT NULL UNIQUE,
+    sn VARCHAR(100) NOT NULL UNIQUE,
     nome VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     senha VARCHAR(100),
@@ -83,7 +83,7 @@ INSERT INTO lembretes (destinatario, descricao, data_lembrete)
 VALUES ('João Silva', 'Reunião de equipe às 14h', '2024-08-03'); 
 
 -- Inserção de exemplo para tabela de usuários
-INSERT INTO users (rn, nome, email, senha, cargo) VALUES 
+INSERT INTO users (sn, nome, email, senha, cargo) VALUES 
 ('11', 'Admin', 'admin@example.com', 'senha123', 'admin'),
 ('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario');
 
