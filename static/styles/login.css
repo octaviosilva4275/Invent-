@@ -20,19 +20,33 @@ html {
 /* Estilos para a classe de login */
 .login {
     display: flex;  /* Define o layout flexível */
-    flex-direction: row-reverse; /* Inverte a ordem dos elementos */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente */
     width: 100vw;  /* Ocupa a largura total da tela */
     height: 100vh;  /* Ocupa a altura total da tela */
+    position: relative;  /* Necessário para o overlay do banner */
 }
 
 /* Estilos para a área de banner */
 .banner {
-    width: 70%;  /* Define a largura do banner em 70% */
+    position: absolute;  /* Ocupa a tela toda, sendo "absoluto" dentro do .login */
+    top: 0;
+    left: 0;
+    width: 100%;  /* Ocupa 100% da largura */
+    height: 100%;  /* Ocupa 100% da altura */
+    z-index: -1;  /* Fica atrás do campo de login */
+    background-image: linear-gradient(rgba(32, 32, 32, 0.8), rgba(34, 34, 34, 0.8)), url(/static/img/banner.webp);
+    background-position: center center;
+    background-size:cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
 }
 
 .banner img {
     width: 100%;  /* Imagem ocupa toda a largura */
     height: 100%;  /* Imagem ocupa toda a altura */
+    object-fit: cover;  /* Garante que a imagem cubra toda a área */
+    z-index: -2;  /* Fica atrás do overlay transparente */
 }
 
 /* Estilos para o campo de login */
@@ -41,28 +55,36 @@ html {
     justify-content: center;  /* Centraliza horizontalmente */
     align-items: center;  /* Centraliza verticalmente */
     background-color: rgba(177, 196, 204, 1);  /* Cor de fundo */
-    width: 30%;  /* Ocupa 30% da largura */
-    height: 100%;  /* Ocupa toda a altura */
+    padding: 50px;  /* Adiciona espaçamento interno */
+    border-radius: 8px;  /* Bordas arredondadas */
 }
 
 /* Estilos do formulário de login */
 .form-login {
-    margin-bottom: 15px;  /* Margem inferior */
+    margin-bottom: 50px;  /* Margem inferior */
     text-align: left;  /* Alinhamento do texto à esquerda */
     width: 32rem;  /* Largura fixa para o formulário */
 }
 
-/* Título do login */
+/* Título do login com logo */
 .titulo-login {
     display: flex;  /* Layout flexível */
-    align-items: center;  /* Alinha ao centro verticalmente */
-    justify-content: center;  /* Alinha ao centro horizontalmente */
+    align-items: center;  /* Alinha verticalmente ao centro */
+    justify-content: center;  /* Centraliza horizontalmente */
+    padding-right: 70px;
+}
+
+.titulo-login img {
+    width: 90px;
+    height: 90px;
+    margin-right: 10px;  /* Espaçamento à direita da logo */
 }
 
 .titulo-login h3 {
     font-size: 24px;  /* Tamanho da fonte do título */
-    margin-bottom: 30px;  /* Margem inferior */
+    margin-bottom: 0;  /* Remove a margem inferior */
 }
+
 
 /* Oculta os rótulos dos inputs */
 .form-login label {
@@ -102,6 +124,12 @@ html {
     border-radius: 5px;  /* Bordas arredondadas */
     margin: 30px auto 0;  /* Centraliza o botão e adiciona margem */
 }
+
+.btn-login:hover{
+    background-color:  rgba(0, 100, 150, 1);
+    transform: scale(1.05);
+}
+
 
 /* Link para "primeiro login" */
 .primeiro-login a {
