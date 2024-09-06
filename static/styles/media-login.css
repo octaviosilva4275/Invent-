@@ -1,0 +1,28 @@
+/* Media Queries para dispositivos móveis e tablets */
+@media (max-width: 1024px) {
+    .banner {
+        display: none; /* Oculta o banner em telas menores que 1024px */
+    }
+    .campo-login {
+        width: 100%; /* Ocupa toda a largura disponível */
+        height: 100%; /* Ocupa toda a altura disponível */
+    }
+}
+
+@media (max-width: 768px) {
+    .form-login {
+        width: 80%; /* Ajusta a largura do formulário de login em telas menores */
+        padding: 0 20px; /* Adiciona um preenchimento para as laterais */
+    }
+
+    .titulo-login h3 {
+        font-size: 20px; /* Reduz o tamanho da fonte do título em telas menores */
+        margin-bottom: 20px; /* Ajusta a margem inferior */
+    }
+
+    .btn-login {
+        width: 70%; /* Ajusta a largura do botão */
+        font-size: 14px; /* Reduz o tamanho da fonte do botão */
+        padding: 8px 16px; /* Ajusta o preenchimento do botão */
+    }
+}
