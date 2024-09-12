@@ -1,0 +1,94 @@
+/* Media Queries para dispositivos móveis e tablets */
+@media (max-width: 1024px) {
+    .banner {
+        display: none;  /* Oculta o banner para tablets e celulares */
+    }
+    
+    .login {
+        width: 100vw;  /* Certifica que ocupa toda a largura */
+        height: 100vh;  /* Certifica que ocupa toda a altura */
+        justify-content: center;  /* Centraliza o conteúdo */
+        align-items: center;  /* Centraliza verticalmente */
+    }
+    
+    .campo-login {
+        width: 100vw;  /* O campo de login ocupa 100% da largura */
+        height: 100vh;  /* O campo de login ocupa 100% da altura */
+        padding: 20px;  /* Ajusta o padding */
+        background-color: rgba(177, 196, 204, 1);  /* Mantém o fundo */
+        display: flex;  /* Flex para centralizar conteúdo */
+        justify-content: center;  /* Centraliza horizontalmente o conteúdo do login */
+        align-items: center;  /* Centraliza verticalmente o conteúdo do login */
+        box-shadow: none;  /* Remove a sombra para manter o layout limpo */
+        border-radius: 0;  /* Remove as bordas arredondadas */
+    }
+
+    .form-login {
+        width: 90%;  /* Ajusta a largura do formulário para 90% */
+        margin: 0 auto;  /* Centraliza */
+    }
+
+    .titulo-login h3 {
+        font-size: 22px;  /* Ajusta o tamanho da fonte do título */
+        margin-bottom: 20px;  /* Margem inferior menor */
+    }
+
+    .form-login input {
+        padding: 10px;  /* Ajusta o padding dos inputs */
+    }
+
+    .btn-login {
+        width: 70%;  /* Ajusta a largura do botão */
+        font-size: 14px;  /* Reduz o tamanho da fonte */
+        padding: 10px 15px;  /* Ajusta o padding */
+    }
+
+    .primeiro-login a, .esqueceu-senha a {
+        font-size: 14px;  /* Ajusta o tamanho do texto */
+        padding: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .campo-login {
+        width: 100vw;  /* O campo de login ocupa toda a largura */
+        height: 100vh;  /* O campo de login ocupa toda a altura */
+        padding: 15px;  /* Menor padding em celulares */
+    }
+
+    .titulo-login h3 {
+        font-size: 20px;  /* Reduz um pouco o tamanho do título */
+    }
+
+    .btn-login {
+        width: 80%;  /* O botão ocupa 80% da largura */
+    }
+
+    .form-login {
+        width: 100%;  /* O formulário ocupa toda a largura */
+    }
+
+    .form-login input {
+        font-size: 14px;  /* Reduz o tamanho da fonte dos inputs */
+    }
+}
+
+@media (max-width: 480px) {
+    .campo-login {
+        width: 100vw;  /* O campo de login ocupa 100% da largura */
+        height: 100vh;  /* O campo de login ocupa 100% da altura */
+        padding: 10px;  /* Padding ainda menor */
+    }
+
+    .titulo-login h3 {
+        font-size: 18px;  /* Reduz ainda mais o tamanho do título */
+    }
+
+    .form-login {
+        width: 100%;  /* Formulário ocupa toda a largura */
+    }
+
+    .btn-login {
+        width: 90%;  /* Botão ocupa 90% da largura */
+    }
+}
