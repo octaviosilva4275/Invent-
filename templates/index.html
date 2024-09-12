@@ -1,74 +1,252 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> 
+    <title>Index</title>
+    <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif; /* Adicionado para melhor aparência */
+        }
+
+        .container {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            margin: 30px auto;
+            padding: 20px;
+
+
+        }
 
 
 
+        .container-saidas {
+            background-color: #4BBF85;
+            color: white;
+            width: 370px;
+            height: 100%;
+            border-radius: 10px;
+            text-align: start;
+
+            
+        }
+
+        .container-estoque {
+            background-color: #E35F64;
+            color: white;
+            width: 370px;
+            height: 100%;
+            border-radius: 10px;
+            text-align: start;
+            margin: 0 50px 0 50px;
+        }
+
+        table{
+            width: 100%;
+            height: calc(100% - 300px);
+            align-items: center;
+            justify-content: center;
+        }
+        section.table{
+            background-color: #B1C4CC;
+            width: 90%;
+            height: 100%;
+            display: flex;
+            margin: 0 auto;
+            border-radius: 20px;
+        }
+        tr{
+            text-align: center;
+            align-items: center;
+        }
+        td{
+            padding: 5px;
+        }
+        caption{
+            font-size: 32px;
+            padding: 24px;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        th{
+            border-top: 2px solid black;
+        }
+        
+        .aprovado{
+            color: rgb(129, 214, 0);
+            font-weight:800;
+        }
+        .negado{
+            color: red;
+            font-weight:800;
+        }
+        .pendente{
+            color: rgb(255, 180, 42);
+            font-weight:800;
+        }
+        section a{
+            font-size: 32px;
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+
+        section h3{
+            margin-left: 20px;
+            margin-top: 8px;
+        }
+
+        .fa-check{
+            position: absolute;
+            display: inline-block;
+            margin-left: 330px;
+            margin-top: 35px;
+            transform: scale(2 , 2);
+        }
+
+        .fa-exclamation{
+            position: absolute;
+            display: inline-block;
+            margin-left: 180px;
+            margin-top: -25px;
+        }
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+
+thead {
+    background-color: #333;
+    color: white;
+}
+
+th {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+/* Estilo da legenda da tabela */
+caption {
+    font-size: 24px;
+    padding: 10px;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+}
+
+
+    </style>
 </head>
 <body>
-    <!-- Pego no bootstrap -->
-    <div class="container mt-5">
-                    <div class="alert alert alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span> 
-                        </button>
-                    </div>
+    <div class="container">
+        <section class="container-estoque">
+            <h3>Estoque mínimo:</h3>
+            <a href="#">50 Itens</a>
+            <a href="#"><figure><i class="fa-solid fa-exclamation"></i></figure></a>
+        </section>
+        <section class="container-saidas" id="saidas">
+            <h3>Saídas hoje:</h3>
+            <figure><i class="fa-solid fa-check"></i></figure>
+            <a href="#" target="_blank">50 Itens</a>
+        </section>
 
-        <div class="row">
-            <div class="col-sm-8">
-                <div class="card text-white bg-danger mb-3">
-                    <div class="card-header">Saídas Hoje</div>
-                    <div class="card-body wd">
-                        <ul class="list-group">
+ 
+    </div>
 
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="card text-white bg-success mb-3">
-                    <div class="card-header">Estoque mínimo</div>
-                    <div class="card-body">
-                        <h5 class="card-title">Entrada:</h5>
-                        <a href="">Ver materiais com estoque mínimo</a>
+    <section class="table">
+        <table>
+            <caption>Histórico</caption>
+            <thead>
+                <tr>
+                    <th>Nome do Produto</th>
+                    <th>Usuário</th>
+                    <th>Quantidade</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Prego</td>
+                    <td>Octavio</td>
+                    <td>10</td>
+                    <td>Pendente</td>
+                </tr>
+            </tbody>
 
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-
-
-    <div class="container mt-5">
-        <div class="row">
-            </div>
-
-            <h3>Histórico de Requisições de Hoje</h3> 
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Solicitante</th>
-                            <th>Material</th>
-                            <th>Quantidade</th> 
-                            <th>Data de Entrega</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>   
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>   
+            <tbody>
+                <tr>
+                    <td>Prego</td>
+                    <td>Octavio</td>
+                    <td>10</td>
+                    <td>Negado</td>
+                </tr>
+            </tbody>
 
 
+            <tbody>
+                <tr>
+                    <td>Prego</td>
+                    <td>Octavio</td>
+                    <td>10</td>
+                    <td>Aprovado</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+       const tds = document.querySelectorAll('td');
+
+        tds.forEach(td => {
+
+            const status = td.textContent.trim();
+
+
+            if (status === "Aprovado") {
+                td.classList.add('aprovado');
+            } else if (status === "Pendente") {
+                td.classList.add('pendente');
+            } else if (status === "Negado") {
+                td.classList.add('negado');
+            }
+        });
+
+    </script>
 </body>
 </html>
