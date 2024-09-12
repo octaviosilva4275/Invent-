@@ -73,14 +73,7 @@ CREATE TABLE lembretes (
     data_lembrete DATE
 );
 
-INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) 
-VALUES (1, -5, 'saida', 2);  -- Assumindo que o usuário 2 fez a saída
 
-INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) 
-VALUES (2, 30, 'entrada', 1); 
-
-INSERT INTO lembretes (destinatario, descricao, data_lembrete) 
-VALUES ('João Silva', 'Reunião de equipe às 14h', '2024-08-03'); 
 
 -- Inserção de exemplo para tabela de usuários
 INSERT INTO users (sn, nome, email, senha, cargo) VALUES 
@@ -267,7 +260,7 @@ INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VAL
 (75, 5, 'entrada', 1),       -- PASTA CATÁLOGO (NULL + 5 -> 5)
 (76, 5, 'entrada', 1),       -- PASTA DE PAPELÃO (NULL + 5 -> 5)
 (77, 5, 'entrada', 1),       -- PASTA GRAMPO TRILHO (NULL + 5 -> 5)
-(78, 5, 'entrada', 1);       -- LIVRO ATA (NULL + 5 -> 5)
+(78, 5, 'entrada', 1),       -- LIVRO ATA (NULL + 5 -> 5)
 (79, 5, 'entrada', 1),       -- PASTA COM CANALETA (NULL + 5 -> 5)
 (80, 5, 'entrada', 1),       -- PASTA EM L (NULL + 5 -> 5)
 (81, 5, 'entrada', 1),       -- ETIQUETA AUTOADESIVA 215,09X279,04MM (NULL + 5 -> 5)
