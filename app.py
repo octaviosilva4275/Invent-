@@ -122,7 +122,7 @@ def dashboard():
 
 # ---------------------------------------------------- CADASTRO MATERIAL ----------------------------------------------------
 
-<<<<<<< HEAD
+
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
 
 
@@ -155,7 +155,7 @@ def registrar_entrada():
         material_id = request.form['material_id']
         quantidade = int(request.form['quantidade'])
         usuario_id = session['user_id'] 
-=======
+
 @app.route('/cadastro_material', methods=['GET', 'POST'])
 def cadastro_material():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
@@ -168,13 +168,13 @@ def cadastro_material():
         estoque_maximo = int(request.form['estoque_maximo'] or 0)
 
 
->>>>>>> 873684dc052663315e599a4492094e5a8deb0814
+
 
         conexao = conectar_banco_dados()
         cursor = conexao.cursor()
 
         try:
-<<<<<<< HEAD
+
             query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'entrada', %s)"
             cursor.execute(query_insert, (material_id, quantidade, usuario_id))
             conexao.commit()
@@ -225,7 +225,7 @@ def registrar_saida():
         except mysql.connector.Error as err:
             print(f'Erro ao registrar saída: {err}')
 
-=======
+
             # Insere o novo material no banco de dados
             query_insert = ("INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) "
                             "VALUES (%s, %s, %s, %s, %s)")
@@ -238,12 +238,12 @@ def registrar_saida():
         except:
             print("Erro ao cadastrar material")
             return redirect(url_for('cadastro_material'))
->>>>>>> 873684dc052663315e599a4492094e5a8deb0814
+
         finally:
             cursor.close()
             conexao.close()
 
-<<<<<<< HEAD
+
     return redirect(url_for('controle_estoque'))
 
 @app.route('/estoque_minimo')
@@ -275,7 +275,7 @@ def estoque_minimo():
     return render_template('estoque_minimo.html', materiais=materiais_abaixo_minimo)
 
 # ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
-=======
+
     # Se for GET ou ocorrer algum erro, exibe o formulário
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
@@ -290,4 +290,3 @@ def estoque_minimo():
 
 if __name__ == "__main__":
     app.run(debug=True)
->>>>>>> 873684dc052663315e599a4492094e5a8deb0814
