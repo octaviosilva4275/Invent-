@@ -1,39 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página de primeiro login para acessar o sistema de inventário.">
     <title>Inventory</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/static/styles/primeirologin.css">
+    <link rel="stylesheet" href="/static/styles/media-primeirologin.css">
     <link rel="icon" href="{{ url_for('static', filename='2.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-
-    </style>
+    <link rel="icon" href="/static/img/logoinvent+.png">
 </head>
 <body>
-    <div class="container">
-        <div class="login">
-            <div class="header">
-                <img src="{{ url_for('static', filename='2.png') }}" alt="Superlist Logo" class="logo">
-                <h1>Entre no nosso sistema de almoxarifado</h1>
+   
 
+    <section class="primeiro-login">
+        <div class="banner-primeirologin">
+   
+            <!-- <img src="/static/img/fotoprimeirologin.jpg" alt="Banner de Primeiro Login"> -->
+        </div>
+
+        <div class="primeiro-login02">
+            <div class="header-primeirologin">
+                <img src="/static/img/logoinvent+.png" alt="Superlist Logo" class="logo">  
+                <h1>CADASTRO</h1>
             </div>
 
-
-            
             <form action="{{ url_for('primeiro_login') }}" method="POST">  
                 <div class="inputs">
-
                     <div class="campo-input">
-                        <input type="text" id="rn" name="rn" placeholder="Código SN" required>
                         <i class="fas fa-user"></i>
+                        <input type="text" id="rn" name="rn" placeholder="Código SN" required>
                     </div>
                 </div>
 
                 <div class="campo-input">
-                    <input type="email" id="email" name="email" placeholder="Email" required>
                     <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
                 </div>
 
                 <div class="campo-input">
@@ -50,40 +53,32 @@
                         <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
                         <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
                         <option value="alimentos-bebidas">Alimentos e Bebidas</option>
-                        
                     </select>
-                    
                 </div>
 
                 <div class="campo-input">
-                    <input type="password" id="password" name="password" placeholder="Password" required>
                     <i class="fas fa-lock"></i>
-                    <i class="fas fa-eye toggle-password"></i>
+                    <input type="password" id="password" name="password" placeholder="Senha" required>          
+                    <i class="fas fa-eye toggle-password" aria-label="Toggle password visibility"></i>
                 </div>
-                <p class="password-hint">Senhas com no mínimo 8 caracteres</p>
-                <button type="submit">Entrar</button>
+
+                <p class="password-hint">Senha com no mínimo 8 caracteres</p>
+                <button class="btn-entrar" type="submit">ENTRAR</button>
                 <p class="terms"></p>
                 <p>Já tem uma conta? <a href="{{ url_for('solicitante') }}">Login</a></p>
             </form>
         </div>
 
-    </div>
-    <div class="back-button">
-        <a href="javascript:history.back()"> <i class="fas fa-arrow-left"></i> Voltar</a>
-    </div>
-    <script>
-        const togglePassword = document.querySelector('.toggle-password');
-        const passwordInput = document.getElementById('password');
+        <script>
+            const togglePassword = document.querySelector('.toggle-password');
+            const passwordInput = document.getElementById('password');
 
-        togglePassword.addEventListener('click', function() {
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordInput.setAttribute('type',   
-        type);
-        this.classList.toggle('fa-eye-slash');   
-
-        });
-
-
-    </script>
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+            });
+        </script>
+    </section>
 </body>
 </html>
