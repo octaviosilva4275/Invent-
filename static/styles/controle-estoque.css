@@ -1,0 +1,94 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-section {
+    width: 80%;
+    max-width: 1000px;
+    background-color: #B1C4CC;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+form {
+    width: 100%;
+
+    padding: 15px;
+    border-radius: 15px;
+}
+
+h1 {
+    margin: 15px 0;
+    color: #333;
+}
+
+h2 {
+    width: 100%;
+    margin: 10px 0;
+    color: #444;
+}
+
+select, input[type="number"] {
+    width: calc(100% - 22px); /* Ajusta a largura para compensar padding e border */
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid ;
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+}
+
+button {
+    padding: 10px 20px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: none;
+    background-color: #4FDF66;
+    color: black;
+    cursor: pointer;
+    font-size: 16px;
+    border: 2px solid black;
+}
+
+
+.table-section {
+    width: 80%;
+    max-width: 1000px;
+    background-color: beige;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+thead {
+    background-color: #f4f4f4;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
