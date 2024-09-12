@@ -7,78 +7,89 @@
     <title>Invent +</title>
     <link rel="stylesheet" href="/static/styles/primeiro-login.css">
     <link rel="stylesheet" href="/static/styles/medias/media-primeirologin.css">
+    <link rel="stylesheet" href="/static/styles/variaveis.css">
     <link rel="icon" href="{{ url_for('static', filename='2.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="icon" href="/static/img/logoinvent+.png">
 </head>
 <body>
    
-
-    <section class="primeiro-login">
-        <div class="banner-primeirologin">
-   
-            <!-- <img src="/static/img/fotoprimeirologin.jpg" alt="Banner de Primeiro Login"> -->
-        </div>
-
-        <div class="primeiro-login02">
-            <div class="header-primeirologin">
-                <img src="/static/img/logoinvent+.png" alt="Superlist Logo" class="logo">  
-                <h1>CADASTRO</h1>
+    <main>
+        <section class="primeiro-login">
+            <!-- Seção de banner do primeiro login -->
+            <div class="banner-primeirologin">
+                <!-- Comentado por enquanto: <img src="/static/img/fotoprimeirologin.jpg" alt="Banner de Primeiro Login"> -->
             </div>
-
-            <form action="{{ url_for('primeiro_login') }}" method="POST">  
-                <div class="inputs">
+    
+            <!-- Formulário de cadastro -->
+            <div class="primeiro-login02">
+                <!-- Header do formulário com logo e título -->
+                <div class="header-primeirologin">
+                    <img src="/static/img/logoinvent+.png" alt="Superlist Logo" class="logo">  
+                    <h1>CADASTRO</h1>
+                </div>
+    
+                <!-- Formulário para cadastro -->
+                <form action="{{ url_for('primeiro_login') }}" method="POST">  
+                    <div class="inputs">
+                        <!-- Campo para Código SN -->
+                        <div class="campo-input">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="rn" name="rn" placeholder="Código SN" required>
+                        </div>
+                    </div>
+    
+                    <!-- Campo para Email -->
+                    <div class="campo-input">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" placeholder="Email" required>
+                    </div>
+    
+                    <!-- Campo para Seleção de Área -->
                     <div class="campo-input">
                         <i class="fas fa-user"></i>
-                        <input type="text" id="rn" name="rn" placeholder="Código SN" required>
+                        <select id="areas-senai" name="areas-senai">
+                            <option value="">Selecione uma área</option>
+                            <option value="eletroeletronica">Eletroeletrônica</option>
+                            <option value="metalmecanica">Metalmecânica</option>
+                            <option value="metalurgia">Metalurgia</option>
+                            <option value="automobilistica">Automobilística</option>
+                            <option value="madeira-mobiliario">Madeira e Mobiliário</option>
+                            <option value="gestao">Gestão</option>
+                            <option value="almoxarifado">Almoxarifado</option>
+                            <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
+                            <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
+                            <option value="alimentos-bebidas">Alimentos e Bebidas</option>
+                        </select>
                     </div>
-                </div>
-
-                <div class="campo-input">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" name="email" placeholder="Email" required>
-                </div>
-
-                <div class="campo-input">
-                    <i class="fas fa-user"></i>
-                    <select id="areas-senai" name="areas-senai">
-                        <option value="">Selecione uma área</option>
-                        <option value="eletroeletronica">Eletroeletrônica</option>
-                        <option value="metalmecanica">Metalmecânica</option>
-                        <option value="metalurgia">Metalurgia</option>
-                        <option value="automobilistica">Automobilística</option>
-                        <option value="madeira-mobiliario">Madeira e Mobiliário</option>
-                        <option value="gestao">Gestão</option>
-                        <option value="almoxarifado">Almoxarifado</option>
-                        <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
-                        <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
-                        <option value="alimentos-bebidas">Alimentos e Bebidas</option>
-                    </select>
-                </div>
-
-                <div class="campo-input">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" name="password" placeholder="Senha" required>          
-                    <i class="fas fa-eye toggle-password" aria-label="Toggle password visibility"></i>
-                </div>
-
-                <p class="password-hint">Senha com no mínimo 8 caracteres</p>
-                <button class="btn-entrar" type="submit">ENTRAR</button>
-                <p class="terms"></p>
-                <p>Já tem uma conta? <a href="{{ url_for('solicitante') }}">Login</a></p>
-            </form>
-        </div>
-
-        <script>
-            const togglePassword = document.querySelector('.toggle-password');
-            const passwordInput = document.getElementById('password');
-
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.classList.toggle('fa-eye-slash');
-            });
-        </script>
-    </section>
+    
+                    <!-- Campo para Senha -->
+                    <div class="campo-input">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Senha" required>          
+                        <i class="fas fa-eye toggle-password" aria-label="Toggle password visibility"></i>
+                    </div>
+    
+                    <p class="password-hint">Senha com no mínimo 8 caracteres</p>
+                    <button class="btn-entrar" type="submit">ENTRAR</button>
+                    <p class="terms"></p>
+                    <p>Já tem uma conta? <a href="{{ url_for('solicitante') }}">Login</a></p>
+                </form>
+            </div>
+    
+            <!-- Script para alternar a visibilidade da senha -->
+            <script>
+                const togglePassword = document.querySelector('.toggle-password');
+                const passwordInput = document.getElementById('password');
+    
+                togglePassword.addEventListener('click', function() {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    this.classList.toggle('fa-eye-slash');
+                });
+            </script>
+        </section>
+    </main>
+    
 </body>
 </html>
