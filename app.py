@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, session,js
 import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = 'sua-chave-secreta-aqui'
+
 
 def conectar_banco_dados():
 
@@ -118,3 +120,7 @@ def dashboard():
 # ---------------------------------------------------- CADASTRO MATERIAL ----------------------------------------------------
 
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
