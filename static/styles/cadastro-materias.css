@@ -1,0 +1,129 @@
+/* Normalização do Navegador */
+* {
+    margin: 0;  /* Remove a margem padrão dos elementos */
+    padding: 0;  /* Remove o padding padrão dos elementos */
+    box-sizing: border-box;  /* Inclui bordas e padding no cálculo do tamanho total dos elementos */
+    list-style: none;  /* Remove a estilização de listas (marcadores) */
+    text-decoration: none;  /* Remove o sublinhado de links */
+    border: none;  /* Remove bordas padrão */
+    font-family: 'Amatic SC', sans-serif;  /* Define a fonte padrão */
+}
+
+/* Normalização do html */
+html {
+    width: 100vw;  /* Define a largura como 100% da viewport */
+    height: 100vh;  /* Define a altura como 100% da viewport */
+    font-size: 62.5%;  /* Ajusta o REM para 10px (1rem = 10px) */
+    overflow: hidden;  /* Remove a barra de rolagem horizontal */
+}
+
+
+.cadastro{
+    display: flex;  /* Define o layout flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente */
+    width: 100vw;  /* Ocupa a largura total da tela */
+    height: 100vh;  /* Ocupa a altura total da tela */
+}
+
+.campo-cadastro{
+    display: flex;  /* Layout flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente */
+    background-color: rgba(177, 196, 204, 1);  /* Cor de fundo */
+    padding: 50px;  /* Adiciona espaçamento interno */
+    border-radius: 8px;  /* Bordas arredondadas */
+}
+
+.form-cadastro{
+    margin-bottom: 50px;  /* Margem inferior */
+    text-align: left;  /* Alinhamento do texto à esquerda */
+    width: 80rem;  /* Largura fixa para o formulário */
+    height: 50rem;
+}
+
+
+/* Título do login com logo */
+.titulo-cadastro {
+    display: flex;  /* Layout flexível */
+    align-items: center;  /* Alinha verticalmente ao centro */
+    justify-content: center;  /* Centraliza horizontalmente */
+    padding-right: 70px;
+}
+
+.titulo-cadastro img {
+    width: 90px;
+    height: 90px;
+    margin-right: 10px;  /* Espaçamento à direita da logo */
+}
+
+.titulo-cadastro h2{
+    font-size: 24px;  /* Tamanho da fonte do título */
+    margin-bottom: 0;  /* Remove a margem inferior */
+}
+
+/* Estilos gerais para o placeholder */
+input::placeholder, 
+select::placeholder {
+    color: #000000; /* Cor mais escura para ser visível */
+    font-size: 16px; /* Tamanho de fonte confortável */
+}
+
+.input_nome,
+.input-descricao,
+.input_categoria {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+    width: 100%;
+    
+}
+
+.input_nome input,
+.input-descricao input,
+.input_categoria select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    
+}
+
+.input_estoque {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    align-items: center; /* Alinha verticalmente no centro */
+    gap: 20px; /* Espaçamento maior entre os inputs dentro do bloco de estoque */
+}
+
+.input_estoque input {
+    width: 48%; /* O input ocupa o restante do espaço */
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    
+}
+
+/* Estilos do botão de login */
+.btn-cadastro{
+    display: flex;  /* Layout flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente */
+    width: 50%;  /* Largura de 50% */
+    font-size: 15px;  /* Tamanho da fonte */
+    padding: 10px 20px;  /* Espaçamento interno */
+    cursor: pointer;  /* Muda o cursor ao passar sobre o botão */
+    background-color: rgba(0, 126, 180, 1);  /* Cor de fundo */
+    color: white;  /* Cor do texto */
+    border-radius: 5px;  /* Bordas arredondadas */
+    margin: 30px auto 0;  /* Centraliza o botão e adiciona margem */
+}
+
+.btn-cadastro:hover{
+    background-color:  rgba(0, 100, 150, 1);
+    transform: scale(1.05);
+}
+
