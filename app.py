@@ -184,7 +184,6 @@ def registrar_saida():
             # Verifica a quantidade em estoque
             cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
             estoque_atual = cursor.fetchone()
-
             if estoque_atual and estoque_atual[0] >= quantidade:
                 # Atualiza a quantidade em estoque (subtrai a quantidade de saída)
                 cursor.execute("""
