@@ -13,6 +13,11 @@ def conectar_banco_dados():
     )
     return conexao
 
+@app.route('/')
+def solicitante():
+    return render_template('login/login.html')
+
+
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -117,4 +122,50 @@ def dashboard():
 
 # ---------------------------------------------------- CADASTRO MATERIAL ----------------------------------------------------
 
+@app.route('/cadastro_material', methods=['GET', 'POST'])
+def cadastro_material():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    if request.method == 'POST':
+        descricao = request.form['descricao']
+        categoria = request.form['categoria']
+        localizacao = request.form['localizacao']
+        estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
+        estoque_maximo = int(request.form['estoque_maximo'] or 0)
+
+
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+            # Insere o novo material no banco de dados
+            query_insert = ("INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) "
+                            "VALUES (%s, %s, %s, %s, %s)")
+            cursor.execute(query_insert, (descricao, categoria, localizacao, estoque_minimo, estoque_maximo))            
+            conexao.commit()
+
+            # Redireciona para a mesma página com uma mensagem de sucesso (opcional)
+            return redirect(url_for('cadastro_material',))
+
+        except:
+            print("Erro ao cadastrar material")
+            return redirect(url_for('cadastro_material'))
+        finally:
+            cursor.close()
+            conexao.close()
+
+    # Se for GET ou ocorrer algum erro, exibe o formulário
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+
+    cursor.close()
+    conexao.close()
+
+    return render_template('/cadastro/cadastro_material.html')
+
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
