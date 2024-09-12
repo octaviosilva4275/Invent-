@@ -1,0 +1,45 @@
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .container-saidas,
+    .container-estoque {
+        width: 85%;
+        margin: 10px 0;
+    }
+
+    .fa-check,
+    .fa-exclamation {
+        font-size: 20px;
+    }
+
+    .fa-check {
+        right: 10px;
+        top: 10px;
+        transform: scale(1.5 , 1.5);
+        
+    }
+
+    .fa-exclamation {
+        right: 10px;
+        top: 10px;
+        transform: scale(1.5 , 1.5);
+    }
+    .container{
+        margin-left: 35px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fa-check,
+    .fa-exclamation {
+        font-size: 18px;
+    }
+
+    table {
+        font-size: 14px; /* Reduz o tamanho da fonte da tabela */
+    }
+}
