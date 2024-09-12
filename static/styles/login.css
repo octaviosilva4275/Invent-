@@ -35,9 +35,9 @@ html {
     width: 100%;  /* Ocupa 100% da largura */
     height: 100%;  /* Ocupa 100% da altura */
     z-index: -1;  /* Fica atrás do campo de login */
-    background-image: linear-gradient(rgba(32, 32, 32, 0.8), rgba(34, 34, 34, 0.8)), url(/static/img/banner.webp);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/static/img/banner.webp);
     background-position: center center;
-    background-size:cover;
+    background-size: cover;
     background-repeat: no-repeat;
     overflow: hidden;
 }
@@ -54,7 +54,7 @@ html {
     display: flex;  /* Layout flexível */
     justify-content: center;  /* Centraliza horizontalmente */
     align-items: center;  /* Centraliza verticalmente */
-    background-color: rgba(177, 196, 204, 1);  /* Cor de fundo */
+    background-color: var(--cinza-azulado);  /* Cor de fundo */
     padding: 50px;  /* Adiciona espaçamento interno */
     border-radius: 8px;  /* Bordas arredondadas */
 }
@@ -85,7 +85,6 @@ html {
     margin-bottom: 0;  /* Remove a margem inferior */
 }
 
-
 /* Oculta os rótulos dos inputs */
 .form-login label {
     display: none;  /* Esconde o label */
@@ -95,14 +94,14 @@ html {
 .form-login input {
     width: 100%;  /* Largura total */
     padding: 12px;  /* Espaçamento interno */
-    border: 1px solid #ccc;  /* Borda fina e cinza */
+    border: 1px solid var(--cinza);  /* Borda fina e cinza */
     border-radius: 4px;  /* Bordas arredondadas */
     margin-top: 5px;  /* Margem superior */
 }
 
 /* Link de "esqueceu a senha" */
 .esqueceu-senha a {
-    color: rgb(0, 0, 0);  /* Cor preta */
+    color: var(--preto);  /* Cor preta */
     font-size: 12px;  /* Tamanho da fonte */
     font-weight: bold;  /* Texto em negrito */
     margin-bottom: 30px;  /* Margem inferior */
@@ -119,21 +118,20 @@ html {
     font-size: 15px;  /* Tamanho da fonte */
     padding: 10px 20px;  /* Espaçamento interno */
     cursor: pointer;  /* Muda o cursor ao passar sobre o botão */
-    background-color: rgba(0, 126, 180, 1);  /* Cor de fundo */
-    color: white;  /* Cor do texto */
+    background-color: var(--azul-claro);  /* Cor de fundo */
+    color: var(--branco);  /* Cor do texto */
     border-radius: 5px;  /* Bordas arredondadas */
     margin: 30px auto 0;  /* Centraliza o botão e adiciona margem */
 }
 
-.btn-login:hover{
-    background-color:  rgba(0, 100, 150, 1);
-    transform: scale(1.05);
+.btn-login:hover {
+    background-color: var(--azul-escuro);  /* Cor de fundo ao passar o cursor */
+    transform: scale(1.05);  /* Efeito de zoom */
 }
-
 
 /* Link para "primeiro login" */
 .primeiro-login a {
-    color: rgb(0, 0, 0);  /* Cor preta */
+    color: var(--preto);  /* Cor preta */
     font-size: 12px;  /* Tamanho da fonte */
     font-weight: bold;  /* Negrito */
     margin-bottom: 30px;  /* Margem inferior */

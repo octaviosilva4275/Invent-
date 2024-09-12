@@ -15,7 +15,7 @@
         width: 100vw;  /* O campo de login ocupa 100% da largura */
         height: 100vh;  /* O campo de login ocupa 100% da altura */
         padding: 20px;  /* Ajusta o padding */
-        background-color: rgba(177, 196, 204, 1);  /* Mantém o fundo */
+        background-color: var(--cinza-azulado);  /* Mantém o fundo */
         display: flex;  /* Flex para centralizar conteúdo */
         justify-content: center;  /* Centraliza horizontalmente o conteúdo do login */
         align-items: center;  /* Centraliza verticalmente o conteúdo do login */
@@ -52,7 +52,7 @@
 @media (max-width: 768px) {
     .campo-login {
         width: 100vw;  /* O campo de login ocupa toda a largura */
-        height: 100vh;  /* O campo de login ocupa toda a altura */
+        height: 100vh;  /* O campo de login ocupa 100% da altura */
         padding: 15px;  /* Menor padding em celulares */
     }
 
