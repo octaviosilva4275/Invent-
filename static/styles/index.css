@@ -1,0 +1,123 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 30px auto;
+    margin-left: 45px;
+    padding: 20px;
+}
+
+.container-saidas,
+.container-estoque {
+    background-color: #4BBF85;
+    color: white;
+    width: calc(25% - 20px);
+    height: auto;
+    border-radius: 10px;
+    text-align: start;
+    margin: 10px;
+    position: relative; /* Garantir que ícones sejam posicionados em relação a este contêiner */
+}
+
+.container-estoque {
+    background-color: #E35F64;
+}
+
+.table {
+    background-color: #B1C4CC;
+    width: 90%;
+    margin: 30px auto;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+}
+
+thead {
+    background-color: #333;
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+    background-color: #ddd;
+}
+
+caption {
+    font-size: 24px;
+    padding: 10px;
+    text-align: center;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Estilo dos ícones */
+section a {
+    font-size: 32px;
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+section h3 {
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+.fa-check,
+.fa-exclamation {
+    position: absolute;
+    font-size: 24px;
+}
+
+.fa-check {
+    right: 10px;
+    top: 10px;
+}
+
+.fa-exclamation {
+    right: 10px;
+    top: 10px;
+}
+
+/* Adicione estilos para as classes de status */
+.aprovado {
+    color: rgb(129, 214, 0);
+    font-weight: 700;
+}
+
+.negado {
+    color: red;
+    font-weight: 700;
+}
+
+.pendente {
+    color: rgb(255, 180, 42);
+    font-weight: 700;
+}
