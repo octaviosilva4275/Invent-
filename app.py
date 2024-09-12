@@ -13,6 +13,11 @@ def conectar_banco_dados():
     )
     return conexao
 
+@app.route('/')
+def solicitante():
+    return render_template('login/login.html')
+
+
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -157,6 +162,10 @@ def cadastro_material():
     cursor.close()
     conexao.close()
 
-    return render_template('cadastro_material.html')
+    return render_template('/cadastro/cadastro_material.html')
 
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
