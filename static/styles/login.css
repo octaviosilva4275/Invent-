@@ -46,17 +46,10 @@ html {
     position: absolute;
     top: 0;
     left: 0;
-<<<<<<< HEAD
     width: 100%;  /* Ocupa 100% da largura */
     height: 100%;  /* Ocupa 100% da altura */
     z-index: -1;  /* Fica atrás do campo de login */
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/static/img/banner.webp);
-=======
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-image: linear-gradient(rgba(32, 32, 32, 0.8), rgba(34, 34, 34, 0.8)), url(/static/img/banner.webp);
->>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -74,21 +67,12 @@ html {
    - Define um layout flexível para centralizar o conteúdo.
    - Define a cor de fundo, padding e bordas arredondadas. */
 .campo-login {
-<<<<<<< HEAD
     display: flex;  /* Layout flexível */
     justify-content: center;  /* Centraliza horizontalmente */
     align-items: center;  /* Centraliza verticalmente */
     background-color: var(--cinza-azulado);  /* Cor de fundo */
     padding: 50px;  /* Adiciona espaçamento interno */
     border-radius: 8px;  /* Bordas arredondadas */
-=======
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--cinza-azulado);
-    padding: 50px;
-    border-radius: 8px;
->>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }
 
 /* Estilos do formulário de login
@@ -120,12 +104,10 @@ html {
     margin-bottom: 0;
 }
 
-<<<<<<< HEAD
-/* Oculta os rótulos dos inputs */
-=======
+
 /* Oculta os rótulos dos inputs
    - Esconde os labels para inputs de login. */
->>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
+
 .form-login label {
     display: none;
 }
@@ -133,46 +115,28 @@ html {
 /* Estilos dos inputs de login
    - Define a largura total, padding, borda e bordas arredondadas para os inputs. */
 .form-login input {
-<<<<<<< HEAD
     width: 100%;  /* Largura total */
     padding: 12px;  /* Espaçamento interno */
     border: 1px solid var(--cinza);  /* Borda fina e cinza */
     border-radius: 4px;  /* Bordas arredondadas */
     margin-top: 5px;  /* Margem superior */
-=======
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--cinza);
-    border-radius: 4px;
-    margin-top: 5px;
->>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }
 
 /* Link de "esqueceu a senha"
    - Define a cor, tamanho da fonte, negrito e sublinhado para o link. */
 .esqueceu-senha a {
-<<<<<<< HEAD
     color: var(--preto);  /* Cor preta */
     font-size: 12px;  /* Tamanho da fonte */
     font-weight: bold;  /* Texto em negrito */
     margin-bottom: 30px;  /* Margem inferior */
     text-decoration: underline;  /* Sublinhado */
     display: block;  /* Exibe como bloco */
-=======
-    color: var(--preto);
-    font-size: 12px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    text-decoration: underline;
-    display: block;
->>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }
 
 /* Estilos do botão de login
    - Define o layout flexível, tamanho, cor de fundo, cor do texto e bordas arredondadas.
    - Adiciona um efeito de hover para alterar a cor e aplicar uma escala. */
 .btn-login {
-<<<<<<< HEAD
     display: flex;  /* Layout flexível */
     justify-content: center;  /* Centraliza horizontalmente */
     align-items: center;  /* Centraliza verticalmente */
@@ -200,18 +164,7 @@ html {
     text-decoration: underline;  /* Sublinhado */
     display: block;  /* Exibe como bloco */
     margin: 30px auto 0;  /* Margem superior */
-=======
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    font-size: 15px;
-    padding: 10px 20px;
-    cursor: pointer;
-    background-color: var(--azul-claro);
-    color: var(--branco);
-    border-radius: 5px;
-    margin: 30px auto 0;
+
 }
 
 .btn-login:hover {
@@ -230,5 +183,4 @@ html {
     text-decoration: underline;
     display: block;
     margin: 30px auto 0;
->>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }

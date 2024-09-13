@@ -1,16 +1,14 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invent +</title>
-    <link rel="icon" href="/static/img/logo.png">
-    <link rel="stylesheet" href="/static/styles/login.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-login.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-login.css') }}">
+
 
 </head>
 
@@ -65,6 +63,7 @@
                     <!-- Link para a página de primeiro login, com uma URL gerada dinamicamente -->
                     <a href="{{ url_for('primeiro_login') }}" class="button color">Primeiro Login?</a>
                 </div>
+
             </div>
         </div>
     </section>
@@ -72,6 +71,3 @@
 </body>
 
 </html>
-
-=======
->>>>>>> d119ade5ed708610dbd0056d74e386a4a44f2e30

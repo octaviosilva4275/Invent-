@@ -145,7 +145,7 @@ def controle_estoque():
     cursor.close()
     conexao.close()
 
-    return render_template('controle_estoque.html', materiais=materiais)
+    return render_template('funcoes/controle_estoque.html', materiais=materiais)
 
 @app.route('/registrar_entrada', methods=['POST'])
 def registrar_entrada():
@@ -219,7 +219,7 @@ def cadastro_material():
     cursor.close()
     conexao.close()
 
-    return render_template('cadastro_material.html')
+    return render_template('funcoes/cadastro_material.html')
 
 
 
@@ -265,7 +265,7 @@ def registrar_saida():
             cursor.close()
             conexao.close()
 
-    return redirect(url_for('controle_estoque'))
+    return redirect(url_for('funcoes/controle_estoque'))
 
 
 @app.route('/estoque_minimo')
@@ -294,18 +294,10 @@ def estoque_minimo():
         cursor.close()
         conexao.close()
     
-    return render_template('estoque_minimo.html', materiais=materiais_abaixo_minimo)
+    return render_template('funcoes/estoque_minimo.html', materiais=materiais_abaixo_minimo)
 
 # ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
 
-    # Se for GET ou ocorrer algum erro, exibe o formulário
-    conexao = conectar_banco_dados()
-    cursor = conexao.cursor(dictionary=True)
-
-    cursor.close()
-    conexao.close()
-
-    return render_template('/cadastro/cadastro_material.html')
 
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
 
