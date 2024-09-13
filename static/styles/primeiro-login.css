@@ -1,0 +1,185 @@
+
+/* Reset básico para garantir uma aparência consistente */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.botao-voltar {
+    position: absolute;
+    top: 20px; 
+    left: 20px; 
+    background-color: #FFFFFF; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    display: flex; 
+    align-items: center; 
+    text-decoration: none; 
+    font-size: 16px; 
+    transition: background-color 0.3s ease; 
+}
+
+.botao-voltar a {
+    text-decoration: none;
+}
+
+.botao-voltar i {
+    margin-right: 8px; /* Espaçamento entre o ícone e o texto */
+}
+
+.botao-voltar:hover {
+    background-color: #005B99; /* Cor de fundo ao passar o mouse */
+}
+
+
+
+
+
+.header-primeirologin img {
+    width: 90px;
+    height: 90px;
+}
+
+.banner-primeirologin {
+        position: absolute;  /* Ocupa a tela toda, sendo "absoluto" dentro do .login */
+        top: 0;
+        left: 0;
+        width: 100%;  /* Ocupa 100% da largura */
+        height: 100%;  /* Ocupa 100% da altura */
+        z-index: -1;  /* Fica atrás do campo de login */
+        background-image: linear-gradient(rgba(31, 30, 30, 0.8), rgba(23, 22, 22, 0.8)), url(/static/img/fotoprimeirologin.jpg);
+        background-position: center center;
+        background-size:cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+    }
+
+
+.banner-primeirologin img {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.campo-input.password i {
+    margin-right: 30px; 
+}
+
+.campo-input label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.campo-input input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.campo-input {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    position: relative; /* Adiciona contexto para posicionar o ícone de alternância */
+}
+
+.campo-input i {
+    margin-right: 10px;
+    font-size: 18px; /* Ajuste o tamanho do ícone conforme necessário */
+}
+
+.campo-input .toggle-password {
+    position: absolute;
+    right: 10px; /* Ajusta a posição do ícone para não sobrepor o texto do campo */
+    font-size: 18px; /* Ajuste o tamanho do ícone conforme necessário */
+    cursor: pointer; /* Indica que o ícone é clicável */
+    color: #aaa; /* Ajusta a cor do ícone para melhor visibilidade */
+}
+
+.campo-input select {
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    font-size: 16px; 
+    box-sizing: border-box; 
+}
+
+.botao-voltar {
+    position: absolute;
+}
+
+.fa-eye:before {
+    content: "\f06e";
+    position: relative;
+}
+.btn-entrar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    font-size: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: rgba(0, 126, 180, 1);
+    color: white;
+    border-radius: 5px;
+    margin: 30px auto 0;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Adiciona transição suave */
+}
+
+.btn-entrar:hover {
+    background-color: rgba(0, 100, 150, 1); /* Cor de fundo ao passar o mouse */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+}
+
+    
+
+/* Seção de login com imagem de fundo e centralização */
+.primeiro-login {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    height: 100vh; /* Altura total da viewport */
+   
+    background-size: cover; /* Faz a imagem cobrir toda a área */
+    background-position: center; /* Centraliza a imagem de fundo */
+}
+
+.primeiro-login {
+    justify-content: center;
+}
+
+/* Formulário centralizado com limite de largura */
+.primeiro-login02 {
+    width: 100%;
+    max-width: 400px; /* Define uma largura máxima */
+    background-color: #B1C4CC; /* Cor de fundo semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ao redor */
+    text-align: center; /* Centraliza o texto dentro do formulário */
+    position: absolute;
+}
+
+
+/* Centraliza o conteúdo do header no formulário */
+.header-primeirologin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-primeirologin img {
+    width: 90px;
+    height: 90px;
+}

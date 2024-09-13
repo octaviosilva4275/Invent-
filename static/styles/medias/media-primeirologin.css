@@ -1,0 +1,33 @@
+/* Responsividade para dispositivos móveis */
+@media only screen and (max-width: 768px) {
+    .banner-primeirologin {
+        display: none; /* Esconde o banner em celulares e tablets */
+    }
+
+    .primeiro-login {
+        justify-content: center;
+    }
+
+    .primeiro-login02 {
+        width: 100%; /* O formulário ocupa 100% da largura em dispositivos móveis */
+        height: 100%; /* O formulário ocupa 100% da altura */
+        margin: 0; /* Remove as margens */
+        padding: 50px; /* Ajusta o padding para telas menores */
+        background-color: #B1C4CC;
+
+    }
+
+    .btn-entrar {
+        width: 100%; /* O botão de entrar ocupa toda a largura em dispositivos móveis */
+    }
+
+    .botao-voltar {
+        position: absolute;
+        display: flex;
+    
+    
+    }
+    .header-primeirologin{
+        padding-top: 60px;
+    }
+}

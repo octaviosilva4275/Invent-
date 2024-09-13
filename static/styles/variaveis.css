@@ -1,0 +1,16 @@
+
+/* 
+   Variáveis de Cores
+   - Define cores para uso consistente em toda a folha de estilos.
+*/
+:root {
+    --preto: #000000;            /* Preto */
+    --azul-escuro: #004766;      /* Azul escuro */
+    --azul-claro: #007EB4;       /* Azul claro */
+    --cinza: #404040;            /* Cinza médio */
+    --branco: #FFFFFF;           /* Branco */
+    --cinza-azulado: #B1C4CC;    /* Cinza azulado */
+    --verde: #4BBF85;            /* Verde */
+    --vermelho: #E35F64;         /* Vermelho */
+    --cinza-escuro: #666565;     /* Cinza escuro */
+}

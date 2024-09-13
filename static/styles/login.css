@@ -1,0 +1,146 @@
+/* Normalização do Navegador */
+* {
+    margin: 0;  /* Remove a margem padrão dos elementos */
+    padding: 0;  /* Remove o padding padrão dos elementos */
+    box-sizing: border-box;  /* Inclui bordas e padding no cálculo do tamanho total dos elementos */
+    list-style: none;  /* Remove a estilização de listas (marcadores) */
+    text-decoration: none;  /* Remove o sublinhado de links */
+    border: none;  /* Remove bordas padrão */
+    font-family: 'Amatic SC', sans-serif;  /* Define a fonte padrão */
+}
+
+/* Normalização do html */
+html {
+    width: 100vw;  /* Define a largura como 100% da viewport */
+    height: 100vh;  /* Define a altura como 100% da viewport */
+    font-size: 62.5%;  /* Ajusta o REM para 10px (1rem = 10px) */
+    overflow: hidden;  /* Remove a barra de rolagem horizontal */
+}
+
+/* Estilos para a classe de login */
+.login {
+    display: flex;  /* Define o layout flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente */
+    width: 100vw;  /* Ocupa a largura total da tela */
+    height: 100vh;  /* Ocupa a altura total da tela */
+    position: relative;  /* Necessário para o overlay do banner */
+}
+
+/* Estilos para a área de banner */
+.banner {
+    position: absolute;  /* Ocupa a tela toda, sendo "absoluto" dentro do .login */
+    top: 0;
+    left: 0;
+    width: 100%;  /* Ocupa 100% da largura */
+    height: 100%;  /* Ocupa 100% da altura */
+    z-index: -1;  /* Fica atrás do campo de login */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/static/img/banner.webp);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.banner img {
+    width: 100%;  /* Imagem ocupa toda a largura */
+    height: 100%;  /* Imagem ocupa toda a altura */
+    object-fit: cover;  /* Garante que a imagem cubra toda a área */
+    z-index: -2;  /* Fica atrás do overlay transparente */
+}
+
+/* Estilos para o campo de login */
+.campo-login {
+    display: flex;  /* Layout flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente */
+    background-color: var(--cinza-azulado);  /* Cor de fundo */
+    padding: 50px;  /* Adiciona espaçamento interno */
+    border-radius: 8px;  /* Bordas arredondadas */
+}
+
+/* Estilos do formulário de login */
+.form-login {
+    margin-bottom: 30px;  /* Margem inferior */
+    text-align: left;  /* Alinhamento do texto à esquerda */
+    width: 32rem;  /* Largura fixa para o formulário */
+}
+
+/* Título do login com logo */
+.titulo-login {
+    display: flex;  /* Layout flexível */
+    align-items: center;  /* Alinha verticalmente ao centro */
+    justify-content: center;  /* Centraliza horizontalmente */
+    padding-right: 70px;
+}
+
+.titulo-login img {
+    width: 90px;
+    height: 90px;
+    margin-right: 10px;  /* Espaçamento à direita da logo */
+}
+
+.titulo-login h3 {
+    font-size: 24px;  /* Tamanho da fonte do título */
+    margin-bottom: 0;  /* Remove a margem inferior */
+}
+
+/* Oculta os rótulos dos inputs */
+.form-login label {
+    display: none;  /* Esconde o label */
+}
+
+/* Estilos dos inputs de login */
+.form-login input {
+    width: 100%;  /* Largura total */
+    padding: 12px;  /* Espaçamento interno */
+    border: 1px solid var(--cinza);  /* Borda fina e cinza */
+    border-radius: 4px;  /* Bordas arredondadas */
+    margin-top: 5px;  /* Margem superior */
+}
+
+/* Link de "esqueceu a senha" */
+.esqueceu-senha a {
+    color: var(--preto);  /* Cor preta */
+    font-size: 14px;  /* Tamanho da fonte */
+    font-weight: bold;  /* Texto em negrito */
+    margin-bottom: 30px;  /* Margem inferior */
+    text-decoration: underline;  /* Sublinhado */
+    display: block;  /* Exibe como bloco */
+}
+
+/* Estilos do botão de login */
+.btn-login {
+    display: flex;  /* Layout flexível */
+    justify-content: center;  /* Centraliza horizontalmente */
+    align-items: center;  /* Centraliza verticalmente */
+    width: 50%;  /* Largura de 50% */
+    font-size: 15px;  /* Tamanho da fonte */
+    padding: 10px 20px;  /* Espaçamento interno */
+    cursor: pointer;  /* Muda o cursor ao passar sobre o botão */
+    background-color: var(--azul-claro);  /* Cor de fundo */
+    color: var(--branco);  /* Cor do texto */
+    border-radius: 5px;  /* Bordas arredondadas */
+    margin: auto 0;  /* Centraliza o botão e adiciona margem */
+}
+
+.btn-login:hover {
+    background-color: var(--azul-escuro);  /* Cor de fundo ao passar o cursor */
+    transform: scale(1.05);  /* Efeito de zoom */
+}
+
+/* Link para "primeiro login" */
+.primeiro-login a {
+    color: var(--preto);  /* Cor preta */
+    font-size: 14px;  /* Tamanho da fonte */
+    font-weight: bold;  /* Negrito */
+    margin-bottom: 30px;  /* Margem inferior */
+    text-decoration: none;  /* Sublinhado */
+    display: block;  /* Exibe como bloco */
+    margin: 30px auto 0;  /* Margem superior */
+}
+
+span{
+    color: white;
+    text-decoration: underline;
+}
