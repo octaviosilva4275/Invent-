@@ -6,28 +6,30 @@ app.secret_key = 'teste'
 
 
 def conectar_banco_dados():
-    # Verifica se deve usar o banco de dados remoto
     use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
     
-def conectar_banco_dados():
     try:
-        conexao = mysql.connector.connect(
-            host=os.getenv('MYSQL_HOST', 'junction.proxy.rlwy.net'),
-            user=os.getenv('MYSQL_USER', 'root'),
-            password=os.getenv('MYSQL_PASSWORD', 'sua_senha_aqui'),
-            database=os.getenv('MYSQL_DB', 'sua_base_de_dados_aqui'),
-            port=int(os.getenv('MYSQL_PORT', 59952))  # Certifique-se de que a porta é um número 
-        )
-    except:
-        # Conectar ao banco de dados local
-        conexao = mysql.connector.connect(
-            host='localhost',
-            user='tcc',
-            password='123',
-            database='almoxarifado',
-        )
-    
-    return conexao
+        if use_remote_db:
+            # Conectar ao banco de dados no Railway (remoto)
+            conexao = mysql.connector.connect(
+                host=os.getenv('MYSQL_HOST', 'junction.proxy.rlwy.net'),
+                user=os.getenv('MYSQL_USER', 'root'),
+                password=os.getenv('MYSQL_PASSWORD', 'unJnulOOsYAsfmzUUzTyVTRlERyYryjz'),
+                database=os.getenv('MYSQL_DB', 'railway'),
+                port=int(os.getenv('MYSQL_PORT', 59952))
+            )
+        else:
+            # Conectar ao banco de dados local
+            conexao = mysql.connector.connect(
+                host='localhost',
+                user='tcc',
+                password='123',
+                database='almoxarifado',
+            )
+        return conexao
+    except Error as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
+        raise
 
 @app.route('/')
 def solicitante():
