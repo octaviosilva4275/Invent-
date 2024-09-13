@@ -5,6 +5,7 @@ body{
 
 html{
     height: 100%;
+    overflow: hidden;
 }
 
 /* Estilo da Seção do Formulário */
@@ -98,7 +99,8 @@ button:hover {
 .container-btn{
     display: flex;
     width: 100%;
-    justify-content: flex-start;
+    justify-content: flex-end;
+    margin-right: -10px;
 }
 
 .btn-cadastro {
