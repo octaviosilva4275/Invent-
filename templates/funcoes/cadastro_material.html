@@ -2,9 +2,9 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/styles/cadastro-materias.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-cadastro.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/cadastro-materias.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-cadastro.css') }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Material</title>
@@ -28,10 +28,7 @@
                         <input type="text" id="descricao" name="descricao" placeholder="Nome do produto" required>
                     </div>
     
-                    <!-- Campo para a descrição do produto -->
-                    <div class="input-descricao">
-                        <input type="text" id="descricao" name="descricao" placeholder="Descrição do produto" required>
-                    </div>
+
     
                     <!-- Campos para o estoque mínimo e máximo -->
                     <div class="input_estoque">
@@ -50,10 +47,13 @@
                         <br><br>
                     </div>
                     
-                    <!-- Botão de submissão do formulário -->
-                    <button class="btn-cadastro" type="submit">Cadastrar</button>
+
     
                 </form>
+                <div class="container-btn">
+                    <!-- Botão de submissão do formulário -->
+                    <button class="btn-cadastro" type="submit">Cadastrar</button>
+                </div>
             </div>
         </section>
     </main>

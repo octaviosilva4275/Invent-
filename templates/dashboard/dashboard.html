@@ -21,8 +21,8 @@
 }
 
 body{
-  margin-left: 90px;
-  width: calc(100% - 90px);
+  margin-left: 85px;
+  width: calc(100% - 85px);
 }
 
 .sidebar {
@@ -170,6 +170,10 @@ body{
   display: none;
 }
 
+.sidebar-header img{
+  transform: scale(1.5, 1.5);
+}
+
 @media (max-width: 468px) {
   .sidebar{
       width: 100%;
@@ -238,6 +242,12 @@ body{
     .container-dashboard-header img {
     display: inline;
 }
+.container-dashboard-header img{
+  transform: scale(1.5 , 1.5);
+}
+.btn-cadastro{
+  width: auto;
+}
 }
 
   </style>
@@ -245,7 +255,7 @@ body{
 <body>
   <header>
     <div class="container-dashboard-header">
-      <img src="{{ url_for('static', filename='images/3.png') }}" alt="logo" class="logo"/>
+      <img src="{{ url_for('static', filename='img/logoinvent+.png') }}" alt="logo" class="logo"/>
       <div class="container-dashboard" onclick="myFunction(this)">
         <div class="bar1"></div>
         <div class="bar2"></div>
@@ -255,7 +265,7 @@ body{
   </header>
   <aside class="sidebar">
     <div class="sidebar-header">
-      <img src="{{ url_for('static', filename='images/3.png') }}" alt="logo" />
+      <img src="{{ url_for('static', filename='img/logoinvent+.png') }}" alt="logo" />
       <h2>Inventory</h2>
     </div>
   </div>
@@ -315,7 +325,7 @@ body{
   <footer>
     <div class="user-account">
         <div class="user-profile">
-          <img src="{{ url_for('static', filename='images/user.png') }}" style="background-color: white;" alt="logo" />
+          <img src="{{ url_for('static', filename='img/user.png') }}" style="background-color: white;" alt="logo" />
               <div class="user-detail">
                   {% if session.get('logged_in') %}
                     <h3>{{ session['user_rn'] }}</h3>

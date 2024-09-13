@@ -23,7 +23,7 @@ def solicitante():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        entrada = request.form['rn']
+        entrada = request.form['sn']
         senha = request.form['password']
 
         conexao = conectar_banco_dados()
@@ -342,6 +342,28 @@ def requisicao_material():
     return render_template('funcoes/requisicao_material.html', materiais=materiais, minhas_requisicoes=minhas_requisicoes)
 
 # ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
+
+
+@app.route('/cadastro_material')
+def cadastro_material_page():
+    return render_template('funcoes/cadastro_material.html')
+
+@app.route('/relatorio')
+def relatorios():
+    return render_template('funcoes/relatorio.html')
+
+@app.route('/requisicao_material_admin')
+def requisicao_material_admin():
+    return render_template('funcoes/requisicao_material_admin.html')
+
+@app.route('/perfil')
+def perfil():
+    return render_template('funcoes/perfil.html')
+
+@app.route('/logout')
+def logout():
+    return render_template('funcoes/logout.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

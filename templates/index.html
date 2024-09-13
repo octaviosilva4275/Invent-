@@ -1,15 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
+    
+    <!-- Link para o Font Awesome -->
     <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/static/styles/index.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-index.css">
+    
+    <!-- Links para os arquivos CSS com Jinja -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-index.css') }}">
 </head>
 <body>
+    {% include '/dashboard/dashboard.html' %}
     <div class="container">
         <section class="container-estoque">
             <h3>Estoque mínimo:</h3>
@@ -78,8 +82,8 @@
                 td.classList.add('aprovado');
             } else if (status === "Pendente") {
                 td.classList.add('pendente');
-            } else if (status === "Negado") {
-                td.classList.add('negado');
+            } else if (status === "Reprovado") {
+                td.classList.add('Reprovado');
             }
         });
 
