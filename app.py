@@ -1,35 +1,50 @@
 from flask import Flask, render_template, request, redirect, url_for, session,jsonify,flash
 import mysql.connector
 import os
+from mysql.connector import Error  # Importar Error corretamente
 app = Flask(__name__)
 app.secret_key = 'teste'
 
+
+from dotenv import load_dotenv
+import os
+import mysql.connector
+from mysql.connector import Error
+
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
+
+app = Flask(__name__)
+app.secret_key = 'teste'
 
 def conectar_banco_dados():
     use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
     
     try:
         if use_remote_db:
-            # Conectar ao banco de dados no Railway (remoto)
+            print("Tentando conectar ao banco de dados remoto...")
             conexao = mysql.connector.connect(
-                host=os.getenv('MYSQL_HOST', 'junction.proxy.rlwy.net'),
-                user=os.getenv('MYSQL_USER', 'root'),
-                password=os.getenv('MYSQL_PASSWORD', 'unJnulOOsYAsfmzUUzTyVTRlERyYryjz'),
-                database=os.getenv('MYSQL_DB', 'railway'),
-                port=int(os.getenv('MYSQL_PORT', 59952))
+                host=os.getenv('MYSQL_HOST'),
+                user=os.getenv('MYSQL_USER'),
+                password=os.getenv('MYSQL_PASSWORD'),
+                database=os.getenv('MYSQL_DB'),
+                port=int(os.getenv('MYSQL_PORT'))
             )
         else:
-            # Conectar ao banco de dados local
+            print("Tentando conectar ao banco de dados local...")
             conexao = mysql.connector.connect(
                 host='localhost',
                 user='tcc',
                 password='123',
                 database='almoxarifado',
             )
+        print("Conexão estabelecida com sucesso!")
         return conexao
     except Error as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
         raise
+
+
 
 @app.route('/')
 def solicitante():
