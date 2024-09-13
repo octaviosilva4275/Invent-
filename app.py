@@ -4,14 +4,29 @@ import mysql.connector
 app = Flask(__name__)
 app.secret_key = 'teste'
 
-def conectar_banco_dados():
 
-    conexao = mysql.connector.connect(
-        host='localhost',
-        user='tcc',
-        password='123',
-        database='almoxarifado',
-    )
+def conectar_banco_dados():
+    # Verifica se deve usar o banco de dados remoto
+    use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
+    
+    if use_remote_db:
+        # Conectar ao banco de dados no Railway (remoto)
+        conexao = mysql.connector.connect(
+            host=os.getenv('MYSQL_HOST', 'junction.proxy.rlwy.net'),
+            user=os.getenv('MYSQL_USER', 'root'),
+            password=os.getenv('MYSQL_PASSWORD', 'unJnulOOsYAsfmzUUzTyVTRlERyYryjz'),
+            database=os.getenv('MYSQL_DB', 'railway'),
+            port=os.getenv('MYSQL_PORT', 59952)
+        )
+    else:
+        # Conectar ao banco de dados local
+        conexao = mysql.connector.connect(
+            host='localhost',
+            user='tcc',
+            password='123',
+            database='almoxarifado',
+        )
+    
     return conexao
 
 @app.route('/')
