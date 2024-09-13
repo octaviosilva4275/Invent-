@@ -183,3 +183,22 @@ body, html {
     width: 90px;
     height: 90px;
 }
+
+
+.flash-messages {
+    margin: 20px 0;
+    position: absolute;
+    width: 100%;
+}
+.flash {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: #fff;
+}
+.flash.success {
+    background-color: #28a745; /* Verde para sucesso */
+}
+.flash.error {
+    background-color: #dc3545; /* Vermelho para erro */
+}

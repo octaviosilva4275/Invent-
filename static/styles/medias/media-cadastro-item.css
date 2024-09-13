@@ -26,11 +26,11 @@
     .cadastro {
         background-color: var(--branco); /* Mantém o fundo verde */
         height: auto; /* Permite o conteúdo expandir verticalmente */
-        padding: 20px;
+
     }
 
     .campo-cadastro {
-        background-color: var(--cinza-azulado); /* Mantém o fundo verde no campo de cadastro */
+        background-color: var(--branco); /* Mantém o fundo verde no campo de cadastro */
         padding: 20px; /* Ajusta o padding para telas menores */
         border-radius: 0; /* Remove bordas arredondadas */
         max-width: 100%; /* Ocupa toda a tela */
@@ -46,7 +46,7 @@
     }
 
     .btn-cadastro {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         padding: 12px;
     }
 }
@@ -54,13 +54,13 @@
 /* Telas Pequenas (Celulares) */
 @media (max-width: 480px) {
     .cadastro {
-        background-color: var(--cinza-azulado); /* Mantém o fundo verde */
+        background-color: var(--branco); /* Mantém o fundo verde */
         height: auto; /* Permite o conteúdo expandir verticalmente */
-        padding: 10px;
+
     }
 
     .campo-cadastro {
-        background-color: var(--cinza-azulado); /* Mantém o fundo verde no campo de cadastro */
+        background-color: var(--branco); /* Mantém o fundo verde no campo de cadastro */
         padding: 10px; /* Ajusta o padding para telas menores */
         border-radius: 0; /* Remove bordas arredondadas */
         max-width: 100%; /* Ocupa toda a tela */
@@ -75,16 +75,17 @@
     .input-descricao input,
     .input_categoria select {
         padding: 12px;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
 
     .input_estoque input {
         padding: 12px;
-        font-size: 1.4rem;
+        font-size: 1.2rem;
     }
 
     .btn-cadastro {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         padding: 10px;
+        margin-right: 12px;
     }
 }

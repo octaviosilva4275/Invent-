@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session,jsonify 
+from flask import Flask, render_template, request, redirect, url_for, session,jsonify,flash
 import mysql.connector
 
 app = Flask(__name__)
@@ -20,6 +20,7 @@ def solicitante():
 
 
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -46,9 +47,10 @@ def login():
             else:
                 return redirect(url_for('requisicao_material'))
         else:
-            print('Credenciais inválidas. Por favor, tente novamente.', 'error')
+            flash('Credenciais inválidas. Por favor, tente novamente.', 'error')
 
     return render_template('login/login.html')
+
 
 
 
@@ -63,7 +65,6 @@ def primeiro_login():
         conexao = conectar_banco_dados()
         cursor = conexao.cursor(dictionary=True)
 
-
         cursor.execute("SELECT * FROM users WHERE sn = %s", (sn,))
         usuario_existente = cursor.fetchone()
 
@@ -71,16 +72,15 @@ def primeiro_login():
             query_update = "UPDATE users SET email = %s, cargo = %s, senha = %s WHERE sn = %s"
             cursor.execute(query_update, (email, area, senha, sn))
             conexao.commit()
-
+            flash('Cadastro realizado com sucesso!', 'success')
         else:
-
-            print('Usuario inexistente')
+            flash('Usuário inexistente.', 'error')
 
         cursor.close()
         conexao.close()
 
+    return render_template('login/primeiro_login.html')
 
-    return render_template('login/primeiro_login.html') 
 
 
 # ---------------------------------------------------- FIM DO LOGIN ----------------------------------------------------
@@ -127,7 +127,6 @@ def cadastro_material():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
     if request.method == 'POST':
-        descricao = request.form['descricao']
         categoria = request.form['categoria']
         localizacao = request.form['localizacao']
         estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
@@ -140,9 +139,9 @@ def cadastro_material():
 
         try:
             # Insere o novo material no banco de dados
-            query_insert = ("INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) "
+            query_insert = ("INSERT INTO materials (categoria, localizacao, estoque_minimo, estoque_maximo) "
                             "VALUES (%s, %s, %s, %s, %s)")
-            cursor.execute(query_insert, (descricao, categoria, localizacao, estoque_minimo, estoque_maximo))            
+            cursor.execute(query_insert, ( categoria, localizacao, estoque_minimo, estoque_maximo))            
             conexao.commit()
 
             # Redireciona para a mesma página com uma mensagem de sucesso (opcional)
@@ -178,7 +177,7 @@ def controle_estoque():
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
-    cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
+    cursor.execute("SELECT m.id, SUM(e.quantidade) as quantidade "
                     "FROM materials m "
                     "LEFT JOIN estoque e ON m.id = e.material_id "
                     "GROUP BY m.id")
