@@ -1,9 +1,17 @@
-
-
-/* Responsividade para dispositivos móveis */
+/* 
+- Responsividade para dispositivos móveis
+- Estilos aplicados para telas com largura máxima de 768px
+- Esconde o banner em celulares e tablets
+- Centraliza o conteúdo dentro do primeiro-login
+- Ajusta o formulário para ocupar 100% da largura e altura
+- Define padding e fundo do formulário para telas menores
+- Ajusta o botão de entrar para ocupar toda a largura
+- Posiciona o botão voltar de forma absoluta e utiliza flexbox
+- Adiciona padding superior ao header
+*/
 @media only screen and (max-width: 768px) {
     .banner-primeirologin {
-        display: none; /* Esconde o banner em celulares e tablets */
+        display: none; 
     }
 
     .primeiro-login {
@@ -11,26 +19,23 @@
     }
 
     .primeiro-login02 {
-        width: 100%; /* O formulário ocupa 100% da largura em dispositivos móveis */
-        height: 100%; /* O formulário ocupa 100% da altura */
-        margin: 0; /* Remove as margens */
-        padding: 50px; /* Ajusta o padding para telas menores */
+        width: 100%; 
+        height: 100%; 
+        margin: 0;
+        padding: 50px; 
         background-color: #B1C4CC;
-
     }
 
     .btn-entrar {
-        width: 100%; /* O botão de entrar ocupa toda a largura em dispositivos móveis */
+        width: 100%;
     }
 
     .botao-voltar {
         position: absolute;
         display: flex;
-    
-    
     }
-    .header-primeirologin{
+    
+    .header-primeirologin {
         padding-top: 60px;
     }
 }
-

@@ -1,4 +1,9 @@
-/* Estilos para telas grandes (PCs e notebooks) */
+/* 
+- Estilos para telas grandes (PCs e notebooks)
+- Aumenta a margem inferior de inputs grandes
+- Define o espaçamento entre os campos de estoque
+- Define a largura dos inputs de estoque como 48%
+*/
 @media (min-width: 1024px) {
     .input_nome,
     .input-descricao,
@@ -16,7 +21,13 @@
     }
 }
 
-/* Estilos para tablets e dispositivos médios */
+/* 
+- Estilos para tablets e dispositivos médios
+- Diminui a margem inferior dos inputs
+- Inputs de estoque ficam empilhados (coluna)
+- Ajusta o espaçamento entre os campos de estoque
+- Inputs ocupam toda a largura
+*/
 @media (max-width: 1023px) {
     .input_nome,
     .input-descricao,
@@ -36,7 +47,13 @@
     }
 }
 
-/* Estilos para celulares e dispositivos pequenos */
+/* 
+- Estilos para celulares e dispositivos pequenos
+- Cor e tamanho do placeholder são ajustados para melhor visibilidade
+- Margens menores para os inputs
+- Campos de estoque em coluna, com espaçamento menor
+- Reduz o padding dos inputs para caber em telas menores
+*/
 @media (max-width: 767px) {
 
     input::placeholder, 
@@ -61,7 +78,9 @@
         width: 100%;
     }
     
-    /* Ajustando o padding para telas menores */
+    /* 
+    - Ajusta o padding dos inputs para telas menores
+    */
     .input_nome input,
     .input-descricao input,
     .input_categoria select,

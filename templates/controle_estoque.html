@@ -9,38 +9,57 @@
     <link rel="stylesheet" href="/static/styles/variaveis.css">
 </head>
 <body>
-    <header>
-
-    </header>
-
-    <section class="form-section">
-        <h1>Controle de Estoque</h1>
-        <h2>Registrar Entrada</h2>
-        <form action="/registrar_entrada" method="POST">
-            <select id="material" name="material_id" required>
-                <option value="1">Selecione o item</option>
-                <option value="2">Material 2</option>
-
-            </select><br><br>
-
-            <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
-
-            <button type="submit">Confirmar</button>
-        </form>
-        <h2>Registrar Saída</h2>
-        <form action="/registrar_saida" method="POST">
-            <select id="material" name="material_id" required>
-                <option value="1">Selecione o item</option>
-                <option value="2">Material 2</option>
-
-            </select><br><br>
-
-            <input type="number" id="quantidade" name="quantidade" min="1" required><br><br>
-
-            <button type="submit">Confirmar</button>
-        </form>
-    </section>
-
+    <main>
+        <!-- A seção principal do conteúdo, que contém o formulário para controle de estoque -->
+        <section class="form-section">
+    
+            <!-- Título principal da página que descreve o propósito: Controle de Estoque -->
+            <h1>Controle de Estoque</h1>
+    
+            <!-- Subtítulo que especifica a funcionalidade atual: Registrar Entrada de materiais -->
+            <h2>Registrar Entrada</h2>
+    
+            <!-- Formulário para registrar a entrada de materiais no estoque -->
+            <form action="/registrar_entrada" method="POST">
+                
+                <!-- Menu suspenso para selecionar o material a ser registrado -->
+                <select id="material" name="material_id" required>
+                    <!-- Primeira opção padrão para orientar o usuário a selecionar um item -->
+                    <option value="1">Selecione o item</option>
+                    <!-- Outras opções de materiais que podem ser selecionados -->
+                    <option value="2">Material 2</option>
+                </select><br><br>
+    
+                <!-- Campo de entrada numérico para a quantidade do material -->
+                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
+    
+                <!-- Botão para enviar o formulário e registrar a entrada -->
+                <button type="submit">Confirmar</button>
+            </form>
+    
+            <!-- Subtítulo para a segunda parte da funcionalidade: Registrar Saída de materiais -->
+            <h2>Registrar Saída</h2>
+    
+            <!-- Formulário para registrar a saída de materiais do estoque -->
+            <form action="/registrar_saida" method="POST">
+                
+                <!-- Menu suspenso para selecionar o material a ser removido -->
+                <select id="material" name="material_id" required>
+                    <!-- Primeira opção padrão para orientar o usuário a selecionar um item -->
+                    <option value="1">Selecione o item</option>
+                    <!-- Outras opções de materiais disponíveis -->
+                    <option value="2">Material 2</option>
+                </select><br><br>
+    
+                <!-- Campo de entrada numérico para a quantidade a ser removida -->
+                <input type="number" id="quantidade" name="quantidade" min="1" required><br><br>
+    
+                <!-- Botão para enviar o formulário e registrar a saída -->
+                <button type="submit">Confirmar</button>
+            </form>
+        </section>
+    </main>
+    
 
 
 </body>
