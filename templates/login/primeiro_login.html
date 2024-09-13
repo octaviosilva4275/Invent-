@@ -5,14 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Página de primeiro login para acessar o sistema de inventário.">
     <title>Invent +</title>
-    <link rel="stylesheet" href="/static/styles/primeiro-login.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-primeirologin.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
-    <link rel="icon" href="{{ url_for('static', filename='2.png') }}">
+    <!-- Links para os arquivos CSS com Jinja -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/primeiro-login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-primeirologin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
+    
+    <!-- Link para o ícone da página com Jinja -->
+    <link rel="icon" href="{{ url_for('static', filename='img/logoinvent+.png') }}">
+    
+    <!-- Link para o Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-    <link rel="icon" href="/static/img/logoinvent+.png">
 </head>
+
 <body>
     <section class="primeiro-login">
         <div class="banner-primeirologin">

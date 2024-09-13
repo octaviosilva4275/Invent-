@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session,js
 import mysql.connector
 
 app = Flask(__name__)
+app.secret_key = 'teste'
 
 def conectar_banco_dados():
 
@@ -121,7 +122,48 @@ def dashboard():
 
 
 # ---------------------------------------------------- CADASTRO MATERIAL ----------------------------------------------------
+@app.route('/cadastro_material', methods=['GET', 'POST'])
+def cadastro_material():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    if request.method == 'POST':
+        descricao = request.form['descricao']
+        categoria = request.form['categoria']
+        localizacao = request.form['localizacao']
+        estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
+        estoque_maximo = int(request.form['estoque_maximo'] or 0)
 
+
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+            # Insere o novo material no banco de dados
+            query_insert = ("INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) "
+                            "VALUES (%s, %s, %s, %s, %s)")
+            cursor.execute(query_insert, (descricao, categoria, localizacao, estoque_minimo, estoque_maximo))            
+            conexao.commit()
+
+            # Redireciona para a mesma página com uma mensagem de sucesso (opcional)
+            return redirect(url_for('cadastro_material', success_message='Material cadastrado com sucesso!'))
+
+        except mysql.connector.Error as err:
+            # Trata erros de banco de dados (opcional - você pode personalizar o tratamento de erros)
+            print("Erro ao cadastrar material")
+            return redirect(url_for('cadastro_material', error_message='Erro ao cadastrar material'))
+        finally:
+            cursor.close()
+            conexao.close()
+
+    # Se for GET ou ocorrer algum erro, exibe o formulário
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+
+    cursor.close()
+    conexao.close()
+
+    return render_template('funcoes/cadastro_material.html')
 
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
 
@@ -178,48 +220,7 @@ def registrar_entrada():
             return redirect(url_for('controle_estoque'))
 
 
-@app.route('/cadastro_material', methods=['GET', 'POST'])
-def cadastro_material():
-    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
-        return redirect(url_for('solicitante'))
-    if request.method == 'POST':
-        descricao = request.form['descricao']
-        categoria = request.form['categoria']
-        localizacao = request.form['localizacao']
-        estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
-        estoque_maximo = int(request.form['estoque_maximo'] or 0)
 
-
-
-        conexao = conectar_banco_dados()
-        cursor = conexao.cursor()
-
-        try:
-            # Insere o novo material no banco de dados
-            query_insert = ("INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) "
-                            "VALUES (%s, %s, %s, %s, %s)")
-            cursor.execute(query_insert, (descricao, categoria, localizacao, estoque_minimo, estoque_maximo))            
-            conexao.commit()
-
-            # Redireciona para a mesma página com uma mensagem de sucesso (opcional)
-            return redirect(url_for('cadastro_material', success_message='Material cadastrado com sucesso!'))
-
-        except mysql.connector.Error as err:
-            # Trata erros de banco de dados (opcional - você pode personalizar o tratamento de erros)
-            print("Erro ao cadastrar material")
-            return redirect(url_for('cadastro_material', error_message='Erro ao cadastrar material'))
-        finally:
-            cursor.close()
-            conexao.close()
-
-    # Se for GET ou ocorrer algum erro, exibe o formulário
-    conexao = conectar_banco_dados()
-    cursor = conexao.cursor(dictionary=True)
-
-    cursor.close()
-    conexao.close()
-
-    return render_template('funcoes/cadastro_material.html')
 
 
 
@@ -268,39 +269,79 @@ def registrar_saida():
     return redirect(url_for('funcoes/controle_estoque'))
 
 
-@app.route('/estoque_minimo')
-def estoque_minimo():
+
+
+# ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
+
+# ---------------------------------------------------- REQUISICAO ----------------------------------------------------
+
+@app.route('/requisicao_material', methods=['GET', 'POST'])
+def requisicao_material():
+    if request.method == 'POST':
+        material_id = request.form['material_id']
+        quantidade = int(request.form['quantidade'])
+        usuario_id = session['user_id']
+        observacao = request.form.get('observacao')  # Observação pode ser opcional
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+            # Insere a requisição no banco de dados
+            inserir = "INSERT INTO requisicoes (material_id, usuario_id, quantidade, observacao) VALUES (%s, %s, %s, %s)"
+            cursor.execute(inserir, (material_id, usuario_id, quantidade, observacao))
+            conexao.commit()
+
+            print('Requisição de material enviada com sucesso!', 'success')
+
+        except mysql.connector.Error as err:
+            print(f"Erro ao criar requisição: {err}")
+            print('Ocorreu um erro ao enviar a requisição. Por favor, tente novamente mais tarde.', 'error')
+
+        finally:
+            cursor.close()
+            conexao.close()
+
+        return redirect(url_for('requisicao_material')) 
+
+    # Lógica para exibir o formulário e as requisições do usuário
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
-    
     try:
-        # Consulta para obter materiais com estoque mínimo atingido
-        cursor.execute("""
-            SELECT m.id, m.descricao, m.estoque_minimo, 
-                   COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
-                            SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
-            FROM materials m
-            LEFT JOIN estoque e ON m.id = e.material_id
-            GROUP BY m.id 
-            HAVING quantidade_atual <= m.estoque_minimo;
-        """)
-        materiais_abaixo_minimo = cursor.fetchall()
-    
+        cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
+                       "FROM materials m "
+                       "LEFT JOIN estoque e ON m.id = e.material_id "
+                       "GROUP BY m.id")
+        materiais = cursor.fetchall()
+
+        minhas_requisicoes = []
+        if 'user_id' in session:
+            usuario_id = session['user_id']
+            cursor.execute("""
+                SELECT 
+                    r.id,
+                    m.descricao as material,
+                    r.quantidade,
+                    r.status,
+                    r.data_entrega 
+                FROM requisicoes r
+                JOIN materials m ON r.material_id = m.id
+                WHERE r.usuario_id = %s
+            """, (usuario_id,))
+            minhas_requisicoes = cursor.fetchall()
+
     except mysql.connector.Error as err:
-        print(f"Erro ao buscar dados de estoque mínimo: {err}")
-        materiais_abaixo_minimo = []
+        print(f"Erro ao buscar dados: {err}")
+        materiais = []
+        minhas_requisicoes = []
 
     finally:
         cursor.close()
         conexao.close()
-    
-    return render_template('funcoes/estoque_minimo.html', materiais=materiais_abaixo_minimo)
 
-# ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
+    return render_template('funcoes/requisicao_material.html', materiais=materiais, minhas_requisicoes=minhas_requisicoes)
 
-
-# ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
-
+# ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
 
 if __name__ == "__main__":
     app.run(debug=True)
