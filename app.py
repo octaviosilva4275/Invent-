@@ -1,18 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, session,jsonify,flash
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
+from mysql.connector import Error
 import os
-from mysql.connector import Error  # Importar Error corretamente
 from dotenv import load_dotenv
-app = Flask(__name__)
-app.secret_key = 'teste'
 
-
-
-
-
-
-# Carregar variáveis de ambiente do arquivo .env
-load_dotenv()
+load_dotenv()  # Carregar variáveis do .env
 
 app = Flask(__name__)
 app.secret_key = 'teste'
@@ -44,6 +36,7 @@ def conectar_banco_dados():
     except Error as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
         raise
+
 
 
 
