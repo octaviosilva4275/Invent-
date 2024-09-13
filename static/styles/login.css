@@ -1,41 +1,62 @@
-/* Normalização do Navegador */
+
+/* Normalização do Navegador
+   - Remove a margem e padding padrão dos elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Remove a estilização de listas e o sublinhado de links.
+   - Remove bordas padrão e define a fonte padrão. */
 * {
-    margin: 0;  /* Remove a margem padrão dos elementos */
-    padding: 0;  /* Remove o padding padrão dos elementos */
-    box-sizing: border-box;  /* Inclui bordas e padding no cálculo do tamanho total dos elementos */
-    list-style: none;  /* Remove a estilização de listas (marcadores) */
-    text-decoration: none;  /* Remove o sublinhado de links */
-    border: none;  /* Remove bordas padrão */
-    font-family: 'Amatic SC', sans-serif;  /* Define a fonte padrão */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+    font-family: 'Amatic SC', sans-serif;
 }
 
-/* Normalização do html */
+/* Normalização do html
+   - Define a largura e altura como 100% da viewport.
+   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
+   - Remove a barra de rolagem horizontal. */
 html {
-    width: 100vw;  /* Define a largura como 100% da viewport */
-    height: 100vh;  /* Define a altura como 100% da viewport */
-    font-size: 62.5%;  /* Ajusta o REM para 10px (1rem = 10px) */
-    overflow: hidden;  /* Remove a barra de rolagem horizontal */
+    width: 100vw;
+    height: 100vh;
+    font-size: 62.5%; /* 1rem = 10px */
+    overflow: hidden;
 }
 
-/* Estilos para a classe de login */
+/* Estilos para a classe de login
+   - Define um layout flexível para centralizar o conteúdo.
+   - Ocupa a largura e altura totais da tela.
+   - Define a posição como relativa para permitir a sobreposição do banner. */
 .login {
-    display: flex;  /* Define o layout flexível */
-    justify-content: center;  /* Centraliza horizontalmente */
-    align-items: center;  /* Centraliza verticalmente */
-    width: 100vw;  /* Ocupa a largura total da tela */
-    height: 100vh;  /* Ocupa a altura total da tela */
-    position: relative;  /* Necessário para o overlay do banner */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
 }
 
-/* Estilos para a área de banner */
+/* Estilos para a área de banner
+   - Define a posição como absoluta para cobrir toda a tela.
+   - Define o z-index para ficar atrás do campo de login.
+   - Aplica uma imagem de fundo com sobreposição de gradiente. */
 .banner {
-    position: absolute;  /* Ocupa a tela toda, sendo "absoluto" dentro do .login */
+    position: absolute;
     top: 0;
     left: 0;
+<<<<<<< HEAD
     width: 100%;  /* Ocupa 100% da largura */
     height: 100%;  /* Ocupa 100% da altura */
     z-index: -1;  /* Fica atrás do campo de login */
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/static/img/banner.webp);
+=======
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: linear-gradient(rgba(32, 32, 32, 0.8), rgba(34, 34, 34, 0.8)), url(/static/img/banner.webp);
+>>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -43,74 +64,115 @@ html {
 }
 
 .banner img {
-    width: 100%;  /* Imagem ocupa toda a largura */
-    height: 100%;  /* Imagem ocupa toda a altura */
-    object-fit: cover;  /* Garante que a imagem cubra toda a área */
-    z-index: -2;  /* Fica atrás do overlay transparente */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
 }
 
-/* Estilos para o campo de login */
+/* Estilos para o campo de login
+   - Define um layout flexível para centralizar o conteúdo.
+   - Define a cor de fundo, padding e bordas arredondadas. */
 .campo-login {
+<<<<<<< HEAD
     display: flex;  /* Layout flexível */
     justify-content: center;  /* Centraliza horizontalmente */
     align-items: center;  /* Centraliza verticalmente */
     background-color: var(--cinza-azulado);  /* Cor de fundo */
     padding: 50px;  /* Adiciona espaçamento interno */
     border-radius: 8px;  /* Bordas arredondadas */
+=======
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--cinza-azulado);
+    padding: 50px;
+    border-radius: 8px;
+>>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }
 
-/* Estilos do formulário de login */
+/* Estilos do formulário de login
+   - Define uma largura fixa e alinha o texto à esquerda. */
 .form-login {
-    margin-bottom: 50px;  /* Margem inferior */
-    text-align: left;  /* Alinhamento do texto à esquerda */
-    width: 32rem;  /* Largura fixa para o formulário */
+    margin-bottom: 50px;
+    text-align: left;
+    width: 32rem; /* Largura do formulário */
 }
 
-/* Título do login com logo */
+/* Título do login com logo
+   - Define um layout flexível para centralizar vertical e horizontalmente.
+   - Define o tamanho e o espaçamento da logo. */
 .titulo-login {
-    display: flex;  /* Layout flexível */
-    align-items: center;  /* Alinha verticalmente ao centro */
-    justify-content: center;  /* Centraliza horizontalmente */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding-right: 70px;
 }
 
 .titulo-login img {
     width: 90px;
     height: 90px;
-    margin-right: 10px;  /* Espaçamento à direita da logo */
+    margin-right: 10px;
 }
 
 .titulo-login h3 {
-    font-size: 24px;  /* Tamanho da fonte do título */
-    margin-bottom: 0;  /* Remove a margem inferior */
+    font-size: 24px;
+    margin-bottom: 0;
 }
 
+<<<<<<< HEAD
 /* Oculta os rótulos dos inputs */
+=======
+/* Oculta os rótulos dos inputs
+   - Esconde os labels para inputs de login. */
+>>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 .form-login label {
-    display: none;  /* Esconde o label */
+    display: none;
 }
 
-/* Estilos dos inputs de login */
+/* Estilos dos inputs de login
+   - Define a largura total, padding, borda e bordas arredondadas para os inputs. */
 .form-login input {
+<<<<<<< HEAD
     width: 100%;  /* Largura total */
     padding: 12px;  /* Espaçamento interno */
     border: 1px solid var(--cinza);  /* Borda fina e cinza */
     border-radius: 4px;  /* Bordas arredondadas */
     margin-top: 5px;  /* Margem superior */
+=======
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--cinza);
+    border-radius: 4px;
+    margin-top: 5px;
+>>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }
 
-/* Link de "esqueceu a senha" */
+/* Link de "esqueceu a senha"
+   - Define a cor, tamanho da fonte, negrito e sublinhado para o link. */
 .esqueceu-senha a {
+<<<<<<< HEAD
     color: var(--preto);  /* Cor preta */
     font-size: 12px;  /* Tamanho da fonte */
     font-weight: bold;  /* Texto em negrito */
     margin-bottom: 30px;  /* Margem inferior */
     text-decoration: underline;  /* Sublinhado */
     display: block;  /* Exibe como bloco */
+=======
+    color: var(--preto);
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-decoration: underline;
+    display: block;
+>>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }
 
-/* Estilos do botão de login */
+/* Estilos do botão de login
+   - Define o layout flexível, tamanho, cor de fundo, cor do texto e bordas arredondadas.
+   - Adiciona um efeito de hover para alterar a cor e aplicar uma escala. */
 .btn-login {
+<<<<<<< HEAD
     display: flex;  /* Layout flexível */
     justify-content: center;  /* Centraliza horizontalmente */
     align-items: center;  /* Centraliza verticalmente */
@@ -138,4 +200,35 @@ html {
     text-decoration: underline;  /* Sublinhado */
     display: block;  /* Exibe como bloco */
     margin: 30px auto 0;  /* Margem superior */
+=======
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    font-size: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: var(--azul-claro);
+    color: var(--branco);
+    border-radius: 5px;
+    margin: 30px auto 0;
+}
+
+.btn-login:hover {
+    background-color: var(--azul-escuro);
+    transform: scale(1.05);
+}
+
+/* Link para "primeiro login"
+   - Define a cor, tamanho da fonte, negrito e sublinhado para o link.
+   - Define uma margem superior. */
+.primeiro-login a {
+    color: var(--preto);
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-decoration: underline;
+    display: block;
+    margin: 30px auto 0;
+>>>>>>> 0a2da8e407c8072d3493462ae7f1734c706143f1
 }

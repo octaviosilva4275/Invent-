@@ -1,71 +1,90 @@
+
 /* Estilos para telas grandes (PCs e notebooks) */
 @media (min-width: 1024px) {
-    .input_nome,
-    .input-descricao,
-    .input_categoria {
-        margin-bottom: 30px;
+    .primeiro-login {
+        flex-direction: row;
+        padding: 40px;
     }
 
-    .input_estoque {
-        margin-bottom: 30px;
-        gap: 20px;
+    .banner-primeirologin {
+        flex: 1;
+        max-width: 600px;
+        background: url('/static/img/fotoprimeirologin.jpg') no-repeat center center;
+        background-size: cover;
+        margin-right: 40px;
     }
 
-    .input_estoque input {
-        width: 48%;
+    .primeiro-login02 {
+        max-width: 500px;
     }
 }
 
-/* Estilos para tablets e dispositivos médios */
-@media (max-width: 1023px) {
-    .input_nome,
-    .input-descricao,
-    .input_categoria {
-        margin-bottom: 25px;
+/* Media Queries para Tornar a Página Responsiva */
+
+/* Telas Médias (Tablets) */
+@media (max-width: 768px) {
+    .cadastro {
+        background-color: var(--cinza-azulado); /* Mantém o fundo verde */
+        height: auto; /* Permite o conteúdo expandir verticalmente */
+        padding: 20px;
+    }
+
+    .campo-cadastro {
+        background-color: var(--cinza-azulado); /* Mantém o fundo verde no campo de cadastro */
+        padding: 20px; /* Ajusta o padding para telas menores */
+        border-radius: 0; /* Remove bordas arredondadas */
+        max-width: 100%; /* Ocupa toda a tela */
+        height: 100vh; /* O campo de cadastro ocupará toda a altura da tela */
     }
 
     .input_estoque {
-        display: flex;
-        flex-direction: column; /* Colocar inputs um abaixo do outro */
-        margin-bottom: 25px;
-        gap: 15px; /* Espaçamento entre os inputs no modo empilhado */
+        flex-direction: column; /* Inputs empilhados verticalmente */
     }
 
     .input_estoque input {
         width: 100%; /* Inputs ocupam 100% da largura no modo coluna */
     }
+
+    .btn-cadastro {
+        font-size: 1.4rem;
+        padding: 12px;
+    }
 }
 
-/* Estilos para celulares e dispositivos pequenos */
-@media (max-width: 767px) {
-
-    input::placeholder, 
-    select::placeholder {
-        color: #000000; /* Cor mais escura para melhor visibilidade */
-        font-size: 18px; /* Aumenta o tamanho da fonte em telas menores */
+/* Telas Pequenas (Celulares) */
+@media (max-width: 480px) {
+    .cadastro {
+        background-color: var(--cinza-azulado); /* Mantém o fundo verde */
+        height: auto; /* Permite o conteúdo expandir verticalmente */
+        padding: 10px;
     }
 
-    .input_nome,
-    .input-descricao,
-    .input_categoria {
-        margin-bottom: 20px;
+    .campo-cadastro {
+        background-color: var(--cinza-azulado); /* Mantém o fundo verde no campo de cadastro */
+        padding: 10px; /* Ajusta o padding para telas menores */
+        border-radius: 0; /* Remove bordas arredondadas */
+        max-width: 100%; /* Ocupa toda a tela */
+        height: 100vh; /* O campo de cadastro ocupará toda a altura da tela */
     }
 
-    .input_estoque {
-        flex-direction: column;
-        margin-bottom: 20px;
-        gap: 10px;
+    .titulo-cadastro h2 {
+        font-size: 2rem;
     }
 
-    .input_estoque input {
-        width: 100%;
-    }
-    
-    /* Ajustando o padding para telas menores */
     .input_nome input,
     .input-descricao input,
-    .input_categoria select,
+    .input_categoria select {
+        padding: 12px;
+        font-size: 1.4rem;
+    }
+
     .input_estoque input {
-        padding: 15px; /* Padding menor para inputs em dispositivos menores */
+        padding: 12px;
+        font-size: 1.4rem;
+    }
+
+    .btn-cadastro {
+        font-size: 1.4rem;
+        padding: 10px;
     }
 }
