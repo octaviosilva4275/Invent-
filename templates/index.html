@@ -1,0 +1,90 @@
+<<<<<<< HEAD
+=======
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/styles/index.css">
+    <link rel="stylesheet" href="/static/styles/medias/media-index.css">
+</head>
+<body>
+    <div class="container">
+        <section class="container-estoque">
+            <h3>Estoque mínimo:</h3>
+            <figure><i class="fa-solid fa-exclamation"></i></figure>
+            <a href="#">50 Itens</a>
+        </section>
+        <section class="container-saidas" id="saidas">
+            <h3>Saídas hoje:</h3>
+            <figure><i class="fa-solid fa-check"></i></figure>
+            <a href="#" target="_blank">50 Itens</a>
+        </section>
+
+ 
+    </div>
+
+    <section class="table">
+        <table>
+            <caption>Histórico</caption>
+            <thead>
+                <tr>
+                    <th>Nome do Produto</th>
+                    <th>Usuário</th>
+                    <th>Quantidade</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Prego</td>
+                    <td>Octavio</td>
+                    <td>10</td>
+                    <td>Pendente</td>
+                </tr>
+            </tbody>
+
+            <tbody>
+                <tr>
+                    <td>Prego</td>
+                    <td>Octavio</td>
+                    <td>10</td>
+                    <td>Negado</td>
+                </tr>
+            </tbody>
+
+
+            <tbody>
+                <tr>
+                    <td>Prego</td>
+                    <td>Octavio</td>
+                    <td>10</td>
+                    <td>Aprovado</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+       const tds = document.querySelectorAll('td');
+
+        tds.forEach(td => {
+
+            const status = td.textContent.trim();
+
+
+            if (status === "Aprovado") {
+                td.classList.add('aprovado');
+            } else if (status === "Pendente") {
+                td.classList.add('pendente');
+            } else if (status === "Negado") {
+                td.classList.add('negado');
+            }
+        });
+
+    </script>
+</body>
+</html>
+>>>>>>> d119ade5ed708610dbd0056d74e386a4a44f2e30
