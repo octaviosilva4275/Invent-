@@ -1,11 +1,33 @@
+
+
+
+@media (max-width: 768px) {
+    .form-section {
+    border-radius: 0px;
+    padding: 0px; 
+    margin: 0;
+    height: 100vh;
+    /* height: 91vh para mobile */
+    width: 100%;
+}
+.container-btn button{
+    margin-right: 20px;
+    margin-top:0px;
+}
+    body{
+        overflow-y: hidden;
+    }
+
+}
+
 @media (max-width: 480px) {
     .form-section {
     border-radius: 0px;
     padding: 0px; 
     margin: 0;
-    height: 90vh;
+    height: 91vh;
     width: 100%;
-}
+    }
     body{
         overflow-y: hidden;
     }
@@ -18,23 +40,4 @@
     .form-section h2{
         font-size: 14px;
     }
-}
-
-
-@media (max-width: 768px) {
-    .form-section {
-    border-radius: 0px;
-    padding: 0px; 
-    margin: 0;
-    height: 91vh;
-    width: 100%;
-}
-.container-btn button{
-    margin-right: 20px;
-    margin-top:0px;
-}
-    body{
-        overflow-y: hidden;
-    }
-
 }
