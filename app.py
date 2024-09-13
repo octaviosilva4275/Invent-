@@ -19,6 +19,7 @@ app.secret_key = 'teste'
 
 def conectar_banco_dados():
     use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
+    print(f"USE_REMOTE_DB: {use_remote_db}")
     
     try:
         if use_remote_db:
