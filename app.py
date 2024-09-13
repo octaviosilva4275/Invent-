@@ -2,14 +2,14 @@ from flask import Flask, render_template, request, redirect, url_for, session,js
 import mysql.connector
 import os
 from mysql.connector import Error  # Importar Error corretamente
+from dotenv import load_dotenv
 app = Flask(__name__)
 app.secret_key = 'teste'
 
 
-from dotenv import load_dotenv
-import os
-import mysql.connector
-from mysql.connector import Error
+
+
+
 
 # Carregar variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -56,6 +56,9 @@ def solicitante():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    print("Iniciando o login...")
+    conexao = conectar_banco_dados()
+    print("Conexão com o banco de dados estabelecida.")
     if request.method == 'POST':
         entrada = request.form['sn']
         senha = request.form['password']
