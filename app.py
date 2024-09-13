@@ -122,6 +122,62 @@ def dashboard():
 
 # ---------------------------------------------------- CADASTRO MATERIAL ----------------------------------------------------
 
+
+# ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
+
+
+
+# ---------------------------------------------------- CONTROLE DE ESTOQUE ----------------------------------------------------
+
+@app.route('/controle_estoque')
+def controle_estoque():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+
+    cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
+                    "FROM materials m "
+                    "LEFT JOIN estoque e ON m.id = e.material_id "
+                    "GROUP BY m.id")
+    materiais = cursor.fetchall()
+
+    cursor.close()
+    conexao.close()
+
+    return render_template('controle_estoque.html', materiais=materiais)
+
+@app.route('/registrar_entrada', methods=['POST'])
+def registrar_entrada():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    if request.method == 'POST':
+        material_id = request.form['material_id']
+        quantidade = int(request.form['quantidade'])
+        usuario_id = session['user_id'] 
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+
+            query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'entrada', %s)"
+            cursor.execute(query_insert, (material_id, quantidade, usuario_id))
+            conexao.commit()
+            
+            cursor.close()
+            conexao.close()
+
+
+            return redirect(url_for('controle_estoque'))
+        except:
+            cursor.close()
+            conexao.close()
+            
+
+            return redirect(url_for('controle_estoque'))
+
+
 @app.route('/cadastro_material', methods=['GET', 'POST'])
 def cadastro_material():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
@@ -146,14 +202,101 @@ def cadastro_material():
             conexao.commit()
 
             # Redireciona para a mesma página com uma mensagem de sucesso (opcional)
-            return redirect(url_for('cadastro_material',))
+            return redirect(url_for('cadastro_material', success_message='Material cadastrado com sucesso!'))
 
-        except:
+        except mysql.connector.Error as err:
+            # Trata erros de banco de dados (opcional - você pode personalizar o tratamento de erros)
             print("Erro ao cadastrar material")
-            return redirect(url_for('cadastro_material'))
+            return redirect(url_for('cadastro_material', error_message='Erro ao cadastrar material'))
         finally:
             cursor.close()
             conexao.close()
+
+    # Se for GET ou ocorrer algum erro, exibe o formulário
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+
+    cursor.close()
+    conexao.close()
+
+    return render_template('cadastro_material.html')
+
+
+
+@app.route('/registrar_saida', methods=['POST'])
+def registrar_saida():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    if request.method == 'POST':
+        material_id = request.form['material_id']
+        quantidade = int(request.form['quantidade'])
+        usuario_id = session['user_id'] 
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+            # Verifica a quantidade em estoque
+            cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
+            estoque_atual = cursor.fetchone()
+
+            if estoque_atual and estoque_atual[0] >= quantidade:
+                # Atualiza a quantidade em estoque (subtrai a quantidade de saída)
+                cursor.execute("""
+                    UPDATE estoque 
+                    SET quantidade = quantidade - %s 
+                    WHERE material_id = %s
+                """, (quantidade, material_id))
+
+                # Insere um novo registro de saída no estoque
+                inserir = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
+                cursor.execute(inserir, (material_id, -quantidade, usuario_id)) 
+
+                conexao.commit()
+
+                return redirect(url_for('controle_estoque'))
+            else:
+                print('Estoque insuficiente para atender a requisição.') 
+        except:
+            print('Erro ao registrar saída')
+
+
+        finally:
+            cursor.close()
+            conexao.close()
+
+    return redirect(url_for('controle_estoque'))
+
+
+@app.route('/estoque_minimo')
+def estoque_minimo():
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    
+    try:
+        # Consulta para obter materiais com estoque mínimo atingido
+        cursor.execute("""
+            SELECT m.id, m.descricao, m.estoque_minimo, 
+                   COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
+                            SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
+            FROM materials m
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id 
+            HAVING quantidade_atual <= m.estoque_minimo;
+        """)
+        materiais_abaixo_minimo = cursor.fetchall()
+    
+    except mysql.connector.Error as err:
+        print(f"Erro ao buscar dados de estoque mínimo: {err}")
+        materiais_abaixo_minimo = []
+
+    finally:
+        cursor.close()
+        conexao.close()
+    
+    return render_template('estoque_minimo.html', materiais=materiais_abaixo_minimo)
+
+# ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
 
     # Se for GET ou ocorrer algum erro, exibe o formulário
     conexao = conectar_banco_dados()
