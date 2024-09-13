@@ -23,7 +23,6 @@ CREATE TABLE users (
 -- Tabela de materiais sem fornecedor
 CREATE TABLE materials (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    descricao TEXT NOT NULL,
     categoria ENUM('consumiveis', 'ferramentas', 'equipamentos') NOT NULL,
     localizacao VARCHAR(100),
     estoque_minimo INT,
@@ -52,7 +51,7 @@ CREATE TABLE requisicoes (
     usuario_id INT,
     quantidade INT NOT NULL,
     data_requisicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pendente', 'aprovada', 'rejeitada') DEFAULT 'pendente',
+    status ENUM('Solicitado,Disponivel para retirada,Aguardando reposição,Retirado') DEFAULT 'pendente',
     data_entrega TIMESTAMP NULL,
     observacao VARCHAR(255),
     FOREIGN KEY (material_id) REFERENCES materials(id),
@@ -270,3 +269,6 @@ INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VAL
 (85, 5, 'entrada', 1),       -- ETIQUETA AUTOADESIVA 101,6 X 25,4MM (NULL + 5 -> 5)
 (86, 5, 'entrada', 1);       -- ETIQUETA AUTOADESIVA 25,4X101,6MM (NULL + 5 -> 5)
  
+ALTER USER 'tcc'@'localhost' IDENTIFIED WITH mysql_native_password BY '123';
+
+select * from users
