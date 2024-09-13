@@ -1,3 +1,10 @@
+/* 
+- Estilo para o corpo da página
+- Define largura e altura como 100% da viewport
+- Remove padding e margens padrão
+- Define box-sizing para incluir bordas e padding no cálculo do tamanho
+- Define fonte padrão
+*/
 body {
     width: 100vw;
     height: 100vh;
@@ -7,6 +14,11 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* 
+- Estilo para o container principal
+- Define largura total, altura automática, e layout flexível com wrap
+- Alinha itens ao início, adiciona margens e padding
+*/
 .container {
     width: 100%;
     height: auto;
@@ -18,6 +30,11 @@ body {
     padding: 20px;
 }
 
+/* 
+- Estilo para os containers de saídas e estoque
+- Define cor de fundo, cor do texto, largura, altura, bordas arredondadas, alinhamento de texto e margens
+- Adiciona posição relativa para posicionamento dos ícones
+*/
 .container-saidas,
 .container-estoque {
     background-color: #4BBF85;
@@ -30,10 +47,18 @@ body {
     position: relative; /* Garantir que ícones sejam posicionados em relação a este contêiner */
 }
 
+/* 
+- Estilo específico para o container de estoque
+- Define uma cor de fundo diferente
+*/
 .container-estoque {
     background-color: #E35F64;
 }
 
+/* 
+- Estilo para a tabela geral
+- Define cor de fundo, largura, margens, bordas arredondadas e overflow
+*/
 .table {
     background-color: #B1C4CC;
     width: 90%;
@@ -42,31 +67,55 @@ body {
     overflow: hidden;
 }
 
+/* 
+- Estilo para as tabelas dentro do container
+- Define largura total, colapsa bordas e cor de fundo
+*/
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: #f9f9f9;
 }
 
+/* 
+- Estilo para o cabeçalho da tabela
+- Define cor de fundo e cor do texto
+*/
 thead {
     background-color: #333;
     color: white;
 }
 
+/* 
+- Estilo para células da tabela
+- Define padding, alinhamento do texto e borda inferior
+*/
 th, td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
+/* 
+- Estilo para linhas pares da tabela
+- Define uma cor de fundo alternada para melhorar a legibilidade
+*/
 tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
+/* 
+- Estilo para linhas da tabela ao passar o mouse
+- Define a cor de fundo para destacar a linha
+*/
 tbody tr:hover {
     background-color: #ddd;
 }
 
+/* 
+- Estilo para a legenda da tabela
+- Define tamanho da fonte, padding, alinhamento e cor do texto
+*/
 caption {
     font-size: 24px;
     padding: 10px;
@@ -75,7 +124,10 @@ caption {
     font-weight: bold;
 }
 
-/* Estilo dos ícones */
+/* 
+- Estilo para ícones dentro de seções
+- Define tamanho da fonte, estilo de exibição, decoração do texto e cor
+*/
 section a {
     font-size: 32px;
     display: inline-block;
@@ -90,6 +142,10 @@ section h3 {
     margin-top: 8px;
 }
 
+/* 
+- Estilo para ícones de verificação e exclamação
+- Define a posição absoluta e tamanho da fonte
+*/
 .fa-check,
 .fa-exclamation {
     position: absolute;
@@ -106,7 +162,10 @@ section h3 {
     top: 10px;
 }
 
-/* Adicione estilos para as classes de status */
+/* 
+- Estilo para classes de status
+- Define cores e peso da fonte para cada status
+*/
 .aprovado {
     color: rgb(129, 214, 0);
     font-weight: 700;

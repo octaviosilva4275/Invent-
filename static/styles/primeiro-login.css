@@ -1,4 +1,9 @@
-/* Reset básico para garantir uma aparência consistente */
+/* 
+- Reset básico para garantir uma aparência consistente
+- Remove margens, padding e bordas padrão
+- Define altura total para body e html
+- Define a fonte padrão e remove barra de rolagem horizontal
+*/
 body, html {
     margin: 0;
     padding: 0;
@@ -8,6 +13,12 @@ body, html {
     text-decoration: none;
 }
 
+/* 
+- Estilos para o botão de voltar
+- Posiciona o botão no canto superior esquerdo
+- Define cor de fundo, bordas arredondadas e padding
+- Adiciona transição para a cor de fundo ao passar o mouse
+*/
 .botao-voltar {
     position: absolute;
     top: 20px; 
@@ -27,47 +38,65 @@ body, html {
 }
 
 .botao-voltar i {
-    margin-right: 8px; /* Espaçamento entre o ícone e o texto */
+    margin-right: 8px; 
 }
 
 .botao-voltar:hover {
-    background-color: #005B99; /* Cor de fundo ao passar o mouse */
+    background-color: #005B99; 
 }
 
-
-
-
-
+/* 
+- Estilo para a imagem no header de primeiro login
+- Define largura e altura da imagem
+*/
 .header-primeirologin img {
     width: 90px;
     height: 90px;
 }
 
+/* 
+- Estilos para o banner de primeiro login
+- Ocupa toda a tela com posição absoluta
+- Define imagem de fundo e sobreposição
+*/
 .banner-primeirologin {
-        position: absolute;  /* Ocupa a tela toda, sendo "absoluto" dentro do .login */
-        top: 0;
-        left: 0;
-        width: 100%;  /* Ocupa 100% da largura */
-        height: 100%;  /* Ocupa 100% da altura */
-        z-index: -1;  /* Fica atrás do campo de login */
-        background-image: linear-gradient(rgba(31, 30, 30, 0.8), rgba(23, 22, 22, 0.8)), url(/static/img/fotoprimeirologin.jpg);
-        background-position: center center;
-        background-size:cover;
-        background-repeat: no-repeat;
-        overflow: hidden;
-    }
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: linear-gradient(rgba(31, 30, 30, 0.8), rgba(23, 22, 22, 0.8)), url(/static/img/fotoprimeirologin.jpg);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
 
-
+/* 
+- Estilo para a imagem dentro do banner de primeiro login
+- Garante que a imagem cubra toda a área
+*/
 .banner-primeirologin img {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
 }
 
+/* 
+- Estilos para o campo de entrada com ícone de senha
+- Define margem direita para o ícone
+- Alinha o campo de entrada e o ícone
+*/
 .campo-input.password i {
     margin-right: 30px; 
 }
 
+/* 
+- Estilos para o campo de entrada
+- Define margem inferior e exibe o ícone
+- Adiciona padding e posiciona o ícone de alternância
+*/
 .campo-input label {
     display: block;
     margin-bottom: 5px;
@@ -86,22 +115,26 @@ body, html {
     display: flex;
     align-items: center;
     padding: 5px;
-    position: relative; /* Adiciona contexto para posicionar o ícone de alternância */
+    position: relative; 
 }
 
 .campo-input i {
     margin-right: 10px;
-    font-size: 18px; /* Ajuste o tamanho do ícone conforme necessário */
+    font-size: 18px; 
 }
 
 .campo-input .toggle-password {
     position: absolute;
-    right: 10px; /* Ajusta a posição do ícone para não sobrepor o texto do campo */
-    font-size: 18px; /* Ajuste o tamanho do ícone conforme necessário */
-    cursor: pointer; /* Indica que o ícone é clicável */
-    color: #aaa; /* Ajusta a cor do ícone para melhor visibilidade */
+    right: 10px; 
+    font-size: 18px; 
+    cursor: pointer; 
+    color: #aaa; 
 }
 
+/* 
+- Estilos para o campo de seleção
+- Define largura, padding e bordas arredondadas
+*/
 .campo-input select {
     width: 100%; 
     padding: 10px; 
@@ -111,14 +144,12 @@ body, html {
     box-sizing: border-box; 
 }
 
-.botao-voltar {
-    position: absolute;
-}
-
-.fa-eye:before {
-    content: "\f06e";
-    position: relative;
-}
+/* 
+- Estilos para o botão de entrar
+- Define layout flexível, largura, tamanho da fonte e padding
+- Define cor de fundo, cor do texto e bordas arredondadas
+- Adiciona efeitos de hover com transição suave
+*/
 .btn-entrar {
     display: flex;
     justify-content: center;
@@ -132,45 +163,48 @@ body, html {
     border-radius: 5px;
     margin: 30px auto 0;
     border: none;
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Adiciona transição suave */
+    transition: background-color 0.3s ease, transform 0.2s ease; 
 }
 
 .btn-entrar:hover {
-    background-color: rgba(0, 100, 150, 1); /* Cor de fundo ao passar o mouse */
-    transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+    background-color: rgba(0, 100, 150, 1); 
+    transform: scale(1.05); 
 }
 
-    
-
-/* Seção de login com imagem de fundo e centralização */
+/* 
+- Estilos para a seção de primeiro login
+- Define layout flexível para centralizar o conteúdo
+- Define altura total da viewport e centraliza a imagem de fundo
+*/
 .primeiro-login {
     display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    height: 100vh; /* Altura total da viewport */
-   
-    background-size: cover; /* Faz a imagem cobrir toda a área */
-    background-position: center; /* Centraliza a imagem de fundo */
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    background-size: cover; 
+    background-position: center; 
 }
 
-.primeiro-login {
-    justify-content: center;
-}
-
-/* Formulário centralizado com limite de largura */
+/* 
+- Estilos para o formulário centralizado
+- Define largura máxima, cor de fundo, padding e bordas arredondadas
+- Adiciona sombra ao redor e centraliza o texto
+*/
 .primeiro-login02 {
     width: 100%;
-    max-width: 400px; /* Define uma largura máxima */
-    background-color: #B1C4CC; /* Cor de fundo semitransparente */
+    max-width: 400px;
+    background-color: #B1C4CC; 
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ao redor */
-    text-align: center; /* Centraliza o texto dentro do formulário */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+    text-align: center; 
     position: absolute;
 }
 
-
-/* Centraliza o conteúdo do header no formulário */
+/* 
+- Estilos para o header dentro do formulário de primeiro login
+- Define layout flexível para centralizar a imagem
+*/
 .header-primeirologin {
     display: flex;
     justify-content: center;

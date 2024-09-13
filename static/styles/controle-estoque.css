@@ -1,3 +1,10 @@
+/* 
+- Estilo para o corpo da página
+- Define largura e altura como 100% da viewport
+- Remove margens padrão
+- Define fonte padrão e layout flexível
+- Centraliza o conteúdo horizontal e verticalmente
+*/
 body {
     width: 100vw;
     height: 100vh;
@@ -9,6 +16,12 @@ body {
     justify-content: center;
 }
 
+/* 
+- Estilo para a seção do formulário
+- Define largura como 80% com largura máxima de 1000px
+- Define cor de fundo, layout flexível e alinhamento do conteúdo
+- Adiciona bordas arredondadas, padding e margem inferior
+*/
 .form-section {
     width: 80%;
     max-width: 1000px;
@@ -20,45 +33,65 @@ body {
     border-radius: 30px;
     padding: 20px;
     margin-bottom: 20px;
-
 }
 
+/* 
+- Estilo para o formulário
+- Define largura total, padding e bordas arredondadas
+*/
 form {
     width: 100%;
     padding: 15px;
     border-radius: 15px;
 }
 
+/* 
+- Estilo para o título principal
+- Define margem e cor do texto
+*/
 h1 {
     margin: 15px 0;
     color: var(--preto);
 }
 
+/* 
+- Estilo para subtítulos
+- Define largura total, margem e cor do texto
+*/
 h2 {
     width: 100%;
     margin: 10px 0;
     color: var(--cinza);
 }
 
-select{
+/* 
+- Estilo para selects
+- Define largura (considerando o padding), padding, margem inferior, bordas arredondadas e cor da borda
+*/
+select {
     width: calc(100% - 22px);
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid var(--cinza-escuro);
-
 }
 
-
+/* 
+- Estilo para inputs de tipo número
+- Define largura (considerando o padding), padding, margem inferior, bordas arredondadas e cor da borda
+*/
 input[type="number"] {
     width: calc(100% - 45px);
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid var(--cinza-escuro);
-
 }
 
+/* 
+- Estilo para botões
+- Define padding, margem inferior, bordas arredondadas, borda, cor de fundo, cor do texto, cursor e tamanho da fonte
+*/
 button {
     padding: 10px 20px;
     margin-bottom: 15px;
@@ -70,9 +103,10 @@ button {
     font-size: 16px;
 }
 
+/* 
+- Estilo para botões ao passar o mouse
+- Define a cor de fundo e aplica um efeito de destaque
+*/
 button:hover {
     background-color: var(--azul-claro);
 }
-
-
-
