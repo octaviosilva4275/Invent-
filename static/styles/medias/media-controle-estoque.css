@@ -7,15 +7,13 @@
     padding: 0px; 
     margin: 0;
     height: 100vh;
-    /* height: 91vh para mobile */
+
     width: 100%;
 }
 .container-btn button{
     margin-top:0px;
 }
-    body{
-        overflow-y: hidden;
-    }
+
 
 }
 
@@ -24,11 +22,11 @@
     border-radius: 0px;
     padding: 0px; 
     margin: 0;
-    height: 91vh;
+    height: 100%;
     width: 100%;
     }
-    body{
-        overflow-y: hidden;
+    html{
+        background-color: white;
     }
     .btn-cadastro h2{
         font-size: 18px;

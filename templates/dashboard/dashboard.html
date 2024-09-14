@@ -9,6 +9,7 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <link rel="icon" href="/3.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
   <style>
    
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
@@ -191,7 +192,7 @@ body{
     }
     .container-dashboard-header{
       width: 100vw;
-      background: #161a2d;
+      background: var(--azul-escuro);
       height: 80px;
 
     }

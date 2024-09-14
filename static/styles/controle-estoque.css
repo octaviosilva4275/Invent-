@@ -5,7 +5,7 @@ body{
 
 html{
     height: 100%;
-    overflow: hidden;
+
 }
 
 /* Estilo da Seção do Formulário */
@@ -41,9 +41,7 @@ form {
 
 /* Estilo dos Subtítulos */
 .form-section h2 {
-    width: 100%;
     margin: 10px 0; /* Aumentado o espaço superior e inferior */
-    margin-left: 32px;
     color: var(--cinza);
     font-size: 22px; /* Ajustado o tamanho da fonte para uma hierarquia clara */
     text-align: start; /* Centralizado o texto */
@@ -91,6 +89,7 @@ button:hover {
 #quantidade, #material{
     background-color: rgb(243, 243, 243);
     color: black;
+    width: 100%;
 }
 
 
