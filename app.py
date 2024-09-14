@@ -39,7 +39,6 @@ def conectar_banco_dados():
 
 
 
-
 @app.route('/')
 def solicitante():
     return render_template('login/login.html')
