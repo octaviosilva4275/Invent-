@@ -17,6 +17,7 @@
     .primeiro-login02 {
         max-width: 500px;
     }
+
 }
 
 /* Media Queries para Tornar a Página Responsiva */
@@ -64,7 +65,7 @@
         padding: 10px; /* Ajusta o padding para telas menores */
         border-radius: 0; /* Remove bordas arredondadas */
         max-width: 100%; /* Ocupa toda a tela */
-        height: 100vh; /* O campo de cadastro ocupará toda a altura da tela */
+        height: 90vh;
     }
 
     .titulo-cadastro h2 {

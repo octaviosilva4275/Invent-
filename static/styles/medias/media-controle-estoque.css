@@ -11,7 +11,6 @@
     width: 100%;
 }
 .container-btn button{
-    margin-right: 20px;
     margin-top:0px;
 }
     body{
@@ -32,12 +31,17 @@
         overflow-y: hidden;
     }
     .btn-cadastro h2{
-        font-size: 16px;
-    }
-    .form-section h1{
         font-size: 18px;
     }
+    .form-section h1{
+        font-size: 24px;
+    }
     .form-section h2{
-        font-size: 14px;
+        font-size: 18px;
+    }
+    #quantidade, #material {
+        background-color: rgb(243, 243, 243);
+        color: black;
+        width: 100%;
     }
 }
