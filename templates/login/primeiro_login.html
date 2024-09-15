@@ -1,22 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Página de primeiro login para acessar o sistema de inventário.">
-    <title>Invent +</title>
-    <!-- Links para os arquivos CSS com Jinja -->
+    <title>Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/primeiro-login.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-primeirologin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
-    
-    <!-- Link para o ícone da página com Jinja -->
-    <link rel="icon" href="{{ url_for('static', filename='img/logoinvent+.png') }}">
-    
-    <!-- Link para o Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script> 
 </head>
-
 <body>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -29,69 +21,79 @@
         </div>
     {% endif %}
 {% endwith %}
-
-    <section class="primeiro-login">
-        <div class="banner-primeirologin"></div>
-
-        <div class="primeiro-login02">
-            <div class="header-primeirologin">
-                <img src="/static/img/logoinvent+.png" alt="Logo Invent +" class="logo">  
-                <h1>CADASTRO</h1>
-            </div>
-
-            <form action="{{ url_for('primeiro_login') }}" method="POST">  
-                <div class="inputs">
-                    <div class="campo-input">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="sn" name="sn" placeholder="Código SN" required>
+    <div class="container-menu">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+        <h1 class="login-menu">Cadastre-se<span>.</span></h1>
+        <a id="voltar-btn" class="voltar">
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+    <div class="login-container">
+        <div class="login-box">
+            <div class="conteudo">
+                <h1 class="login-full">Cadastre-se<span>.</span></h1>
+                <form action="{{ url_for('primeiro_login') }}" method="POST">
+                    <div class="input-box">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="exemplo@gmail.com" required>
                     </div>
-                </div>
+                    
+                    <div class="input-box">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" placeholder="**********" required >
+                    </div>
+                    
+                    <div class="input-box">
+                        <label for="sn">Código SN</label>
+                        <input type="text" id="sn" name="sn" placeholder="3416" required>
+                    </div>
+                    
+                    <div class="input-box">
+                        <label for="areas-senai">Área de Interesse</label>
+                        <select id="areas-senai" name="areas-senai" required>
+                            <option value="">Selecione uma área</option>
+                            <option value="eletroeletronica">Eletroeletrônica</option>
+                            <option value="metalmecanica">Metalmecânica</option>
+                            <option value="metalurgia">Metalurgia</option>
+                            <option value="automobilistica">Automobilística</option>
+                            <option value="madeira-mobiliario">Madeira e Mobiliário</option>
+                            <option value="gestao">Gestão</option>
+                            <option value="almoxarifado">Almoxarifado</option>
+                            <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
+                            <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
+                            <option value="alimentos-bebidas">Alimentos e Bebidas</option>
+                        </select>
+                    </div>
 
-                <div class="campo-input">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" id="email" name="email" placeholder="Email" required>
-                </div>
-
-                <div class="campo-input">
-                    <i class="fas fa-user"></i>
-                    <select id="areas-senai" name="areas-senai" required>
-                        <option value="">Selecione uma área</option>
-                        <option value="eletroeletronica">Eletroeletrônica</option>
-                        <option value="metalmecanica">Metalmecânica</option>
-                        <option value="metalurgia">Metalurgia</option>
-                        <option value="automobilistica">Automobilística</option>
-                        <option value="madeira-mobiliario">Madeira e Mobiliário</option>
-                        <option value="gestao">Gestão</option>
-                        <option value="almoxarifado">Almoxarifado</option>
-                        <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
-                        <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
-                        <option value="alimentos-bebidas">Alimentos e Bebidas</option>
-                    </select>
-                </div>
-
-                <div class="campo-input">
-                    <i class="fas fa-lock"></i>
-                    <input type="password" id="password" name="password" placeholder="Senha" required>          
-                    <i class="fas fa-eye toggle-password" aria-label="Toggle password visibility"></i>
-                </div>
-
-                <p class="password-hint">Senha com no mínimo 8 caracteres</p>
-                <button class="btn-entrar" type="submit">ENTRAR</button>
-                <p class="terms"></p>
-                <p>Já tem uma conta? <a href="{{ url_for('solicitante') }}">Login</a></p>
-            </form>
+                    <button type="submit">Cadastrar</button>
+                </form>
+                <a href="{{ url_for('login') }}"><p class="register">Possui uma conta?</p></a>
+            </div>
         </div>
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='img/fotoprimeirologin.jpg') }}" alt="Imagem de fundo">
+        </div>
+    </div>
+    <script>
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.getElementById('password');
 
-        <script>
-            const togglePassword = document.querySelector('.toggle-password');
-            const passwordInput = document.getElementById('password');
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
 
-            togglePassword.addEventListener('click', function() {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                this.classList.toggle('fa-eye-slash');
-            });
-        </script>
-    </section>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const voltarBtn = document.getElementById('voltar-btn');
+
+        voltarBtn.addEventListener('click', function() {
+            // Substitua o URL abaixo pelo URL para onde você deseja redirecionar
+            window.location.assign("{{ url_for('login') }}");
+        });
+    });
+
+    </script>
 </body>
 </html>

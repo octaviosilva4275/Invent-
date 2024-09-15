@@ -1,117 +1,65 @@
-/* Estilos aplicados para telas com largura de até 1024 pixels (tablets e dispositivos móveis maiores) */
-@media (max-width: 1024px) {
-    /* Ajusta o container de login para ocupar toda a largura e altura da tela, e centraliza o conteúdo */
-    .login {
-        width: 100vw;
-        height: 100vh;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
-
-    /* Ajusta o campo de login para ocupar 90% da tela com padding adequado */
-    .campo-login {
-        width: 100%;
-        max-width: 400px;
-        padding: 30px;
-        box-shadow: none; /* Remove a sombra */
-        border-radius: 8px; /* Mantém as bordas arredondadas */
-        background-color: var(--cinza-azulado); /* Cor de fundo */
-    }
-
-    /* Define a largura do formulário de login como 90% e centraliza */
-    .form-login {
-        width: 90%;
-        margin: 0 auto;
-    }
-
-    /* Ajusta o tamanho da fonte e a margem inferior do título do formulário de login */
-    .titulo-login h3 {
-        font-size: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    /* Define o padding e o tamanho dos campos de input */
-    .form-login input {
-        padding: 1rem;
-        font-size: 1.4rem;
-    }
-
-    /* Ajusta a largura, tamanho da fonte e padding do botão de login */
-    .btn-login {
-        width: 70%;
-        font-size: 1.5rem;
-        padding: 1.2rem;
-        margin: 20px auto;
-    }
-
-    /* Centraliza e ajusta o tamanho da fonte do link de recuperação de senha */
-    .esqueceu-senha a {
-        font-size: 1.4rem;
-        text-align: center;
-        display: block;
-        margin-top: 10px;
-    }
-
-    /* Centraliza o link de primeiro login */
-    .primeiro-login a {
-        text-align: center;
-        font-size: 1.4rem;
-        margin-top: 20px;
-        
-    }
-}
-
-/* Estilos aplicados para telas com largura de até 768 pixels (dispositivos móveis menores) */
+/* Media Queries para Responsividade */
 @media (max-width: 768px) {
-    .login {
-        padding: 10px;
+    .conteudo{
+        margin-left: 30px;
     }
 
-    .campo-login {
-        width: 100vw; /* Ocupa toda a largura */
-        padding: 20px;
-    }
-
-    .form-login {
-        width: 95%; /* Mais espaço para inputs */
-    }
-
-    .titulo-login h3 {
-        font-size: 1.8rem; /* Menor tamanho para título */
-    }
-
-    .btn-login {
-        width: 80%;
-        font-size: 1.4rem; /* Tamanho reduzido da fonte */
-        padding: 1rem;
-    }
 }
 
-/* Estilos aplicados para telas com largura de até 480 pixels (celulares menores) */
-@media (max-width: 480px) {
-    /* Define o campo de login para ocupar a tela toda com padding ajustado */
-    .campo-login {
-        padding: 15px;
+/* Media Queries para Responsividade */
+/* Talvez */
+/* @media (max-width: 488px) {
+    .login-container{
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
     }
 
-    /* Reduz o tamanho da fonte do título */
-    .titulo-login h3 {
-        font-size: 1.6rem;
-    }
+} */
 
-    /* Aumenta a largura do botão de login e ajusta o padding */
-    .btn-login {
-        width: 90%;
-        padding: 1rem;
-    }
 
-    .form-login input {
-        font-size: 1.2rem;
-        padding: 0.8rem;
+@media (max-width: 488px) {
+    .login-container{
+        width: 100%;
+        height: 100%;
+        border-radius: 0px;
+        display: block;
     }
-
-    .primeiro-login a, .esqueceu-senha a {
-        font-size: 1.2rem; /* Tamanho de texto ajustado */
+    .image-container{
+        display: none;
+    }
+    .login-box{
+        width: 100%;
+        height: 75%;
+        max-width:none;
+        position: fixed;
+        bottom: 0;
+        border-radius: 100px 0px 0px 0px;
+    }
+    .container-menu {
+        width: 100%;
+        height: 40%;
+        background-color: #eeeeee;
+        position: fixed;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        background-image: url('/static/img/fundo_branco.jpg'); /* Verifique o caminho */
+        background-size: cover; /* Ajusta a imagem para cobrir todo o container */
+        background-position: center; /* Centraliza a imagem no container */
+        background-repeat: no-repeat; /* Impede que a imagem se repita */
+    }
+    
+    .container-menu img {
+        width: 230px;
+        height: 230px;
+    }
+    .conteudo{
+        margin-left: 0px;
+        width: 80%;
+    }
+    .input-box input{
+        font-size: 22px;
     }
 }
