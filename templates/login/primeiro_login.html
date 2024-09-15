@@ -21,16 +21,22 @@
         </div>
     {% endif %}
 {% endwith %}
+
     <div class="container-menu">
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
         <h1 class="login-menu">Cadastre-se<span>.</span></h1>
-        <a id="voltar-btn" class="voltar">
-            <i class="fa-solid fa-arrow-right"></i>
-        </a>
+        <div class="container-voltar">
+
+            
+            </div>
     </div>
     <div class="login-container">
+        
         <div class="login-box">
             <div class="conteudo">
+                <a class="voltar" href="{{ url_for('login') }}">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
                 <h1 class="login-full">Cadastre-se<span>.</span></h1>
                 <form action="{{ url_for('primeiro_login') }}" method="POST">
                     <div class="input-box">
@@ -86,12 +92,13 @@
 
 
     document.addEventListener('DOMContentLoaded', function() {
-        const voltarBtn = document.getElementById('voltar-btn');
+        const voltarBtn = document.getElementById('container-voltar');
 
         voltarBtn.addEventListener('click', function() {
             // Substitua o URL abaixo pelo URL para onde você deseja redirecionar
             window.location.assign("{{ url_for('login') }}");
         });
+        
     });
 
     </script>

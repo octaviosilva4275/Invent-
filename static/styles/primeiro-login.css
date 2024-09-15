@@ -154,6 +154,9 @@ button:hover {
 .login-full{
     margin-bottom: 18px;
 }
+.container-voltar{
+    display: block;
+}
 
 .container-menu{
     display: none;
@@ -181,3 +184,26 @@ button:hover {
     color: #fff; /* Cor branca para as opções */
 }
 
+
+/* Adicione ou atualize as seguintes regras no seu CSS */
+
+/* Estilização do botão de voltar */
+.voltar {
+    position: absolute; /* Garante que o botão de voltar esteja posicionado corretamente */
+    top: 105px; /* Ajuste conforme necessário */
+    left: 20px; /* Ajuste conforme necessário */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; /* Ajuste o tamanho conforme necessário */
+    height: 50px; /* Ajuste o tamanho conforme necessário */
+    transform: rotate(180deg);
+    border-radius: 50%; /* Faz o botão ser redondo */
+    text-decoration: none; /* Remove o sublinhado padrão do link */
+    z-index: 3; /* Garante que o botão esteja sobre outros elementos */
+}
+
+.voltar i {
+    font-size: 24px; /* Ajuste o tamanho do ícone conforme necessário */
+    color: #ffffff; /* Ajuste a cor do ícone conforme necessário */
+}
