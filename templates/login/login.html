@@ -7,19 +7,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-login.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
+    <script defer src="{{ url_for('static', filename='js/login.js') }}"></script> <!-- Inclua o JS -->
 </head>
 <body>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <div class="flash-messages">
-            {% for category, message in messages %}
-                <div class="flash {{ category }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    {% endwith %}
 
     <div class="container-menu">
         <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
@@ -29,24 +19,52 @@
         <div class="login-box">
             <div class="conteudo">
                 <h1>Faça seu login<span>.</span></h1>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                <div id="flash-messages" class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
                 <form action="/login" method="POST">
                     <div class="input-box">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="exemplo@gmail.com" required>
+                        <label for="sn">Email ou SN</label>
+                        <input type="text" id="sn" name="sn" placeholder="Digite seu SN ou email" required>
                     </div>
                     <div class="input-box">
                         <label for="senha">Senha</label>
-                        <input type="password" id="senha" placeholder="**********" required >
+                        <input type="password" id="senha" name="password" placeholder="**********" required>
                     </div>
                     <a href="#" class="forgot-password">Esqueci a senha?</a>
                     <button type="submit">Entrar</button>
                 </form>
-                <a href="{{ url_for('primeiro_login') }}"><p class="register">Ainda não tenho uma conta</p></a>
+
+                <a href="{{ url_for('primeiro_login') }}">
+                    <p class="register">Ainda não tenho uma conta</p>
+                </a>
             </div>
         </div>
         <div class="image-container">
             <img src="{{ url_for('static', filename='img/fotoprimeirologin.jpg') }}" alt="Imagem de fundo">
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const flashMessages = document.getElementById('flash-messages');
+    if (flashMessages) {
+        const messages = flashMessages.getElementsByClassName('flash error');
+        if (messages.length > 0) {
+            // Adiciona a classe de erro aos inputs
+            document.getElementById('sn').classList.add('input-error');
+            document.getElementById('senha').classList.add('input-error');
+        }
+    }
+});
+
+    </script>
 </body>
 </html>

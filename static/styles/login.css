@@ -28,6 +28,44 @@ body {
     overflow: hidden; /* Garante que a borda arredondada afete o conteúdo interno */
     position: relative; /* Adicione isso para posicionar o gradient corretamente */
 }
+/* Estilo base para os inputs */
+.input-box input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+/* Estilo para inputs com erro */
+.input-box input.input-error {
+    border: 1.5px solid #ff4d4d; /* Vermelho para indicar erro */
+    background-color: #ffe6e6; /* Fundo levemente vermelho para destacar o erro */
+}
+
+/* Estilo para as mensagens de flash */
+.flash-messages {
+    margin-bottom: 10px;
+}
+
+.flash {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+
 
 .image-container {
     flex: 1;

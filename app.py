@@ -71,19 +71,14 @@ def solicitante():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print("Iniciando o login...")
     conexao = conectar_banco_dados()
-    print("Conexão com o banco de dados estabelecida.")
     if request.method == 'POST':
         entrada = request.form['sn']
         senha = request.form['password']
 
-        conexao = conectar_banco_dados()
         cursor = conexao.cursor(dictionary=True)
-
         cursor.execute("SELECT * FROM users WHERE (sn = %s OR email = %s) AND senha = %s", (entrada, entrada, senha))
         usuario = cursor.fetchone()
-
         cursor.close()
         conexao.close()
 
@@ -92,15 +87,16 @@ def login():
             session['user_id'] = usuario['id']
             session['user_sn'] = usuario['sn']
             session['user_cargo'] = usuario['cargo']
-
             if usuario['cargo'] == 'almoxarifado':
                 return redirect(url_for('dashboard'))
             else:
                 return redirect(url_for('requisicao_material'))
         else:
             flash('Credenciais inválidas. Por favor, tente novamente.', 'error')
+            return redirect(url_for('solicitante'))  # Redireciona para garantir que o erro seja exibido
 
     return render_template('login/login.html')
+
 
 
 

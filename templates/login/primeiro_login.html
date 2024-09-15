@@ -35,19 +35,19 @@
                 <form action="{{ url_for('primeiro_login') }}" method="POST">
                     <div class="input-box">
                         <label for="email">Email</label>
-                        <input type="email" id="email" placeholder="exemplo@gmail.com" required>
+                        <input type="email" id="email" name="email" placeholder="exemplo@gmail.com" required>
                     </div>
-                    
+                
                     <div class="input-box">
                         <label for="senha">Senha</label>
-                        <input type="password" id="senha" placeholder="**********" required >
+                        <input type="password" id="senha" name="password" placeholder="**********" required>
                     </div>
-                    
+                
                     <div class="input-box">
                         <label for="sn">Código SN</label>
                         <input type="text" id="sn" name="sn" placeholder="3416" required>
                     </div>
-                    
+                
                     <div class="input-box">
                         <label for="areas-senai">Área de Interesse</label>
                         <select id="areas-senai" name="areas-senai" required>
