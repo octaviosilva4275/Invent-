@@ -54,6 +54,7 @@
     .container-menu img {
         width: 180px;
         height: 200px;
+        margin-top: -20px;
     }
     .conteudo{
         margin-left: 0px;
