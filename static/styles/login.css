@@ -99,6 +99,7 @@ h1 span {
     color: #888; /* Cor do label */
     display: block; /* Faz o label ocupar a linha inteira */
     margin-bottom: 5px; /* Espaçamento entre o label e o input */
+    margin-top: 5px;
 }
 
 .input-box select {
