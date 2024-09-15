@@ -17,6 +17,7 @@ body {
     background-size: cover; /* Ajusta a imagem para cobrir todo o container */
     background-position: center; /* Centraliza a imagem no container */
     background-repeat: no-repeat; /* Impede que a imagem se repita */
+    overflow: hidden;
 }
 
 .login-container {
