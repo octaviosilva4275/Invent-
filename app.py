@@ -2,12 +2,11 @@ from flask import Flask, render_template, request, redirect, url_for, session,js
 import mysql.connector
 
 app = Flask(__name__)
-<<<<<<< HEAD
+
 app.secret_key = 'sua-chave-secreta-aqui'
 
-=======
+
 app.secret_key = 'teste'
->>>>>>> 0df7302287222c41e80e74e738faba18c3f9eef5
 
 def conectar_banco_dados():
 
@@ -138,13 +137,7 @@ def cadastro_material():
         estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
         estoque_maximo = int(request.form['estoque_maximo'] or 0)
 
-<<<<<<< HEAD
-# ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
 
-
-if __name__ == '__main__':
-    app.run(debug=True)
-=======
 
 
         conexao = conectar_banco_dados()
@@ -357,4 +350,3 @@ def requisicao_material():
 
 if __name__ == "__main__":
     app.run(debug=True)
->>>>>>> 0df7302287222c41e80e74e738faba18c3f9eef5
