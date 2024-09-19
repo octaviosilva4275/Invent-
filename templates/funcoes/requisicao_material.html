@@ -1,12 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Requisições de Material - Admin</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
+    <div class="container mt-5">
+        <h2>Requisições Pendentes/Rejeitadas</h2>
+<table class="table table-striped" id="requisicoes-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Material</th>
+            <th>Quantidade</th>
+            <th>Usuário</th>
+            <th>Status</th>
+            <th>Observação</th> 
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for requisicao in requisicoes %}
+        <tr>
+            <td>{{ requisicao.id }}</td>
+            <td>{{ requisicao.material }}</td>
+            <td>{{ requisicao.quantidade }}</td>
+            <td>{{ requisicao.usuario }}</td>
+            <td>{{ requisicao.status }}</td>
+            <td>{{ requisicao.observacao }}</td> 
+            <td>
+                <form method="POST" action="{{ url_for('atualizar_requisicao') }}">
+                    <input type="hidden" name="requisicao_id" value="{{ requisicao.id }}">
+                    <button type="submit" name="acao" value="aprovar" class="btn btn-success">Aprovar</button>
+                    <button type="submit" name="acao" value="rejeitar" class="btn btn-danger">Rejeitar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<script>
+    $(document).ready(function() {
+        // Function to update the table
+        function atualizarTabela() {
+            $.ajax({
+                url: "{{ url_for('api_requisicoes_admin') }}", // New route to fetch updated data
+                type: 'GET',
+                success: function(data) {
+                    let tableBody = $('#requisicoes-table tbody');
+                    tableBody.empty(); // Clear the table
+
+                    if (data.length > 0) {
+                        data.forEach(function(requisicao) {
+                            let row = '<tr>' +
+                                '<td>' + requisicao.id + '</td>' +
+                                '<td>' + requisicao.material + '</td>' +
+                                '<td>' + requisicao.quantidade + '</td>' +
+                                '<td>' + requisicao.usuario + '</td>' +
+                                '<td>' + requisicao.status + '</td>' +
+                                '<td>' + (requisicao.observacao || '') + '</td>' + // Handle null observations
+                                '<td>' +
+                                    '<form method="POST" action="{{ url_for('atualizar_requisicao') }}">'+
+                                        '<input type="hidden" name="requisicao_id" value="' + requisicao.id + '">'+
+                                        '<button type="submit" name="acao" value="aprovar" class="btn btn-success">Aprovar</button> '+
+                                        '<button type="submit" name="acao" value="rejeitar" class="btn btn-danger">Rejeitar</button> '+
+                                    '</form>' +
+                                '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+                    } else {
+                        tableBody.append('<tr><td colspan="7">Nenhuma requisição pendente ou rejeitada no momento.</td></tr>');
+                    }
+                },
+                error: function(error) {
+                    console.error('Error in AJAX request:', error);
+                    // Add error handling logic here (e.g., display an error message)
+                }
+            });
+        }
+
+        // Initial table update
+        atualizarTabela();
+
+        // Update the table every 5 seconds
+        setInterval(atualizarTabela, 5000);
+    });
+</script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
