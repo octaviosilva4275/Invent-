@@ -177,44 +177,36 @@ def dashboard():
 def cadastro_material():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
+
     if request.method == 'POST':
+        descricao = request.form['descricao']
         categoria = request.form['categoria']
-        localizacao = request.form['localizacao']
-        estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
+
+        estoque_minimo = int(request.form['estoque_minimo'] or 0)
         estoque_maximo = int(request.form['estoque_maximo'] or 0)
-
-
-
 
         conexao = conectar_banco_dados()
         cursor = conexao.cursor()
 
         try:
-            # Insere o novo material no banco de dados
-            query_insert = ("INSERT INTO materials (categoria, localizacao, estoque_minimo, estoque_maximo) "
-                            "VALUES (%s, %s, %s, %s, %s)")
-            cursor.execute(query_insert, ( categoria, localizacao, estoque_minimo, estoque_maximo))            
+            query_insert = ("INSERT INTO materials (descricao, categoria, estoque_minimo, estoque_maximo) "
+                            "VALUES (%s, %s, %s, %s)")
+            cursor.execute(query_insert, (descricao, categoria, estoque_minimo, estoque_maximo))
             conexao.commit()
 
-            # Redireciona para a mesma página com uma mensagem de sucesso (opcional)
-            return redirect(url_for('cadastro_material', success_message='Material cadastrado com sucesso!'))
+            flash('Material cadastrado com sucesso!', 'success')
+            return redirect(url_for('cadastro_material'))
 
         except mysql.connector.Error as err:
-            # Trata erros de banco de dados (opcional - você pode personalizar o tratamento de erros)
-            print("Erro ao cadastrar material")
-            return redirect(url_for('cadastro_material', error_message='Erro ao cadastrar material'))
+            flash('Erro ao cadastrar material: {}'.format(err), 'error')
+            return redirect(url_for('cadastro_material'))
+
         finally:
             cursor.close()
             conexao.close()
 
-    # Se for GET ou ocorrer algum erro, exibe o formulário
-    conexao = conectar_banco_dados()
-    cursor = conexao.cursor(dictionary=True)
-
-    cursor.close()
-    conexao.close()
-
     return render_template('funcoes/cadastro_material.html')
+
 
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
 
@@ -391,6 +383,74 @@ def requisicao_material():
         conexao.close()
 
     return render_template('funcoes/requisicao_material.html', materiais=materiais, minhas_requisicoes=minhas_requisicoes)
+
+@app.route('/api/requisicoes_admin')
+def api_requisicoes_admin():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return jsonify([])
+
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    try:
+        cursor.execute("""
+            SELECT 
+                r.id,
+                m.descricao as material,
+                r.quantidade,
+                u.nome as usuario, 
+                r.status,
+                r.data_entrega,
+                r.observacao
+            FROM requisicoes r
+            JOIN materials m ON r.material_id = m.id
+            JOIN users u ON r.usuario_id = u.id 
+            WHERE r.status != 'aprovada'  
+            ORDER BY r.status DESC 
+        """)
+        requisicoes = cursor.fetchall()
+    except mysql.connector.Error as err:
+        print(f'Erro ao buscar requisições: {err}')
+        return jsonify([]), 500 
+
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return jsonify(requisicoes) 
+
+@app.route('/api/minhas_requisicoes')
+def api_minhas_requisicoes():
+    if 'user_id' not in session:
+        return jsonify([])
+
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+
+    try:
+        usuario_id = session['user_id']
+        cursor.execute("""
+            SELECT 
+                r.id,
+                m.descricao as material,
+                r.quantidade,
+                r.status,
+                r.data_entrega 
+            FROM requisicoes r
+            JOIN materials m ON r.material_id = m.id
+            WHERE r.usuario_id = %s AND r.status = 'pendente' 
+        """, (usuario_id,))
+        minhas_requisicoes = cursor.fetchall()
+
+    except mysql.connector.Error as err:
+        print(f"Erro ao buscar requisições do usuário: {err}")
+        return jsonify([]), 500  # Retorna uma lista vazia em caso de erro
+
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return jsonify(minhas_requisicoes)
+
 
 # ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
 

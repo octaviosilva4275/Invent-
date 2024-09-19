@@ -179,3 +179,32 @@ input, select{
     width: 100%;
     justify-content: flex-end;
 }
+
+
+.flash-messages {
+    position: fixed;
+    top: 35px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 90%; /* Ajuste a largura conforme necessário */
+    max-width: 400px; /* Limite a largura máxima */
+    text-align: center; /* Centraliza o texto */
+    font-size: 18px;
+}
+
+.flash {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra opcional */
+}
+
+.flash.error {
+    background-color: #e74c3c; /* Vermelho */
+}
+
+.flash.success {
+    background-color: #2ecc71; /* Verde */
+}
