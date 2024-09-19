@@ -2,9 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import mysql.connector
 from mysql.connector import Error
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()  # Carregar variáveis do .env
+# load_dotenv()  # Carregar variáveis do .env
 
 app = Flask(__name__)
 app.secret_key = 'teste'
