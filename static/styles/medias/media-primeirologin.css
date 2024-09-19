@@ -13,6 +13,7 @@
         height: 100%; /* O formulário ocupa 100% da altura */
         margin: 0; /* Remove as margens */
         padding: 50px; /* Ajusta o padding para telas menores */
+        max-width: none;
         background-color: #B1C4CC;
 
     }
