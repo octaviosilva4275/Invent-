@@ -39,7 +39,7 @@ html {
     width: 100%;  /* Ocupa 100% da largura */
     height: 100%;  /* Ocupa 100% da altura */
     z-index: -1;  /* Fica atrás do campo de login */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/static/img/banner.webp);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(/static/img/banner.webp);
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -58,7 +58,7 @@ html {
     display: flex;  /* Layout flexível */
     justify-content: center;  /* Centraliza horizontalmente */
     align-items: center;  /* Centraliza verticalmente */
-    background-color: var(--cinza-azulado);  /* Cor de fundo */
+    background-color : #D9D9D9;  /* Cor de fundo */
     padding: 50px;  /* Adiciona espaçamento interno */
     border-radius: 8px;  /* Bordas arredondadas */
 }
@@ -98,7 +98,6 @@ html {
 .form-login input {
     width: 100%;  /* Largura total */
     padding: 12px;  /* Espaçamento interno */
-    border: 1px solid var(--cinza);  /* Borda fina e cinza */
     border-radius: 4px;  /* Bordas arredondadas */
     margin-top: 5px;  /* Margem superior */
 }
@@ -108,9 +107,10 @@ html {
     color: var(--preto);  /* Cor preta */
     font-size: 12px;  /* Tamanho da fonte */
     font-weight: bold;  /* Texto em negrito */
-    margin-bottom: 30px;  /* Margem inferior */
+    margin-bottom: 20px;  /* Margem inferior */
     text-decoration: underline;  /* Sublinhado */
     display: block;  /* Exibe como bloco */
+    padding: 10px;
 }
 
 /* Estilos do botão de login */
@@ -120,16 +120,16 @@ html {
     align-items: center;  /* Centraliza verticalmente */
     width: 50%;  /* Largura de 50% */
     font-size: 15px;  /* Tamanho da fonte */
-    padding: 10px 20px;  /* Espaçamento interno */
+    padding: 10px 10px;  /* Espaçamento interno */
     cursor: pointer;  /* Muda o cursor ao passar sobre o botão */
-    background-color: var(--azul-claro);  /* Cor de fundo */
+    background-color: #464242;  /* Cor de fundo */
     color: var(--branco);  /* Cor do texto */
     border-radius: 5px;  /* Bordas arredondadas */
-    margin: 30px auto 0;  /* Centraliza o botão e adiciona margem */
+    margin: 20px auto 0;  /* Centraliza o botão e adiciona margem */
 }
 
 .btn-login:hover {
-    background-color: var(--azul-escuro);  /* Cor de fundo ao passar o cursor */
+    background-color: #292727;  /* Cor de fundo ao passar o cursor */
     transform: scale(1.05);  /* Efeito de zoom */
 }
 
@@ -174,11 +174,22 @@ button {
     font-size: 16px;
     cursor: pointer;
     background-color: #3564ff;
-    transition:0.3s;
+    transition: background 0.3s;
 }
 
 /* Efeito de hover no botão */
 button:hover {
     background-color: #2749d8;
     transform: scale(1.05);
+}
+
+.register {
+    margin-top: 20px;
+    color: #888;
+    text-align: center;
+}
+
+
+.container-menu{
+    display: none;
 }

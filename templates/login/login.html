@@ -13,6 +13,15 @@
 </head>
 
 <body>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
     <!-- Seção que engloba tudo da tela de login -->
     <section class="login">
 
@@ -34,10 +43,10 @@
                 <!-- Formulário de login -->
                 <form action="/login" method="POST">
                     <!-- Campo de entrada para o código RN ou email -->
-                    <div class="form-login">
-                        <label for="rn">Codigo RN | Email</label>
+                    <div class="form-login">    
+                        <label for="sn">Codigo RN | Email</label>
                         <!-- Campo de texto para inserir o código RN ou email -->
-                        <input type="text" id="rn" name="rn" placeholder="Codigo SN | Email" required>
+                        <input type="text" id="sn" name="sn" placeholder="Codigo SN | Email" required>
                     </div>
 
                     <!-- Campo de entrada para a senha -->
