@@ -1,145 +1,35 @@
-/* Media Queries para Responsividade */
-@media (max-width: 866px) {
-    .conteudo{
-        margin-left: 30px;
+/* Responsividade para dispositivos móveis */
+@media only screen and (max-width: 768px) {
+    .banner-primeirologin {
+        display: none; /* Esconde o banner em celulares e tablets */
     }
 
-    .voltar {
-        top: 105px; /* Ajuste conforme necessário */
-        left: -2px; /* Ajuste conforme necessário */
-    }
-
-}
-/* Media Queries para Responsividade */
-@media (max-width: 768px) {
-    .conteudo{
-        margin-left: 30px;
-    }
-
-}
-
-@media (max-width: 600px) {
-    .login-container{
-        width: 100%;
-        height: 100%;
-    }
-    .voltar {
-        top: 22.5%; /* Ajuste conforme necessário */
-        left: -8px; /* Ajuste conforme necessário */
-    }
-}
-
-
-/* Media Queries para Responsividade */
-/* Talvez */
-/* @media (max-width: 488px) {
-    .login-container{
-        width: 100%;
-        height: 100%;
-        border-radius: 0px;
-    }
-
-} */
-
-
-@media (max-width: 488px) {
-    .login-container{
-        width: 100%;
-        height: 100%;
-        border-radius: 0px;
-        display: block;
-    }
-    .image-container{
-        display: none;
-    }
-    .login-menu{
-        display:block;
-    }
-    .login-box{
-        width: 100%;
-        height: 85%;
-        max-width:none;
-        position: fixed;
-        bottom: 0;
-       
-    }
-    .container-menu {
-        width: 100%;
-        height: 40%;
-        background-color: #eeeeee;
-        position: fixed;
-        top: 0;
-        display: flex;
+    .primeiro-login {
         justify-content: center;
-        align-items: start;
-        background-image: url('/static/img/fundo_branco.jpg'); /* Caminho da imagem usando Jinja */
-        background-size: cover; /* Ajusta a imagem para cobrir todo o container */
-        background-position: center; /* Centraliza a imagem no container */
-        background-repeat: no-repeat; /* Impede que a imagem se repita */
-    }
-    
-    h1 {
-        font-size: 34px;
-        margin-top: 55px;
-        color: #0c0c0c;
-    }
-    
-    .container-menu img {
-        display: none;
-    }
-    .conteudo{
-        margin-left: 0px;
-        width: 80%;
-    }
-    .input-box input{
-        font-size: 22px;
-        margin-bottom: 0px;
-    }
-    .login-full{
-        display: none;
-    }
-    .fa-arrow-right{
-        display: block;
-        position: fixed;
-        color: black;
-        transform:rotate(180deg);
-        top: 60px;
-        left: 5%;
-        font-size: 32px;
     }
 
-    
-    #areas-senai{
-        margin-bottom: 30px;
+    .primeiro-login02 {
+        width: 100%; /* O formulário ocupa 100% da largura em dispositivos móveis */
+        height: 100%; /* O formulário ocupa 100% da altura */
+        margin: 0; /* Remove as margens */
+        padding: 50px; /* Ajusta o padding para telas menores */
+        background-color: #B1C4CC;
+
     }
-    .container-voltar {
-        position: relative; /* Adiciona isso se não estiver */
+
+    .btn-entrar {
+        width: 100%; /* O botão de entrar ocupa toda a largura em dispositivos móveis */
     }
-    
-    #voltar-btn {
+
+    .botao-voltar {
+        position: absolute;
         display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 50px; /* Ajuste o tamanho conforme necessário */
-        height: 50px; /* Ajuste o tamanho conforme necessário */
-        background-color: #fff; /* Ajuste a cor de fundo conforme necessário */
-        border-radius: 50%;
-        text-decoration: none; /* Remove o sublinhado padrão do link */
-    }
     
-    #voltar-btn i {
-        font-size: 24px; /* Ajuste o tamanho do ícone conforme necessário */
-        color: #000; /* Ajuste a cor do ícone conforme necessário */
+    
     }
-    .voltar {
-        top: -25px; /* Ajuste conforme necessário */
-        left: 15px; /* Ajuste conforme necessário */
-        transform: rotate(180deg);
-        font-size: 28px;
-    }
-    .voltar i{
-        color: rgb(0, 0, 0);
-        font-size: 38px;
-        transform: rotate(360deg);
+    .header-primeirologin{
+        padding-top: 60px;
     }
 }
+
+
