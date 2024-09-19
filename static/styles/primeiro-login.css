@@ -1,209 +1,186 @@
-
-* {
+/* Reset básico para garantir uma aparência consistente */
+body, html {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
-}
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(135deg, #0c0c0c, #2a2a2a); /* Gradiente no fundo do body */
-    color: #fff;
-    background-image: url('/static/img/fundo_preto.jpg'); /* Caminho da imagem usando Jinja */
-    background-size: cover; /* Ajusta a imagem para cobrir todo o container */
-    background-position: center; /* Centraliza a imagem no container */
-    background-repeat: no-repeat; /* Impede que a imagem se repita */
+    height: 100%;
+    font-family: Arial, sans-serif;
     overflow: hidden;
-}
-
-.login-container {
-    display: flex;
-    width: 80%; /* Ajuste conforme necessário */
-    height: 80%; /* Ajuste conforme necessário */
-    border-radius: 35px; /* Adicione a borda arredondada aqui */
-    overflow: hidden; /* Garante que a borda arredondada afete o conteúdo interno */
-    position: relative; /* Adicione isso para posicionar o gradient corretamente */
-}
-
-.image-container {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-}
-
-.image-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgb(12,12,12);
-    /* background: linear-gradient(90deg, rgba(12,12,12,0.7301295518207283) 0%, rgba(12,12,12,1) 70%); */
-    background: linear-gradient(90deg, rgba(12,12,12,1) 26%, rgba(12, 12, 12, 0.432) 100%);
-    z-index: 1; /* Coloca o gradient acima da imagem */
-}
-.conteudo{
-    margin-left: 120px;
-    width: 85%;
-}
-.image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.login-box {
-    flex: 1;
-    display: flex;
-    justify-content: center; /* Alinha horizontalmente o conteúdo */
-    align-items: center; /* Alinha verticalmente o conteúdo */
-    flex-direction: column;
-    position: relative; /* Adicione isso para garantir que o conteúdo do login esteja acima do gradient */
-    z-index: 2; /* Garante que a caixa de login esteja acima da imagem e do gradient */
-    margin: auto; /* Garante que a caixa esteja centralizada em relação ao container */
-    max-width: 400px;
-    height: 100%;
-    background-color: rgb(12,12,12);
-}
-
-h1 {
-    font-size: 34px;
-    margin-top: 30px;
-
-}
-
-h1 span {
-    color: #3564ff;
-}
-
-.input-box {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-
-
-.input-box input, .input-box select {
-    width: 100%;
-    padding: 10px;
-    background: #222;
-    border: none;
-    outline: none;
-    color: #fff;
-    border-radius: 5px;
-    font-size: 20px;
-}
-
-.input-box label {
-    font-size: 18px; /* Tamanho da fonte do label */
-    color: #888; /* Cor do label */
-    display: block; /* Faz o label ocupar a linha inteira */
-    margin-bottom: 5px; /* Espaçamento entre o label e o input */
-    margin-top: 5px;
-}
-
-
-.input-box select {
-    appearance: none; /* Remove a estilização padrão do select */
-    background: #222; /* Mantém o mesmo estilo dos inputs */
-    padding-right: 30px; /* Adiciona espaçamento à direita */
-}
-
-.input-box input::placeholder {
-    color: #666; /* Cor do placeholder */
-}
-
-
-.forgot-password {
-    color: #888;
     text-decoration: none;
-    display: block;
-    margin-bottom: 20px;
-    text-align: right;
 }
 
-button {
+.botao-voltar {
+    position: absolute;
+    top: 20px; 
+    left: 20px; 
+    background-color: #FFFFFF; 
+    border-radius: 5px; 
+    padding: 10px 15px; 
+    display: flex; 
+    align-items: center; 
+    text-decoration: none; 
+    font-size: 16px; 
+    transition: background-color 0.3s ease; 
+}
+
+.botao-voltar a {
+    text-decoration: none;
+}
+
+.botao-voltar i {
+    margin-right: 8px; /* Espaçamento entre o ícone e o texto */
+}
+
+.botao-voltar:hover {
+    background-color: #005B99; /* Cor de fundo ao passar o mouse */
+}
+
+
+
+
+
+.header-primeirologin img {
+    width: 90px;
+    height: 90px;
+}
+
+.banner-primeirologin {
+        position: absolute;  /* Ocupa a tela toda, sendo "absoluto" dentro do .login */
+        top: 0;
+        left: 0;
+        width: 100%;  /* Ocupa 100% da largura */
+        height: 100%;  /* Ocupa 100% da altura */
+        z-index: -1;  /* Fica atrás do campo de login */
+        background-image: linear-gradient(rgba(31, 30, 30, 0.8), rgba(23, 22, 22, 0.8)), url(/static/img/fotoprimeirologin.jpg);
+        background-position: center center;
+        background-size:cover;
+        background-repeat: no-repeat;
+        overflow: hidden;
+    }
+
+
+.banner-primeirologin img {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.campo-input.password i {
+    margin-right: 30px; 
+}
+
+.campo-input label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.campo-input input {
     width: 100%;
     padding: 10px;
-    border: none;
-    border-radius: 5px;
-    color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
     font-size: 16px;
-    cursor: pointer;
-    background-color: #3564ff;
-    transition: background 0.3s;
 }
 
-/* Efeito de hover no botão */
-button:hover {
-    background-color: #2749d8; /* Muda a cor de fundo no hover */
-    transform: scale(1.05); /* Aumenta ligeiramente o tamanho no hover */
-}
-
-.register {
-    margin-top: 20px;
-    color: #888;
-    text-align: center;
-}
-
-.login-full{
-    margin-bottom: 18px;
-}
-.container-voltar{
-    display: block;
-}
-
-.container-menu{
-    display: none;
-}
-
-.login-menu{
-    display: none;
-}
-.fa-arrow-right{
-    display: none;
-}
-
-/* Cor inicial do texto do select (placeholder) */
-.input-box select {
-    color: #666; /* Cor igual ao placeholder */
-}
-
-/* Quando uma opção for selecionada, a cor muda para branco */
-.input-box select:focus {
-    color: #fff; /* Cor branca quando o select está ativo */
-}
-
-/* Quando uma opção for selecionada e o select não estiver focado */
-.input-box select option {
-    color: #fff; /* Cor branca para as opções */
-}
-
-
-/* Adicione ou atualize as seguintes regras no seu CSS */
-
-/* Estilização do botão de voltar */
-.voltar {
-    position: absolute; /* Garante que o botão de voltar esteja posicionado corretamente */
-    top: 105px; /* Ajuste conforme necessário */
-    left: 20px; /* Ajuste conforme necessário */
+.campo-input {
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 50px; /* Ajuste o tamanho conforme necessário */
-    height: 50px; /* Ajuste o tamanho conforme necessário */
-    transform: rotate(180deg);
-    border-radius: 50%; /* Faz o botão ser redondo */
-    text-decoration: none; /* Remove o sublinhado padrão do link */
-    z-index: 3; /* Garante que o botão esteja sobre outros elementos */
+    padding: 5px;
+    position: relative; /* Adiciona contexto para posicionar o ícone de alternância */
 }
 
-.voltar i {
-    font-size: 24px; /* Ajuste o tamanho do ícone conforme necessário */
-    color: #ffffff; /* Ajuste a cor do ícone conforme necessário */
+.campo-input i {
+    margin-right: 10px;
+    font-size: 18px; /* Ajuste o tamanho do ícone conforme necessário */
 }
+
+.campo-input .toggle-password {
+    position: absolute;
+    right: 10px; /* Ajusta a posição do ícone para não sobrepor o texto do campo */
+    font-size: 18px; /* Ajuste o tamanho do ícone conforme necessário */
+    cursor: pointer; /* Indica que o ícone é clicável */
+    color: #aaa; /* Ajusta a cor do ícone para melhor visibilidade */
+}
+
+.campo-input select {
+    width: 100%; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    font-size: 16px; 
+    box-sizing: border-box; 
+}
+
+.botao-voltar {
+    position: absolute;
+}
+
+.fa-eye:before {
+    content: "\f06e";
+    position: relative;
+}
+.btn-entrar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    font-size: 15px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: rgba(0, 126, 180, 1);
+    color: white;
+    border-radius: 5px;
+    margin: 30px auto 0;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Adiciona transição suave */
+}
+
+.btn-entrar:hover {
+    background-color: rgba(0, 100, 150, 1); /* Cor de fundo ao passar o mouse */
+    transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
+}
+
+    
+
+/* Seção de login com imagem de fundo e centralização */
+.primeiro-login {
+    display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    height: 100vh; /* Altura total da viewport */
+   
+    background-size: cover; /* Faz a imagem cobrir toda a área */
+    background-position: center; /* Centraliza a imagem de fundo */
+}
+
+.primeiro-login {
+    justify-content: center;
+}
+
+/* Formulário centralizado com limite de largura */
+.primeiro-login02 {
+    width: 100%;
+    max-width: 400px; /* Define uma largura máxima */
+    background-color: #B1C4CC; /* Cor de fundo semitransparente */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ao redor */
+    text-align: center; /* Centraliza o texto dentro do formulário */
+    position: absolute;
+}
+
+
+/* Centraliza o conteúdo do header no formulário */
+.header-primeirologin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-primeirologin img {
+    width: 90px;
+    height: 90px;
+}
+
+
