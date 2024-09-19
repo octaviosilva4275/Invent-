@@ -207,3 +207,17 @@ button:hover {
     font-size: 24px; /* Ajuste o tamanho do ícone conforme necessário */
     color: #ffffff; /* Ajuste a cor do ícone conforme necessário */
 }
+
+.success {
+    position: fixed;
+    width: 50%;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: green;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+}
