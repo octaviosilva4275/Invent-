@@ -1,66 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Metadados do documento, incluindo charset e viewport para responsividade -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque</title>
+    
+    <!-- Links para os arquivos de estilo CSS que definem o layout e as variáveis do projeto -->
     <link rel="stylesheet" href="/static/styles/controle-estoque.css">
     <link rel="stylesheet" href="/static/styles/medias/media-controle-estoque.css">
     <link rel="stylesheet" href="/static/styles/variaveis.css">
 </head>
 <body>
     <main>
-        <!-- A seção principal do conteúdo, que contém o formulário para controle de estoque -->
+        <!-- Seção principal do conteúdo, que contém o formulário para controle de estoque -->
         <section class="form-section">
     
-            <!-- Título principal da página que descreve o propósito: Controle de Estoque -->
+            <!-- Título principal da página e subtítulos para as funcionalidades de entrada e saída -->
             <h1>Controle de Estoque</h1>
-    
-            <!-- Subtítulo que especifica a funcionalidade atual: Registrar Entrada de materiais -->
             <h2>Registrar Entrada</h2>
     
             <!-- Formulário para registrar a entrada de materiais no estoque -->
             <form action="/registrar_entrada" method="POST">
-                
-                <!-- Menu suspenso para selecionar o material a ser registrado -->
+                <!-- Seleção do material a ser registrado e entrada da quantidade -->
                 <select id="material" name="material_id" required>
-                    <!-- Primeira opção padrão para orientar o usuário a selecionar um item -->
                     <option value="1">Selecione o item</option>
-                    <!-- Outras opções de materiais que podem ser selecionados -->
                     <option value="2">Material 2</option>
                 </select><br><br>
-    
-                <!-- Campo de entrada numérico para a quantidade do material -->
                 <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
-    
-                <!-- Botão para enviar o formulário e registrar a entrada -->
+                <!-- Botão para confirmar a entrada -->
                 <button type="submit">Confirmar</button>
             </form>
     
-            <!-- Subtítulo para a segunda parte da funcionalidade: Registrar Saída de materiais -->
+            <!-- Subtítulo para registrar a saída de materiais -->
             <h2>Registrar Saída</h2>
     
             <!-- Formulário para registrar a saída de materiais do estoque -->
             <form action="/registrar_saida" method="POST">
-                
-                <!-- Menu suspenso para selecionar o material a ser removido -->
+                <!-- Seleção do material a ser removido e entrada da quantidade -->
                 <select id="material" name="material_id" required>
-                    <!-- Primeira opção padrão para orientar o usuário a selecionar um item -->
                     <option value="1">Selecione o item</option>
-                    <!-- Outras opções de materiais disponíveis -->
                     <option value="2">Material 2</option>
                 </select><br><br>
-    
-                <!-- Campo de entrada numérico para a quantidade a ser removida -->
                 <input type="number" id="quantidade" name="quantidade" min="1" required><br><br>
-    
-                <!-- Botão para enviar o formulário e registrar a saída -->
+                <!-- Botão para confirmar a saída -->
                 <button type="submit">Confirmar</button>
             </form>
         </section>
     </main>
-    
-
-
 </body>
 </html>
