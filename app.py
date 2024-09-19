@@ -7,6 +7,10 @@ import os
 # load_dotenv()  # Carregar variáveis do .env
 
 app = Flask(__name__)
+
+app.secret_key = 'sua-chave-secreta-aqui'
+
+
 app.secret_key = 'teste'
 
 
@@ -178,6 +182,7 @@ def cadastro_material():
         localizacao = request.form['localizacao']
         estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
         estoque_maximo = int(request.form['estoque_maximo'] or 0)
+
 
 
 
