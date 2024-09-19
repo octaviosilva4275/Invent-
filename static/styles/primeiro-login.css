@@ -8,35 +8,6 @@ body, html {
     text-decoration: none;
 }
 
-.botao-voltar {
-    position: absolute;
-    top: 20px; 
-    left: 20px; 
-    background-color: #FFFFFF; 
-    border-radius: 5px; 
-    padding: 10px 15px; 
-    display: flex; 
-    align-items: center; 
-    text-decoration: none; 
-    font-size: 16px; 
-    transition: background-color 0.3s ease; 
-}
-
-.botao-voltar a {
-    text-decoration: none;
-}
-
-.botao-voltar i {
-    margin-right: 8px; /* Espaçamento entre o ícone e o texto */
-}
-
-.botao-voltar:hover {
-    background-color: #005B99; /* Cor de fundo ao passar o mouse */
-}
-
-
-
-
 
 .header-primeirologin img {
     width: 90px;
@@ -50,7 +21,7 @@ body, html {
         width: 100%;  /* Ocupa 100% da largura */
         height: 100%;  /* Ocupa 100% da altura */
         z-index: -1;  /* Fica atrás do campo de login */
-        background-image: linear-gradient(rgba(31, 30, 30, 0.8), rgba(23, 22, 22, 0.8)), url(/static/img/fotoprimeirologin.jpg);
+        background-image: linear-gradient(rgba(31, 30, 30, 0.5), rgba(23, 22, 22, 0.8)), url(/static/img/fotoprimeirologin.jpg);
         background-position: center center;
         background-size:cover;
         background-repeat: no-repeat;
@@ -127,7 +98,7 @@ body, html {
     font-size: 15px;
     padding: 10px 20px;
     cursor: pointer;
-    background-color: rgba(0, 126, 180, 1);
+    background-color: rgba(70, 66, 66, 1);
     color: white;
     border-radius: 5px;
     margin: 30px auto 0;
@@ -136,7 +107,7 @@ body, html {
 }
 
 .btn-entrar:hover {
-    background-color: rgba(0, 100, 150, 1); /* Cor de fundo ao passar o mouse */
+    background-color:rgb(39, 37, 37); /* Cor de fundo ao passar o mouse */
     transform: scale(1.05); /* Aumenta ligeiramente o tamanho */
 }
 
@@ -161,7 +132,7 @@ body, html {
 .primeiro-login02 {
     width: 100%;
     max-width: 400px; /* Define uma largura máxima */
-    background-color: #B1C4CC; /* Cor de fundo semitransparente */
+    background-color:rgba(217, 217, 217, 1); /* Cor de fundo semitransparente */
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Sombra ao redor */
@@ -178,7 +149,6 @@ body, html {
     margin-bottom: 20px;
 }
 
-.header-primeirologin img {
-    width: 90px;
-    height: 90px;
+.header-primeirologin h1{
+    padding-right: 50px;
 }

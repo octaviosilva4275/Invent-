@@ -174,22 +174,11 @@ button {
     font-size: 16px;
     cursor: pointer;
     background-color: #3564ff;
-    transition: background 0.3s;
+    transition:0.3s;
 }
 
 /* Efeito de hover no botão */
 button:hover {
     background-color: #2749d8;
     transform: scale(1.05);
-}
-
-.register {
-    margin-top: 20px;
-    color: #888;
-    text-align: center;
-}
-
-
-.container-menu{
-    display: none;
 }
