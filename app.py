@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import mysql.connector
 from mysql.connector import Error
 import os
+from twilio.rest import Client
 # from dotenv import load_dotenv
 
 # load_dotenv()  # Carregar variáveis do .env
@@ -13,6 +14,19 @@ app.secret_key = 'sua-chave-secreta-aqui'
 
 app.secret_key = 'teste'
 
+
+# Codigo para autentificação
+
+# account_sid = "ACc1f8fd89246833c6ec94946e9addeb12"
+
+# auth_token = "72fd4f9768bcbe85fbbe65d0093280af"
+# client = Client(account_sid, auth_token)
+
+# message = client.messages.create(
+#     to="+5516992360708",
+#     from_="+12542216778",
+#     body=f'Mensagem enviada')
+# print(message.sid)
 
 # def verificar_tabela():
 #     try:
@@ -218,19 +232,30 @@ def cadastro_material():
 def controle_estoque():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
+
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
-    cursor.execute("SELECT m.id, SUM(e.quantidade) as quantidade "
-                    "FROM materials m "
-                    "LEFT JOIN estoque e ON m.id = e.material_id "
-                    "GROUP BY m.id")
-    materiais = cursor.fetchall()
+    try:
+        # Obtém todos os materiais e suas quantidades
+        cursor.execute("""
+            SELECT m.id, m.descricao, COALESCE(SUM(e.quantidade), 0) AS quantidade
+            FROM materials m
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id
+        """)
+        materiais = cursor.fetchall()
 
-    cursor.close()
-    conexao.close()
+    except Exception as e:
+        print(f"Erro ao buscar dados: {e}")
+        materiais = []
+
+    finally:
+        cursor.close()
+        conexao.close()
 
     return render_template('funcoes/controle_estoque.html', materiais=materiais)
+
 
 @app.route('/registrar_entrada', methods=['POST'])
 def registrar_entrada():
@@ -271,45 +296,46 @@ def registrar_entrada():
 def registrar_saida():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
+    
     if request.method == 'POST':
         material_id = request.form['material_id']
         quantidade = int(request.form['quantidade'])
         usuario_id = session['user_id'] 
 
         conexao = conectar_banco_dados()
-        cursor = conexao.cursor()
 
         try:
-            # Verifica a quantidade em estoque
-            cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
-            estoque_atual = cursor.fetchone()
+            with conexao.cursor() as cursor:
+                # Verifica a quantidade em estoque
+                cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
+                estoque_atual = cursor.fetchone()
 
-            if estoque_atual and estoque_atual[0] >= quantidade:
-                # Atualiza a quantidade em estoque (subtrai a quantidade de saída)
-                cursor.execute("""
-                    UPDATE estoque 
-                    SET quantidade = quantidade - %s 
-                    WHERE material_id = %s
-                """, (quantidade, material_id))
+                if estoque_atual and estoque_atual[0] >= quantidade:
+                    # Atualiza a quantidade em estoque (subtrai a quantidade de saída)
+                    cursor.execute("""UPDATE estoque 
+                                      SET quantidade = quantidade - %s 
+                                      WHERE material_id = %s""", (quantidade, material_id))
 
-                # Insere um novo registro de saída no estoque
-                inserir = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
-                cursor.execute(inserir, (material_id, -quantidade, usuario_id)) 
+                    # Insere um novo registro de saída no estoque
+                    inserir = """INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) 
+                                  VALUES (%s, %s, 'saida', %s)"""
+                    cursor.execute(inserir, (material_id, -quantidade, usuario_id)) 
 
-                conexao.commit()
-
-                return redirect(url_for('controle_estoque'))
-            else:
-                print('Estoque insuficiente para atender a requisição.') 
-        except:
-            print('Erro ao registrar saída')
-
-
+                    conexao.commit()
+                    flash('Saída registrada com sucesso!', 'success')
+                    return redirect(url_for('controle_estoque'))
+                else:
+                    flash('Estoque insuficiente para atender a requisição.', 'error')
+        except mysql.connector.Error as err:
+            print(f'Erro ao registrar saída: {err}')
+            flash('Erro ao registrar saída.', 'error')
         finally:
-            cursor.close()
             conexao.close()
 
-    return redirect(url_for('funcoes/controle_estoque'))
+    return redirect(url_for('controle_estoque'))
+
+
+
 
 
 
@@ -443,7 +469,7 @@ def api_minhas_requisicoes():
 
     except mysql.connector.Error as err:
         print(f"Erro ao buscar requisições do usuário: {err}")
-        return jsonify([]), 500  # Retorna uma lista vazia em caso de erro
+        return jsonify([]), 500
 
     finally:
         cursor.close()

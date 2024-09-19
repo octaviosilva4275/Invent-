@@ -6,37 +6,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque</title>
 
-    <!-- Links para os arquivos CSS com Jinja -->
+    <!-- Links para os arquivos CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/controle-estoque.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-controle-estoque.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
 </head>
 
 <body>
-    {% include '/dashboard/dashboard.html' %}
+    {% include 'dashboard/dashboard.html' %}
     <main>
         <section class="form-section">
             <h1>Controle de Estoque</h1>
-            <h2>Registrar Entrada</h2>
-            <form action="/registrar_entrada" method="POST">
-                <select id="material" name="material_id" required>
-                    <option value="1">Selecione o item</option>
-                    <option value="2">Material 2</option>
 
+            <h2>Registrar Entrada</h2>
+            <form action="{{ url_for('registrar_entrada') }}" method="POST">
+                <select id="material" name="material_id" required>
+                    <option value="">Selecione o item</option>
+                    {% for material in materiais %}
+                        <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})</option>
+                    {% endfor %}
                 </select><br><br>
 
-                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade"
-                    required><br>
+                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br>
                 <div class="container-btn">
                     <button type="submit">Confirmar</button>
                 </div>
             </form>
-            <h2>Registrar Saída</h2>
-            <form action="/registrar_saida" method="POST">
-                <select id="material" name="material_id" required>
-                    <option value="1">Selecione o item</option>
-                    <option value="2">Material 2</option>
 
+            <h2>Registrar Saída</h2>
+            <form action="{{ url_for('registrar_saida') }}" method="POST">
+                <select id="material" name="material_id" required>
+                    <option value="">Selecione o item</option>
+                    {% for material in materiais %}
+                        <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})</option>
+                    {% endfor %}
                 </select><br><br>
 
                 <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
@@ -46,8 +49,6 @@
             </form>
         </section>
     </main>
-
-
 </body>
 
 </html>

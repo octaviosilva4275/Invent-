@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requisição de Material</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        h1,
+        h2 {
+            color: #2196F3;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+
+        }
+
+        select,
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            background-color: #2196F3;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button[type="submit"]:hover {
+            background-color:
+                #1976D2;
+        }
+
+        #area_relatorio {
+            margin-top: 30px;
+        }
+
+        #area_relatorio table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #area_relatorio th,
+        #area_relatorio td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #area_relatorio th {
+            background-color: #f2f2f2;
+        }
+
+        #movimentacao-chart {
+            width: 100%;
+            max-height: 400px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    {% include '/dashboard/dashboard.html' %}
+    <form action="{{ url_for('requisicao_material') }}" method="POST">
+        <h2>Requisição de Material</h2>
+        <div class="input-group">
+            <label for="material">Material:</label>
+            <select id="material" name="material_id" required>
+                {% for material in materiais %}
+                <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})
+                </option>
+                {% endfor %}
+            </select><br><br>
+        </div>
+
+
+
+        <div class="input-group">
+            <label for="quantidade">Quantidade:</label>
+            <input type="number" id="quantidade" name="quantidade" min="1" required><br><br>
+        </div>
+        <div class="form-group">
+            <label for="observacao">Observação</label>
+            <textarea class="form-control" id="observacao" name="observacao" rows="3" placeholder="Opcional"></textarea>
+        </div>
+
+        <button type="submit">Enviar Requisição</button>
+    </form>
+    <h3>Minhas Requisições Pendentes</h3>
+    {% if minhas_requisicoes %}
+    <table class="table table-striped" id="minhas-requisicoes-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Material</th>
+                <th>Quantidade</th>
+                <th>Status</th>
+                <th>Data de Entrega</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for requisicao in minhas_requisicoes %}
+            {% if requisicao.status == 'pendente' %}
+            <tr>
+                <td>{{ requisicao.id }}</td>
+                <td>{{ requisicao.material }}</td>
+                <td>{{ requisicao.quantidade }}</td>
+                <td>{{ requisicao.status }}</td>
+                <td>{{ requisicao.data_entrega.strftime('%d/%m/%Y') if requisicao.data_entrega else '' }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Você ainda não fez nenhuma requisição.</p>
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            // Função para atualizar a tabela
+            function atualizarTabela() {
+                $.ajax({
+                    url: "{{ url_for('api_minhas_requisicoes') }}", // Rota para buscar os dados atualizados
+                    type: 'GET',
+                    success: function (data) {
+                        let tableBody = $('#minhas-requisicoes-table tbody');
+                        tableBody.empty(); // Limpa a tabela
+
+                        if (data.length > 0) {
+                            data.forEach(function (requisicao) {
+                                let row = '<tr>' +
+                                    '<td>' + requisicao.id + '</td>' +
+                                    '<td>' + requisicao.material + '</td>' +
+                                    '<td>' + requisicao.quantidade + '</td>' +
+                                    '<td>' + requisicao.status + '</td>' +
+                                    '<td>' + (requisicao.data_entrega ? requisicao.data_entrega : '') + '</td>' +
+                                    '</tr>';
+                                tableBody.append(row);
+                            });
+                        } else {
+                            tableBody.append('<tr><td colspan="5">Você ainda não fez nenhuma requisição.</td></tr>');
+                        }
+                    },
+                    error: function (error) {
+                        console.error('Erro na requisição AJAX:', error);
+
+                    }
+                });
+            }
+
+            // Atualiza a tabela inicialmente
+            atualizarTabela();
+
+            // Atualiza a tabela a cada 5 segundos (opcional)
+            setInterval(atualizarTabela, 5000);
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+
+</html>

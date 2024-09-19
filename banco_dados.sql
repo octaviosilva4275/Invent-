@@ -150,8 +150,12 @@ INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VAL
 
 -- Inserção de exemplo para tabela de requisições
 INSERT INTO requisicoes (material_id, usuario_id, quantidade, status, observacao) VALUES 
-(1, 2, 10, 'Solicitado', 'Requisitado para sala de reuniões'),
-(2, 1, 3, 'Disponivel para retirada', 'Requisitado pelo setor de manutenção');
+(1, 2, 10, 'Solicitado', 'Material solicitado para a reunião do projeto.'),
+(3, 1, 5, 'Solicitado', 'Material solicitado para a aula de matemática.'),
+(5, 2, 2, 'Aguardando reposição', 'Material solicitado para a biblioteca.'),
+(10, 1, 1, 'Disponivel para retirada', 'Material reservado para o evento.'),
+(15, 2, 3, 'Retirado', 'Material retirado para uso imediato.');
+
 
 -- Inserção de exemplo para tabela de lembretes
 INSERT INTO lembretes (destinatario, descricao, data_lembrete) VALUES 
