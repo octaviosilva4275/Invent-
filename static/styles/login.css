@@ -122,14 +122,14 @@ html {
     font-size: 15px;  /* Tamanho da fonte */
     padding: 10px 10px;  /* Espaçamento interno */
     cursor: pointer;  /* Muda o cursor ao passar sobre o botão */
-    background-color: #464242;  /* Cor de fundo */
+    background-color: rgba(1, 100, 142, 1);  /* Cor de fundo */
     color: var(--branco);  /* Cor do texto */
     border-radius: 5px;  /* Bordas arredondadas */
     margin: 20px auto 0;  /* Centraliza o botão e adiciona margem */
 }
 
 .btn-login:hover {
-    background-color: #292727;  /* Cor de fundo ao passar o cursor */
+    background-color:rgb(1, 78, 111);  /* Cor de fundo ao passar o cursor */
     transform: scale(1.05);  /* Efeito de zoom */
 }
 
@@ -165,14 +165,3 @@ html {
     text-align: right;
 }
 
-
-/* Efeito de hover no botão */
-button:hover {
-    background-color: #2749d8;
-    transform: scale(1.05);
-}
-
-
-.container-menu{
-    display: none;
-}
