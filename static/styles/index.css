@@ -1,14 +1,5 @@
-body {
-    width: 100vw;
-    height: 100vh;
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
 
 .container {
-    width: 100%;
     height: auto;
     display: flex;
     flex-wrap: wrap;
@@ -107,17 +98,23 @@ section h3 {
 }
 
 /* Adicione estilos para as classes de status */
-.aprovado {
-    color: rgb(129, 214, 0);
-    font-weight: 700;
+/* Estilo dos status adicionais */
+.em-separacao {
+    color: orange;
+    font-weight: bold;
 }
 
-.negado {
-    color: red;
-    font-weight: 700;
+.pronto-retirar {
+    color: green;
+    font-weight: bold;
 }
 
-.pendente {
-    color: rgb(255, 180, 42);
-    font-weight: 700;
+.aguardando-estoque {
+    color: rgb(212, 0, 0);
+    font-weight: bold;
+}
+
+.finalizado {
+    color: grey;
+    font-weight: bold;
 }

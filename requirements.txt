@@ -1,0 +1,11 @@
+blinker
+click
+colorama
+Flask
+itsdangerous
+Jinja2
+MarkupSafe
+mysql-connector-python
+python-dotenv
+Werkzeug
+Gunicorn

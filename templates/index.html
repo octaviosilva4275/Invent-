@@ -1,15 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
+    
+    <!-- Link para o Font Awesome -->
     <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/static/styles/index.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-index.css">
+    
+    <!-- Links para os arquivos CSS com Jinja -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-index.css') }}">
 </head>
 <body>
+    {% include '/dashboard/dashboard.html' %}
     <div class="container">
         <section class="container-estoque">
             <h3>Estoque mínimo:</h3>
@@ -38,50 +42,63 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Prego</td>
-                    <td>Octavio</td>
-                    <td>10</td>
-                    <td>Pendente</td>
+                    <td data-label="Nome do Produto">Prego</td>
+                    <td data-label="Usuário">Octavio</td>
+                    <td data-label="Quantidade">10</td>
+                    <td data-label="Status">Em separação</td>
                 </tr>
             </tbody>
-
             <tbody>
                 <tr>
-                    <td>Prego</td>
-                    <td>Octavio</td>
-                    <td>10</td>
-                    <td>Negado</td>
+                    <td data-label="Nome do Produto">Parafuso</td>
+                    <td data-label="Usuário">Octavio</td>
+                    <td data-label="Quantidade">50</td>
+                    <td data-label="Status">Pronto para retirar</td>
                 </tr>
             </tbody>
-
-
             <tbody>
                 <tr>
-                    <td>Prego</td>
-                    <td>Octavio</td>
-                    <td>10</td>
-                    <td>Aprovado</td>
+                    <td data-label="Nome do Produto">Martelo</td>
+                    <td data-label="Usuário">Octavio</td>
+                    <td data-label="Quantidade">5</td>
+                    <td data-label="Status">Aguardando estoque</td>
                 </tr>
             </tbody>
+            <tbody>
+                <tr>
+                    <td data-label="Nome do Produto">Broca</td>
+                    <td data-label="Usuário">Octavio</td>
+                    <td data-label="Quantidade">15</td>
+                    <td data-label="Status">Finalizado</td>
+                </tr>
+            </tbody>
+            
         </table>
     </section>
 
     <script>
-       const tds = document.querySelectorAll('td');
+            const tds = document.querySelectorAll('td');
 
-        tds.forEach(td => {
-
+            tds.forEach(td => {
             const status = td.textContent.trim();
-
 
             if (status === "Aprovado") {
                 td.classList.add('aprovado');
             } else if (status === "Pendente") {
                 td.classList.add('pendente');
             } else if (status === "Negado") {
-                td.classList.add('negado');
+                td.classList.add('reprovado');
+            } else if (status === "Em separação") {
+                td.classList.add('em-separacao');
+            } else if (status === "Pronto para retirar") {
+                td.classList.add('pronto-retirar');
+            } else if (status === "Aguardando estoque") {
+                td.classList.add('aguardando-estoque');
+            } else if (status === "Finalizado") {
+                td.classList.add('finalizado');
             }
-        });
+            });
+
 
     </script>
 </body>

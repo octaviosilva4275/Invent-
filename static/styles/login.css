@@ -1,146 +1,191 @@
-/* Normalização do Navegador */
+
 * {
-    margin: 0;  /* Remove a margem padrão dos elementos */
-    padding: 0;  /* Remove o padding padrão dos elementos */
-    box-sizing: border-box;  /* Inclui bordas e padding no cálculo do tamanho total dos elementos */
-    list-style: none;  /* Remove a estilização de listas (marcadores) */
-    text-decoration: none;  /* Remove o sublinhado de links */
-    border: none;  /* Remove bordas padrão */
-    font-family: 'Amatic SC', sans-serif;  /* Define a fonte padrão */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
 }
 
-/* Normalização do html */
-html {
-    width: 100vw;  /* Define a largura como 100% da viewport */
-    height: 100vh;  /* Define a altura como 100% da viewport */
-    font-size: 62.5%;  /* Ajusta o REM para 10px (1rem = 10px) */
-    overflow: hidden;  /* Remove a barra de rolagem horizontal */
-}
-
-/* Estilos para a classe de login */
-.login {
-    display: flex;  /* Define o layout flexível */
-    justify-content: center;  /* Centraliza horizontalmente */
-    align-items: center;  /* Centraliza verticalmente */
-    width: 100vw;  /* Ocupa a largura total da tela */
-    height: 100vh;  /* Ocupa a altura total da tela */
-    position: relative;  /* Necessário para o overlay do banner */
-}
-
-/* Estilos para a área de banner */
-.banner {
-    position: absolute;  /* Ocupa a tela toda, sendo "absoluto" dentro do .login */
-    top: 0;
-    left: 0;
-    width: 100%;  /* Ocupa 100% da largura */
-    height: 100%;  /* Ocupa 100% da altura */
-    z-index: -1;  /* Fica atrás do campo de login */
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(/static/img/banner.webp);
-    background-position: center center;
-    background-size: cover;
-    background-repeat: no-repeat;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #0c0c0c, #2a2a2a); /* Gradiente no fundo do body */
+    color: #fff;
+    background-image: url('/static/img/fundo_preto.jpg'); /* Caminho da imagem usando Jinja */
+    background-size: cover; /* Ajusta a imagem para cobrir todo o container */
+    background-position: center; /* Centraliza a imagem no container */
+    background-repeat: no-repeat; /* Impede que a imagem se repita */
     overflow: hidden;
 }
 
-.banner img {
-    width: 100%;  /* Imagem ocupa toda a largura */
-    height: 100%;  /* Imagem ocupa toda a altura */
-    object-fit: cover;  /* Garante que a imagem cubra toda a área */
-    z-index: -2;  /* Fica atrás do overlay transparente */
+.login-container {
+    display: flex;
+    width: 80%; /* Ajuste conforme necessário */
+    height: 80%; /* Ajuste conforme necessário */
+    border-radius: 35px; /* Adicione a borda arredondada aqui */
+    overflow: hidden; /* Garante que a borda arredondada afete o conteúdo interno */
+    position: relative; /* Adicione isso para posicionar o gradient corretamente */
+}
+/* Estilo base para os inputs */
+.input-box input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
 }
 
-/* Estilos para o campo de login */
-.campo-login {
-    display: flex;  /* Layout flexível */
-    justify-content: center;  /* Centraliza horizontalmente */
-    align-items: center;  /* Centraliza verticalmente */
-    background-color: var(--cinza-azulado);  /* Cor de fundo */
-    padding: 50px;  /* Adiciona espaçamento interno */
-    border-radius: 8px;  /* Bordas arredondadas */
+/* Estilo para inputs com erro */
+.input-box input.input-error {
+    border: 1.5px solid #ff4d4d; /* Vermelho para indicar erro */
+    background-color: #ffe6e6; /* Fundo levemente vermelho para destacar o erro */
 }
 
-/* Estilos do formulário de login */
-.form-login {
-    margin-bottom: 30px;  /* Margem inferior */
-    text-align: left;  /* Alinhamento do texto à esquerda */
-    width: 32rem;  /* Largura fixa para o formulário */
+/* Estilo para as mensagens de flash */
+.flash-messages {
+    margin-bottom: 10px;
 }
 
-/* Título do login com logo */
-.titulo-login {
-    display: flex;  /* Layout flexível */
-    align-items: center;  /* Alinha verticalmente ao centro */
-    justify-content: center;  /* Centraliza horizontalmente */
-    padding-right: 70px;
+.flash {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-.titulo-login img {
-    width: 90px;
-    height: 90px;
-    margin-right: 10px;  /* Espaçamento à direita da logo */
+.flash.success {
+    background-color: #d4edda;
+    color: #155724;
 }
 
-.titulo-login h3 {
-    font-size: 24px;  /* Tamanho da fonte do título */
-    margin-bottom: 0;  /* Remove a margem inferior */
+.flash.error {
+    background-color: #f8d7da;
+    color: #721c24;
 }
 
-/* Oculta os rótulos dos inputs */
-.form-login label {
-    display: none;  /* Esconde o label */
+
+
+.image-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Estilos dos inputs de login */
-.form-login input {
-    width: 100%;  /* Largura total */
-    padding: 12px;  /* Espaçamento interno */
-    border: 1px solid var(--cinza);  /* Borda fina e cinza */
-    border-radius: 4px;  /* Bordas arredondadas */
-    margin-top: 5px;  /* Margem superior */
+.image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(12,12,12);
+    /* background: linear-gradient(90deg, rgba(12,12,12,0.7301295518207283) 0%, rgba(12,12,12,1) 70%); */
+    background: linear-gradient(90deg, rgba(12,12,12,1) 26%, rgba(12, 12, 12, 0.432) 100%);
+    z-index: 1; /* Coloca o gradient acima da imagem */
+}
+.conteudo{
+    margin-left: 120px;
+}
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* Link de "esqueceu a senha" */
-.esqueceu-senha a {
-    color: var(--preto);  /* Cor preta */
-    font-size: 14px;  /* Tamanho da fonte */
-    font-weight: bold;  /* Texto em negrito */
-    margin-bottom: 30px;  /* Margem inferior */
-    text-decoration: underline;  /* Sublinhado */
-    display: block;  /* Exibe como bloco */
+.login-box {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Alinha horizontalmente o conteúdo */
+    align-items: center; /* Alinha verticalmente o conteúdo */
+    flex-direction: column;
+    position: relative; /* Adicione isso para garantir que o conteúdo do login esteja acima do gradient */
+    z-index: 2; /* Garante que a caixa de login esteja acima da imagem e do gradient */
+    margin: auto; /* Garante que a caixa esteja centralizada em relação ao container */
+    max-width: 400px;
+    height: 100%;
+    background-color: rgb(12,12,12);
 }
 
-/* Estilos do botão de login */
-.btn-login {
-    display: flex;  /* Layout flexível */
-    justify-content: center;  /* Centraliza horizontalmente */
-    align-items: center;  /* Centraliza verticalmente */
-    width: 50%;  /* Largura de 50% */
-    font-size: 15px;  /* Tamanho da fonte */
-    padding: 10px 20px;  /* Espaçamento interno */
-    cursor: pointer;  /* Muda o cursor ao passar sobre o botão */
-    background-color: var(--azul-claro);  /* Cor de fundo */
-    color: var(--branco);  /* Cor do texto */
-    border-radius: 5px;  /* Bordas arredondadas */
-    margin: auto 0;  /* Centraliza o botão e adiciona margem */
+h1 {
+    font-size: 38px;
+    margin-bottom: 30px;
 }
 
-.btn-login:hover {
-    background-color: var(--azul-escuro);  /* Cor de fundo ao passar o cursor */
-    transform: scale(1.05);  /* Efeito de zoom */
+h1 span {
+    color: #3564ff;
 }
 
-/* Link para "primeiro login" */
-.primeiro-login a {
-    color: var(--preto);  /* Cor preta */
-    font-size: 14px;  /* Tamanho da fonte */
-    font-weight: bold;  /* Negrito */
-    margin-bottom: 30px;  /* Margem inferior */
-    text-decoration: none;  /* Sublinhado */
-    display: block;  /* Exibe como bloco */
-    margin: 30px auto 0;  /* Margem superior */
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
 }
 
-span{
+.input-box input, .input-box select {
+    width: 100%;
+    padding: 10px;
+    background: #222;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+.input-box label {
+    font-size: 18px; /* Tamanho da fonte do label */
+    color: #888; /* Cor do label */
+    display: block; /* Faz o label ocupar a linha inteira */
+    margin-bottom: 5px; /* Espaçamento entre o label e o input */
+    margin-top: 5px;
+}
+
+.input-box select {
+    appearance: none; /* Remove a estilização padrão do select */
+    background: #222; /* Mantém o mesmo estilo dos inputs */
+    padding-right: 30px; /* Adiciona espaçamento à direita */
+}
+
+.input-box input::placeholder {
+    color: #666; /* Cor do placeholder */
+}
+
+
+
+.forgot-password {
+    color: #888;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
     color: white;
-    text-decoration: underline;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #3564ff;
+    transition: background 0.3s;
+}
+
+/* Efeito de hover no botão */
+button:hover {
+    background-color: #2749d8;
+    transform: scale(1.05);
+}
+
+.register {
+    margin-top: 20px;
+    color: #888;
+    text-align: center;
+}
+
+
+.container-menu{
+    display: none;
 }

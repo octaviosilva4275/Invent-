@@ -1,47 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque</title>
-    <link rel="stylesheet" href="/static/styles/controle-estoque.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-controle-estoque.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
+
+    <!-- Links para os arquivos CSS com Jinja -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/controle-estoque.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-controle-estoque.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
 </head>
+
 <body>
-    <header>
+    {% include '/dashboard/dashboard.html' %}
+    <main>
+        <section class="form-section">
+            <h1>Controle de Estoque</h1>
+            <h2>Registrar Entrada</h2>
+            <form action="/registrar_entrada" method="POST">
+                <select id="material" name="material_id" required>
+                    <option value="1">Selecione o item</option>
+                    <option value="2">Material 2</option>
 
-    </header>
+                </select><br><br>
 
-    <section class="form-section">
-        <h1>Controle de Estoque</h1>
-        <h2>Registrar Entrada</h2>
-        <form action="/registrar_entrada" method="POST">
-            <select id="material" name="material_id" required>
-                <option value="1">Selecione o item</option>
-                <option value="2">Material 2</option>
+                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade"
+                    required><br>
+                <div class="container-btn">
+                    <button type="submit">Confirmar</button>
+                </div>
+            </form>
+            <h2>Registrar Saída</h2>
+            <form action="/registrar_saida" method="POST">
+                <select id="material" name="material_id" required>
+                    <option value="1">Selecione o item</option>
+                    <option value="2">Material 2</option>
 
-            </select><br><br>
+                </select><br><br>
 
-            <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
-
-            <button type="submit">Confirmar</button>
-        </form>
-        <h2>Registrar Saída</h2>
-        <form action="/registrar_saida" method="POST">
-            <select id="material" name="material_id" required>
-                <option value="1">Selecione o item</option>
-                <option value="2">Material 2</option>
-
-            </select><br><br>
-
-            <input type="number" id="quantidade" name="quantidade" min="1" required><br><br>
-
-            <button type="submit">Confirmar</button>
-        </form>
-    </section>
-
+                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
+                <div class="container-btn">
+                    <button type="submit">Confirmar</button>
+                </div>
+            </form>
+        </section>
+    </main>
 
 
 </body>
+
 </html>

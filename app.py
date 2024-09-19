@@ -1,5 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, session,jsonify 
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
+from mysql.connector import Error
+import os
+# from dotenv import load_dotenv
+
+# load_dotenv()  # Carregar variáveis do .env
 
 app = Flask(__name__)
 
@@ -8,15 +13,58 @@ app.secret_key = 'sua-chave-secreta-aqui'
 
 app.secret_key = 'teste'
 
-def conectar_banco_dados():
 
-    conexao = mysql.connector.connect(
-        host='localhost',
-        user='tcc',
-        password='123',
-        database='almoxarifado',
-    )
-    return conexao
+# def verificar_tabela():
+#     try:
+#         conexao = mysql.connector.connect(
+#             host=os.getenv('MYSQL_HOST'),
+#             user=os.getenv('MYSQL_USER'),
+#             password=os.getenv('MYSQL_PASSWORD'),
+#             database=os.getenv('MYSQL_DB'),
+#             port=int(os.getenv('MYSQL_PORT'))
+#         )
+#         cursor = conexao.cursor()
+#         cursor.execute("SHOW TABLES")
+#         tables = cursor.fetchall()
+#         print("Tabelas no banco de dados:")
+#         for table in tables:
+#             print(table[0])
+#         cursor.close()
+#         conexao.close()
+#     except mysql.connector.Error as err:
+#         print(f"Erro: {err}")
+
+# verificar_tabela()
+
+def conectar_banco_dados():
+    # use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
+    # print(f"USE_REMOTE_DB: {use_remote_db}")
+    
+    try:
+        # if use_remote_db:
+        #     print("Tentando conectar ao banco de dados remoto...")
+        #     conexao = mysql.connector.connect(
+        #         host=os.getenv('MYSQL_HOST'),
+        #         user=os.getenv('MYSQL_USER'),
+        #         password=os.getenv('MYSQL_PASSWORD'),
+        #         database=os.getenv('MYSQL_DB'),
+        #         port=int(os.getenv('MYSQL_PORT'))
+        #     )
+        # else:
+        print("Tentando conectar ao banco de dados local...")
+        conexao = mysql.connector.connect(
+            host='localhost',
+            user='tcc',
+            password='123',
+            database='almoxarifado',
+        )
+        print("Conexão estabelecida com sucesso!")
+        return conexao
+    except Error as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
+        raise
+
+
 
 @app.route('/')
 def solicitante():
@@ -24,18 +72,17 @@ def solicitante():
 
 
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    conexao = conectar_banco_dados()
     if request.method == 'POST':
-        entrada = request.form['rn']
+        entrada = request.form['sn']
         senha = request.form['password']
 
-        conexao = conectar_banco_dados()
         cursor = conexao.cursor(dictionary=True)
-
         cursor.execute("SELECT * FROM users WHERE (sn = %s OR email = %s) AND senha = %s", (entrada, entrada, senha))
         usuario = cursor.fetchone()
-
         cursor.close()
         conexao.close()
 
@@ -44,15 +91,17 @@ def login():
             session['user_id'] = usuario['id']
             session['user_sn'] = usuario['sn']
             session['user_cargo'] = usuario['cargo']
-
             if usuario['cargo'] == 'almoxarifado':
                 return redirect(url_for('dashboard'))
             else:
                 return redirect(url_for('requisicao_material'))
         else:
-            print('Credenciais inválidas. Por favor, tente novamente.', 'error')
+            flash('Credenciais inválidas. Por favor, tente novamente.', 'error')
+            return redirect(url_for('solicitante'))  # Redireciona para garantir que o erro seja exibido
 
     return render_template('login/login.html')
+
+
 
 
 
@@ -67,7 +116,6 @@ def primeiro_login():
         conexao = conectar_banco_dados()
         cursor = conexao.cursor(dictionary=True)
 
-
         cursor.execute("SELECT * FROM users WHERE sn = %s", (sn,))
         usuario_existente = cursor.fetchone()
 
@@ -75,16 +123,15 @@ def primeiro_login():
             query_update = "UPDATE users SET email = %s, cargo = %s, senha = %s WHERE sn = %s"
             cursor.execute(query_update, (email, area, senha, sn))
             conexao.commit()
-
+            flash('Cadastro realizado com sucesso!', 'success')
         else:
-
-            print('Usuario inexistente')
+            flash('Usuário inexistente.', 'error')
 
         cursor.close()
         conexao.close()
 
+    return render_template('login/primeiro_login.html')
 
-    return render_template('login/primeiro_login.html') 
 
 
 # ---------------------------------------------------- FIM DO LOGIN ----------------------------------------------------
@@ -131,7 +178,6 @@ def cadastro_material():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
     if request.method == 'POST':
-        descricao = request.form['descricao']
         categoria = request.form['categoria']
         localizacao = request.form['localizacao']
         estoque_minimo = int(request.form['estoque_minimo'] or 0)  # Converte para int, 0 se vazio
@@ -145,9 +191,9 @@ def cadastro_material():
 
         try:
             # Insere o novo material no banco de dados
-            query_insert = ("INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) "
+            query_insert = ("INSERT INTO materials (categoria, localizacao, estoque_minimo, estoque_maximo) "
                             "VALUES (%s, %s, %s, %s, %s)")
-            cursor.execute(query_insert, (descricao, categoria, localizacao, estoque_minimo, estoque_maximo))            
+            cursor.execute(query_insert, ( categoria, localizacao, estoque_minimo, estoque_maximo))            
             conexao.commit()
 
             # Redireciona para a mesma página com uma mensagem de sucesso (opcional)
@@ -183,7 +229,7 @@ def controle_estoque():
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
-    cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
+    cursor.execute("SELECT m.id, SUM(e.quantidade) as quantidade "
                     "FROM materials m "
                     "LEFT JOIN estoque e ON m.id = e.material_id "
                     "GROUP BY m.id")
@@ -347,6 +393,28 @@ def requisicao_material():
     return render_template('funcoes/requisicao_material.html', materiais=materiais, minhas_requisicoes=minhas_requisicoes)
 
 # ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
+
+
+@app.route('/cadastro_material')
+def cadastro_material_page():
+    return render_template('funcoes/cadastro_material.html')
+
+@app.route('/relatorio')
+def relatorios():
+    return render_template('funcoes/relatorio.html')
+
+@app.route('/requisicao_material_admin')
+def requisicao_material_admin():
+    return render_template('funcoes/requisicao_material_admin.html')
+
+@app.route('/perfil')
+def perfil():
+    return render_template('funcoes/perfil.html')
+
+@app.route('/logout')
+def logout():
+    return render_template('funcoes/logout.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

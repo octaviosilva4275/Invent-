@@ -1,78 +1,122 @@
-body {
-    width: 100vw;
-    height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+body{
+    background: rgb(0,71,102);
+    background: linear-gradient(6deg, rgba(0,71,102,1) 12%, rgba(177,196,204,1) 100%);
 }
 
+html{
+    height: 100%;
+
+}
+
+/* Estilo da Seção do Formulário */
 .form-section {
     width: 80%;
     max-width: 1000px;
-    background-color: var(--cinza-azulado);
+    background-color: var(--branco);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 30px;
-    padding: 20px;
-    margin-bottom: 20px;
-
+    border-radius: 20px; /* Ajustado para bordas mais suaves */
+    padding: 30px; /* Aumentado o padding para mais espaçamento interno */
+    margin: 20px auto; /* Adicionado espaçamento automático para centralizar verticalmente */    
 }
 
+/* Estilo do Formulário */
 form {
     width: 100%;
-    padding: 15px;
-    border-radius: 15px;
+    background-color: var(--branco); /* Adicionada cor de fundo branca para o formulário */
+    padding: 20px; /* Aumentado o padding para maior conforto */
+    border-radius: 10px; /* Ajustado para bordas mais suaves */
+
 }
 
-h1 {
+/* Estilo do Título Principal */
+.form-section h1 {
     margin: 15px 0;
     color: var(--preto);
+    font-size: 28px; /* Aumentado o tamanho da fonte para mais destaque */
+    text-align: center; /* Centralizado o texto */
 }
 
-h2 {
-    width: 100%;
-    margin: 10px 0;
+/* Estilo dos Subtítulos */
+.form-section h2 {
+    margin: 10px 0; /* Aumentado o espaço superior e inferior */
     color: var(--cinza);
+    font-size: 22px; /* Ajustado o tamanho da fonte para uma hierarquia clara */
+    text-align: start; /* Centralizado o texto */
 }
 
-select{
+/* Estilo dos Campos de Seleção */
+select {
     width: calc(100% - 22px);
-    padding: 10px;
+    padding: 12px; /* Aumentado o padding para mais conforto */
     margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid var(--cinza-escuro);
-
+    border: 1px solid var(--cinza-azulado);
+    font-size: 16px; /* Ajustado o tamanho da fonte para consistência */
 }
 
-
+/* Estilo dos Campos de Entrada de Número */
 input[type="number"] {
-    width: calc(100% - 45px);
-    padding: 10px;
+    width: calc(100% - 22px); /* Ajustado para alinhar com o campo select */
+    padding: 12px; /* Aumentado o padding para mais conforto */
     margin-bottom: 15px;
     border-radius: 5px;
-    border: 1px solid var(--cinza-escuro);
-
+    border: 1px solid var(--cinza-azulado);
+    font-size: 16px; /* Ajustado o tamanho da fonte para consistência */
 }
 
+/* Estilo dos Botões */
 button {
-    padding: 10px 20px;
-    margin-bottom: 15px;
+    padding: 12px 20px; /* Aumentado o padding para mais conforto */
+    margin-top: 10px; /* Ajustado o espaçamento superior */
     border-radius: 5px;
-    border: 2px solid var(--preto);
-    background-color: var(--verde);
-    color: var(--preto);
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
+    border: 2px solid rgba(190, 190, 190, 0.333);
     background-color: var(--azul-claro);
+    color: var(--branco);
+    cursor: pointer;
+    font-size: 16px; /* Ajustado o tamanho da fonte */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Adicionada uma transição suave */
+}
+
+/* Estilo do Botão ao Passar o Mouse */
+button:hover {
+    background-color: var(--azul-escuro);
+    transform: scale(1.05); /* Adicionado um leve efeito de aumento */
+}
+
+#quantidade, #material{
+    background-color: rgb(243, 243, 243);
+    color: black;
+    width: 100%;
 }
 
 
 
+
+.container-btn{
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-right: -10px;
+}
+
+.btn-cadastro {
+
+    justify-content: center;
+    align-items: flex-end;
+    width: 25%;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-cadastro:hover {
+    background-color: var(--azul-claro);
+    transform: scale(1.05);
+}

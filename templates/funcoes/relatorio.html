@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/relatorios.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-relatorio.css') }}">
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+
+
+    <main>
+        <main>
+            <!-- Seção principal de cadastro -->
+            <section class="cadastro">
+            <!-- Container para o formulário de cadastro -->
+            <div class="campo-cadastro">
+            <form action="/registrar_entrada" method="POST">
+                <select id="relatorio" name="relatorio" required>
+                    <option value="1">Selecione o item</option>
+                    <option value="2">Material 2</option>
+
+                </select><br><br>
+                <button>Confirmar</button>
+            </form>
+            </div>
+
+        </section>
+    </main>
+</body>
+</html>
