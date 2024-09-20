@@ -33,6 +33,10 @@
                 </div>
             </form>
 
+
+
+
+
             <h2>Registrar Saída</h2>
             <form action="{{ url_for('registrar_saida') }}" method="POST">
                 <select id="material" name="material_id" required>
@@ -40,13 +44,14 @@
                     {% for material in materiais %}
                         <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})</option>
                     {% endfor %}
-                </select><br><br>
-
+                </select>
                 <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
                 <div class="container-btn">
                     <button type="submit">Confirmar</button>
                 </div>
             </form>
+
+            
         </section>
     </main>
 </body>

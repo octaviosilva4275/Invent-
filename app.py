@@ -3,9 +3,9 @@ import mysql.connector
 from mysql.connector import Error
 import os
 # from twilio.rest import Client
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 
-load_dotenv()  # Carregar variáveis do .env
+# load_dotenv()  # Carregar variáveis do .env
 
 app = Flask(__name__)
 
@@ -28,51 +28,51 @@ app.secret_key = 'teste'
 #     body=f'Mensagem enviada')
 # print(message.sid)
 
-def verificar_tabela():
-    try:
-        conexao = mysql.connector.connect(
-            host=os.getenv('MYSQL_HOST'),
-            user=os.getenv('MYSQL_USER'),
-            password=os.getenv('MYSQL_PASSWORD'),
-            database=os.getenv('MYSQL_DB'),
-            port=int(os.getenv('MYSQL_PORT'))
-        )
-        cursor = conexao.cursor()
-        cursor.execute("SHOW TABLES")
-        tables = cursor.fetchall()
-        print("Tabelas no banco de dados:")
-        for table in tables:
-            print(table[0])
-        cursor.close()
-        conexao.close()
-    except mysql.connector.Error as err:
-        print(f"Erro: {err}")
+# def verificar_tabela():
+#     try:
+#         conexao = mysql.connector.connect(
+#             host=os.getenv('MYSQL_HOST'),
+#             user=os.getenv('MYSQL_USER'),
+#             password=os.getenv('MYSQL_PASSWORD'),
+#             database=os.getenv('MYSQL_DB'),
+#             port=int(os.getenv('MYSQL_PORT'))
+#         )
+#         cursor = conexao.cursor()
+#         cursor.execute("SHOW TABLES")
+#         tables = cursor.fetchall()
+#         print("Tabelas no banco de dados:")
+#         for table in tables:
+#             print(table[0])
+#         cursor.close()
+#         conexao.close()
+#     except mysql.connector.Error as err:
+#         print(f"Erro: {err}")
 
-verificar_tabela()
+# verificar_tabela()
 
 def conectar_banco_dados():
-    use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
-    print(f"USE_REMOTE_DB: {use_remote_db}")
+    # use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
+    # print(f"USE_REMOTE_DB: {use_remote_db}")
     
     try:
-        if use_remote_db:
-            print("Tentando conectar ao banco de dados remoto...")
-            conexao = mysql.connector.connect(
-                host=os.getenv('MYSQL_HOST'),
-                user=os.getenv('MYSQL_USER'),
-                password=os.getenv('MYSQL_PASSWORD'),
-                database=os.getenv('MYSQL_DB'),
-                port=int(os.getenv('MYSQL_PORT'))
-            )
-        else:
-            print("Tentando conectar ao banco de dados local...")
-            conexao = mysql.connector.connect(
-                host='localhost',
-                user='tcc',
-                password='123',
-                database='almoxarifado',
-            )
-            print("Conexão estabelecida com sucesso!")
+        # if use_remote_db:
+        #     print("Tentando conectar ao banco de dados remoto...")
+        #     conexao = mysql.connector.connect(
+        #         host=os.getenv('MYSQL_HOST'),
+        #         user=os.getenv('MYSQL_USER'),
+        #         password=os.getenv('MYSQL_PASSWORD'),
+        #         database=os.getenv('MYSQL_DB'),
+        #         port=int(os.getenv('MYSQL_PORT'))
+        #     )
+        # else:
+        print("Tentando conectar ao banco de dados local...")
+        conexao = mysql.connector.connect(
+            host='localhost',
+            user='tcc',
+            password='123',
+            database='almoxarifado',
+        )
+        print("Conexão estabelecida com sucesso!")
         return conexao
     except Error as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
@@ -232,30 +232,21 @@ def cadastro_material():
 def controle_estoque():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
-
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
-    try:
-        # Obtém todos os materiais e suas quantidades
-        cursor.execute("""
-            SELECT m.id, m.descricao, COALESCE(SUM(e.quantidade), 0) AS quantidade
-            FROM materials m
-            LEFT JOIN estoque e ON m.id = e.material_id
-            GROUP BY m.id
-        """)
-        materiais = cursor.fetchall()
+    
+    cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
+                    "FROM materials m "
+                    "LEFT JOIN estoque e ON m.id = e.material_id "
+                    "GROUP BY m.id")
+    materiais = cursor.fetchall()
 
-    except Exception as e:
-        print(f"Erro ao buscar dados: {e}")
-        materiais = []
+    cursor.close()
+    conexao.close()
 
-    finally:
-        cursor.close()
-        conexao.close()
 
     return render_template('funcoes/controle_estoque.html', materiais=materiais)
-
 
 @app.route('/registrar_entrada', methods=['POST'])
 def registrar_entrada():
@@ -291,48 +282,39 @@ def registrar_entrada():
 
 
 
-
 @app.route('/registrar_saida', methods=['POST'])
 def registrar_saida():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
     
+
     if request.method == 'POST':
         material_id = request.form['material_id']
         quantidade = int(request.form['quantidade'])
         usuario_id = session['user_id'] 
 
         conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
 
         try:
-            with conexao.cursor() as cursor:
-                # Verifica a quantidade em estoque
-                cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
-                estoque_atual = cursor.fetchone()
 
-                if estoque_atual and estoque_atual[0] >= quantidade:
-                    # Atualiza a quantidade em estoque (subtrai a quantidade de saída)
-                    cursor.execute("""UPDATE estoque 
-                                      SET quantidade = quantidade - %s 
-                                      WHERE material_id = %s""", (quantidade, material_id))
-
-                    # Insere um novo registro de saída no estoque
-                    inserir = """INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) 
-                                  VALUES (%s, %s, 'saida', %s)"""
-                    cursor.execute(inserir, (material_id, -quantidade, usuario_id)) 
-
-                    conexao.commit()
-                    flash('Saída registrada com sucesso!', 'success')
-                    return redirect(url_for('controle_estoque'))
-                else:
-                    flash('Estoque insuficiente para atender a requisição.', 'error')
-        except mysql.connector.Error as err:
-            print(f'Erro ao registrar saída: {err}')
-            flash('Erro ao registrar saída.', 'error')
-        finally:
+            query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
+            cursor.execute(query_insert, (material_id, -quantidade, usuario_id))
+            conexao.commit()
+            
+            cursor.close()
             conexao.close()
 
-    return redirect(url_for('controle_estoque'))
+
+            return redirect(url_for('controle_estoque'))
+        except:
+            cursor.close()
+            conexao.close()
+            
+
+            return redirect(url_for('controle_estoque'))
+
+
 
 
 
