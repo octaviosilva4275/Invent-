@@ -211,8 +211,8 @@ def cadastro_material():
             flash('Material cadastrado com sucesso!', 'success')
             return redirect(url_for('cadastro_material'))
 
-        except mysql.connector.Error as err:
-            flash('Erro ao cadastrar material: {}'.format(err), 'error')
+        except:
+            flash('Erro ao cadastrar material: {}', 'error')
             return redirect(url_for('cadastro_material'))
 
         finally:
@@ -326,8 +326,8 @@ def registrar_saida():
                     return redirect(url_for('controle_estoque'))
                 else:
                     flash('Estoque insuficiente para atender a requisição.', 'error')
-        except mysql.connector.Error as err:
-            print(f'Erro ao registrar saída: {err}')
+        except:
+            print('Erro ao registrar saída')
             flash('Erro ao registrar saída.', 'error')
         finally:
             conexao.close()
@@ -360,6 +360,7 @@ def api_requisicoes_admin():
                 u.nome as usuario, 
                 r.status,
                 r.data_entrega,
+                r.data_atualizacao,
                 r.observacao
             FROM requisicoes r
             JOIN materials m ON r.material_id = m.id
@@ -368,8 +369,8 @@ def api_requisicoes_admin():
             ORDER BY r.status DESC 
         """)
         requisicoes = cursor.fetchall()
-    except mysql.connector.Error as err:
-        print(f'Erro ao buscar requisições: {err}')
+    except:
+        print('Erro ao buscar requisições')
         return jsonify([]), 500 
 
     finally:
@@ -389,20 +390,21 @@ def api_minhas_requisicoes():
     try:
         usuario_id = session['user_id']
         cursor.execute("""
-            SELECT 
-                r.id,
-                m.descricao as material,
-                r.quantidade,
-                r.status,
-                r.data_entrega 
-            FROM requisicoes r
-            JOIN materials m ON r.material_id = m.id
-            WHERE r.usuario_id = %s AND r.status = 'pendente' 
+        SELECT 
+            r.id,
+            m.descricao as material,
+            r.quantidade,
+            r.status,
+            r.data_entrega,
+            r.data_atualizacao
+        FROM requisicoes r
+        JOIN materials m ON r.material_id = m.id
+        WHERE r.usuario_id = %s
         """, (usuario_id,))
         minhas_requisicoes = cursor.fetchall()
 
-    except mysql.connector.Error as err:
-        print(f"Erro ao buscar requisições do usuário: {err}")
+    except:
+        print("Erro ao buscar requisições do usuário")
         return jsonify([]), 500  # Retorna uma lista vazia em caso de erro
 
     finally:
@@ -430,8 +432,8 @@ def requisicao_material():
 
             print('Requisição de material enviada com sucesso!', 'success')
 
-        except mysql.connector.Error as err:
-            print(f"Erro ao criar requisição: {err}")
+        except:
+            print("Erro ao criar requisição")
             print('Ocorreu um erro ao enviar a requisição. Por favor, tente novamente mais tarde.', 'error')
 
         finally:
@@ -466,8 +468,8 @@ def requisicao_material():
             """, (usuario_id,))
             minhas_requisicoes = cursor.fetchall()
 
-    except mysql.connector.Error as err:
-        print(f"Erro ao buscar dados: {err}")
+    except:
+        print("Erro ao buscar dados")
         materiais = []
         minhas_requisicoes = []
 
@@ -488,19 +490,19 @@ def requisicao_material_admin():
             r.id,
             m.descricao as material,
             r.quantidade,
-            u.nome as usuario,  # Certifique-se de que 'u.nome' é o nome correto da coluna na tabela 'users'
+            u.nome as usuario,
             r.status,
             r.data_entrega,
-            r.observacao
+            r.observacao,
+            DATE_FORMAT(r.data_atualizacao, '%H:%i') as data_atualizacao
         FROM requisicoes r
         JOIN materials m ON r.material_id = m.id
-        JOIN users u ON r.usuario_id = u.id  # Verifique se 'r.usuario_id' e 'u.id' são os nomes corretos das colunas
-        WHERE r.status != 'aprovada'  
+        JOIN users u ON r.usuario_id = u.id
+        WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()  -- Filtra pelo dia atual
         ORDER BY r.status DESC 
     """)
     requisicoes = cursor.fetchall()
 
-    
     cursor.close()
     conexao.close()
 
@@ -562,8 +564,8 @@ def atualizar_requisicao():
 
         conexao.commit()
 
-    except mysql.connector.Error as err:
-        print(f'Erro ao atualizar requisição: {err}')
+    except:
+        print('Erro ao atualizar requisição')
         return jsonify({'error': 'Erro ao atualizar requisição'}), 500
     finally:
         cursor.close()
@@ -598,7 +600,10 @@ def perfil():
 
 @app.route('/logout')
 def logout():
-    return render_template('funcoes/logout.html')
+    session.clear()  # Limpa todos os dados da sessão
+    flash('Você foi desconectado com sucesso.', 'success')  # Mensagem de sucesso
+    return redirect(url_for('solicitante'))  # Redireciona para a página de login
+
 
 
 if __name__ == "__main__":
