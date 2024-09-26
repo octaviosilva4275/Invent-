@@ -218,8 +218,8 @@ def cadastro_material():
             flash('Material cadastrado com sucesso!', 'success')
             return redirect(url_for('cadastro_material'))
 
-        except mysql.connector.Error as err:
-            flash('Erro ao cadastrar material: {}'.format(err), 'error')
+        except:
+            flash('Erro ao cadastrar material', 'error')
             return redirect(url_for('cadastro_material'))
 
         finally:
@@ -352,8 +352,8 @@ def requisicao_material():
 
             print('Requisição de material enviada com sucesso!', 'success')
 
-        except mysql.connector.Error as err:
-            print(f"Erro ao criar requisição: {err}")
+        except:
+            print(f"Erro ao criar requisição")
             print('Ocorreu um erro ao enviar a requisição. Por favor, tente novamente mais tarde.', 'error')
 
         finally:
@@ -388,8 +388,8 @@ def requisicao_material():
             """, (usuario_id,))
             minhas_requisicoes = cursor.fetchall()
 
-    except mysql.connector.Error as err:
-        print(f"Erro ao buscar dados: {err}")
+    except:
+        print(f"Erro ao buscar dados")
         materiais = []
         minhas_requisicoes = []
 
@@ -423,8 +423,8 @@ def api_requisicoes_admin():
             ORDER BY r.status DESC 
         """)
         requisicoes = cursor.fetchall()
-    except mysql.connector.Error as err:
-        print(f'Erro ao buscar requisições: {err}')
+    except:
+        print(f'Erro ao buscar requisições')
         return jsonify([]), 500 
 
     finally:
@@ -456,8 +456,8 @@ def api_minhas_requisicoes():
         """, (usuario_id,))
         minhas_requisicoes = cursor.fetchall()
 
-    except mysql.connector.Error as err:
-        print(f"Erro ao buscar requisições do usuário: {err}")
+    except:
+        print(f"Erro ao buscar requisições do usuário")
         return jsonify([]), 500
 
     finally:
