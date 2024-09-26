@@ -510,35 +510,71 @@ def requisicao_material_admin():
 @app.route('/atualizar_requisicao', methods=['POST'])
 def atualizar_requisicao():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
-        return jsonify({'success': False, 'message': 'Acesso não autorizado.'}), 403
+        return redirect(url_for('solicitante'))
 
-    requisicao_id = request.form['requisicao_id']
-    acao = request.form['acao']
+    data = request.get_json()
+    requisicao_id = data['requisicao_id']
+    acao = data['acao']
 
     conexao = conectar_banco_dados()
     cursor = conexao.cursor()
 
     try:
-        if acao == 'aprovar':
-            # Lógica de aprovação
-            cursor.execute("UPDATE requisicoes SET status = 'Disponivel para retirada', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
-            # Atualizar estoque etc.
-            conexao.commit()
-            return jsonify({'success': True})
+        if acao == 'Solicitado':
+            # Lógica para atualizar o status para "Solicitado", se necessário
 
-        elif acao == 'retirado':
-            # Lógica de retirada
-            cursor.execute("UPDATE requisicoes SET status = 'Retirado', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
-            conexao.commit()
-            return jsonify({'success': True})
+            cursor.execute("UPDATE requisicoes SET status = 'Solicitado' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'Disponivel para retirada':
+            cursor.execute("UPDATE requisicoes SET status = 'Disponivel para retirada' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'Aguardando reposição':
+            cursor.execute("UPDATE requisicoes SET status = 'Aguardando reposição' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'Retirado':
+            cursor.execute("UPDATE requisicoes SET status = 'Retirado' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'aprovar':
+            # Aprova a requisição e verifica o estoque
+            cursor.execute("SELECT material_id, quantidade FROM requisicoes WHERE id = %s", (requisicao_id,))
+            requisicao = cursor.fetchone()
+
+            if requisicao:
+                material_id = requisicao[0]
+                quantidade_requisitada = requisicao[1]
+
+                cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
+                estoque_atual = cursor.fetchone()
+
+                if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
+                    # Atualiza o estoque
+                    nova_quantidade = estoque_atual[0] - quantidade_requisitada
+                    cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
+
+                    # Atualiza a requisição
+                    cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
+                    conexao.commit()
+                else:
+                    # Estoque insuficiente
+                    cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
+        
+
+
+        conexao.commit()
 
     except mysql.connector.Error as err:
-        print(f"Erro ao atualizar requisição: {err}")
-        return jsonify({'success': False, 'message': 'Erro ao processar a requisição.'})
-
+        print(f'Erro ao atualizar requisição: {err}')
+        return jsonify({'error': 'Erro ao atualizar requisição'}), 500
     finally:
         cursor.close()
         conexao.close()
+
+    return jsonify({'success': 'Status atualizado com sucesso'})
+
+
+
+
+
 
 
 

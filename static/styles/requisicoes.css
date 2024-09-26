@@ -82,3 +82,24 @@ body {
     height: 80%;
 }
 
+/* Adicione estilos para as classes de status */
+/* Estilo dos status adicionais */
+.em-separacao {
+    color: orange;
+    font-weight: bold;
+}
+
+.pronto-retirar {
+    color: green;
+    font-weight: bold;
+}
+
+.aguardando-estoque {
+    color: rgb(212, 0, 0);
+    font-weight: bold;
+}
+
+.finalizado {
+    color: grey;
+    font-weight: bold;
+}
