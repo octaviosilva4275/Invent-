@@ -19,7 +19,8 @@ html{
     justify-content: center;
     border-radius: 20px; /* Ajustado para bordas mais suaves */
     padding: 30px; /* Aumentado o padding para mais espaçamento interno */
-    margin: 100px auto; /* Adicionado espaçamento automático para centralizar verticalmente */    
+    margin: 1% auto; /* Adicionado espaçamento automático para centralizar verticalmente */   
+    height: 95vh; 
 }
 
 /* Estilo do Formulário */

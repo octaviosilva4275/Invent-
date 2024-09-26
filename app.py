@@ -1,7 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
-from mysql.connector import Error
 import os
+
+# from rotas.conexao_online import *
+# from rotas.conexao import *
+# from rotas.config import Config
+# from rotas.dashboard import *
+# from rotas.logar import *
+# from rotas.material import *
+# from rotas.requisicao import *
+
+
 # from twilio.rest import Client
 # from dotenv import load_dotenv
 
@@ -10,7 +19,6 @@ import os
 app = Flask(__name__)
 
 app.secret_key = 'sua-chave-secreta-aqui'
-
 
 app.secret_key = 'teste'
 
@@ -74,8 +82,8 @@ def conectar_banco_dados():
         )
         print("Conexão estabelecida com sucesso!")
         return conexao
-    except Error as e:
-        print(f"Erro ao conectar ao banco de dados: {e}")
+    except:
+        print(f"Erro ao conectar ao banco de dados")
         raise
 
 
@@ -83,7 +91,6 @@ def conectar_banco_dados():
 @app.route('/')
 def solicitante():
     return render_template('login/login.html')
-
 
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
 
