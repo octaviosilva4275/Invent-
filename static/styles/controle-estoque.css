@@ -59,7 +59,7 @@ select {
 }
 
 /* Estilo dos Campos de Entrada de Número */
-input[type="number"] {
+input {
     width: calc(100% - 22px); /* Ajustado para alinhar com o campo select */
     padding: 12px; /* Aumentado o padding para mais conforto */
     margin-bottom: 15px;

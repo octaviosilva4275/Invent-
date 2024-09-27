@@ -293,7 +293,6 @@ def registrar_entrada():
 def registrar_saida():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
-    
 
     if request.method == 'POST':
         material_id = request.form['material_id']
@@ -304,22 +303,28 @@ def registrar_saida():
         cursor = conexao.cursor()
 
         try:
+            # Verifica o estoque atual do material
+            cursor.execute("SELECT SUM(quantidade) FROM estoque WHERE material_id = %s", (material_id,))
+            estoque_atual = cursor.fetchone()[0] or 0
 
-            query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
-            cursor.execute(query_insert, (material_id, -quantidade, usuario_id))
-            conexao.commit()
-            
+            if estoque_atual >= quantidade:
+                query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
+                cursor.execute(query_insert, (material_id, -quantidade, usuario_id))
+                conexao.commit()
+                flash('Saída registrada com sucesso!', 'success')
+            else:
+                flash('Estoque insuficiente para registrar a saída.', 'error')
+
+        except Exception as e:
+            print(f"Erro ao registrar saída: {e}")
+            flash('Erro ao registrar saída.', 'error')
+
+        finally:
             cursor.close()
             conexao.close()
 
+        return redirect(url_for('controle_estoque'))
 
-            return redirect(url_for('controle_estoque'))
-        except:
-            cursor.close()
-            conexao.close()
-            
-
-            return redirect(url_for('controle_estoque'))
 
 
 
@@ -471,30 +476,39 @@ def requisicao_material():
 def requisicao_material_admin():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
+    
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
-    cursor.execute("""
+
+    # Consulta para calcular o estoque total de cada material
+    cursor.execute("""  
         SELECT 
             r.id,
-            m.descricao as material,
+            m.descricao AS material,
             r.quantidade,
-            u.nome as usuario,
+            COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'entrada'), 0) -
+            COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
+            u.nome AS usuario,
             r.status,
             r.data_entrega,
             r.observacao,
-            DATE_FORMAT(r.data_atualizacao, '%H:%i') as data_atualizacao
+            DATE_FORMAT(r.data_atualizacao, '%H:%i') AS data_atualizacao
         FROM requisicoes r
         JOIN materials m ON r.material_id = m.id
         JOIN users u ON r.usuario_id = u.id
-        WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()  -- Filtra pelo dia atual
+        WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()
         ORDER BY r.status DESC 
     """)
+
     requisicoes = cursor.fetchall()
 
     cursor.close()
     conexao.close()
 
-    return render_template('funcoes/requisicao_material_admin.html', requisicoes=requisicoes) 
+    return render_template('funcoes/requisicao_material_admin.html', requisicoes=requisicoes)
+
+
+
 
 
 @app.route('/atualizar_requisicao', methods=['POST'])
@@ -560,11 +574,6 @@ def atualizar_requisicao():
         conexao.close()
 
     return jsonify({'success': 'Status atualizado com sucesso'})
-
-
-
-
-
 
 
 

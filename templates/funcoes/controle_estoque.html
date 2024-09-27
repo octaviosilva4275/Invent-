@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/controle-estoque.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-controle-estoque.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
+
+    <!-- Link para o jQuery UI para autocomplete -->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 
 <body>
@@ -20,12 +25,9 @@
 
             <h2>Registrar Entrada</h2>
             <form action="{{ url_for('registrar_entrada') }}" method="POST">
-                <select id="material" name="material_id" required>
-                    <option value="">Selecione o item</option>
-                    {% for material in materiais %}
-                        <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})</option>
-                    {% endfor %}
-                </select><br><br>
+                <input type="text" id="search-material" placeholder="Pesquise o material" required>
+                <input type="hidden" id="material_id" name="material_id">
+                <br><br>
 
                 <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br>
                 <div class="container-btn">
@@ -33,27 +35,49 @@
                 </div>
             </form>
 
-
-
-
-
             <h2>Registrar Saída</h2>
             <form action="{{ url_for('registrar_saida') }}" method="POST">
-                <select id="material" name="material_id" required>
-                    <option value="">Selecione o item</option>
-                    {% for material in materiais %}
-                        <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})</option>
-                    {% endfor %}
-                </select>
-                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
+                <input type="text" id="search-material-saida" placeholder="Pesquise o material" required>
+                <input type="hidden" id="material_id_saida" name="material_id">
+                <br><br>
+
+                <input type="number" id="quantidade-saida" name="quantidade" min="1" placeholder="Quantidade" required><br>
                 <div class="container-btn">
                     <button type="submit">Confirmar</button>
                 </div>
             </form>
-
-            
         </section>
     </main>
+
+    <script>
+        // Função para habilitar o autocomplete
+        $(function () {
+            var materiais = [
+                {% for material in materiais %}
+                    {
+                        id: "{{ material.id }}",
+                        label: "{{ material.descricao }} (Quantidade: {{ material.quantidade }})"
+                    },
+                {% endfor %}
+            ];
+
+            // Autocomplete para Registrar Entrada
+            $("#search-material").autocomplete({
+                source: materiais,
+                select: function (event, ui) {
+                    $("#material_id").val(ui.item.id);  // Armazena o id do material selecionado
+                }
+            });
+
+            // Autocomplete para Registrar Saída
+            $("#search-material-saida").autocomplete({
+                source: materiais,
+                select: function (event, ui) {
+                    $("#material_id_saida").val(ui.item.id);  // Armazena o id do material selecionado
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

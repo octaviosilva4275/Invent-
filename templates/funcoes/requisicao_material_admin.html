@@ -18,7 +18,7 @@
 
     <div class="container mt-5">
         <h2>Requisições por Status</h2>
-
+    
         {% for status, color in [('Solicitado', 'em-separacao'), ('Disponivel para retirada', 'pronto-retirar'), ('Aguardando reposição', 'aguardando-estoque'), ('Retirado', 'finalizado')] %}
         <h4>{{ status }}</h4>
         <table class="table table-striped">
@@ -26,6 +26,7 @@
                 <tr>
                     <th>Material</th>
                     <th>Quantidade</th>
+                    <th>Estoque</th>
                     <th>Usuário</th>
                     <th>Status</th>
                     <th>Observação</th>
@@ -37,9 +38,9 @@
                 {% for requisicao in requisicoes %}
                 {% if requisicao.status == status %}
                 <tr>
-
                     <td>{{ requisicao.material }}</td>
                     <td>{{ requisicao.quantidade }}</td>
+                    <td class="block">{{ requisicao.quantidade_estoque }}</td> <!-- Exibe o estoque atual -->
                     <td>{{ requisicao.usuario }}</td>
                     <td class="{{ color }}">{{ requisicao.status }}</td>
                     <td>{{ requisicao.observacao }}</td>
@@ -54,6 +55,7 @@
                 {% endif %}
                 {% endfor %}
             </tbody>
+            
         </table>
         {% endfor %}
     </div>
