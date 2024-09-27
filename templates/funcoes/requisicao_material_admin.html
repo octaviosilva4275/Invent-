@@ -5,25 +5,12 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        .em-separacao {
-            color: orange;
-            font-weight: bold;
-        }
-        .pronto-retirar {
-            color: green;
-            font-weight: bold;
-        }
-        .aguardando-estoque {
-            color: rgb(212, 0, 0);
-            font-weight: bold;
-        }
-        .finalizado {
-            color: grey;
-            font-weight: bold;
-        }
-        h4 {
-            margin-top: 30px;
-        }
+        .em-separacao { color: orange; font-weight: bold; }
+        .pronto-retirar { color: green; font-weight: bold; }
+        .aguardando-estoque { color: rgb(212, 0, 0); font-weight: bold; }
+        .finalizado { color: grey; font-weight: bold; }
+        h4 { margin-top: 80px; }
+
     </style>
 </head>
 <body>
@@ -32,30 +19,31 @@
     <div class="container mt-5">
         <h2>Requisições por Status</h2>
 
-        <!-- Tabela para "Solicitado" -->
-        <h4>Solicitado</h4>
+        {% for status, color in [('Solicitado', 'em-separacao'), ('Disponivel para retirada', 'pronto-retirar'), ('Aguardando reposição', 'aguardando-estoque'), ('Retirado', 'finalizado')] %}
+        <h4>{{ status }}</h4>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Material</th>
                     <th>Quantidade</th>
                     <th>Usuário</th>
                     <th>Status</th>
                     <th>Observação</th>
+                    <th>Última Atualização</th>
                     <th>Ação</th>
                 </tr>
             </thead>
             <tbody>
                 {% for requisicao in requisicoes %}
-                {% if requisicao.status == "Solicitado" %}
+                {% if requisicao.status == status %}
                 <tr>
-                    <td>{{ requisicao.id }}</td>
+
                     <td>{{ requisicao.material }}</td>
                     <td>{{ requisicao.quantidade }}</td>
                     <td>{{ requisicao.usuario }}</td>
-                    <td class="em-separacao">{{ requisicao.status }}</td>
+                    <td class="{{ color }}">{{ requisicao.status }}</td>
                     <td>{{ requisicao.observacao }}</td>
+                    <td>{{ requisicao.data_atualizacao | default('N/A') }}</td>
                     <td>
                         <button class="btn btn-secondary" data-toggle="modal" data-target="#acaoModal" 
                                 data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}">
@@ -67,107 +55,7 @@
                 {% endfor %}
             </tbody>
         </table>
-
-        <!-- Tabela para "Disponível para retirada" -->
-        <h4>Disponível para retirada</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Material</th>
-                    <th>Quantidade</th>
-                    <th>Usuário</th>
-                    <th>Status</th>
-                    <th>Observação</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for requisicao in requisicoes %}
-                {% if requisicao.status == "Disponivel para retirada" %}
-                <tr>
-                    <td>{{ requisicao.id }}</td>
-                    <td>{{ requisicao.material }}</td>
-                    <td>{{ requisicao.quantidade }}</td>
-                    <td>{{ requisicao.usuario }}</td>
-                    <td class="pronto-retirar">{{ requisicao.status }}</td>
-                    <td>{{ requisicao.observacao }}</td>
-                    <td>
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#acaoModal" 
-                                data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}">
-                            Ações
-                        </button>
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Tabela para "Aguardando reposição" -->
-        <h4>Aguardando reposição</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Material</th>
-                    <th>Quantidade</th>
-                    <th>Usuário</th>
-                    <th>Status</th>
-                    <th>Observação</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for requisicao in requisicoes %}
-                {% if requisicao.status == "Aguardando reposição" %}
-                <tr>
-                    <td>{{ requisicao.id }}</td>
-                    <td>{{ requisicao.material }}</td>
-                    <td>{{ requisicao.quantidade }}</td>
-                    <td>{{ requisicao.usuario }}</td>
-                    <td class="aguardando-estoque">{{ requisicao.status }}</td>
-                    <td>{{ requisicao.observacao }}</td>
-                    <td>
-                        <button class="btn btn-secondary" data-toggle="modal" data-target="#acaoModal" 
-                                data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}">
-                            Ações
-                        </button>
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <!-- Tabela para "Retirado" -->
-        <h4>Retirado</h4>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Material</th>
-                    <th>Quantidade</th>
-                    <th>Usuário</th>
-                    <th>Status</th>
-                    <th>Observação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for requisicao in requisicoes %}
-                {% if requisicao.status == "Retirado" %}
-                <tr>
-                    <td>{{ requisicao.id }}</td>
-                    <td>{{ requisicao.material }}</td>
-                    <td>{{ requisicao.quantidade }}</td>
-                    <td>{{ requisicao.usuario }}</td>
-                    <td class="finalizado">{{ requisicao.status }}</td>
-                    <td>{{ requisicao.observacao }}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
+        {% endfor %}
     </div>
 
     <!-- Modal -->
