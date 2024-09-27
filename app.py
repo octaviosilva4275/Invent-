@@ -573,9 +573,7 @@ def atualizar_requisicao():
 # ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
 
 
-@app.route('/cadastro_material')
-def cadastro_material_page():
-    return render_template('funcoes/cadastro_material.html')
+
 
 @app.route('/relatorio')
 def relatorios():
