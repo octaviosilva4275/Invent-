@@ -586,7 +586,12 @@ def perfil():
 
 @app.route('/logout')
 def logout():
-    return render_template('funcoes/logout.html')
+    # Limpa a sessão do usuário
+    session.clear()
+    # Redireciona para a página de login após o logout
+    flash('Você foi desconectado com sucesso.', 'success')
+    return redirect(url_for('solicitante'))
+
 
 
 if __name__ == "__main__":
