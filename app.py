@@ -331,9 +331,7 @@ def registrar_saida():
 # ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
 
 
-@app.route('/cadastro_material')
-def cadastro_material_page():
-    return render_template('funcoes/cadastro_material.html')
+
 
 @app.route('/relatorio')
 def relatorios():
@@ -344,9 +342,7 @@ def relatorios():
 def perfil():
     return render_template('funcoes/perfil.html')
 
-@app.route('/logout')
-def logout():
-    return render_template('funcoes/logout.html')
+
 
 
 if __name__ == "__main__":
