@@ -210,6 +210,7 @@ def cadastro_material():
 
         except:
             flash('Erro ao cadastrar material', 'error')
+
             return redirect(url_for('cadastro_material'))
 
         finally:
