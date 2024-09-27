@@ -289,7 +289,37 @@ def registrar_entrada():
 
 
 
+@app.route('/registrar_saida', methods=['POST'])
+def registrar_saida():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    
 
+    if request.method == 'POST':
+        material_id = request.form['material_id']
+        quantidade = int(request.form['quantidade'])
+        usuario_id = session['user_id'] 
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+
+            query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
+            cursor.execute(query_insert, (material_id, -quantidade, usuario_id))
+            conexao.commit()
+            
+            cursor.close()
+            conexao.close()
+
+
+            return redirect(url_for('controle_estoque'))
+        except:
+            cursor.close()
+            conexao.close()
+            
+
+            return redirect(url_for('controle_estoque'))
 
 
 
