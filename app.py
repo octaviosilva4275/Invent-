@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
+from mysql.connector import Error
 import os
 # from twilio.rest import Client
 # from dotenv import load_dotenv
@@ -9,6 +10,7 @@ import os
 app = Flask(__name__)
 
 app.secret_key = 'sua-chave-secreta-aqui'
+
 
 app.secret_key = 'teste'
 
@@ -72,8 +74,8 @@ def conectar_banco_dados():
         )
         print("Conexão estabelecida com sucesso!")
         return conexao
-    except:
-        print(f"Erro ao conectar ao banco de dados")
+    except Error as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
         raise
 
 
@@ -81,6 +83,7 @@ def conectar_banco_dados():
 @app.route('/')
 def solicitante():
     return render_template('login/login.html')
+
 
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
 
@@ -209,8 +212,7 @@ def cadastro_material():
             return redirect(url_for('cadastro_material'))
 
         except:
-            flash('Erro ao cadastrar material', 'error')
-
+            flash('Erro ao cadastrar material: {}', 'error')
             return redirect(url_for('cadastro_material'))
 
         finally:
@@ -230,21 +232,30 @@ def cadastro_material():
 def controle_estoque():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
+
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
-    
-    cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
-                    "FROM materials m "
-                    "LEFT JOIN estoque e ON m.id = e.material_id "
-                    "GROUP BY m.id")
-    materiais = cursor.fetchall()
+    try:
+        # Obtém todos os materiais e suas quantidades
+        cursor.execute("""
+            SELECT m.id, m.descricao, COALESCE(SUM(e.quantidade), 0) AS quantidade
+            FROM materials m
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id
+        """)
+        materiais = cursor.fetchall()
 
-    cursor.close()
-    conexao.close()
+    except Exception as e:
+        print(f"Erro ao buscar dados: {e}")
+        materiais = []
 
+    finally:
+        cursor.close()
+        conexao.close()
 
     return render_template('funcoes/controle_estoque.html', materiais=materiais)
+
 
 @app.route('/registrar_entrada', methods=['POST'])
 def registrar_entrada():
@@ -280,12 +291,11 @@ def registrar_entrada():
 
 
 
+
 @app.route('/registrar_saida', methods=['POST'])
 def registrar_saida():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
-    
-
     if request.method == 'POST':
         material_id = request.form['material_id']
         quantidade = int(request.form['quantidade'])
@@ -296,7 +306,7 @@ def registrar_saida():
 
         try:
 
-            query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
+            query_insert = "INSERT INTO estoque (material_id, -quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'entrada', %s)"
             cursor.execute(query_insert, (material_id, -quantidade, usuario_id))
             conexao.commit()
             
@@ -318,8 +328,6 @@ def registrar_saida():
 
 
 
-
-
 # ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
 
 # ---------------------------------------------------- REQUISICAO ----------------------------------------------------
@@ -328,10 +336,13 @@ def registrar_saida():
 
 
 
+
 # ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
 
 
-
+@app.route('/cadastro_material')
+def cadastro_material_page():
+    return render_template('funcoes/cadastro_material.html')
 
 @app.route('/relatorio')
 def relatorios():
@@ -342,6 +353,11 @@ def relatorios():
 def perfil():
     return render_template('funcoes/perfil.html')
 
+@app.route('/logout')
+def logout():
+    session.clear()  # Limpa todos os dados da sessão
+    flash('Você foi desconectado com sucesso.', 'success')  # Mensagem de sucesso
+    return redirect(url_for('solicitante'))  # Redireciona para a página de login
 
 
 
