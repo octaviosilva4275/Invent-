@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS requisicoes (
     status ENUM('Solicitado', 'Disponivel para retirada', 'Aguardando reposição', 'Retirado') DEFAULT 'Solicitado',
     data_entrega TIMESTAMP NULL,
     observacao VARCHAR(255),
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (material_id) REFERENCES materials(id),
     FOREIGN KEY (usuario_id) REFERENCES users(id)
 );
