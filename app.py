@@ -211,8 +211,8 @@ def cadastro_material():
             flash('Material cadastrado com sucesso!', 'success')
             return redirect(url_for('cadastro_material'))
 
-        except:
-            flash('Erro ao cadastrar material: {}', 'error')
+        except mysql.connector.Error as err:
+            flash('Erro ao cadastrar material: {}'.format(err), 'error')
             return redirect(url_for('cadastro_material'))
 
         finally:
@@ -292,36 +292,6 @@ def registrar_entrada():
 
 
 
-@app.route('/registrar_saida', methods=['POST'])
-def registrar_saida():
-    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
-        return redirect(url_for('solicitante'))
-    if request.method == 'POST':
-        material_id = request.form['material_id']
-        quantidade = int(request.form['quantidade'])
-        usuario_id = session['user_id'] 
-
-        conexao = conectar_banco_dados()
-        cursor = conexao.cursor()
-
-        try:
-
-            query_insert = "INSERT INTO estoque (material_id, -quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'entrada', %s)"
-            cursor.execute(query_insert, (material_id, -quantidade, usuario_id))
-            conexao.commit()
-            
-            cursor.close()
-            conexao.close()
-
-
-            return redirect(url_for('controle_estoque'))
-        except:
-            cursor.close()
-            conexao.close()
-            
-
-            return redirect(url_for('controle_estoque'))
-
 
 
 
@@ -331,6 +301,239 @@ def registrar_saida():
 # ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
 
 # ---------------------------------------------------- REQUISICAO ----------------------------------------------------
+
+@app.route('/api/requisicoes_admin')
+def api_requisicoes_admin():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return jsonify([])
+
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    try:
+        cursor.execute("""
+            SELECT 
+                r.id,
+                m.descricao as material,
+                r.quantidade,
+                u.nome as usuario, 
+                r.status,
+                r.data_entrega,
+                r.data_atualizacao,
+                r.observacao
+            FROM requisicoes r
+            JOIN materials m ON r.material_id = m.id
+            JOIN users u ON r.usuario_id = u.id 
+            WHERE r.status != 'aprovada'  
+            ORDER BY r.status DESC 
+        """)
+        requisicoes = cursor.fetchall()
+    except:
+        print('Erro ao buscar requisições')
+        return jsonify([]), 500 
+
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return jsonify(requisicoes) 
+
+@app.route('/api/minhas_requisicoes')
+def api_minhas_requisicoes():
+    if 'user_id' not in session:
+        return jsonify([])
+
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+
+    try:
+        usuario_id = session['user_id']
+        cursor.execute("""
+        SELECT 
+            r.id,
+            m.descricao as material,
+            r.quantidade,
+            r.status,
+            r.data_entrega,
+            r.data_atualizacao
+        FROM requisicoes r
+        JOIN materials m ON r.material_id = m.id
+        WHERE r.usuario_id = %s
+        """, (usuario_id,))
+        minhas_requisicoes = cursor.fetchall()
+
+    except:
+        print("Erro ao buscar requisições do usuário")
+        return jsonify([]), 500  # Retorna uma lista vazia em caso de erro
+
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return jsonify(minhas_requisicoes)
+
+@app.route('/requisicao_material', methods=['GET', 'POST'])
+def requisicao_material():
+    if request.method == 'POST':
+        material_id = request.form['material_id']
+        quantidade = int(request.form['quantidade'])
+        usuario_id = session['user_id']
+        observacao = request.form.get('observacao')  # Observação pode ser opcional
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+            # Insere a requisição no banco de dados
+            inserir = "INSERT INTO requisicoes (material_id, usuario_id, quantidade, observacao) VALUES (%s, %s, %s, %s)"
+            cursor.execute(inserir, (material_id, usuario_id, quantidade, observacao))
+            conexao.commit()
+
+            print('Requisição de material enviada com sucesso!', 'success')
+
+        except:
+            print("Erro ao criar requisição")
+            print('Ocorreu um erro ao enviar a requisição. Por favor, tente novamente mais tarde.', 'error')
+
+        finally:
+            cursor.close()
+            conexao.close()
+
+        return redirect(url_for('requisicao_material')) 
+
+    # Lógica para exibir o formulário e as requisições do usuário
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    try:
+        cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
+                       "FROM materials m "
+                       "LEFT JOIN estoque e ON m.id = e.material_id "
+                       "GROUP BY m.id")
+        materiais = cursor.fetchall()
+
+        minhas_requisicoes = []
+        if 'user_id' in session:
+            usuario_id = session['user_id']
+            cursor.execute("""
+                SELECT 
+                    r.id,
+                    m.descricao as material,
+                    r.quantidade,
+                    r.status,
+                    r.data_entrega 
+                FROM requisicoes r
+                JOIN materials m ON r.material_id = m.id
+                WHERE r.usuario_id = %s
+            """, (usuario_id,))
+            minhas_requisicoes = cursor.fetchall()
+
+    except:
+        print("Erro ao buscar dados")
+        materiais = []
+        minhas_requisicoes = []
+
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return render_template('funcoes/requisicao_material.html', materiais=materiais, minhas_requisicoes=minhas_requisicoes)
+
+@app.route('/requisicao_material_admin', methods=['GET'])
+def requisicao_material_admin():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            r.id,
+            m.descricao as material,
+            r.quantidade,
+            u.nome as usuario,
+            r.status,
+            r.data_entrega,
+            r.observacao,
+            DATE_FORMAT(r.data_atualizacao, '%H:%i') as data_atualizacao
+        FROM requisicoes r
+        JOIN materials m ON r.material_id = m.id
+        JOIN users u ON r.usuario_id = u.id
+        WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()  -- Filtra pelo dia atual
+        ORDER BY r.status DESC 
+    """)
+    requisicoes = cursor.fetchall()
+
+    cursor.close()
+    conexao.close()
+
+    return render_template('funcoes/requisicao_material_admin.html', requisicoes=requisicoes) 
+
+
+@app.route('/atualizar_requisicao', methods=['POST'])
+def atualizar_requisicao():
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+
+    data = request.get_json()
+    requisicao_id = data['requisicao_id']
+    acao = data['acao']
+
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor()
+
+    try:
+        if acao == 'Solicitado':
+            # Lógica para atualizar o status para "Solicitado", se necessário
+
+            cursor.execute("UPDATE requisicoes SET status = 'Solicitado' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'Disponivel para retirada':
+            cursor.execute("UPDATE requisicoes SET status = 'Disponivel para retirada' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'Aguardando reposição':
+            cursor.execute("UPDATE requisicoes SET status = 'Aguardando reposição' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'Retirado':
+            cursor.execute("UPDATE requisicoes SET status = 'Retirado' WHERE id = %s", (requisicao_id,))
+        
+        elif acao == 'aprovar':
+            # Aprova a requisição e verifica o estoque
+            cursor.execute("SELECT material_id, quantidade FROM requisicoes WHERE id = %s", (requisicao_id,))
+            requisicao = cursor.fetchone()
+
+            if requisicao:
+                material_id = requisicao[0]
+                quantidade_requisitada = requisicao[1]
+
+                cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
+                estoque_atual = cursor.fetchone()
+
+                if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
+                    # Atualiza o estoque
+                    nova_quantidade = estoque_atual[0] - quantidade_requisitada
+                    cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
+
+                    # Atualiza a requisição
+                    cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
+                    conexao.commit()
+                else:
+                    # Estoque insuficiente
+                    cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
+        
+
+
+        conexao.commit()
+
+    except:
+        print('Erro ao atualizar requisição')
+        return jsonify({'error': 'Erro ao atualizar requisição'}), 500
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return jsonify({'success': 'Status atualizado com sucesso'})
+
+
+
+
 
 
 
@@ -355,10 +558,7 @@ def perfil():
 
 @app.route('/logout')
 def logout():
-    session.clear()  # Limpa todos os dados da sessão
-    flash('Você foi desconectado com sucesso.', 'success')  # Mensagem de sucesso
-    return redirect(url_for('solicitante'))  # Redireciona para a página de login
-
+    return render_template('funcoes/logout.html')
 
 
 if __name__ == "__main__":

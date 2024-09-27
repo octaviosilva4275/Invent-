@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <style>
-        h1, h2 {
+        h1,
+        h2 {
             color: #2196F3;
         }
 
@@ -17,10 +18,9 @@
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
         }
 
-        .input-group, .form-group {
+        .input-group {
             margin-bottom: 20px;
         }
 
@@ -28,9 +28,12 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
+
         }
 
-        select, input[type="number"], textarea {
+        select,
+        input[type="number"],
+        textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
@@ -46,11 +49,37 @@
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s;
         }
 
         button[type="submit"]:hover {
-            background-color: #1976D2;
+            background-color:
+                #1976D2;
+        }
+
+        #area_relatorio {
+            margin-top: 30px;
+        }
+
+        #area_relatorio table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #area_relatorio th,
+        #area_relatorio td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #area_relatorio th {
+            background-color: #f2f2f2;
+        }
+
+        #movimentacao-chart {
+            width: 100%;
+            max-height: 400px;
         }
 
         table {
@@ -59,7 +88,8 @@
             margin-top: 20px;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
@@ -68,64 +98,61 @@
         th {
             background-color: #f2f2f2;
         }
-
-        #minhas-requisicoes-table {
-            margin-top: 30px;
-        }
-        .em-separacao { color: orange; font-weight: bold; }
-        .pronto-retirar { color: green; font-weight: bold; }
-        .aguardando-estoque { color: rgb(212, 0, 0); font-weight: bold; }
-        .finalizado { color: grey; font-weight: bold; }
     </style>
 </head>
 
 <body>
 
+
     {% include '/dashboard/dashboard.html' %}
-    
     <form action="{{ url_for('requisicao_material') }}" method="POST">
         <h2>Requisição de Material</h2>
         <div class="input-group">
             <label for="material">Material:</label>
             <select id="material" name="material_id" required>
                 {% for material in materiais %}
-                <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})</option>
+                <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})
+                </option>
                 {% endfor %}
-            </select>
+            </select><br><br>
         </div>
+
+
 
         <div class="input-group">
             <label for="quantidade">Quantidade:</label>
-            <input type="number" id="quantidade" name="quantidade" min="1" required>
+            <input type="number" id="quantidade" name="quantidade" min="1" required><br><br>
         </div>
-
         <div class="form-group">
             <label for="observacao">Observação</label>
-            <textarea id="observacao" name="observacao" rows="3" placeholder="Opcional"></textarea>
+            <textarea class="form-control" id="observacao" name="observacao" rows="3" placeholder="Opcional"></textarea>
         </div>
 
         <button type="submit">Enviar Requisição</button>
     </form>
-
     <h3>Minhas Requisições Pendentes</h3>
     {% if minhas_requisicoes %}
-    <table id="minhas-requisicoes-table">
+    <table class="table table-striped" id="minhas-requisicoes-table">
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Material</th>
                 <th>Quantidade</th>
                 <th>Status</th>
-                <th>Última atualização</th>
+                <th>Data de Entrega</th>
             </tr>
         </thead>
         <tbody>
             {% for requisicao in minhas_requisicoes %}
+            {% if requisicao.status == 'pendente' %}
             <tr>
+                <td>{{ requisicao.id }}</td>
                 <td>{{ requisicao.material }}</td>
                 <td>{{ requisicao.quantidade }}</td>
-                <td class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponível para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% endif %}">{{ requisicao.status }}</td>
-                <td>{{ requisicao.data_atualizacao }}</td>
+                <td>{{ requisicao.status }}</td>
+                <td>{{ requisicao.data_entrega.strftime('%d/%m/%Y') if requisicao.data_entrega else '' }}</td>
             </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>
@@ -133,46 +160,48 @@
     <p>Você ainda não fez nenhuma requisição.</p>
     {% endif %}
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Função para atualizar a tabela
             function atualizarTabela() {
                 $.ajax({
-                    url: "{{ url_for('api_minhas_requisicoes') }}",
+                    url: "{{ url_for('api_minhas_requisicoes') }}", // Rota para buscar os dados atualizados
                     type: 'GET',
                     success: function (data) {
                         let tableBody = $('#minhas-requisicoes-table tbody');
-                        tableBody.empty();
+                        tableBody.empty(); // Limpa a tabela
 
                         if (data.length > 0) {
                             data.forEach(function (requisicao) {
                                 let row = '<tr>' +
+                                    '<td>' + requisicao.id + '</td>' +
                                     '<td>' + requisicao.material + '</td>' +
                                     '<td>' + requisicao.quantidade + '</td>' +
-                                    '<td class="' + (requisicao.status === 'Solicitado' ? 'em-separacao' : requisicao.status === 'Disponivel para retirada' ? 'pronto-retirar' : requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 'finalizado') + '">' + requisicao.status + '</td>' +
-                                    '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
+                                    '<td>' + requisicao.status + '</td>' +
+                                    '<td>' + (requisicao.data_entrega ? requisicao.data_entrega : '') + '</td>' +
                                     '</tr>';
                                 tableBody.append(row);
                             });
                         } else {
-                            tableBody.append('<tr><td colspan="4">Você ainda não fez nenhuma requisição.</td></tr>');
+                            tableBody.append('<tr><td colspan="5">Você ainda não fez nenhuma requisição.</td></tr>');
                         }
                     },
                     error: function (error) {
                         console.error('Erro na requisição AJAX:', error);
+
                     }
                 });
             }
 
+            // Atualiza a tabela inicialmente
             atualizarTabela();
+
+            // Atualiza a tabela a cada 5 segundos (opcional)
             setInterval(atualizarTabela, 5000);
         });
-
-        function formatarData(dataString) {
-            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-            return new Date(dataString).toLocaleDateString('pt-BR', options).replace(' ', ' de ');
-        }
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>
