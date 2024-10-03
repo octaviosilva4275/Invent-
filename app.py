@@ -237,9 +237,15 @@ def controle_estoque():
     cursor = conexao.cursor(dictionary=True)
 
     try:
-        # Obtém todos os materiais e suas quantidades
+        # Obtém todos os materiais e calcula a quantidade disponível
         cursor.execute("""
-            SELECT m.id, m.descricao, COALESCE(SUM(e.quantidade), 0) AS quantidade
+            SELECT 
+                m.id, 
+                m.descricao, 
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) AS total_entrada,
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS total_saida,
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) - 
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_disponivel
             FROM materials m
             LEFT JOIN estoque e ON m.id = e.material_id
             GROUP BY m.id
@@ -255,6 +261,7 @@ def controle_estoque():
         conexao.close()
 
     return render_template('funcoes/controle_estoque.html', materiais=materiais)
+
 
 
 @app.route('/registrar_entrada', methods=['POST'])
@@ -309,7 +316,7 @@ def registrar_saida():
 
             if estoque_atual >= quantidade:
                 query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
-                cursor.execute(query_insert, (material_id, -quantidade, usuario_id))
+                cursor.execute(query_insert, (material_id, quantidade, usuario_id))
                 conexao.commit()
                 flash('Saída registrada com sucesso!', 'success')
             else:
