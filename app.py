@@ -400,6 +400,10 @@ def api_requisicoes_admin():
 
     return jsonify(requisicoes) 
 
+
+
+
+
 @app.route('/api/minhas_requisicoes')
 def api_minhas_requisicoes():
     if 'user_id' not in session:
@@ -433,6 +437,9 @@ def api_minhas_requisicoes():
         conexao.close()
 
     return jsonify(minhas_requisicoes)
+
+
+
 
 @app.route('/requisicao_material', methods=['GET', 'POST'])
 def requisicao_material():
@@ -499,6 +506,9 @@ def requisicao_material():
         conexao.close()
 
     return render_template('funcoes/requisicao_material.html', materiais=materiais, minhas_requisicoes=minhas_requisicoes)
+
+
+
 
 @app.route('/requisicao_material_admin', methods=['GET'])
 def requisicao_material_admin():
@@ -573,6 +583,9 @@ def enviar_email_almoxarifado(destinatario, assunto, corpo):
         print("Email enviado com sucesso!")
     except Exception as e:
         print(f"Ocorreu um erro ao enviar o email: {e}")
+
+
+
 
 @app.route('/atualizar_requisicao', methods=['POST']) 
 def atualizar_requisicao():
