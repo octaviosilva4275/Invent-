@@ -4,7 +4,10 @@ from mysql.connector import Error
 import os
 from twilio.rest import Client
 from dotenv import load_dotenv
-
+from azure.storage.blob import BlobServiceClient
+import uuid
+import os
+from upload_file import upload_file
 
 # EMAIL
 import smtplib
@@ -618,7 +621,7 @@ def atualizar_requisicao():
 
         # Enviar e-mail após a atualização
         assunto = f'Aviso: Requisição {requisicao_id} atualizada'
-        corpo = f'A requisição com ID {requisicao_id} foi atualizada para "{acao}".'
+        corpo = f'A requisição com ID {requisicao_id} foi atualizada para {acao}.'
 
         # Tente enviar o e-mail
         try:
@@ -667,6 +670,19 @@ def logout():
     flash('Você foi desconectado com sucesso.', 'success')
     return redirect(url_for('solicitante'))
 
+
+
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
+
+@app.route('/upload', methods=['POST'])
+def upload_file2():
+
+    file = request.files['file']
+    link_arquivo = upload_file(file)
+
+    return link_arquivo, 200
 
 
 if __name__ == "__main__":
