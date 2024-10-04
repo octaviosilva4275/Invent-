@@ -2,10 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import mysql.connector
 from mysql.connector import Error
 import os
-# from twilio.rest import Client
-# from dotenv import load_dotenv
+from twilio.rest import Client
+from dotenv import load_dotenv
 
-# load_dotenv()  # Carregar variáveis do .env
+load_dotenv()  # Carregar variáveis do .env
 
 app = Flask(__name__)
 
@@ -13,6 +13,16 @@ app.secret_key = 'sua-chave-secreta-aqui'
 
 
 app.secret_key = 'teste'
+
+
+
+# Código para autenticação
+account_sid = "ACc1f8fd89246833c6ec94946e9addeb12"
+auth_token = "72fd4f9768bcbe85fbbe65d0093280af"
+
+
+
+client = Client(account_sid, auth_token)
 
 
 # Codigo para autentificação
@@ -518,7 +528,7 @@ def requisicao_material_admin():
 
 
 
-@app.route('/atualizar_requisicao', methods=['POST'])
+@app.route('/atualizar_requisicao', methods=['POST']) 
 def atualizar_requisicao():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
         return redirect(url_for('solicitante'))
@@ -532,8 +542,6 @@ def atualizar_requisicao():
 
     try:
         if acao == 'Solicitado':
-            # Lógica para atualizar o status para "Solicitado", se necessário
-
             cursor.execute("UPDATE requisicoes SET status = 'Solicitado' WHERE id = %s", (requisicao_id,))
         
         elif acao == 'Disponivel para retirada':
@@ -564,17 +572,22 @@ def atualizar_requisicao():
 
                     # Atualiza a requisição
                     cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
-                    conexao.commit()
                 else:
                     # Estoque insuficiente
                     cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
-        
 
+        # Enviar mensagem após atualizar o status
+        message = client.messages.create(
+            to="+5516992360708",  # Altere para o número desejado
+            from_="+12542216778",  # Seu número Twilio
+            body=f'Requisição {requisicao_id} atualizada para "{acao}"'
+        )
+        print(f'Mensagem enviada: {message.sid}')
 
         conexao.commit()
 
-    except:
-        print('Erro ao atualizar requisição')
+    except Exception as e:
+        print('Erro ao atualizar requisição:', e)
         return jsonify({'error': 'Erro ao atualizar requisição'}), 500
     finally:
         cursor.close()
