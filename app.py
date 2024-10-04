@@ -4,9 +4,10 @@ from mysql.connector import Error
 import os
 from twilio.rest import Client
 from dotenv import load_dotenv
-
-# pip install Flask mysql-connector-python twilio python-dotenv
-
+from azure.storage.blob import BlobServiceClient
+import uuid
+import os
+from upload_file import upload_file
 
 # EMAIL
 import smtplib
@@ -399,6 +400,10 @@ def api_requisicoes_admin():
 
     return jsonify(requisicoes) 
 
+
+
+
+
 @app.route('/api/minhas_requisicoes')
 def api_minhas_requisicoes():
     if 'user_id' not in session:
@@ -432,6 +437,9 @@ def api_minhas_requisicoes():
         conexao.close()
 
     return jsonify(minhas_requisicoes)
+
+
+
 
 @app.route('/requisicao_material', methods=['GET', 'POST'])
 def requisicao_material():
@@ -498,6 +506,9 @@ def requisicao_material():
         conexao.close()
 
     return render_template('funcoes/requisicao_material.html', materiais=materiais, minhas_requisicoes=minhas_requisicoes)
+
+
+
 
 @app.route('/requisicao_material_admin', methods=['GET'])
 def requisicao_material_admin():
@@ -573,6 +584,9 @@ def enviar_email_almoxarifado(destinatario, assunto, corpo):
     except Exception as e:
         print(f"Ocorreu um erro ao enviar o email: {e}")
 
+
+
+
 @app.route('/atualizar_requisicao', methods=['POST']) 
 def atualizar_requisicao():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
@@ -620,7 +634,7 @@ def atualizar_requisicao():
 
         # Enviar e-mail após a atualização
         assunto = f'Aviso: Requisição {requisicao_id} atualizada'
-        corpo = f'A requisição com ID {requisicao_id} foi atualizada para "{acao}".'
+        corpo = f'A requisição com ID {requisicao_id} foi atualizada para {acao}.'
 
         # Tente enviar o e-mail
         try:
@@ -669,6 +683,19 @@ def logout():
     flash('Você foi desconectado com sucesso.', 'success')
     return redirect(url_for('solicitante'))
 
+
+
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
+
+@app.route('/upload', methods=['POST'])
+def upload_file2():
+
+    file = request.files['file']
+    link_arquivo = upload_file(file)
+
+    return link_arquivo, 200
 
 
 if __name__ == "__main__":
