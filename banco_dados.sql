@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS lembretes (
 INSERT INTO users (sn, nome, email, senha, cargo) VALUES 
 ('11', 'Admin', 'admin@example.com', 'senha123', 'admin'),
 ('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario'),
-('33', 'Octavio', 'octavio@gmail.com', 'senha123', 'almoxarifado')
+('33', 'Octavio', 'octavio@gmail.com', 'senha123', 'almoxarifado');
 
 -- Inserção de exemplo para tabela de materiais
 INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) VALUES 

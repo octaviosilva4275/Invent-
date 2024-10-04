@@ -5,6 +5,8 @@ import os
 from twilio.rest import Client
 from dotenv import load_dotenv
 
+# pip install Flask mysql-connector-python twilio python-dotenv
+
 
 # EMAIL
 import smtplib
