@@ -5,6 +5,12 @@ import os
 from twilio.rest import Client
 from dotenv import load_dotenv
 
+
+# EMAIL
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 load_dotenv()  # Carregar variáveis do .env
 
 app = Flask(__name__)
@@ -114,7 +120,9 @@ def login():
             session['logged_in'] = True
             session['user_id'] = usuario['id']
             session['user_sn'] = usuario['sn']
+            session['user_email'] = usuario['email']
             session['user_cargo'] = usuario['cargo']
+
             if usuario['cargo'] == 'almoxarifado':
                 return redirect(url_for('dashboard'))
             else:
@@ -528,6 +536,41 @@ def requisicao_material_admin():
 
 
 
+
+
+
+def enviar_email_almoxarifado(destinatario, assunto, corpo):
+    remetente = "almoxarifadoinvent@gmail.com"
+    senha = "gcormxmospfzsowq"  # Use uma senha de aplicativo se necessário
+
+    mensagem = MIMEMultipart()
+    mensagem['From'] = remetente
+    mensagem['To'] = destinatario
+    mensagem['Subject'] = assunto
+    
+    # Corpo do email em HTML
+    corpo_html = f"""
+    <html>
+    <body>
+        <h2>{assunto}</h2>
+        <p>{corpo}</p>
+        <p>Atenciosamente,<br>Almoxarifado</p>
+    </body>
+    </html>
+    """
+    
+    parte_html = MIMEText(corpo_html, 'html')
+    mensagem.attach(parte_html)
+
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.starttls()
+            smtp.login(remetente, senha)
+            smtp.sendmail(remetente, destinatario, mensagem.as_string())
+        print("Email enviado com sucesso!")
+    except Exception as e:
+        print(f"Ocorreu um erro ao enviar o email: {e}")
+
 @app.route('/atualizar_requisicao', methods=['POST']) 
 def atualizar_requisicao():
     if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
@@ -554,7 +597,6 @@ def atualizar_requisicao():
             cursor.execute("UPDATE requisicoes SET status = 'Retirado' WHERE id = %s", (requisicao_id,))
         
         elif acao == 'aprovar':
-            # Aprova a requisição e verifica o estoque
             cursor.execute("SELECT material_id, quantidade FROM requisicoes WHERE id = %s", (requisicao_id,))
             requisicao = cursor.fetchone()
 
@@ -566,25 +608,27 @@ def atualizar_requisicao():
                 estoque_atual = cursor.fetchone()
 
                 if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
-                    # Atualiza o estoque
                     nova_quantidade = estoque_atual[0] - quantidade_requisitada
                     cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
-
-                    # Atualiza a requisição
                     cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
                 else:
-                    # Estoque insuficiente
                     cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
 
-        # Enviar mensagem após atualizar o status
-        message = client.messages.create(
-            to="+5516992360708",  # Altere para o número desejado
-            from_="+12542216778",  # Seu número Twilio
-            body=f'Requisição {requisicao_id} atualizada para "{acao}"'
-        )
-        print(f'Mensagem enviada: {message.sid}')
-
         conexao.commit()
+
+        # Enviar e-mail após a atualização
+        assunto = f'Aviso: Requisição {requisicao_id} atualizada'
+        corpo = f'A requisição com ID {requisicao_id} foi atualizada para "{acao}".'
+
+        # Tente enviar o e-mail
+        try:
+            email_usuario = session.get('user_email')  # Certifique-se de que o e-mail do usuário foi salvo na sessão durante o login
+            if email_usuario:
+                enviar_email_almoxarifado(email_usuario, assunto, corpo)
+            else:
+                print("E-mail do usuário não encontrado na sessão.")
+        except Exception as email_error:
+            print(f"Erro ao tentar enviar o e-mail: {email_error}")
 
     except Exception as e:
         print('Erro ao atualizar requisição:', e)
@@ -594,6 +638,8 @@ def atualizar_requisicao():
         conexao.close()
 
     return jsonify({'success': 'Status atualizado com sucesso'})
+
+
 
 
 
