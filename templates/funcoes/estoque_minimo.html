@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materiais com Estoque Mínimo</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  {% include '/dashboard/dashboard.html' %}
+    <div class="container mt-5">
+        <h1>Materiais com Estoque Mínimo</h1>
+
+        {% if materiais %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descrição</th>
+                        <th>Estoque Mínimo</th>
+                        <th>Quantidade Atual</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for material in materiais %}
+                    <tr>
+                        <td>{{ material.id }}</td>
+                        <td>{{ material.descricao }}</td>
+                        <td>{{ material.estoque_minimo }}</td>
+                        <td>{{ material.quantidade_atual }}</td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Nenhum material com estoque mínimo atingido no momento.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

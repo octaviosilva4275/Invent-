@@ -1,37 +1,33 @@
+import os
+import uuid
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
 from mysql.connector import Error
-import os
-from twilio.rest import Client
+# from twilio.rest import Client
 from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
-import uuid
-import os
-from upload_file import upload_file
 
 # EMAIL
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-load_dotenv()  # Carregar variáveis do .env
+# Carregar variáveis do .env
+load_dotenv()
 
+# Inicialização do Flask
 app = Flask(__name__)
-
-app.secret_key = 'sua-chave-secreta-aqui'
-
-
 app.secret_key = 'teste'
 
 
 
 # Código para autenticação
-account_sid = "ACc1f8fd89246833c6ec94946e9addeb12"
-auth_token = "72fd4f9768bcbe85fbbe65d0093280af"
+# account_sid = "ACc1f8fd89246833c6ec94946e9addeb12"
+# auth_token = "72fd4f9768bcbe85fbbe65d0093280af"
 
 
 
-client = Client(account_sid, auth_token)
+# client = Client(account_sid, auth_token)
 
 
 # Codigo para autentificação
@@ -174,35 +170,52 @@ def primeiro_login():
 # ---------------------------------------------------- TELA INICIAL ----------------------------------------------------
 
 
-@app.route('/dashboard') 
+@app.route('/dashboard')
 def dashboard():
-    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
-
-        return redirect(url_for('solicitante'))  # Redireciona para a página de solicitante ou outra página adequada
-
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
     try:
-        # Quantidade de materiais com estoque mínimo atingido
+        # Obter detalhes dos produtos abaixo do estoque mínimo
         cursor.execute("""
-            SELECT COUNT(*) AS estoque_minimo 
+            SELECT m.id, m.descricao, m.estoque_minimo, 
+                   COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
+                            SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
             FROM materials m
-            JOIN estoque e ON m.id = e.material_id
-            WHERE e.quantidade <= 6
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id 
+            HAVING quantidade_atual <= m.estoque_minimo
         """)
-        estoque_minimo = cursor.fetchone()['estoque_minimo']
+        produtos_estoque_minimo = cursor.fetchall()
+        estoque_minimo = len(produtos_estoque_minimo)
 
-    except:
-        print("Erro ao buscar dados do dashboard")
+        # Atualizar consulta para incluir data_atualizacao
+        cursor.execute("""
+            SELECT r.id, r.quantidade, r.status, m.descricao AS material, u.nome AS usuario, r.data_atualizacao
+            FROM requisicoes r
+            JOIN materials m ON r.material_id = m.id
+            JOIN users u ON r.usuario_id = u.id
+            WHERE DATE(r.data_requisicao) = CURDATE()
+        """)
+        historico_hoje = cursor.fetchall()
 
+    except mysql.connector.Error as err:
+        print(f"Erro: {err}")
         estoque_minimo = 0
+        produtos_estoque_minimo = []
+        historico_hoje = []
 
     finally:
         cursor.close()
         conexao.close()
 
-    return render_template('index.html', estoque_minimo=estoque_minimo)
+    return render_template('index.html', 
+                           estoque_minimo=estoque_minimo,
+                           produtos_estoque_minimo=produtos_estoque_minimo,
+                           historico_hoje=historico_hoje)
+
+
+
 
 # ---------------------------------------------------- FIM DA TELA INICIAL ----------------------------------------------------
 
@@ -663,8 +676,55 @@ def atualizar_requisicao():
 
 # ---------------------------------------------------- FIM REQUISICAO ----------------------------------------------------
 
+@app.route('/estoque_minimo')
+def estoque_minimo():
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    
+    try:
+        # Consulta para obter materiais com estoque mínimo atingido
+        cursor.execute("""
+            SELECT m.id, m.descricao, m.estoque_minimo, 
+                   COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
+                            SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
+            FROM materials m
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id 
+            HAVING quantidade_atual <= m.estoque_minimo;
+        """)
+        materiais_abaixo_minimo = cursor.fetchall()
+    
+    except mysql.connector.Error as err:
+        print(f"Erro ao buscar dados de estoque mínimo: {err}")
+        materiais_abaixo_minimo = []
+
+    finally:
+        cursor.close()
+        conexao.close()
+    
+    return render_template('funcoes/estoque_minimo.html', materiais=materiais_abaixo_minimo)
 
 
+@app.route('/historico_requisicoes')
+def historico_requisicoes():
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    cursor.execute("""
+        SELECT 
+            rh.id,
+            m.descricao as material,
+            rh.quantidade,
+            u.nome as usuario,
+            rh.data_aprovacao as data_entrega  # Use a data de aprovação como data de entrega
+        FROM requisicoes_historico rh
+        JOIN materials m ON rh.material_id = m.id
+        JOIN users u ON rh.usuario_id = u.id
+    """)
+    requisicoes_historico = cursor.fetchall()
+    cursor.close()
+    conexao.close()
+
+    return render_template('historico_requisicoes.html', requisicoes=requisicoes_historico)
 
 @app.route('/relatorio')
 def relatorios():

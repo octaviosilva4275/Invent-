@@ -1,11 +1,12 @@
+body {
+    background-color: #f5f5f5;
+}
 
 .container {
-    height: auto;
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    justify-content: space-between;
     margin: 30px auto;
-    margin-left: 45px;
     padding: 20px;
 }
 
@@ -13,12 +14,13 @@
 .container-estoque {
     background-color: #4BBF85;
     color: white;
-    width: calc(25% - 20px);
-    height: auto;
+    width: calc(45% - 20px);
     border-radius: 10px;
     text-align: start;
     margin: 10px;
-    position: relative; /* Garantir que ícones sejam posicionados em relação a este contêiner */
+    position: relative;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .container-estoque {
@@ -26,17 +28,16 @@
 }
 
 .table {
-    background-color: #B1C4CC;
-    width: 90%;
+    background-color: #fff;
+
     margin: 30px auto;
-    border-radius: 20px;
-    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 table {
-    width: 100%;
     border-collapse: collapse;
-    background-color: #f9f9f9;
+
 }
 
 thead {
@@ -66,19 +67,18 @@ caption {
     font-weight: bold;
 }
 
-/* Estilo dos ícones */
-section a {
+section span {
     font-size: 32px;
-    display: inline-block;
-    text-decoration: none;
     color: white;
-    margin-left: 20px;
-    margin-top: 20px;
+}
+
+section a {
+    color: white;
+    text-decoration: none;
 }
 
 section h3 {
-    margin-left: 20px;
-    margin-top: 8px;
+    margin: 0;
 }
 
 .fa-check,
@@ -97,24 +97,7 @@ section h3 {
     top: 10px;
 }
 
-/* Adicione estilos para as classes de status */
-/* Estilo dos status adicionais */
-.em-separacao {
-    color: orange;
-    font-weight: bold;
-}
 
-.pronto-retirar {
-    color: green;
-    font-weight: bold;
-}
-
-.aguardando-estoque {
-    color: rgb(212, 0, 0);
-    font-weight: bold;
-}
-
-.finalizado {
-    color: grey;
-    font-weight: bold;
+.container-estoque{
+    width: 100%;
 }
