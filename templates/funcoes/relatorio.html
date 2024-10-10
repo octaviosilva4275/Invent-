@@ -1,35 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/relatorios.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-relatorio.css') }}">
+    <title>Relatório e Análises</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #E7E9EB;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+            background-color: #a7b2c8;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .chart-container {
+
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        select, button {
+            margin-top: 20px;
+        }
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+
+        }
+        .flex{
+            display: flex;
+            flex-direction: inherit;
+            gap: 20px;
+        }
+        .form-group{
+            width: 80%;
+        }
+        .btn{
+            background-color: #192340;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    {% include '/dashboard/dashboard.html' %}
-
-
-    <main>
-        <main>
-            <!-- Seção principal de cadastro -->
-            <section class="cadastro">
-            <!-- Container para o formulário de cadastro -->
-            <div class="campo-cadastro">
-            <form action="/registrar_entrada" method="POST">
-                <select id="relatorio" name="relatorio" required>
-                    <option value="1">Selecione o item</option>
-                    <option value="2">Material 2</option>
-
-                </select><br><br>
-                <button>Confirmar</button>
-            </form>
+    {% include 'dashboard/dashboard.html' %}
+    <div class="container">
+        <h1>Relatório e Análises</h1>
+        <div class="form-group">
+            <label for="chartType">Selecione o tipo de gráfico</label>
+            <div class="flex">
+                <select id="chartType" class="form-control">
+                    <option value="">-- Selecione --</option>
+                    <option value="line">Gráfico de Linhas</option>
+                    <option value="bar">Gráfico de Barras</option>
+                    <option value="pie">Gráfico de Pizza</option>
+                </select>
+                <button class="btn" id="generateChart">Gerar</button>
             </div>
+        </div>
+        </div>
 
-        </section>
-    </main>
+
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+        let myChart;
+
+        document.getElementById('generateChart').addEventListener('click', function() {
+            const chartType = document.getElementById('chartType').value;
+
+            if (myChart) {
+                myChart.destroy(); // Limpa o gráfico anterior, se existir
+            }
+
+            // Dados de exemplo
+            const data = {
+                labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+                datasets: [{
+                    label: 'Dados de Exemplo',
+                    data: [500, 200, 700, 400, 1000, 600, 300, 800, 900, 250],
+                    borderColor: 'rgb(255, 206, 86)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    fill: false,
+                }]
+            };
+
+            myChart = new Chart(ctx, {
+                type: chartType || 'line', // Tipo de gráfico
+                data: data,
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                },
+            });
+        });
+    </script>
 </body>
 </html>

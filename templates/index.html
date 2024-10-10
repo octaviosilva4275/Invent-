@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
-    
+
+    <!-- FontAwesome and Bootstrap -->
     <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script>
-    
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-index.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-index.css') }}">
+
     <style>
         body {
             background-color: #f5f5f5;
@@ -21,7 +23,6 @@
         .container-estoque,
         .container-saidas {
             width: 100%;
-            background-color: #4BBF85;
             color: white;
             border-radius: 10px;
             padding: 20px;
@@ -31,7 +32,9 @@
         }
         .container-estoque {
             background-color: #E35F64;
-
+        }
+        .container-saidas {
+            background-color: #4BBF85;
         }
         .table {
             background-color: #fff;
@@ -91,7 +94,7 @@
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
-    
+
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -192,6 +195,7 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     
