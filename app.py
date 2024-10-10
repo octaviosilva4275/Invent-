@@ -376,6 +376,15 @@ def registrar_saida():
 
 # ---------------------------------------------------- FIM CONTROLE DE ESTOQUE ----------------------------------------------------
 
+
+# ---------------------------------------------------- RELATORIO ----------------------------------------------------
+
+
+
+
+
+# ---------------------------------------------------- FIM RELATORIO ----------------------------------------------------
+
 # ---------------------------------------------------- REQUISICAO ----------------------------------------------------
 
 @app.route('/api/requisicoes_admin')
@@ -726,9 +735,46 @@ def historico_requisicoes():
 
     return render_template('historico_requisicoes.html', requisicoes=requisicoes_historico)
 
-@app.route('/relatorio')
+@app.route('/relatorio', methods=['GET', 'POST'])
 def relatorios():
-    return render_template('funcoes/relatorio.html')
+    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+        return redirect(url_for('solicitante'))
+    
+    relatorio = None
+    relatorio_titulo = None
+    tipo_relatorio = None
+
+    if request.method == 'POST':
+        tipo_relatorio = request.form['tipo_relatorio']
+
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor(dictionary=True)
+
+        try:
+            if tipo_relatorio == 'estoque':
+                cursor.execute("SELECT m.descricao as Material, SUM(e.quantidade) as Quantidade "
+                               "FROM materials m "
+                               "LEFT JOIN estoque e ON m.id = e.material_id "
+                               "GROUP BY m.id")
+                relatorio = cursor.fetchall()
+                relatorio_titulo = "Relatório de Estoque"
+
+            elif tipo_relatorio == 'movimentacao':
+                cursor.execute("SELECT e.data_movimentacao as Data, m.descricao as Material, e.tipo_movimentacao as Tipo, e.quantidade as Quantidade, u.nome as Usuário "
+                               "FROM estoque e "
+                               "JOIN materials m ON e.material_id = m.id "
+                               "JOIN users u ON e.usuario_id = u.id")
+                relatorio = cursor.fetchall()
+                relatorio_titulo = "Relatório de Movimentação"
+
+        except mysql.connector.Error as err:
+            print(f"Erro ao gerar relatório: {err}")
+
+        finally:
+            cursor.close()
+            conexao.close()
+
+    return render_template('funcoes/relatorio.html', relatorio=relatorio, relatorio_titulo=relatorio_titulo, tipo_relatorio=tipo_relatorio)
 
 
 @app.route('/perfil')

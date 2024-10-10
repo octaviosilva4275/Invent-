@@ -16,42 +16,38 @@
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1 {
             color: #333;
         }
         .chart-container {
-
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
+            width: 100%; /* Ajuste para largura total */
         }
         select, button {
             margin-top: 20px;
         }
-        .container{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-
-        }
-        .flex{
-            display: flex;
-            flex-direction: inherit;
-            gap: 20px;
-        }
-        .form-group{
-            width: 80%;
-        }
-        .btn{
+        .btn {
             background-color: #192340;
             color: white;
+        }
+        .flex {
+            display: flex;
+            gap: 20px;
+            width: 80%;
+        }
+        .form-group {
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    {% include 'dashboard/dashboard.html' %}
+    {% include '/dashboard/dashboard.html' %}
     <div class="container">
         <h1>Relatório e Análises</h1>
         <div class="form-group">
@@ -66,12 +62,46 @@
                 <button class="btn" id="generateChart">Gerar</button>
             </div>
         </div>
-        </div>
-
 
         <div class="chart-container">
             <canvas id="myChart"></canvas>
         </div>
+
+        {% if relatorio %}
+        <h2>{{ relatorio_titulo }}</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    {% if tipo_relatorio == 'estoque' %}
+                    <th>Material</th>
+                    <th>Quantidade</th>
+                    {% elif tipo_relatorio == 'movimentacao' %}
+                    <th>Data</th>
+                    <th>Material</th>
+                    <th>Tipo</th>
+                    <th>Quantidade</th>
+                    <th>Usuário</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in relatorio %}
+                <tr>
+                    {% if tipo_relatorio == 'estoque' %}
+                    <td>{{ item.Material }}</td>
+                    <td>{{ item.Quantidade }}</td>
+                    {% elif tipo_relatorio == 'movimentacao' %}
+                    <td>{{ item.Data }}</td>
+                    <td>{{ item.Material }}</td>
+                    <td>{{ item.Tipo }}</td>
+                    <td>{{ item.Quantidade }}</td>
+                    <td>{{ item['Usuário'] }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

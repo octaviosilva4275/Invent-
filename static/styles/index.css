@@ -28,7 +28,7 @@ body {
 }
 
 .table {
-    background-color: #fff;
+    background-color: transparent;
 
     margin: 30px auto;
     border-radius: 10px;
@@ -38,6 +38,18 @@ body {
 table {
     border-collapse: collapse;
 
+}
+
+.historico{
+    color: black;
+    align-items: center;
+    display: flex;
+    margin-left: auto;
+}
+.flex{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 thead {
