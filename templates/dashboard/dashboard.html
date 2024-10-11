@@ -271,9 +271,14 @@ body{
     </div>
   </div>
   <ul class="sidebar-links">
+    {% if session['user_cargo'] == 'admin' %}
+    <li>
+        <a href="{{ url_for('admin') }}">
+            <span class="material-symbols-outlined"> admin_panel_settings </span>Painel de Administração</a>
+    </li>
+    {% endif %}
 
-
-  {% if session['user_cargo'] == 'almoxarifado' %}
+  {% if session['user_cargo'] == 'almoxarifado'  or session['user_cargo'] == 'admin' %}
   <h4>
     <div class="menu-separator"></div>
     <span>Menu Principal</span>
@@ -299,22 +304,24 @@ body{
       <span>Geral</span>
       <div class="menu-separator"></div>
   </h4>
-  {% if session['user_cargo'] != 'almoxarifado' %}
+  {% if session['user_cargo'] != 'almoxarifado' or session['user_cargo'] == 'almoxarifado-nao-verificado' %}
   <li>
       <a href="{{ url_for('requisicao_material') }}"><span class="material-symbols-outlined"> folder </span>Requisicao Material</a>
   </li>
   {% endif %}
-  {% if session['user_cargo'] == 'almoxarifado' %}
+  {% if session['user_cargo'] == 'almoxarifado' or session['user_cargo'] == 'admin' %}
   <li>
-      <a href="{{ url_for('requisicao_material_admin') }}"><span class="material-symbols-outlined"> folder </span>Requisicao Material Admin</a>
+      <a href="{{ url_for('requisicao_material_admin') }}">
+          <span class="material-symbols-outlined"> folder </span>Requisição Material Admin</a>
   </li>
   {% endif %}
+  
   <h4>
     <span>Account</span>
     <div class="menu-separator"></div>
   </h4>
   <li>
-    <a href="#"><span class="material-symbols-outlined"> account_circle </span>Profile</a>
+    <a href="{{ url_for('editar_perfil')}}"><span class="material-symbols-outlined"> account_circle </span>Profile</a>
   </li>
 
   {% if session.get('logged_in') %}

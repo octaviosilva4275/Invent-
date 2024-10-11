@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 import mysql.connector
 from mysql.connector import Error
 # from twilio.rest import Client
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
 
 # EMAIL
@@ -13,7 +13,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 # Carregar variáveis do .env
-load_dotenv()
+# load_dotenv()
 
 # Inicialização do Flask
 app = Flask(__name__)
@@ -116,21 +116,68 @@ def login():
         conexao.close()
 
         if usuario:
+            if usuario['cargo'] == 'almoxarifado-nao-verificado':
+                return redirect(url_for('espera'))  # Redireciona para a tela de espera
             session['logged_in'] = True
             session['user_id'] = usuario['id']
             session['user_sn'] = usuario['sn']
             session['user_email'] = usuario['email']
             session['user_cargo'] = usuario['cargo']
 
-            if usuario['cargo'] == 'almoxarifado':
-                return redirect(url_for('dashboard'))
+            if usuario['cargo'] == 'admin':
+                return redirect(url_for('admin'))  # Exemplo de redirecionamento para admin
             else:
-                return redirect(url_for('requisicao_material'))
+                return redirect(url_for('dashboard'))  # Exemplo de redirecionamento para dashboard
         else:
             flash('Credenciais inválidas. Por favor, tente novamente.', 'error')
-            return redirect(url_for('solicitante'))  # Redireciona para garantir que o erro seja exibido
+            return redirect(url_for('solicitante'))
 
     return render_template('login/login.html')
+
+
+@app.route('/espera')
+def espera():
+    return render_template('espera.html')
+
+
+@app.route('/editar_perfil', methods=['GET', 'POST'])
+def editar_perfil():
+    conexao = conectar_banco_dados()
+    usuario_id = session.get('user_id')
+
+    if request.method == 'POST':
+        sn = request.form['sn']  # O código SN
+        nome = request.form['nome']
+        email = request.form['email']
+        senha = request.form['senha']
+        confirmar_senha = request.form['confirmar_senha']
+
+        cursor = conexao.cursor()
+        
+        if senha and senha != confirmar_senha:  # Verifica se as senhas coincidem
+            flash('As senhas não coincidem. Tente novamente.', 'error')
+            cursor.close()
+            conexao.close()
+            return redirect(url_for('editar_perfil'))
+
+        if senha:  # Se a senha foi fornecida, atualiza
+            cursor.execute("UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s", (nome, email, senha, usuario_id))
+        else:  # Se a senha não foi fornecida, não atualiza
+            cursor.execute("UPDATE users SET nome = %s, email = %s WHERE id = %s", (nome, email, usuario_id))
+        
+        conexao.commit()
+        cursor.close()
+        conexao.close()
+        flash('Perfil atualizado com sucesso!', 'success')
+        return redirect(url_for('dashboard'))
+
+    cursor = conexao.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
+    usuario = cursor.fetchone()
+    cursor.close()
+    conexao.close()
+    
+    return render_template('editar_perfil.html', usuario=usuario)
 
 
 
@@ -258,6 +305,69 @@ def cadastro_material():
 
 # ---------------------------------------------------- FIM CADASTRO MATERIAL ----------------------------------------------------
 
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if 'logged_in' not in session or session.get('user_cargo') != 'admin':
+        flash('Acesso negado. Você não tem permissão para acessar esta página.', 'error')
+        return redirect(url_for('solicitante'))
+
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+
+    if request.method == 'POST':
+        user_id = request.form['user_id']
+        nome = request.form['nome']
+        email = request.form['email']
+        cargo = request.form['cargo']
+        senha = request.form['senha']
+
+        query_update = "UPDATE users SET nome = %s, email = %s, cargo = %s, senha = %s WHERE id = %s"
+        cursor.execute(query_update, (nome, email, cargo, senha, user_id))
+        conexao.commit()
+        flash('Usuário atualizado com sucesso!', 'success')
+
+    cursor.execute("SELECT * FROM users")
+    usuarios = cursor.fetchall()
+    cursor.close()
+    conexao.close()
+
+    return render_template('admin/admin.html', usuarios=usuarios)
+
+
+@app.route('/aprovar_usuario', methods=['POST'])
+def aprovar_usuario():
+    user_id = request.form['user_id']
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor()
+
+    # Atualiza o cargo do usuário
+    query_update = "UPDATE users SET cargo = 'almoxarifado' WHERE id = %s"
+    cursor.execute(query_update, (user_id,))
+    conexao.commit()
+
+    cursor.close()
+    conexao.close()
+    
+    flash('Usuário aprovado com sucesso!', 'success')
+    return redirect(url_for('admin'))  # Redireciona para a página de administração
+
+@app.route('/excluir_usuario', methods=['POST'])
+def excluir_usuario():
+    user_id = request.form['user_id']
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor()
+
+    # Executa a exclusão do usuário
+    query_delete = "DELETE FROM users WHERE id = %s"
+    cursor.execute(query_delete, (user_id,))
+    conexao.commit()
+
+    cursor.close()
+    conexao.close()
+
+    flash('Usuário excluído com sucesso!', 'success')
+    return redirect(url_for('admin'))  # Redireciona para a página de administração
 
 
 # ---------------------------------------------------- CONTROLE DE ESTOQUE ----------------------------------------------------

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Administração</title>
+    <link rel="stylesheet" href="path/to/your/css/styles.css"> <!-- Adicione seu CSS -->
+    <script>
+        function confirmDelete(userId) {
+            const confirmation = confirm("Tem certeza que deseja excluir este usuário?");
+            if (confirmation) {
+                document.getElementById('deleteUserForm' + userId).submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+    <h1>Painel de Administração</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Cargo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.cargo }}</td>
+                    <td>
+                        <button onclick="document.getElementById('editUser{{ usuario.id }}').style.display='block'">Editar</button>
+                        {% if usuario.cargo == 'almoxarifado-nao-verificado' %}
+                        <form method="POST" action="{{ url_for('aprovar_usuario') }}" style="display:inline;">
+                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                            <button type="submit">Aprovar</button>
+                        </form>
+                        {% endif %}
+                        <form id="deleteUserForm{{ usuario.id }}" method="POST" action="{{ url_for('excluir_usuario') }}" style="display:inline;">
+                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                            <button type="button" onclick="confirmDelete({{ usuario.id }})">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+
+                <!-- Formulário para editar usuário -->
+                <div id="editUser{{ usuario.id }}" style="display:none;">
+                    <form method="POST">
+                        <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                        <label for="nome">Nome:</label>
+                        <input type="text" name="nome" value="{{ usuario.nome }}" required>
+                        <label for="email">Email:</label>
+                        <input type="email" name="email" value="{{ usuario.email }}" required>
+                        <label for="cargo">Cargo:</label>
+                        <input type="text" name="cargo" value="{{ usuario.cargo }}" required>
+                        <label for="senha">Senha:</label>
+                        <input type="password" name="senha" value="{{ usuario.senha }}" required>
+                        <button type="submit">Salvar</button>
+                        <button type="button" onclick="document.getElementById('editUser{{ usuario.id }}').style.display='none'">Cancelar</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

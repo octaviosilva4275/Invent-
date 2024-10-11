@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 40px;
+    width: 90%;
+    max-width: 400px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.cancel {
+    background-color: #ccc;
+}
+
+.cancel:hover {
+    background-color: #bbb;
+}
+
+    </style>
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+    <div class="container">
+        <h1>Editar Perfil</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="sn">Código SN:</label>
+                <input type="text" id="sn" name="sn" value="{{ usuario.sn }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" value="{{ usuario.nome }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Nova Senha:</label>
+                <input type="password" id="senha" name="senha" placeholder="Deixe vazio para não alterar">
+            </div>
+            <div class="form-group">
+                <label for="confirmar_senha">Confirmar Senha:</label>
+                <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Repita a nova senha">
+            </div>
+            <button type="submit" class="btn">Salvar Alterações</button>
+            <a href="{{ url_for('dashboard') }}" class="btn cancel">Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>

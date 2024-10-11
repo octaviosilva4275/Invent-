@@ -27,7 +27,7 @@ html{
 form {
     width: 100%;
     background-color: var(--branco); /* Adicionada cor de fundo branca para o formulário */
-    padding: 20px; /* Aumentado o padding para maior conforto */
+
     border-radius: 10px; /* Ajustado para bordas mais suaves */
 
 }
@@ -42,7 +42,6 @@ form {
 
 /* Estilo dos Subtítulos */
 .form-section h2 {
-    margin: 10px 0; /* Aumentado o espaço superior e inferior */
     color: var(--cinza);
     font-size: 22px; /* Ajustado o tamanho da fonte para uma hierarquia clara */
     text-align: start; /* Centralizado o texto */
