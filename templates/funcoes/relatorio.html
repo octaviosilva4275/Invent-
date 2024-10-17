@@ -1,146 +1,234 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório e Análises</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+    <title>Relatórios</title>
     <style>
         body {
-            background-color: #E7E9EB;
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
         .container {
-            margin-top: 50px;
-            background-color: #a7b2c8;
-            border-radius: 10px;
+            max-width: 800px;
+            margin: auto;
+            background: white;
             padding: 20px;
+            border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
-        h1 {
+        h1, h2, h3 {
             color: #333;
         }
-        .chart-container {
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            width: 100%; /* Ajuste para largura total */
+        .tabela {
+            margin: 20px 0;
         }
-        select, button {
-            margin-top: 20px;
-        }
-        .btn {
-            background-color: #192340;
-            color: white;
-        }
-        .flex {
-            display: flex;
-            gap: 20px;
-            width: 80%;
-        }
-        .form-group {
+        table {
             width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .graficos {
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
     <div class="container">
-        <h1>Relatório e Análises</h1>
-        <div class="form-group">
-            <label for="chartType">Selecione o tipo de gráfico</label>
-            <div class="flex">
-                <select id="chartType" class="form-control">
-                    <option value="">-- Selecione --</option>
-                    <option value="line">Gráfico de Linhas</option>
-                    <option value="bar">Gráfico de Barras</option>
-                    <option value="pie">Gráfico de Pizza</option>
-                </select>
-                <button class="btn" id="generateChart">Gerar</button>
-            </div>
-        </div>
-
-        <div class="chart-container">
-            <canvas id="myChart"></canvas>
-        </div>
+        <h1>Relatórios</h1>
+        <form method="POST">
+            <label for="tipo_relatorio">Selecione o tipo de relatório:</label>
+            <select name="tipo_relatorio" id="tipo_relatorio">
+                <option value="estoque">Relatório de Estoque</option>
+                <option value="movimentacao">Relatório de Movimentação</option>
+                <option value="solicitacoes_usuario">Solicitações por Usuário</option>
+                <option value="movimentacao_mensal">Movimentação Mensal</option>
+            </select>
+            <button type="submit">Gerar Relatório</button>
+        </form>
 
         {% if relatorio %}
-        <h2>{{ relatorio_titulo }}</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    {% if tipo_relatorio == 'estoque' %}
-                    <th>Material</th>
-                    <th>Quantidade</th>
-                    {% elif tipo_relatorio == 'movimentacao' %}
-                    <th>Data</th>
-                    <th>Material</th>
-                    <th>Tipo</th>
-                    <th>Quantidade</th>
-                    <th>Usuário</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in relatorio %}
-                <tr>
-                    {% if tipo_relatorio == 'estoque' %}
-                    <td>{{ item.Material }}</td>
-                    <td>{{ item.Quantidade }}</td>
-                    {% elif tipo_relatorio == 'movimentacao' %}
-                    <td>{{ item.Data }}</td>
-                    <td>{{ item.Material }}</td>
-                    <td>{{ item.Tipo }}</td>
-                    <td>{{ item.Quantidade }}</td>
-                    <td>{{ item['Usuário'] }}</td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <h2>{{ relatorio_titulo }}</h2>
+            <div class="tabela">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for key in relatorio[0].keys() %}
+                                <th>{{ key }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in relatorio %}
+                            <tr>
+                                {% for value in item.values() %}
+                                    <td>{{ value }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="graficos">
+                <h3>Gráficos</h3>
+
+                {% if tipo_relatorio == 'movimentacao_mensal' %}
+                    <canvas id="graficoMovimentacaoMensal"></canvas>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const ctx = document.getElementById('graficoMovimentacaoMensal').getContext('2d');
+                            const dados = {
+                                labels: [{% for item in relatorio %}'Mês {{ item.Mes }}',{% endfor %}],
+                                datasets: [
+                                    {
+                                        label: 'Total Entrada',
+                                        data: [{% for item in relatorio %}{{ item.TotalEntrada }},{% endfor %}],
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Total Saída',
+                                        data: [{% for item in relatorio %}{{ item.TotalSaida }},{% endfor %}],
+                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            };
+                            const grafico = new Chart(ctx, {
+                                type: 'bar',
+                                data: dados,
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                {% endif %}
+
+                {% if tipo_relatorio == 'estoque' %}
+                    <canvas id="graficoEstoque"></canvas>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const ctx = document.getElementById('graficoEstoque').getContext('2d');
+                            const dados = {
+                                labels: [{% for item in relatorio %}'{{ item.Material }}',{% endfor %}],
+                                datasets: [{
+                                    label: 'Quantidade em Estoque',
+                                    data: [{% for item in relatorio %}{{ item.Quantidade }},{% endfor %}],
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                                }]
+                            };
+                            const grafico = new Chart(ctx, {
+                                type: 'bar',
+                                data: dados,
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                {% endif %}
+
+                {% if tipo_relatorio == 'movimentacao' %}
+                    <canvas id="graficoMovimentacao"></canvas>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const ctx = document.getElementById('graficoMovimentacao').getContext('2d');
+                            const dados = {
+                                labels: [{% for item in relatorio %}'{{ item.Material }}',{% endfor %}],
+                                datasets: [{
+                                    label: 'Quantidade Movimentada',
+                                    data: [{% for item in relatorio %}{{ item.Quantidade }},{% endfor %}],
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                }]
+                            };
+                            const grafico = new Chart(ctx, {
+                                type: 'bar',
+                                data: dados,
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                {% endif %}
+
+                {% if tipo_relatorio == 'solicitacoes_usuario' %}
+                    <canvas id="graficoSolicitacoesUsuario"></canvas>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const ctx = document.getElementById('graficoSolicitacoesUsuario').getContext('2d');
+                            const dados = {
+                                labels: [{% for item in relatorio %}'{{ item.Usuario }}',{% endfor %}],
+                                datasets: [{
+                                    label: 'Total de Solicitações',
+                                    data: [{% for item in relatorio %}{{ item.TotalSolicitacoes }},{% endfor %}],
+                                    backgroundColor: [
+                                        'rgba(255, 99, 132, 0.2)',
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 206, 86, 0.2)',
+                                        'rgba(75, 192, 192, 0.2)',
+                                        'rgba(153, 102, 255, 0.2)',
+                                    ],
+                                    borderColor: [
+                                        'rgba(255, 99, 132, 1)',
+                                        'rgba(54, 162, 235, 1)',
+                                        'rgba(255, 206, 86, 1)',
+                                        'rgba(75, 192, 192, 1)',
+                                        'rgba(153, 102, 255, 1)',
+                                    ],
+                                    borderWidth: 1
+                                }]
+                            };
+                            const grafico = new Chart(ctx, {
+                                type: 'pie',
+                                data: dados,
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: {
+                                            position: 'top',
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('myChart').getContext('2d');
-        let myChart;
-
-        document.getElementById('generateChart').addEventListener('click', function() {
-            const chartType = document.getElementById('chartType').value;
-
-            if (myChart) {
-                myChart.destroy(); // Limpa o gráfico anterior, se existir
-            }
-
-            // Dados de exemplo
-            const data = {
-                labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
-                datasets: [{
-                    label: 'Dados de Exemplo',
-                    data: [500, 200, 700, 400, 1000, 600, 300, 800, 900, 250],
-                    borderColor: 'rgb(255, 206, 86)',
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    fill: false,
-                }]
-            };
-
-            myChart = new Chart(ctx, {
-                type: chartType || 'line', // Tipo de gráfico
-                data: data,
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                },
-            });
-        });
-    </script>
 </body>
 </html>

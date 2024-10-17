@@ -984,6 +984,23 @@ def relatorios():
                 relatorio = cursor.fetchall()
                 relatorio_titulo = "Relatório de Movimentação"
 
+            elif tipo_relatorio == 'solicitacoes_usuario':
+                cursor.execute("SELECT u.nome as Usuario, COUNT(r.id) as TotalSolicitacoes "
+                               "FROM requisicoes r "
+                               "JOIN users u ON r.usuario_id = u.id "
+                               "GROUP BY u.id")
+                relatorio = cursor.fetchall()
+                relatorio_titulo = "Total de Solicitações por Usuário"
+
+            elif tipo_relatorio == 'movimentacao_mensal':
+                cursor.execute("SELECT MONTH(e.data_movimentacao) as Mes, "
+                            "SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) as TotalEntrada, "
+                            "SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END) as TotalSaida "
+                            "FROM estoque e "
+                            "GROUP BY MONTH(e.data_movimentacao)")
+                relatorio = cursor.fetchall()
+                relatorio_titulo = "Movimentação Mensal"
+
         except mysql.connector.Error as err:
             print(f"Erro ao gerar relatório: {err}")
 
@@ -992,6 +1009,10 @@ def relatorios():
             conexao.close()
 
     return render_template('funcoes/relatorio.html', relatorio=relatorio, relatorio_titulo=relatorio_titulo, tipo_relatorio=tipo_relatorio)
+
+
+
+
 
 
 @app.route('/perfil')

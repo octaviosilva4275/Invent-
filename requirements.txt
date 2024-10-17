@@ -12,3 +12,4 @@ Flask-Mail
 itsdangerous
 azure-storage-blob
 Gunicorn
+jwt
