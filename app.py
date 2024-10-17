@@ -3,6 +3,14 @@ import uuid
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
 from mysql.connector import Error
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Mail, Message
+import jwt
+import hashlib
+import time
+import secrets
+from datetime import datetime, timedelta
+
 # from twilio.rest import Client
 # from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
@@ -12,6 +20,10 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+
+import secrets
+from datetime import datetime, timedelta
+
 # Carregar variáveis do .env
 # load_dotenv()
 
@@ -19,7 +31,8 @@ from email.mime.text import MIMEText
 app = Flask(__name__)
 app.secret_key = 'teste'
 
-
+EMAIL_USER = os.getenv('EMAIL_USER')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 # Código para autenticação
 # account_sid = "ACc1f8fd89246833c6ec94946e9addeb12"
@@ -94,7 +107,6 @@ def conectar_banco_dados():
         raise
 
 
-
 @app.route('/')
 def solicitante():
     return render_template('login/login.html')
@@ -133,6 +145,9 @@ def login():
             return redirect(url_for('solicitante'))
 
     return render_template('login/login.html')
+
+
+
 
 
 @app.route('/espera')
@@ -308,7 +323,7 @@ def cadastro_material():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    if 'logged_in' not in session or session.get('user_cargo') != 'admin':
+    if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         flash('Acesso negado. Você não tem permissão para acessar esta página.', 'error')
         return redirect(url_for('solicitante'))
 
@@ -499,7 +514,7 @@ def registrar_saida():
 
 @app.route('/api/requisicoes_admin')
 def api_requisicoes_admin():
-    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+    if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         return jsonify([])
 
     conexao = conectar_banco_dados()
@@ -644,7 +659,7 @@ def requisicao_material():
 
 @app.route('/requisicao_material_admin', methods=['GET'])
 def requisicao_material_admin():
-    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+    if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         return redirect(url_for('solicitante'))
     
     conexao = conectar_banco_dados()
@@ -692,8 +707,7 @@ def enviar_email_almoxarifado(destinatario, assunto, corpo):
     mensagem['From'] = remetente
     mensagem['To'] = destinatario
     mensagem['Subject'] = assunto
-    
-    # Corpo do email em HTML
+
     corpo_html = f"""
     <html>
     <body>
@@ -703,8 +717,12 @@ def enviar_email_almoxarifado(destinatario, assunto, corpo):
     </body>
     </html>
     """
-    
-    parte_html = MIMEText(corpo_html, 'html')
+
+    # Debug para verificar o conteúdo
+    print(f"Corpo do e-mail: {corpo}")
+    print(f"Corpo HTML: {corpo_html}")
+
+    parte_html = MIMEText(corpo_html, 'html',"ANSI")
     mensagem.attach(parte_html)
 
     try:
@@ -719,9 +737,98 @@ def enviar_email_almoxarifado(destinatario, assunto, corpo):
 
 
 
+def gerar_token(email):
+    token = secrets.token_urlsafe(16)  # Gera um token seguro
+    expires_at = datetime.now() + timedelta(hours=1)  # Define a expiração para 1 hora
+    return token, expires_at
+
+@app.route('/esquecer_senha', methods=['GET', 'POST'])
+def esquecer_senha():
+    if request.method == 'POST':
+        data = request.form  # Use request.form para receber dados do formulário
+        sn = data.get('sn')
+
+        # Conecte-se ao banco de dados
+        conn = mysql.connector.connect(user='tcc', password='123', database='almoxarifado')
+        cursor = conn.cursor()
+
+        # Verifique se o usuário existe
+        cursor.execute("SELECT email FROM users WHERE sn = %s", (sn,))
+        result = cursor.fetchone()
+
+        if result:
+            email = result[0]
+            print(f"Usuário encontrado: {email}")  # Depuração
+            token, expires_at = gerar_token(email)
+
+            # Armazene o token e a data de expiração no banco de dados
+            cursor.execute("INSERT INTO senha_resetada (email, token, expires_at) VALUES (%s, %s, %s)",
+                           (email, token, expires_at))
+            conn.commit()
+
+            # Verifique se a inserção foi bem-sucedida
+            if cursor.rowcount > 0:
+                print("Token inserido com sucesso.")
+            else:
+                print("Falha ao inserir o token.")
+
+            # Envie o e-mail com o link de redefinição de senha
+            link_redefinicao = f"http://localhost:5000/redefinir_senha?token={token}"  # Use localhost
+            corpo_email = f"Clique no seguinte link para redefinir sua senha: {link_redefinicao}"
+            enviar_email_almoxarifado(email, "Redefinição de Senha", corpo_email)
+
+            cursor.close()
+            conn.close()
+            return jsonify({"mensagem": "E-mail de redefinição de senha enviado com sucesso!"}), 200
+
+        cursor.close()
+        conn.close()
+        return jsonify({"mensagem": "Usuário não encontrado."}), 404
+
+    return render_template('recuperacao_senha.html')  # Para o método GET, retorne o formulário
+
+@app.route('/redefinir_senha', methods=['GET', 'POST'])
+def redefinir_senha():
+    if request.method == 'GET':
+        token = request.args.get('token')
+        # Retorne um formulário de redefinição de senha ou uma página informativa
+        return render_template('redefinicao_senha.html', token=token)
+
+    if request.method == 'POST':
+        token = request.args.get('token')  # Obtendo o token da URL
+        nova_senha = request.form.get('nova_senha')  # Obtendo a nova senha do formulário
+
+        # Conecte-se ao banco de dados
+        conn = mysql.connector.connect(user='tcc', password='123', database='almoxarifado')
+        cursor = conn.cursor()
+
+        # Verifique se o token é válido
+        cursor.execute("SELECT email FROM senha_resetada WHERE token = %s AND expires_at > NOW()", (token,))
+        result = cursor.fetchone()
+
+        if result:
+            email = result[0]
+
+            # Atualize a senha do usuário
+            cursor.execute("UPDATE users SET senha = %s WHERE email = %s", (nova_senha, email))
+            conn.commit()
+
+            # Remova o token usado
+            cursor.execute("DELETE FROM senha_resetada WHERE token = %s", (token,))
+            conn.commit()
+
+            cursor.close()
+            conn.close()
+
+            return redirect(url_for('login'))
+        else:
+            cursor.close()
+            conn.close()
+            return jsonify({"mensagem": "Token inválido ou expirado."}), 400
+        
 @app.route('/atualizar_requisicao', methods=['POST']) 
 def atualizar_requisicao():
-    if 'user_cargo' not in session or session['user_cargo'] != 'almoxarifado':
+    if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         return redirect(url_for('solicitante'))
 
     data = request.get_json()
