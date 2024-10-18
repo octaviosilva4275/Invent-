@@ -10,7 +10,6 @@
         .aguardando-estoque { color: rgb(212, 0, 0); font-weight: bold; }
         .finalizado { color: grey; font-weight: bold; }
         h4 { margin-top: 80px; }
-
     </style>
 </head>
 <body>
@@ -39,15 +38,16 @@
                 {% if requisicao.status == status %}
                 <tr>
                     <td>{{ requisicao.material }}</td>
-                    <td>{{ requisicao.quantidade }}</td>
-                    <td class="block">{{ requisicao.quantidade_estoque }}</td> <!-- Exibe o estoque atual -->
+                    <td class="quantidade">{{ requisicao.quantidade }}</td>
+                    <td class="estoque">{{ requisicao.quantidade_estoque }}</td>                    
                     <td>{{ requisicao.usuario }}</td>
                     <td class="{{ color }}">{{ requisicao.status }}</td>
                     <td>{{ requisicao.observacao }}</td>
                     <td>{{ requisicao.data_atualizacao | default('N/A') }}</td>
                     <td>
                         <button class="btn btn-secondary" data-toggle="modal" data-target="#acaoModal" 
-                                data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}">
+                                data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}"
+                                data-quantidade="{{ requisicao.quantidade }}" data-estoque="{{ requisicao.quantidade_estoque }}">
                             Ações
                         </button>
                     </td>
@@ -55,7 +55,6 @@
                 {% endif %}
                 {% endfor %}
             </tbody>
-            
         </table>
         {% endfor %}
     </div>
@@ -72,6 +71,8 @@
                 </div>
                 <div class="modal-body">
                     <p id="modal-material"></p>
+                    <p>Quantidade: <span id="modal-quantidade"></span></p>
+                    <p>Estoque disponível: <span id="modal-estoque"></span></p>
                     <form id="acaoForm">
                         <input type="hidden" name="requisicao_id" id="requisicao_id" value="">
                         <button type="button" class="btn btn-warning" onclick="atualizarStatus('Solicitado')">Solicitado</button>
@@ -89,14 +90,26 @@
             var button = $(event.relatedTarget);
             var requisicaoId = button.data('id');
             var material = button.data('material');
+            var quantidade = button.data('quantidade');
+            var estoque = button.data('estoque');
 
             var modal = $(this);
             modal.find('#requisicao_id').val(requisicaoId);
             modal.find('#modal-material').text('Material: ' + material);
+            modal.find('#modal-quantidade').text(quantidade);
+            modal.find('#modal-estoque').text(estoque);
         });
 
         function atualizarStatus(status) {
             var requisicaoId = $('#requisicao_id').val();
+            var quantidade = parseInt($('#modal-quantidade').text());
+            var estoque = parseInt($('#modal-estoque').text());
+
+            // Verifica se a quantidade requisitada é maior que a quantidade no estoque apenas para "Retirado"
+            if (status === 'Retirado' && quantidade > estoque) {
+                alert('Estoque insuficiente para retirar! Disponível: ' + estoque);
+                return;
+            }
 
             $.ajax({
                 url: "{{ url_for('atualizar_requisicao') }}",
@@ -107,10 +120,15 @@
                     acao: status
                 }),
                 success: function(response) {
-                    location.reload();
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Erro ao atualizar a requisição: ' + response.error);
+                    }
                 },
                 error: function(error) {
                     console.error('Erro ao atualizar status:', error);
+                    alert('Erro ao atualizar status. Tente novamente mais tarde.');
                 }
             });
         }

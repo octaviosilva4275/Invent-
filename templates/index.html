@@ -17,6 +17,10 @@
         body {
             background-color: #f5f5f5;
         }
+
+        .filter-button {
+            margin-left: 20px;
+        }
         .container {
             margin: 30px auto;
         }
@@ -39,7 +43,7 @@
         .table {
             background-color: #fff;
             border-radius: 10px;
-            margin-top: 20px;
+            margin: 10px 0px 0px 0px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         caption {
@@ -63,9 +67,7 @@
         tbody tr:hover {
             background-color: #ddd;
         }
-        .filter-button {
-            margin-left: auto;
-        }
+
         section a {
             color: white;
             text-decoration: none;
@@ -201,51 +203,70 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tdsStatus = document.querySelectorAll('td[data-label="Status"]');
-            const applyFiltersButton = document.getElementById('applyFilters');
+document.addEventListener('DOMContentLoaded', function() {
+    const tdsStatus = document.querySelectorAll('td[data-label="Status"]');
+    const applyFiltersButton = document.getElementById('applyFilters');
+    const orderFilter = document.getElementById('orderFilter');
 
-            // Status Color Classes
-            tdsStatus.forEach(td => {
-                const status = td.textContent.trim();
-                if (status === "Retirado") {
-                    td.classList.add('finalizado');
-                } else if (status === "Solicitado") {
-                    td.classList.add('em-separacao');
-                } else if (status === "Aguardando reposição") {
-                    td.classList.add('aguardando-reposicao');
-                } else if (status === "Disponível para retirada") {
-                    td.classList.add('pronto-retirar');
-                }
-            });
+    // Status Color Classes
+    tdsStatus.forEach(td => {
+        const status = td.textContent.trim();
+        if (status === "Retirado") {
+            td.classList.add('finalizado');
+        } else if (status === "Solicitado") {
+            td.classList.add('em-separacao');
+        } else if (status === "Aguardando reposição") {
+            td.classList.add('aguardando-reposicao');
+        } else if (status === "Disponível para retirada") {
+            td.classList.add('pronto-retirar');
+        }
+    });
 
-            // Filtro
-            applyFiltersButton.addEventListener('click', function() {
-                const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
-                const usuarioFilter = document.getElementById('usuarioFilter').value.toLowerCase();
-                const produtoFilter = document.getElementById('produtoFilter').value.toLowerCase();
+    // Filtro e Ordenação
+    applyFiltersButton.addEventListener('click', function() {
+        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+        const usuarioFilter = document.getElementById('usuarioFilter').value.toLowerCase();
+        const produtoFilter = document.getElementById('produtoFilter').value.toLowerCase();
+        const orderValue = orderFilter.value;
 
-                const rows = document.querySelectorAll('#historicoTable tr');
+        const rows = Array.from(document.querySelectorAll('#historicoTable tr'));
 
-                rows.forEach(row => {
-                    const statusCell = row.querySelector('td[data-label="Status"]');
-                    const usuarioCell = row.querySelector('td[data-label="Usuário"]');
-                    const produtoCell = row.querySelector('td[data-label="Nome do Produto"]');
+        // Filtragem
+        rows.forEach(row => {
+            const statusCell = row.querySelector('td[data-label="Status"]');
+            const usuarioCell = row.querySelector('td[data-label="Usuário"]');
+            const produtoCell = row.querySelector('td[data-label="Nome do Produto"]');
 
-                    const statusText = statusCell.textContent.toLowerCase();
-                    const usuarioText = usuarioCell.textContent.toLowerCase();
-                    const produtoText = produtoCell.textContent.toLowerCase();
+            const statusText = statusCell.textContent.toLowerCase();
+            const usuarioText = usuarioCell.textContent.toLowerCase();
+            const produtoText = produtoCell.textContent.toLowerCase();
 
-                    const matchesStatus = !statusFilter || statusText.includes(statusFilter);
-                    const matchesUsuario = !usuarioFilter || usuarioText.includes(usuarioFilter);
-                    const matchesProduto = !produtoFilter || produtoText.includes(produtoFilter);
+            const matchesStatus = !statusFilter || statusText.includes(statusFilter);
+            const matchesUsuario = !usuarioFilter || usuarioText.includes(usuarioFilter);
+            const matchesProduto = !produtoFilter || produtoText.includes(produtoFilter);
 
-                    row.style.display = (matchesStatus && matchesUsuario && matchesProduto) ? '' : 'none';
-                });
-
-                $('#filterModal').modal('hide'); // Fecha o modal após aplicar os filtros
-            });
+            row.style.display = (matchesStatus && matchesUsuario && matchesProduto) ? '' : 'none';
         });
+
+        // Ordenação
+        const filteredRows = Array.from(document.querySelectorAll('#historicoTable tr')).filter(row => row.style.display !== 'none');
+
+        filteredRows.sort((a, b) => {
+            const aValue = a.querySelector(`td[data-label="${orderValue === 'usuario' ? 'Usuário' : 'Nome do Produto'}"]`).textContent.toLowerCase();
+            const bValue = b.querySelector(`td[data-label="${orderValue === 'usuario' ? 'Usuário' : 'Nome do Produto'}"]`).textContent.toLowerCase();
+            return aValue.localeCompare(bValue);
+        });
+
+        // Atualiza a tabela
+        const tbody = document.querySelector('#historicoTable');
+        tbody.innerHTML = ''; // Limpa a tabela
+        filteredRows.forEach(row => tbody.appendChild(row));
+
+        $('#filterModal').modal('hide'); // Fecha o modal após aplicar os filtros
+    });
+});
+
+
     </script>
 </body>
 </html>

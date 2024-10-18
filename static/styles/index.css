@@ -44,8 +44,10 @@ table {
     color: black;
     align-items: center;
     display: flex;
-    margin-left: auto;
+    align-items: center;
 }
+
+
 .flex{
     display: flex;
     align-items: center;

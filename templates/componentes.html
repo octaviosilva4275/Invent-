@@ -1,0 +1,214 @@
+<style>
+    .alerts {
+        top: 0;
+        bottom: 0;
+        position: fixed;
+        display: flex;
+        flex-flow: column;  
+        font-family: 'Montserrat', sans-serif;
+        overflow-y: auto;
+        padding: 30px;
+        width: auto;
+    }
+
+    .alert {
+        display: flex;
+        flex-flow: row;    
+        margin: 10px 0;
+        width: 250px;
+        min-height: 90px;
+        background-color: #cecece;
+        border-radius: 4px;
+        color: #fff;
+        box-shadow: 0px 10px 46px -21px rgba(0, 0, 0, 0.75);
+        transition: all 0.3s cubic-bezier(0, 0, 0.3, 1);
+        cursor: pointer;
+    }
+
+    .alert:hover {
+        box-shadow: 0px 10px 60px -21px rgba(0, 0, 0, 0.80);
+    }
+
+    .sucess {
+        background-color: #3db56e;
+    }
+
+    .request {
+        background-color: #67a4c0;
+    }
+
+    .wait {
+        background-color: #c3d2d9;
+    }
+
+    .failed {
+        background-color: #c84346;
+    }
+
+    .alert-icon {
+        font-weight: 300;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 30%;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .alert-content {
+        position: relative;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-flow: column;
+        width: 100%;
+    }
+
+    .alert-close {
+        position: absolute;         
+        font-size: 0.7em;   
+        top: 7px;
+        right: 10px;
+        cursor: pointer;
+    }
+
+    .alert-title {
+        padding-right: 12px;
+        font-size: 0.7em;
+        font-weight: 700;
+    }
+
+    .alert-subtitle {
+        display: flex;
+        flex-flow: column;
+        margin-top: 5px;
+        font-size: 0.4em;
+        font-weight: 300;
+    }
+
+    .little-list {
+        display: none;
+        padding: 0 10px;
+    }
+
+    /* Demo */
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    body, html {
+        height: 100%;
+    }
+
+    body {
+        font-family: Montserrat, sans-serif; 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        font-size: 1.5rem;
+        background-color: #bdbdbd;
+    }
+</style>
+
+
+<div class="alerts">
+    <div class="alert sucess">    
+      <span class="alert-icon"><i class="fas fa-check"></i>      
+      </span>
+      <span class="alert-content">
+        <span class="alert-close"><i class="fas fa-times"></i></span>
+        <span class="alert-title">Success</span>
+        <span class="alert-subtitle">View details</span>
+      </span>    
+    </div>
+    <div class="alert request">
+      <span class="alert-icon"><i class="fas fa-exclamation"></i></span>
+      <span class="alert-content">
+        <span class="alert-close"><i class="fas fa-times"></i></span>
+        <span class="alert-title">Request submitted</span>
+        <span class="alert-subtitle">
+          View details
+          <ul class="little-list">
+            <li>New account has been created</li>
+            <li>New provider has been created</li>
+            <li>New provider has been created</li>
+            <li>New provider has been created</li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    <div class="alert wait">
+      <span class="alert-icon"><i class="far fa-clock"></i></span>
+      <span class="alert-content">
+        <span class="alert-close"><i class="fas fa-times"></i></span>
+        <span class="alert-title">Wait a Moment</span>
+        <span class="alert-subtitle">
+          View details
+          <ul class="little-list">
+            <li>New account has been created</li>
+            <li>New provider has been created</li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    <div class="alert failed">
+      <span class="alert-icon"><i class="fas fa-times"></i></span>
+      <span class="alert-content">
+        <span class="alert-close"><i class="fas fa-times"></i></span>
+        <span class="alert-title">Failed</span>      
+        <span class="alert-subtitle">
+          View details
+          <ul class="little-list">
+            <li>New account has been created</li>
+            <li>New provider has been created</li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    <div class="alert failed">
+      <span class="alert-icon"><i class="fas fa-times"></i></span>
+      <span class="alert-content">
+        <span class="alert-close"><i class="fas fa-times"></i></span>
+        <span class="alert-title">Account Removed</span>      
+        <span class="alert-subtitle">
+          View details
+          <ul class="little-list">
+            <li>New account has been created</li>
+            <li>New provider has been created</li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    <div class="alert failed">
+      <span class="alert-icon"><i class="fas fa-times"></i></span>
+      <span class="alert-content">
+        <span class="alert-close"><i class="fas fa-times"></i></span>
+        <span class="alert-title">Error 504</span>      
+        <span class="alert-subtitle">
+          View details
+          <ul class="little-list">
+            <li>New account has been created</li>
+            <li>New provider has been created</li>
+          </ul>
+        </span>
+      </span>
+    </div>
+    
+  </div>
+
+
+  <script>
+    $(document).ready(function () {
+  $( ".alert" ).click(function() {
+    $( this ).find( ".little-list" ).slideToggle();
+  });
+  $( ".alert-close" ).click(function() {
+    $( this ).parent().parent().fadeOut();
+  });
+});
+  </script>

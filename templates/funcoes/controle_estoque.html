@@ -13,10 +13,11 @@
 </head>
 
 <body>
-    {% include 'dashboard/dashboard.html' %}
+
+
     <main>
         <section class="form-section">
-            <h1>Controle de Estoque</h1>
+            <h1>Movimentação de Estoque</h1>
 
             <h2>Registrar Entrada</h2>
             <form action="{{ url_for('registrar_entrada') }}" method="POST">
@@ -49,6 +50,18 @@
                     <button type="submit">Confirmar</button>
                 </div>
             </form>
+            {% include 'dashboard/dashboard.html' %}
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <ul class="flashes">
+                  {% for category, message in messages %}
+                    <p class="alert alert-{{ category }}">{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+        
         </section>
     </main>
 </body>

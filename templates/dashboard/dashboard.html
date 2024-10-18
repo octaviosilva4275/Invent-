@@ -287,17 +287,18 @@ body{
 
   <li>
     <a href="{{ url_for('dashboard') }}">
-        <span class="material-symbols-outlined"> dashboard </span>Dashboard</a>
+        <span class="material-symbols-outlined"> dashboard </span>Inicio</a>
   </li>
   <li>
-      <a href="{{ url_for('cadastro_material') }}"><span class="material-symbols-outlined"> overview </span>Cadastro material</a>
+      <a href="{{ url_for('cadastro_material') }}"><span class="material-symbols-outlined"> overview </span>Cadastro</a>
   </li>
+  <li>
+    <a href="{{ url_for('controle_estoque') }}"><span class="material-symbols-outlined"> groups </span>Movimentação</a>
+</li>
   <li>
       <a href="{{ url_for('relatorios') }}"><span class="material-symbols-outlined"> monitoring </span>Relatorios</a>
   </li>
-  <li>
-      <a href="{{ url_for('controle_estoque') }}"><span class="material-symbols-outlined"> groups </span>Controle Estoque</a>
-  </li>
+
 
   {% endif %}
   <h4>
@@ -312,21 +313,21 @@ body{
   {% if session['user_cargo'] == 'almoxarifado' or session['user_cargo'] == 'admin' %}
   <li>
       <a href="{{ url_for('requisicao_material_admin') }}">
-          <span class="material-symbols-outlined"> folder </span>Requisição Material Admin</a>
+          <span class="material-symbols-outlined"> folder </span>Requisições</a>
   </li>
   {% endif %}
   
   <h4>
-    <span>Account</span>
+    <span>Conta</span>
     <div class="menu-separator"></div>
   </h4>
   <li>
-    <a href="{{ url_for('editar_perfil')}}"><span class="material-symbols-outlined"> account_circle </span>Profile</a>
+    <a href="{{ url_for('editar_perfil')}}"><span class="material-symbols-outlined"> account_circle </span>Editar Perfil</a>
   </li>
 
   {% if session.get('logged_in') %}
   <li>
-    <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined"> logout </span>Logout</a>
+    <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined"> logout </span>Sair</a>
   </li>
   {% endif %}
   </ul>
@@ -336,7 +337,7 @@ body{
           <img src="{{ url_for('static', filename='img/user.png') }}" style="background-color: white;" alt="logo" />
               <div class="user-detail">
                   {% if session.get('logged_in') %}
-                    <h3>{{ session['user_rn'] }}</h3>
+                    <h3></h3>
                     <span>{{ session['user_cargo'] }}</span>
                   {% else %}
                     <h3>Usuário não logado</h3>
