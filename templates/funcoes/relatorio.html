@@ -81,6 +81,30 @@
                 </table>
             </div>
 
+            
+            <script>
+                function formatarData(data) {
+                    const partes = data.split(' ');
+                    const dataPartes = partes[0].split('-');
+                    const horaPartes = partes[1];
+            
+                    return `${dataPartes[2]}/${dataPartes[1]}/${dataPartes[0]} ${horaPartes}`;
+                }
+            
+                document.addEventListener('DOMContentLoaded', function () {
+                    const tabela = document.getElementById('tabela-relatorio');
+                    const linhas = tabela.getElementsByTagName('tr');
+            
+                    for (let i = 0; i < linhas.length; i++) {
+                        const celulas = linhas[i].getElementsByTagName('td');
+                        if (celulas.length > 0) {
+                            const dataOriginal = celulas[0].textContent; // Pega a data da primeira célula
+                            const dataFormatada = formatarData(dataOriginal);
+                            celulas[0].textContent = dataFormatada; // Atualiza a célula com a data formatada
+                        }
+                    }
+                });
+            </script>
             <div class="graficos">
                 <h3>Gráficos</h3>
 
@@ -228,7 +252,13 @@
             </div>
         {% endif %}
     </div>
-
+    <script>
+        const dataOriginal = new Date(item.Data);  // Supondo que item.Data seja uma string ISO ou timestamp
+const dia = String(dataOriginal.getDate()).padStart(2, '0');
+const mes = String(dataOriginal.getMonth() + 1).padStart(2, '0');  // Os meses começam do zero
+const ano = dataOriginal.getFullYear();
+const dataFormatada = `${dia}/${mes}/${ano}`;
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

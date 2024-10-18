@@ -343,8 +343,7 @@
             </label>
             <select id="material" name="material_id" required>
                 {% for material in materiais %}
-                <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})
-                </option>
+                <option value="{{ material.id }}">{{ material.descricao }} (Estoque: {{ material.quantidade if material.quantidade is not none else 0 }})
                 {% endfor %}
             </select>
         </div>
@@ -379,7 +378,7 @@
             {% for requisicao in minhas_requisicoes %}
             <tr>
                 <td>{{ requisicao.material }}</td>
-                <td>{{ requisicao.quantidade }}</td>
+                <td>{{ requisicao.quantidade if requisicao.quantidade is not none else 0 }}</td>
                 <td
                     class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponível para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% endif %}">
                     {{ requisicao.status }}</td>
