@@ -12,15 +12,7 @@
 </head>
 
 <body>
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            <div class="flash-messages">
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+
     <!-- Seção de recuperação de senha -->
     <section class="recuperacao-senha">
         <!-- Container do formulário -->

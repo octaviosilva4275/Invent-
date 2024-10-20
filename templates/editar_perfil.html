@@ -46,9 +46,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .alert-icon{
-            padding: 10%;
-        }
+
         input[type="text"]:focus,
         input[type="email"]:focus,
         input[type="password"]:focus {
@@ -68,54 +66,18 @@
         .btn:hover {
             background-color: #0056b3;
         }
-        .cancel {
-            background-color: #ccc;
-        }
-        .cancel:hover {
-            background-color: #bbb;
-        }
-        .alerts {
-            margin-bottom: 20px;
-        }
-        .alert {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            color: white;
-            display: flex;
-            align-items: center;
-        }
-        .alert .success { background-color: #28a745; }
-        .alert .error { background-color: #dc3545; }
-        .alert-icon { margin-right: 10px; }
+
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
-    <!-- {% include '/componentes.html' %} -->
+
     <div class="container">
         <h1>Editar Perfil</h1>
         
-        <div class="alerts">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert {{ category }}">
-                            <span class="alert-icon">
-                                {% if category == 'success' %}
-                                    <i class="fas fa-check"></i>
-                                {% elif category == 'error' %}
-                                    <i class="fas fa-times"></i>
-                                {% endif %}
-                            </span>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
 
         <form method="POST">
             <div class="form-group">
