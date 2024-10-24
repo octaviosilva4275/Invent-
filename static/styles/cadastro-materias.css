@@ -1,10 +1,4 @@
-/* 
-   Normalização do Navegador
-   - Remove margens e paddings padrão de todos os elementos.
-   - Define a caixa de todos os elementos como "box-sizing: border-box".
-   - Remove o estilo de lista e a sublinha de links.
-   - Define a fonte padrão 'Amatic SC'.
-*/
+/* Normalização do Navegador */
 * {
     margin: 0;
     padding: 0;
@@ -14,72 +8,49 @@
     border: none;
 }
 
-/* 
-   Normalização do HTML e body
-   - Define a largura e altura como 100% da viewport.
-   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
-   - Remove o overflow horizontal.
-*/
+/* HTML e Body */
+html, body {
+    height: 100%;
+    font-family: 'Amatic SC', cursive; /* Exemplo de fonte, adicione a fonte que preferir */
+    background-color: var(--cinza-claro);
+}
 
-
-/* 
-   Seção de Cadastro
-   - Centraliza o conteúdo da seção usando flexbox.
-   - Define a largura e altura para ocupar toda a tela.
-   - Aplica um fundo cinza claro.
-*/
+/* Seção de Cadastro */
 .cadastro {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
     height: 100vh;
-    background: rgb(0,71,102);
-    background: linear-gradient(6deg, rgba(0,71,102,1) 12%, rgba(177,196,204,1) 100%);
+    padding: 20px; /* Adicionado padding para evitar que o conteúdo fique colado nas bordas */
 }
 
-/* 
-   Campo de Cadastro
-   - Centraliza o conteúdo do campo de cadastro.
-   - Aplica um fundo verde com padding.
-   - Define uma largura máxima de 900px para telas grandes e 100% para telas pequenas.
-*/
 /* Campo de Cadastro */
 .campo-cadastro {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: var(--branco);
-    padding: 50px;
-    border-radius: 8px;
+    background-color: #a8b4cc;
+    padding: 40px;
+    border-radius: 10px;
     max-width: 900px;
     width: 100%;
-    /* Adicionando box-shadow para criar um efeito de profundidade */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra leve */
-    transition: box-shadow 0.3s ease; /* Transição suave para efeitos de foco */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Adicionada transição para transformar */
 }
 
 .campo-cadastro:hover {
-    /* Sombra mais intensa ao passar o mouse */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px); /* Pequeno efeito de movimento ao passar o mouse */
 }
 
-/* 
-   Formulário de Cadastro
-   - Ajusta o formulário para ocupar toda a largura disponível.
-   - Alinha o texto à esquerda.
-*/
+/* Formulário de Cadastro */
 .form-cadastro {
     text-align: left;
     width: 100%;
 }
 
-/* 
-   Título do Cadastro com Logo
-   - Centraliza verticalmente a logo e o título.
-   - Aplica espaçamento entre a logo e o texto.
-*/
+/* Título do Cadastro com Logo */
 .titulo-cadastro {
     display: flex;
     align-items: center;
@@ -88,24 +59,18 @@
 }
 
 .titulo-cadastro img {
-    width: 90px;
-    height: 90px;
+    width: 80px; /* Dimensões ajustadas */
+    height: 80px;
     margin-right: 10px;
 }
 
 .titulo-cadastro h2 {
-    font-size: 24px;
-    margin-bottom: 0;
+    font-size: 28px; /* Aumentado para maior destaque */
+    color: var(--azul-escuro);
 }
 
-/* 
-   Estilos para Inputs e Select
-   - Alinha os campos em coluna.
-   - Define padding e largura total para inputs e selects.
-   - Aplica bordas arredondadas e ajusta a tipografia.
-*/
+/* Estilos para Inputs e Select */
 .input_nome,
-.input-descricao,
 .input_categoria {
     display: flex;
     flex-direction: column;
@@ -113,26 +78,28 @@
     width: 100%;
 }
 
-input, select{
-    background-color: rgb(243, 243, 243);
-    color: black;
+input, select {
+    background-color: #f5f5f5; /* Cor de fundo mais clara */
+    color: #333;
+    transition: border-color 0.3s ease; /* Transição suave para bordas */
 }
 
 .input_nome input,
-.input-descricao input,
 .input_categoria select {
     width: 100%;
-    padding: 15px;
-    border-radius: 4px;
+    padding: 12px;
+    border-radius: 5px;
     border: 1px solid var(--cinza-azulado);
     font-size: 16px;
 }
 
-/* 
-   Inputs de Estoque
-   - Define os inputs lado a lado com um espaçamento entre eles.
-   - Ajusta o tamanho e o estilo dos inputs de estoque mínimo e máximo.
-*/
+.input_nome input:focus,
+.input_categoria select:focus {
+    border-color: var(--azul-escuro); /* Mudança de cor na borda ao focar */
+    outline: none; /* Remove o contorno padrão */
+}
+
+/* Inputs de Estoque */
 .input_estoque {
     display: flex;
     justify-content: space-between;
@@ -142,45 +109,39 @@ input, select{
 
 .input_estoque input {
     width: 48%;
-    padding: 15px;
-    border-radius: 4px;
+    padding: 12px; /* Ajustado para consistência */
+    border-radius: 5px;
     border: 1px solid var(--cinza-azulado);
     font-size: 16px;
 }
 
-/* 
-   Estilos do Botão de Cadastro
-   - Centraliza o botão de cadastro.
-   - Aplica estilo de cursor, cores e um efeito de hover.
-   - Define a transição suave para o efeito de hover.
-*/
+/* Estilos do Botão de Cadastro */
 .btn-cadastro {
-
     justify-content: center;
-    align-items: flex-end;
-    width: 25%;
+    align-items: center;
+    width: 30%; /* Largura ajustada para um design mais equilibrado */
     padding: 15px;
     font-size: 16px;
     cursor: pointer;
     background-color: var(--azul-escuro);
     color: var(--branco);
     border-radius: 5px;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, transform 0.2s ease; /* Transição suave com transformação */
 }
 
 .btn-cadastro:hover {
     background-color: var(--azul-claro);
-    transform: scale(1.05);
+    transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
 }
 
-
-.container-btn{
+/* Container do Botão */
+.container-btn {
     display: flex;
     width: 100%;
     justify-content: flex-end;
 }
 
-
+/* Mensagens de Flash */
 .flash-messages {
     position: fixed;
     top: 35px;

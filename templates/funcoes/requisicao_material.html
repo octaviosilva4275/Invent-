@@ -8,19 +8,25 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
     <style>
-        body{
+        body {
             overflow: auto;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
         }
+
         h1,
-        h2 {
-            color: #2196F3;
+        h2,
+        h3 {
+            margin-bottom: 10px;
         }
 
         form {
             background-color: #fff;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
             margin-bottom: 30px;
         }
 
@@ -43,42 +49,65 @@
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        select:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #2196F3;
+            outline: none;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
         }
 
         button[type="submit"] {
-            background-color: #2196F3;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+            padding: 10px;
+            font-size: 16px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            background-color: var(--azul-escuro);
+            color: var(--branco);
+            border-radius: 5px;
+            transition: all 0.3s ease, transform 0.2s ease;
         }
 
         button[type="submit"]:hover {
             background-color: #1976D2;
+            transform: scale(1.05);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden; /* Para bordas arredondadas */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         th,
         td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
             text-align: left;
+            transition: background-color 0.3s;
         }
 
         th {
             background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9; /* Muda a cor ao passar o mouse */
         }
 
         #minhas-requisicoes-table {
             margin-top: 30px;
+            font-size: 14px;
         }
 
         .em-separacao {
@@ -143,7 +172,7 @@
             z-index: 10;
             outline: 2px solid #FFEB3B;
             outline-offset: -4px;
-            background-color: #ccc;
+            background-color: #f9f9f9;
         }
 
         #tutorial-overlay {
@@ -221,87 +250,76 @@
         }
 
         /* Classes para cada mensagem do tutorial */
-        .step-1 {
+        .step-1,
+        .step-2,
+        .step-3,
+        .step-4,
+        .step-5 {
             margin-left: 115px;
             background-color: #ddd;
-            margin-top: 140px;
             max-width: fit-content;
             padding: 5px;
             border-radius: 5px;
         }
 
+        .step-1 {
+            margin-top: 140px;
+        }
 
         .step-2 {
-
-            margin-left: 115px;
-            background-color: #ddd;
             margin-top: 235px;
-            max-width: fit-content;
-            padding: 5px;
-            border-radius: 5px;
-
         }
 
         .step-3 {
-            margin-left: 115px;
-            background-color: #ddd;
             margin-top: 375px;
-            max-width: fit-content;
-            padding: 5px;
-            border-radius: 5px;
-
         }
 
         .step-4 {
-            margin-left: 280px;
-            background-color: #ddd;
             margin-top: 395px;
-            max-width: fit-content;
-            padding: 5px;
-            border-radius: 5px;
         }
 
         .step-5 {
             margin-left: 45%;
-            background-color: #ddd;
             margin-top: 400px;
-            max-width: fit-content;
-            padding: 5px;
-            border-radius: 5px;
             align-items: center;
             display: flex;
             flex-direction: column;
         }
+
         @media (max-width: 768px) {
+            .step-1,
+            .step-2,
+            .step-3,
+            .step-4,
+            .step-5 {
+                margin-left: 30px;
+            }
+
             .step-1 {
-            margin-left: 30px;
-            margin-top: 225px;
-        }
+                margin-top: 225px;
+            }
 
+            .step-2 {
+                margin-top: 315px;
+            }
 
-        .step-2 {
+            .step-3 {
+                margin-top: 445px;
+            }
 
-            margin-left: 30px;
-            margin-top: 315px;
-        }
+            .step-4 {
+                margin-left: 200px;
+                margin-top: 420px;
+            }
 
-        .step-3 {
-            margin-left: 30px;
-            margin-top: 445px;
-        }
+            .step-5 {
+                margin-left: 20%;
+                margin-top: 850px;
+            }
 
-        .step-4 {
-            margin-left: 200px;
-            margin-top: 420px;
-        }
-
-        .step-5 {
-            margin-left: 20%;
-            margin-top: 850px;
-        }
-        #minhas-requisicoes-table{
-            font-size: 14px;
-        }
+            #minhas-requisicoes-table {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -333,8 +351,6 @@
         </div>
     </div>
 
-
-
     <form action="{{ url_for('requisicao_material') }}" method="POST">
         <h2>Requisição de Material</h2>
         <div class="input-group">
@@ -343,7 +359,7 @@
             </label>
             <select id="material" name="material_id" required>
                 {% for material in materiais %}
-                <option value="{{ material.id }}">{{ material.descricao }} (Estoque: {{ material.quantidade if material.quantidade is not none else 0 }})
+                <option value="{{ material.id }}">{{ material.descricao }} (Estoque: {{ material.quantidade if material.quantidade is not none else 0 }})</option>
                 {% endfor %}
             </select>
         </div>
@@ -379,9 +395,10 @@
             <tr>
                 <td>{{ requisicao.material }}</td>
                 <td>{{ requisicao.quantidade if requisicao.quantidade is not none else 0 }}</td>
-                <td
-                    class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponível para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% endif %}">
-                    {{ requisicao.status }}</td>
+                <td class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponivel para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% endif %}">
+                    {{ requisicao.status }}
+                </td>
+                
                 <td>{{ requisicao.data_atualizacao }}</td>
             </tr>
             {% endfor %}
@@ -442,10 +459,6 @@
                 showTutorialStep(currentStep);
             }
 
-
-            // Inicia o tutorial
-            showTutorialStep(currentStep);
-
             // Função para atualizar a tabela de requisições
             function atualizarTabela() {
                 $.ajax({
@@ -457,14 +470,20 @@
 
                         if (data.length > 0) {
                             data.forEach(function (requisicao) {
-                                let row = '<tr>' +
-                                    '<td>' + requisicao.material + '</td>' +
-                                    '<td>' + requisicao.quantidade + '</td>' +
-                                    '<td class="' + (requisicao.status === 'Solicitado' ? 'em-separacao' : requisicao.status === 'Disponível para retirada' ? 'pronto-retirar' : requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 'finalizado') + '">' + requisicao.status + '</td>' +
-                                    '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
-                                    '</tr>';
-                                tableBody.append(row);
-                            });
+                            let row = '<tr>' +
+                                '<td>' + requisicao.material + '</td>' +
+                                '<td>' + requisicao.quantidade + '</td>' +
+                                '<td class="' + 
+                                (requisicao.status === 'Solicitado' ? 'em-separacao' : 
+                                requisicao.status === 'Disponivel para retirada' ? 'pronto-retirar' : 
+                                requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 
+                                requisicao.status === 'Retirado' ? 'finalizado' : 
+                                'status-desconhecido') + '">' + requisicao.status + '</td>' +
+                                '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+
                         } else {
                             tableBody.append('<tr><td colspan="4">Você ainda não fez nenhuma requisição.</td></tr>');
                         }
@@ -485,8 +504,6 @@
                 return new Date(dataString).toLocaleDateString('pt-BR', options).replace(' ', ' de ');
             }
         });
-
-
     </script>
 </body>
 

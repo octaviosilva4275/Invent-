@@ -242,7 +242,7 @@ def primeiro_login():
         cursor.close()
         conexao.close()
 
-    return render_template('login/login.html')
+    return render_template('login/primeiro_login.html')
 
 
 
@@ -370,26 +370,41 @@ def admin():
 
     # Obter o nome do usuário logado
     cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
-    usuario = cursor.fetchone()
+    usuario_logado = cursor.fetchone()
 
     if request.method == 'POST':
-        user_id = request.form['user_id']
-        nome = request.form['nome']
-        email = request.form['email']
-        cargo = request.form['cargo']
-        senha = request.form['senha']
+        # Capturar os dados do formulário
+        user_id = request.form.get('user_id')
+        nome = request.form.get('nome')
+        email = request.form.get('email')
+        sn = request.form.get('sn', '')  # Atribui um valor padrão vazio se 'sn' não estiver presente
+        cargo = request.form.get('cargo')
+        senha = request.form.get('senha')
 
-        query_update = "UPDATE users SET nome = %s, email = %s, cargo = %s, senha = %s WHERE id = %s"
-        cursor.execute(query_update, (nome, email, cargo, senha, user_id))
+        # Verificar se o usuário tem permissão para mudar cargos (somente admins)
+        if session['user_cargo'] == 'admin':
+            query_update = "UPDATE users SET nome = %s, email = %s, sn = %s, cargo = %s, senha = %s WHERE id = %s"
+            cursor.execute(query_update, (nome, email, sn, cargo, senha, user_id))
+        else:
+            query_update = "UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s"
+            cursor.execute(query_update, (nome, email, senha, user_id))
+        
         conexao.commit()
         flash('Usuário atualizado com sucesso!', 'success')
 
+    # Buscar todos os usuários
     cursor.execute("SELECT * FROM users")
     usuarios = cursor.fetchall()
+
     cursor.close()
     conexao.close()
 
-    return render_template('admin/admin.html', usuarios=usuarios, usuario=usuario)
+    return render_template('admin/admin.html', usuarios=usuarios, usuario=usuario_logado)
+
+
+
+
+
 
 
 

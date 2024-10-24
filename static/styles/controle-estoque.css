@@ -1,83 +1,74 @@
-body{
-    background: rgb(0,71,102);
-    background: linear-gradient(6deg, rgba(0,71,102,1) 12%, rgba(177,196,204,1) 100%);
-}
-
-html{
-    height: 100%;
-
-}
-
 /* Estilo da Seção do Formulário */
 .form-section {
-    width: 80%;
+    width: 90%; /* Ajustado para um pouco mais de espaço nas laterais */
     max-width: 1000px;
-    background-color: var(--branco);
+    background-color: #a8b4cc;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: 20px; /* Ajustado para bordas mais suaves */
-    padding: 30px; /* Aumentado o padding para mais espaçamento interno */
-    margin: 1% auto; /* Adicionado espaçamento automático para centralizar verticalmente */   
-    height: 95vh; 
+    border-radius: 20px;
+    padding: 40px; /* Aumentado o padding para mais espaçamento interno */
+    margin: 5% auto; /* Adicionado espaçamento automático para centralizar verticalmente */   
+    max-height: 80vh; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra suave para dar profundidade */
 }
 
 /* Estilo do Formulário */
 form {
     width: 100%;
-    background-color: var(--branco); /* Adicionada cor de fundo branca para o formulário */
-
-    border-radius: 10px; /* Ajustado para bordas mais suaves */
-
+    background-color: transparent; /* Removida cor de fundo do formulário */
 }
 
 /* Estilo do Título Principal */
 .form-section h1 {
     margin: 15px 0;
     color: var(--preto);
-    font-size: 28px; /* Aumentado o tamanho da fonte para mais destaque */
+    font-size: 32px; /* Aumentado o tamanho da fonte para mais destaque */
     text-align: center; /* Centralizado o texto */
 }
 
 /* Estilo dos Subtítulos */
 .form-section h2 {
     color: var(--cinza);
-    font-size: 22px; /* Ajustado o tamanho da fonte para uma hierarquia clara */
+    font-size: 24px; /* Aumentado o tamanho da fonte para uma hierarquia clara */
     text-align: start; /* Centralizado o texto */
+    margin-top: 20px; /* Adicionado espaçamento superior */
 }
 
 /* Estilo dos Campos de Seleção */
 select {
     width: calc(100% - 22px);
-    padding: 12px; /* Aumentado o padding para mais conforto */
-    margin-bottom: 15px;
+    padding: 14px; /* Aumentado o padding para mais conforto */
+    width: 100%;
+    margin-top: 10px;
     border-radius: 5px;
     border: 1px solid var(--cinza-azulado);
     font-size: 16px; /* Ajustado o tamanho da fonte para consistência */
+    background-color: #f5f5f5; /* Fundo claro para melhorar a visibilidade */
 }
 
 /* Estilo dos Campos de Entrada de Número */
 input {
-    width: calc(100% - 22px); /* Ajustado para alinhar com o campo select */
-    padding: 12px; /* Aumentado o padding para mais conforto */
+    width: 100%; /* Ajustado para alinhar com o campo select */
+    padding: 14px; /* Aumentado o padding para mais conforto */
     margin-bottom: 15px;
     border-radius: 5px;
     border: 1px solid var(--cinza-azulado);
     font-size: 16px; /* Ajustado o tamanho da fonte para consistência */
+    background-color: #f5f5f5; /* Fundo claro para melhorar a visibilidade */
 }
 
 /* Estilo dos Botões */
 button {
-    padding: 12px 20px; /* Aumentado o padding para mais conforto */
-    margin-top: 10px; /* Ajustado o espaçamento superior */
-    border-radius: 5px;
-    border: 2px solid rgba(190, 190, 190, 0.333);
-    background-color: var(--azul-claro);
-    color: var(--branco);
+    width: 15%;
+    padding: 15px;
+    font-size: 16px;
     cursor: pointer;
-    font-size: 16px; /* Ajustado o tamanho da fonte */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Adicionada uma transição suave */
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+    border-radius: 5px;
+    transition: all 0.3s ease, transform 0.2s ease;
 }
 
 /* Estilo do Botão ao Passar o Mouse */
@@ -86,37 +77,39 @@ button:hover {
     transform: scale(1.05); /* Adicionado um leve efeito de aumento */
 }
 
-#quantidade, #material{
-    background-color: rgb(243, 243, 243);
-    color: black;
-    width: 100%;
-}
-
-
-
-
-.container-btn{
+/* Container para Botões */
+.container-btn {
     display: flex;
     width: 100%;
     justify-content: flex-end;
-    margin-right: -10px;
 }
 
-.btn-cadastro {
+/* Flash Messages */
+.flash-messages {
+    position: fixed;
+    top: 35px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 90%; /* Ajuste a largura conforme necessário */
+    max-width: 400px; /* Limite a largura máxima */
+    text-align: center; /* Centraliza o texto */
+    font-size: 18px;
+}
 
-    justify-content: center;
-    align-items: flex-end;
-    width: 25%;
+/* Estilo das Mensagens */
+.flash {
     padding: 15px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: var(--azul-escuro);
-    color: var(--branco);
+    margin: 10px 0;
     border-radius: 5px;
-    transition: all 0.3s ease;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra opcional */
 }
 
-.btn-cadastro:hover {
-    background-color: var(--azul-claro);
-    transform: scale(1.05);
+.flash.error {
+    background-color: #e74c3c; /* Vermelho */
+}
+
+.flash.success {
+    background-color: #2ecc71; /* Verde */
 }
