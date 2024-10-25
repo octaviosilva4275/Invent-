@@ -242,7 +242,7 @@ def primeiro_login():
         cursor.close()
         conexao.close()
 
-    return render_template('login/primeiro_login.html')
+    return render_template('login/cadastro.html')
 
 
 
