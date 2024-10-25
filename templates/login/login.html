@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="/icone.js" defer></script> <!-- Adicione defer para garantir que o JS seja carregado após o HTML -->
+    <link rel="icon" href="{{ url_for('static', filename='img/Inventlogo.png') }}">
+
+</head>
+<body>
+    <div class="container-geral">
+    <div class="darkmode">
+        <img src="lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="sol.png" alt="Modo Claro" class="none" id="sol-icon">
+        <div class="container-degrade">
+        </div>
+    </div>
+
+    
+    <div class="container1">
+        <div class="container2"></div>
+    
+
+    <div class="container-form">
+        <form class="form-login">
+            <div class="titulo">
+                <img src="/Inventlogo.png" alt="">
+                <h2>Login</h2>
+            </div>
+
+            <div class="inputBox">
+                <input class="input-login" type="text" required>
+                <span>Código SN | Email</span>
+                <i></i>
+            </div>
+            <div class="inputBox">
+                <input class="input-login" type="password" required>
+                <span>Senha</span>
+                <i></i>
+            </div>
+            <input class="in" type="submit" value="Entrar">
+            <div class="links">
+                <a href="#">Esqueceu a senha?</a>
+                <a href="#">Primeiro login?</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</body>
+</html>
+
