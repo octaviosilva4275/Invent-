@@ -46,13 +46,15 @@ body{
 }
 
 .sidebar .sidebar-header {
-  display: flex;
   align-items: center;
 }
 
 .sidebar .sidebar-header img {
-  width: 42px;
+  width: 58px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  margin: auto;
 }
 
 .sidebar .sidebar-header h2 {
@@ -60,7 +62,7 @@ body{
   font-size: 1.25rem;
   font-weight: 600;
   white-space: nowrap;
-  margin-left: 23px;
+  margin-left: 80px;
 }
 
 .sidebar-links h4 {
@@ -113,7 +115,7 @@ body{
 .sidebar-links li a {
   display: flex;
   align-items: center;
-  gap: 0 20px;
+  gap: 0 13px;
   color: #fff;
   font-weight: 500;
   white-space: nowrap;
@@ -268,7 +270,7 @@ body{
   <aside class="sidebar">
     <div class="sidebar-header">
       <img src="{{ url_for('static', filename='img/logoinvent+.png') }}" alt="logo" />
-      <h2>Inventory</h2>
+      <h2>Invent +</h2>
     </div>
   </div>
   <ul class="sidebar-links">
@@ -280,6 +282,7 @@ body{
     {% endif %}
 
   {% if session['user_cargo'] == 'almoxarifado'  or session['user_cargo'] == 'admin' %}
+  
   <h4>
     <div class="menu-separator"></div>
     <span>Menu Principal</span>
@@ -288,20 +291,22 @@ body{
 
   <li>
     <a href="{{ url_for('dashboard') }}">
-        <span class="material-symbols-outlined"> dashboard </span>Inicio</a>
+        <span class="material-symbols-outlined"> dashboard </span>Início</a>
   </li>
   <li>
-      <a href="{{ url_for('cadastro_material') }}"><span class="material-symbols-outlined"> overview </span>Cadastro</a>
+      <a href="{{ url_for('cadastro_material') }}"><span class="material-symbols-outlined"> overview </span>Cadastro material</a>
   </li>
   <li>
     <a href="{{ url_for('controle_estoque') }}"><span class="material-symbols-outlined"> groups </span>Movimentação</a>
 </li>
   <li>
-      <a href="{{ url_for('relatorios') }}"><span class="material-symbols-outlined"> monitoring </span>Relatorios</a>
+      <a href="{{ url_for('relatorios') }}"><span class="material-symbols-outlined"> monitoring </span>Relatórios</a>
   </li>
 
 
   {% endif %}
+
+ 
   <h4>
       <span>Geral</span>
       <div class="menu-separator"></div>
@@ -318,12 +323,13 @@ body{
   </li>
   {% endif %}
   
+ 
   <h4>
     <span>Conta</span>
     <div class="menu-separator"></div>
   </h4>
   <li>
-    <a href="{{ url_for('editar_perfil')}}"><span class="material-symbols-outlined"> account_circle </span>Editar Perfil</a>
+    <a href="{{ url_for('editar_perfil')}}"><span class="material-symbols-outlined"> account_circle </span>Perfil</a>
   </li>
 
   {% if session.get('logged_in') %}
