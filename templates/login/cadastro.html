@@ -1,51 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"> 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-login.css') }}">
-    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
-    <link rel="icon" href="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Cadastro</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/cadastro.css') }}"> <!-- CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-cadastroinicial.css') }}">
+    <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script> <!-- Font Awesome -->
+    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script> <!-- JavaScript carregado após o HTML -->
+    <link rel="icon" href="{{ url_for('static', filename='img/Inventlogo.png') }}">
 </head>
-<body>
-    {% include 'componentes.html' %}
-    <div class="container-geral">
-        <div class="darkmode">
-            <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
-            <img src="{{ url_for('static', filename='img/login-img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
-            <div class="container-degrade"></div>
+<body> 
+<main> <!-- Conteúdo principal -->
+    <div class="container-geral"> <!-- Contêiner geral -->
+        <div class="darkmode"> <!-- Alternância entre modos claro e escuro -->
+            <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon"> 
+            <img src="{{ url_for('static', filename='img/login-img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon"> 
+            <div class="container-degrade"></div> <!-- Contêiner para gradiente -->
         </div>
-
-        <div class="container1">
-            <div class="container2"></div>
-            <div class="container-form">
-                <form class="form-login" method="POST" action="{{ url_for('login') }}">
-                    <div class="titulo">
+        
+        <section class="cadastro"> <!-- Seção do formulário de cadastro -->
+            <div class="container-cadastro"> <!-- Contêiner do formulário -->
+                <form class="form-cadastro" action="{{ url_for('cadastro') }}" method="POST"> <!-- Aponte para a rota de cadastro -->
+                    <div class="titulo-cadastro">
                         <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt="">
-                        <h2>Login</h2>
+                        <h2>Cadastro</h2>
+                    </div>
+                    <div class="input-cadastro">
+                        <input type="text" id="sn" name="sn" required>
+                        <span>Código SN</span>
+                    </div>
+                    <div class="input-cadastro">
+                        <input type="email" id="email" name="email" required>
+                        <span>Email</span>
+                    </div>
+                    <div class="input-cadastro">
+                        <input type="password" id="senha" name="senha" required>
+                        <span>Crie uma senha</span>
                     </div>
 
-                    <div class="inputBox">
-                        <input class="input-login" type="text" name="entrada" required>
-                        <span>Código SN | Email</span>
-                        <i></i>
+                
+
+                    <div class="input-cadastro"> <!-- Seleção de áreas -->
+                        <select id="areas-senai" name="areas-senai" required> <!-- Menu suspenso -->
+                            <option value="">Selecione uma área</option> <!-- Opção padrão -->
+                            <option value="eletroeletronica">Eletroeletrônica</option> <!-- Opções -->
+                            <option value="metalmecanica">Metalmecânica</option>
+                            <option value="metalurgia">Metalurgia</option>
+                            <option value="automobilistica">Automobilística</option>
+                            <option value="madeira-mobiliario">Madeira e Mobiliário</option>
+                            <option value="gestao">Gestão</option>
+                            <option value="almoxarifado">Almoxarifado</option>
+                            <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
+                            <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
+                            <option value="alimentos-bebidas">Alimentos e Bebidas</option>
+                        </select>
                     </div>
-                    <div class="inputBox">
-                        <input class="input-login" type="password" name="senha" required>
-                        <span>Senha</span>
-                        <i></i>
-                    </div>
-                    <input class="in" type="submit" value="Entrar">
+
+                    <input type="submit" value="Cadastrar"> <!-- Botão de envio -->
                     <div class="links">
-                        <a href="{{ url_for('esquecer_senha') }}">Esqueceu a senha?</a>
-                        <a href="{{ url_for('cadastro') }}">Primeiro login?</a>
+                        <a href="{{ url_for('login') }}">Possui uma conta?</a>
                     </div>
                 </form>
+
             </div>
-        </div>
+        </section>
     </div>
+</main>
 </body>
 </html>
