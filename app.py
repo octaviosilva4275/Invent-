@@ -225,7 +225,7 @@ def cadastro():
         sn = request.form['sn']
         email = request.form['email']
         area = request.form['areas-senai']
-        senha = request.form['password']
+        senha = request.form['senha']
 
         conexao = conectar_banco_dados()
         cursor = conexao.cursor(dictionary=True)
@@ -450,6 +450,10 @@ def excluir_usuario():
     cursor = conexao.cursor()
 
     try:
+        # Remover referências na tabela lembretes
+        query_delete_lembretes = "DELETE FROM lembretes WHERE destinatario = %s"
+        cursor.execute(query_delete_lembretes, (user_id,))
+
         # Remover referências na tabela requisicoes
         query_delete_requisicoes = "DELETE FROM requisicoes WHERE usuario_id = %s"
         cursor.execute(query_delete_requisicoes, (user_id,))
@@ -457,7 +461,7 @@ def excluir_usuario():
         # Remover referências na tabela estoque
         query_delete_estoque = "DELETE FROM estoque WHERE usuario_id = %s"
         cursor.execute(query_delete_estoque, (user_id,))
-        
+
         # Executar exclusão do usuário
         query_delete_user = "DELETE FROM users WHERE id = %s"
         cursor.execute(query_delete_user, (user_id,))
@@ -465,7 +469,7 @@ def excluir_usuario():
 
         flash('Usuário excluído com sucesso!', 'success')
     except mysql.connector.errors.IntegrityError as e:
-        print(f"Erro de integridade: {e}")  # Log do erro
+
         flash('Não é possível excluir o usuário. Existem registros associados.', 'error')
         conexao.rollback()
     except Exception as e:

@@ -22,26 +22,25 @@
         
         <section class="cadastro"> <!-- Seção do formulário de cadastro -->
             <div class="container-cadastro"> <!-- Contêiner do formulário -->
-                <form class="form-cadastro" action="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" method="POST"> <!-- Formulário -->
-                    <div class="titulo-cadastro"> <!-- Título do formulário -->
-                        <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt=""> <!-- Logotipo -->
-                        <h2>Cadastro</h2> <!-- Título -->
+                <form class="form-cadastro" action="{{ url_for('cadastro') }}" method="POST"> <!-- Aponte para a rota de cadastro -->
+                    <div class="titulo-cadastro">
+                        <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt="">
+                        <h2>Cadastro</h2>
+                    </div>
+                    <div class="input-cadastro">
+                        <input type="text" id="sn" name="sn" required>
+                        <span>Código SN</span>
+                    </div>
+                    <div class="input-cadastro">
+                        <input type="email" id="email" name="email" required>
+                        <span>Email</span>
+                    </div>
+                    <div class="input-cadastro">
+                        <input type="password" id="senha" name="senha" required>
+                        <span>Crie uma senha</span>
                     </div>
 
-                    <div class="input-cadastro"> <!-- Campo de email -->
-                        <input type="email" id="email" name="email" required> <!-- Entrada para email -->
-                        <span>Email</span> <!-- Rótulo -->
-                    </div>
-
-                    <div class="input-cadastro"> <!-- Campo de senha -->
-                        <input type="password" id="senha" name="senha" required> <!-- Entrada para senha -->
-                        <span>Crie uma senha</span> <!-- Rótulo -->
-                    </div>
-
-                    <div class="input-cadastro"> <!-- Campo de código SN -->
-                        <input type="text" id="sn" name="sn" required> <!-- Entrada para código SN -->
-                        <span>Código SN</span> <!-- Rótulo -->
-                    </div>
+                
 
                     <div class="input-cadastro"> <!-- Seleção de áreas -->
                         <select id="areas-senai" name="areas-senai" required> <!-- Menu suspenso -->
