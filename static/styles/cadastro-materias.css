@@ -35,13 +35,61 @@ body {
     height: 100%;
 }
 
-/* 
-   Seção de Cadastro
-   - Centraliza o conteúdo da seção usando flexbox.
-   - Define a largura e altura para ocupar toda a tela.
-   - Aplica um fundo cinza claro.
-*/
-.cadastro {
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark  : #465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+
+
+body.light-mode {
+    background-color: var(--cinza);
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+.dark-mode .campo-material{
+    background-color: var(--fundodark);
+}
+.material {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,123 +98,94 @@ body {
     background-color: var(--branco);
 }
 
-/* 
-   Campo de Cadastro
-   - Centraliza o conteúdo do campo de cadastro.
-   - Aplica um fundo verde com padding.
-   - Define uma largura máxima de 900px para telas grandes e 100% para telas pequenas.
-*/
-.campo-cadastro {
+.campo-material {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--cinza-azulado);
+    background-color:rgba(70, 94, 140, 0.51);
     padding: 50px;
-    border-radius: 8px;
+    border-radius: 30px;
     max-width: 900px;
     width: 100%;
+    height: 80%;
 }
 
-/* 
-   Formulário de Cadastro
-   - Ajusta o formulário para ocupar toda a largura disponível.
-   - Alinha o texto à esquerda.
-*/
-.form-cadastro {
+.form-material {
     text-align: left;
     width: 100%;
 }
 
-/* 
-   Título do Cadastro com Logo
-   - Centraliza verticalmente a logo e o título.
-   - Aplica espaçamento entre a logo e o texto.
-*/
-.titulo-cadastro {
+.titulo-material{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
+    padding: 20px;
+    margin-top: -50px;
+    margin-bottom: 60px;
+    font-size: 3.5rem;
 }
 
-.titulo-cadastro img {
-    width: 90px;
-    height: 90px;
-    margin-right: 10px;
+.input-material{
+    font-weight: bolder;
+    color: black;
 }
 
-.titulo-cadastro h2 {
-    font-size: 2.4rem;
-    margin-bottom: 0;
+/* Define o estilo para os campos de entrada de texto */
+.input-material[type="text"] {
+width: 100%;
+padding: 15px;
+margin: 10px 0;
+border: none;
+border-radius: 10px;
+background-color: #f4f4f4;
+font-size: 14px;
 }
 
-/* 
-   Estilos para Inputs e Select
-   - Alinha os campos em coluna.
-   - Define padding e largura total para inputs e selects.
-   - Aplica bordas arredondadas e ajusta a tipografia.
-*/
-.input_nome,
-.input-descricao,
-.input_categoria {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    width: 100%;
-}
-
-.input_nome input,
-.input-descricao input,
-.input_categoria select {
+.select-categoria {
     width: 100%;
     padding: 15px;
-    border-radius: 4px;
-    border: 1px solid var(--cinza-azulado);
-    font-size: 1.6rem;
+    margin-top: 10px;
+    border-radius: 9px;
+    box-sizing: border-box; /* garante que padding não afete a largura */
 }
 
-/* 
-   Inputs de Estoque
-   - Define os inputs lado a lado com um espaçamento entre eles.
-   - Ajusta o tamanho e o estilo dos inputs de estoque mínimo e máximo.
-*/
-.input_estoque {
+.input-material[type="number"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    font-size: 14px;
+}
+
+/* Define a linha contendo os campos de estoque mínimo e máximo */
+.estoques {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 30px;
-    gap: 20px;
 }
 
-.input_estoque input {
+/* Ajusta a largura dos campos de número na mesma linha */
+.input-material[type="number"] {
     width: 48%;
-    padding: 15px;
-    border-radius: 4px;
-    border: 1px solid var(--cinza-azulado);
-    font-size: 1.6rem;
 }
 
-/* 
-   Estilos do Botão de Cadastro
-   - Centraliza o botão de cadastro.
-   - Aplica estilo de cursor, cores e um efeito de hover.
-   - Define a transição suave para o efeito de hover.
-*/
-.btn-cadastro {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Estiliza o botão de submissão */
+.btn-material {
     width: 100%;
     padding: 15px;
-    font-size: 1.6rem;
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 16px;
     cursor: pointer;
-    background-color: var(--azul-escuro);
-    color: var(--branco);
-    border-radius: 5px;
+    margin-top: 90px;
+    background-color: rgba(25, 35, 64, 1);
     transition: all 0.3s ease;
 }
 
-.btn-cadastro:hover {
-    background-color: var(--azul-claro);
+/* Define o comportamento do botão quando o cursor passa sobre ele */
+.btn-material:hover {
+    background-color: rgba(25, 35, 64, 0.8); /* Cor mais clara ou outra cor quando o mouse estiver sobre o botão */
     transform: scale(1.05);
 }
-
