@@ -120,8 +120,8 @@ def solicitante():
 def login():
     conexao = conectar_banco_dados()
     if request.method == 'POST':
-        entrada = request.form['sn']
-        senha = request.form['password']
+        entrada = request.form['entrada']
+        senha = request.form['senha']
 
         cursor = conexao.cursor(dictionary=True)
         cursor.execute("SELECT * FROM users WHERE (sn = %s OR email = %s) AND senha = %s", (entrada, entrada, senha))
