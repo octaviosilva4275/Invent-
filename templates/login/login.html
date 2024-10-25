@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-login.css') }}">
     <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
-    <link rel="icon" href="{{ url_for('static', filename='img/login img/Inventlogo.png') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}">
 </head>
 <body>
     <div class="container-geral">
         <div class="darkmode">
-            <img src="{{ url_for('static', filename='img/login img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
-            <img src="{{ url_for('static', filename='img/login img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
+            <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
+            <img src="{{ url_for('static', filename='img/login-img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
             <div class="container-degrade"></div>
         </div>
 
@@ -23,7 +23,7 @@
             <div class="container-form">
                 <form class="form-login" method="POST" action="{{ url_for('login') }}">
                     <div class="titulo">
-                        <img src="{{ url_for('static', filename='img/login img/Inventlogo.png') }}" alt="">
+                        <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt="">
                         <h2>Login</h2>
                     </div>
 
