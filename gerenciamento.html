@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Almoxarifado</title>
+    <link rel="stylesheet" href="/static/styles/gerenciamento.css">
+    <script src="/static/gerenciamento.js"></script>
+</head>
+<body>
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
+    <!-- Primeira sessão: Solicitação para Almoxarife -->
+    <div class="gerenciamento">
+        <h2>Solicitação para Almoxarife</h2>
+        <table class="tabela-solicitacao">
+            <thead>
+                <tr>
+                    <th>Nome do Solicitante</th>
+                    <th>Código SN</th>
+                    <th>Email</th>
+                    <th>Id</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="btn-gerenciar">
+                        <button class="aprovado">APROVAR</button>
+                        <button class="excluir">EXCLUIR</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Segunda sessão: Gerenciar Usuários -->
+    <div class="gerenciamento">
+        <h2>Gerenciar Usuários</h2>
+        <select class="select-usuario">
+            <option>Usuario desejado</option>
+        </select>
+        <table class="tabela-solicitacao">
+            <thead>
+                <tr>
+                    <th>Nome do Solicitante</th>
+                    <th>Código SN</th>
+                    <th>Email</th>
+                    <th>Id</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <div class="btn-gerenciar">
+                        <button class="excluir">EXCLUIR</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
