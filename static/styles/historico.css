@@ -1,0 +1,217 @@
+/* 
+   Normalização do Navegador
+   - Remove margens e paddings padrão de todos os elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Remove o estilo de lista e a sublinha de links.
+   - Define a fonte padrão 'Amatic SC'.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+    font-family: 'Amatic SC', sans-serif;
+}
+
+/* 
+   Normalização do HTML e body
+   - Define a largura e altura como 100% da viewport.
+   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
+   - Remove o overflow horizontal.
+*/
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 62.5%;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark  :#465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+
+main{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+}
+
+body.light-mode {
+    background-color: var(--cinza);
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    left: 10px;  /* Distância do canto esquerdo */
+    top: 10px;   /* Distância do topo, ajuste conforme necessário */
+}
+
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+.dark-mode .container-historico {
+    background-color: var(--fundodark) ;
+}
+.container-caixas {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 60%;
+    margin-bottom: 10%;
+    margin-top: 100px;
+    gap: 50rem;
+}
+
+.caixa {
+    width: 150px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    position: relative;
+}
+
+.estoque-minimo {
+    background-color: #c70000;
+    width: 250px;
+    font-size: 20px;
+}
+
+.estoque-minimo::after {
+    content: "!";
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 24px;
+}
+
+.saidas {
+    background-color: #28a745;
+    width: 250px;
+    font-size: 20px;
+}
+
+.saidas::after {
+    content: "✔";
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.caixa span {
+    font-size: 2.5rem;
+    margin-top: 10px;
+    margin-right: 180px;
+}
+
+.container-historico {
+    background-color: #16203a; 
+    border-radius: 20px;
+    width: 60%;
+    height: 50vh;
+    padding: 30px;
+    color: white;
+    margin-top: -10px;
+}
+
+.header-historico {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.header-historico::after {
+    position: absolute;
+    right: 15px;
+    top: 0;
+    background-color: #394970;
+    border-radius: 50%;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.painel-solicitante {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+.painel-solicitante div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.painel-solicitante div span {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.circle {
+    background-color: white;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    margin-bottom: 10px;
+}
+
+.date {
+    color: #8c98a9;
+}
+
+.divider {
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    height: 50px;
+}
