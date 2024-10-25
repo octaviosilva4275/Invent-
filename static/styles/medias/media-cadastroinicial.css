@@ -1,0 +1,196 @@
+/* Responsividade - Mobile */
+
+
+@media (max-width: 820px) {
+    .container-geral {
+        width: 100vw;
+        height: 100vh;
+        background-color: var(--cinza);
+        background-image: url(imagemfundo.png);
+        background-size: 90%;
+        background-position: -156px calc(79% + -34px);
+        background-repeat: no-repeat;
+        position: relative;
+        overflow: hidden; }
+}
+
+
+@media (max-width: 768px) {
+    .container-geral {
+        background-image: url(gifhomem.gif);
+        background-size: 125%;
+        height: 100vh;
+        width: 100vw;
+        background-position: -70px calc(133% + -40px);
+    }
+    .container-cadastro .form-cadastro .links {
+
+        position: absolute;
+        top: 540px;
+    }
+    .container-cadastro .form-cadastro {
+        background: none;
+        position: relative;
+        margin: -112px 0 10px auto;
+    }
+
+    .dark-mode .container-cadastro {
+        background-color: transparent;
+    }
+
+    .dark-mode .container-cadastro .form-cadastro {
+        background-color: transparent;
+    }
+
+    .container-cadastro::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 500px; 
+        height: 550px; 
+        background: none;
+        z-index: 1;
+        transform-origin: bottom right;
+        animation: animate 6s linear infinite;
+    }
+
+    .container-cadastro {
+        background: none;
+        box-shadow: none;
+    }
+
+    .titulo-cadastro img {
+        display: block;
+        margin: 0 auto;
+        width: 70px;
+        height: auto;
+        transform: scale(1.2) translateY(-5px);
+    }
+}
+
+
+@media (max-width: 575px) {
+    .container-cadastro .form-cadastro .links {
+
+        position: absolute;
+        top: 540px;
+    }
+    .container-geral {
+        background-image: url(gifhomem.gif);
+        background-size: 100%;
+        height: 100vh;
+        width: 100vw;
+        background-position: 0px calc(119% + -40px);
+    }
+}
+
+
+@media (max-width: 480px) {
+    .container-geral {
+        background-size: 150%; /* Tamanho ajustado */
+        background-position: -110px calc(122% + -28px);
+    }
+    .container-cadastro .form-cadastro .links {
+
+        position: absolute;
+        top: 540px;
+    }
+}
+
+@media (max-width: 430px) {
+    .container-cadastro .form-cadastro .links {
+
+        position: absolute;
+        top: 540px;
+    }
+}
+
+@media (max-width: 414px) {
+    .container-cadastro .form-cadastro .links {
+
+        position: absolute;
+        top: 550px;
+    }
+}
+
+
+
+@media (max-width: 390px) {
+    .container-geral {
+        background-size: 150%;
+        background-position: -110px calc(138% + -95px);
+    }
+
+    form {
+        width: 90%;
+    }
+
+    .titulo-cadastro img {
+        width: 60px;
+        transform: scale(1.2) translateY(-5px);
+    }
+    .container-cadastro .form-cadastro {
+        background: none;
+        position: relative;
+        margin: -60px 0 10px 20px;
+    }
+}
+
+@media (max-width: 375px) {
+    .container-geral {
+        background-size: 150%;
+        background-position: -110px calc(134% + -28px);
+    }
+
+    .titulo-cadastro img {
+        width: 65px;
+        transform: scale(1.4) translateY(-8px);
+    }
+
+    .container-cadastro .form-cadastro .links a {
+        margin-bottom: 65px;
+    }
+
+    .container-cadastro .form-cadastro {
+        background: none;
+        position: relative;
+        margin: -110px 0px 10px 25px;
+    }
+}
+
+@media (max-width: 361px) {
+    .container-geral {
+        background-size: 150%;
+        background-position: -85px calc(122% + -28px);
+    }
+
+    .container-cadastro .form-cadastro {
+        background: none;
+        position: relative;
+        margin: -110px 0px 10px 25px;
+    }
+    .container-cadastro .form-cadastro .links {
+
+        position: absolute;
+        top: 570px;
+    }
+}
+
+@media (max-width: 320px) {
+    .container-geral {
+        background-size: 150%;
+        background-position: -85px calc(116% + -28px);
+    }
+
+    .container-cadastro .form-cadastro {
+        background: none;
+        position: relative;
+        margin: -110px 0px 10px 25px;
+    }
+
+    .titulo-cadastro img {
+        width: 60px;
+        transform: scale(1.2) translateY(-5px);
+    }
+}
