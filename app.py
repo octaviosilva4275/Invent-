@@ -1030,9 +1030,12 @@ def estoque_minimo():
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
     
+    # Inicializar usuario
+    usuario = None
+
     try:
         # Consulta para obter materiais com estoque mínimo atingido
-        cursor.execute("""
+        cursor.execute(""" 
             SELECT m.id, m.descricao, m.estoque_minimo, 
                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
                             SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
@@ -1042,7 +1045,13 @@ def estoque_minimo():
             HAVING quantidade_atual <= m.estoque_minimo;
         """)
         materiais_abaixo_minimo = cursor.fetchall()
-    
+
+        # Fetch user information
+        usuario_id = session.get('user_id')
+        if usuario_id:
+            cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
+            usuario = cursor.fetchone()
+
     except mysql.connector.Error as err:
         print(f"Erro ao buscar dados de estoque mínimo: {err}")
         materiais_abaixo_minimo = []
@@ -1051,7 +1060,8 @@ def estoque_minimo():
         cursor.close()
         conexao.close()
     
-    return render_template('funcoes/estoque_minimo.html', materiais=materiais_abaixo_minimo)
+    return render_template('funcoes/estoque_minimo.html', materiais=materiais_abaixo_minimo, usuario=usuario)
+
 
 
 @app.route('/historico_requisicoes')
