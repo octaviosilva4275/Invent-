@@ -114,6 +114,8 @@ def solicitante():
 
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
 
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     conexao = conectar_banco_dados()
@@ -251,60 +253,72 @@ def primeiro_login():
 # ---------------------------------------------------- TELA INICIAL ----------------------------------------------------
 
 
+@app.route('/autenticacao')
+def verificar_autenticacao():
+    if 'user_id' in session:
+        return jsonify({'autenticado': True})
+    else:
+        return jsonify({'autenticado': False})
+
 @app.route('/dashboard')
 def dashboard():
+
+    if 'user_id' in session:
+        user_id = session['user_id']
+
     if 'user_id' not in session:
         flash('Você precisa estar logado para acessar essa página.', 'error')
         return redirect(url_for('login'))
 
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
+    if 'user_id' in session:
+        user_id = session['user_id']
+        try:
+            # Obter detalhes dos produtos abaixo do estoque mínimo
+            cursor.execute("""
+                SELECT m.id, m.descricao, m.estoque_minimo, 
+                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
+                                SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
+                FROM materials m
+                LEFT JOIN estoque e ON m.id = e.material_id
+                GROUP BY m.id 
+                HAVING quantidade_atual <= m.estoque_minimo
+            """)
+            produtos_estoque_minimo = cursor.fetchall()
+            estoque_minimo = len(produtos_estoque_minimo)
 
-    try:
-        # Obter detalhes dos produtos abaixo do estoque mínimo
-        cursor.execute("""
-            SELECT m.id, m.descricao, m.estoque_minimo, 
-                   COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
-                            SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
-            FROM materials m
-            LEFT JOIN estoque e ON m.id = e.material_id
-            GROUP BY m.id 
-            HAVING quantidade_atual <= m.estoque_minimo
-        """)
-        produtos_estoque_minimo = cursor.fetchall()
-        estoque_minimo = len(produtos_estoque_minimo)
+            # Atualizar consulta para incluir data_atualizacao
+            cursor.execute("""
+                SELECT r.id, r.quantidade, r.status, m.descricao AS material, u.nome AS usuario, r.data_atualizacao
+                FROM requisicoes r
+                JOIN materials m ON r.material_id = m.id
+                JOIN users u ON r.usuario_id = u.id
+                WHERE DATE(r.data_requisicao) = CURDATE()
+            """)
+            historico_hoje = cursor.fetchall()
 
-        # Atualizar consulta para incluir data_atualizacao
-        cursor.execute("""
-            SELECT r.id, r.quantidade, r.status, m.descricao AS material, u.nome AS usuario, r.data_atualizacao
-            FROM requisicoes r
-            JOIN materials m ON r.material_id = m.id
-            JOIN users u ON r.usuario_id = u.id
-            WHERE DATE(r.data_requisicao) = CURDATE()
-        """)
-        historico_hoje = cursor.fetchall()
+            # Obter nome do usuário logado
+            cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
+            usuario = cursor.fetchone()
 
-        # Obter nome do usuário logado
-        cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
-        usuario = cursor.fetchone()
+        except mysql.connector.Error as err:
+            print(f"Erro: {err}")
+            estoque_minimo = 0
+            produtos_estoque_minimo = []
+            historico_hoje = []
+            usuario = None
 
-    except mysql.connector.Error as err:
-        print(f"Erro: {err}")
-        estoque_minimo = 0
-        produtos_estoque_minimo = []
-        historico_hoje = []
-        usuario = None
+        finally:
+            cursor.close()
+            conexao.close()
 
-    finally:
-        cursor.close()
-        conexao.close()
-
-    return render_template('index.html', 
-                           estoque_minimo=estoque_minimo,
-                           produtos_estoque_minimo=produtos_estoque_minimo,
-                           historico_hoje=historico_hoje,
-                           usuario=usuario,
-                           )  # Passando o usuário para o template
+        return render_template('index.html', 
+                            estoque_minimo=estoque_minimo,
+                            produtos_estoque_minimo=produtos_estoque_minimo,
+                            historico_hoje=historico_hoje,
+                            usuario=usuario,
+                            )  # Passando o usuário para o template
 
 
 
@@ -328,26 +342,27 @@ def cadastro_material():
     if 'user_id' in session:
         cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
         usuario = cursor.fetchone()
+    if 'user_id' in session:
+        user_id = session['user_id']
+        if request.method == 'POST':
+            descricao = request.form['descricao']
+            categoria = request.form['categoria']
 
-    if request.method == 'POST':
-        descricao = request.form['descricao']
-        categoria = request.form['categoria']
+            estoque_minimo = int(request.form['estoque_minimo'] or 0)
+            estoque_maximo = int(request.form['estoque_maximo'] or 0)
 
-        estoque_minimo = int(request.form['estoque_minimo'] or 0)
-        estoque_maximo = int(request.form['estoque_maximo'] or 0)
+            try:
+                query_insert = ("INSERT INTO materials (descricao, categoria, estoque_minimo, estoque_maximo) "
+                                "VALUES (%s, %s, %s, %s)")
+                cursor.execute(query_insert, (descricao, categoria, estoque_minimo, estoque_maximo))
+                conexao.commit()
 
-        try:
-            query_insert = ("INSERT INTO materials (descricao, categoria, estoque_minimo, estoque_maximo) "
-                            "VALUES (%s, %s, %s, %s)")
-            cursor.execute(query_insert, (descricao, categoria, estoque_minimo, estoque_maximo))
-            conexao.commit()
+                flash('Material cadastrado com sucesso!', 'success')
+                return redirect(url_for('cadastro_material'))
 
-            flash('Material cadastrado com sucesso!', 'success')
-            return redirect(url_for('cadastro_material'))
-
-        except mysql.connector.Error as err:
-            flash('Erro ao cadastrar material: {}'.format(err), 'error')
-            return redirect(url_for('cadastro_material'))
+            except mysql.connector.Error as err:
+                flash('Erro ao cadastrar material: {}'.format(err), 'error')
+                return redirect(url_for('cadastro_material'))
 
     cursor.close()
     conexao.close()
@@ -371,26 +386,27 @@ def admin():
     # Obter o nome do usuário logado
     cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
     usuario_logado = cursor.fetchone()
+    if 'user_id' in session:
+        user_id = session['user_id']
+        if request.method == 'POST':
+            # Capturar os dados do formulário
+            user_id = request.form.get('user_id')
+            nome = request.form.get('nome')
+            email = request.form.get('email')
+            sn = request.form.get('sn', '')  # Atribui um valor padrão vazio se 'sn' não estiver presente
+            cargo = request.form.get('cargo')
+            senha = request.form.get('senha')
 
-    if request.method == 'POST':
-        # Capturar os dados do formulário
-        user_id = request.form.get('user_id')
-        nome = request.form.get('nome')
-        email = request.form.get('email')
-        sn = request.form.get('sn', '')  # Atribui um valor padrão vazio se 'sn' não estiver presente
-        cargo = request.form.get('cargo')
-        senha = request.form.get('senha')
-
-        # Verificar se o usuário tem permissão para mudar cargos (somente admins)
-        if session['user_cargo'] == 'admin':
-            query_update = "UPDATE users SET nome = %s, email = %s, sn = %s, cargo = %s, senha = %s WHERE id = %s"
-            cursor.execute(query_update, (nome, email, sn, cargo, senha, user_id))
-        else:
-            query_update = "UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s"
-            cursor.execute(query_update, (nome, email, senha, user_id))
-        
-        conexao.commit()
-        flash('Usuário atualizado com sucesso!', 'success')
+            # Verificar se o usuário tem permissão para mudar cargos (somente admins)
+            if session['user_cargo'] == 'admin':
+                query_update = "UPDATE users SET nome = %s, email = %s, sn = %s, cargo = %s, senha = %s WHERE id = %s"
+                cursor.execute(query_update, (nome, email, sn, cargo, senha, user_id))
+            else:
+                query_update = "UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s"
+                cursor.execute(query_update, (nome, email, senha, user_id))
+            
+            conexao.commit()
+            flash('Usuário atualizado com sucesso!', 'success')
 
     # Buscar todos os usuários
     cursor.execute("SELECT * FROM users")
@@ -479,8 +495,7 @@ def controle_estoque():
 
     usuario = None
     usuario_id = session.get('user_id')
-    
-    # Fetch user information
+  
     if usuario_id:
         cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
         usuario = cursor.fetchone()
