@@ -1,52 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-    <!-- Metadados do documento, incluindo charset e viewport para responsividade -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de Estoque</title>
-    
-    <!-- Links para os arquivos de estilo CSS que definem o layout e as variáveis do projeto -->
     <link rel="stylesheet" href="/static/styles/controle-estoque.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-controle-estoque.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
+    <script src="/static/controle-estoque.js"></script>
 </head>
 <body>
-    <main>
-        <!-- Seção principal do conteúdo, que contém o formulário para controle de estoque -->
-        <section class="form-section">
+<main>
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
     
-            <!-- Título principal da página e subtítulos para as funcionalidades de entrada e saída -->
-            <h1>Controle de Estoque</h1>
-            <h2>Registrar Entrada</h2>
-    
-            <!-- Formulário para registrar a entrada de materiais no estoque -->
-            <form action="/registrar_entrada" method="POST">
-                <!-- Seleção do material a ser registrado e entrada da quantidade -->
-                <select id="material" name="material_id" required>
-                    <option value="1">Selecione o item</option>
-                    <option value="2">Material 2</option>
-                </select><br><br>
-                <input type="number" id="quantidade" name="quantidade" min="1" placeholder="Quantidade" required><br><br>
-                <!-- Botão para confirmar a entrada -->
-                <button type="submit">Confirmar</button>
+    <section class="estoque">
+        <div class="campo-estoque">
+            <form class="form-estoque">
+                <h1 class="titulo-estoque">Controle de Estoque</h1>
+                <div class="entrada">
+                    <h2 class="titulo-entrada">Entrada</h2>
+                    <select class="select-estoque" id="entrada-item">
+                        <option value="">Selecione o item</option>
+                        <!-- Opções de itens para entrada -->
+                    </select>
+                    <input class="quant" type="number" id="quantidade" name="quantidade" placeholder="Quantidade">
+                    <button class="btn-estoque" type="submit">Confirmar</button>
+                </div>
+                <div class="saida">
+                    <h2 class="titulo-saida">Saída</h2>
+                    <select class="select-estoque" id="saida-item">
+                        <option value="">Selecione o item</option>
+                        <!-- Opções de itens para saída -->
+                    </select>
+                    <input  class="quant" type="number" id="quantidade" name="quantidade" placeholder="Quantidade">
+                    <button class="btn-estoque" type="submit">Confirmar</button>
+                </div>
             </form>
-    
-            <!-- Subtítulo para registrar a saída de materiais -->
-            <h2>Registrar Saída</h2>
-    
-            <!-- Formulário para registrar a saída de materiais do estoque -->
-            <form action="/registrar_saida" method="POST">
-                <!-- Seleção do material a ser removido e entrada da quantidade -->
-                <select id="material" name="material_id" required>
-                    <option value="1">Selecione o item</option>
-                    <option value="2">Material 2</option>
-                </select><br><br>
-                <input type="number" id="quantidade" name="quantidade" min="1" required><br><br>
-                <!-- Botão para confirmar a saída -->
-                <button type="submit">Confirmar</button>
-            </form>
-        </section>
-    </main>
+        </div>
+    </section>
+</main>
 </body>
 </html>

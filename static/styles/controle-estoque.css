@@ -1,112 +1,150 @@
 /* 
-- Estilo para o corpo da página
-- Define largura e altura como 100% da viewport
-- Remove margens padrão
-- Define fonte padrão e layout flexível
-- Centraliza o conteúdo horizontal e verticalmente
+   Normalização do Navegador
+   - Remove margens e paddings padrão de todos os elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Remove o estilo de lista e a sublinha de links.
+   - Define a fonte padrão 'Amatic SC'.
 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+    font-family: 'Amatic SC', sans-serif;
+}
+
+/* 
+   Normalização do HTML e body
+   - Define a largura e altura como 100% da viewport.
+   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
+   - Remove o overflow horizontal.
+*/
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 62.5%;
+    overflow-x: hidden;
+}
+
 body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark :#465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+body.light-mode {
+    background-color: var(--cinza);
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+.dark-mode .campo-estoque{
+    background-color: var(--fundodark);
+}
+.estoque {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100vw;
     height: 100vh;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    background-color: var(--branco);
 }
 
-/* 
-- Estilo para a seção do formulário
-- Define largura como 80% com largura máxima de 1000px
-- Define cor de fundo, layout flexível e alinhamento do conteúdo
-- Adiciona bordas arredondadas, padding e margem inferior
-*/
-.form-section {
-    width: 80%;
-    max-width: 1000px;
-    background-color: var(--cinza-azulado);
+.campo-estoque {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    background-color:rgba(70, 94, 140, 0.51);
+    padding: 50px;
     border-radius: 30px;
-    padding: 20px;
-    margin-bottom: 20px;
+    max-width: 900px;
+    width: 100%;
+    height: 80%;
 }
 
-/* 
-- Estilo para o formulário
-- Define largura total, padding e bordas arredondadas
-*/
-form {
+.form-estoque {
+    text-align: left;
+    width: 100%;
+}
+
+.titulo-estoque{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+}
+
+.titulo-entrada, .titulo-saida{
+    margin-bottom: 5px;
+}
+
+.entrada, .saida {
+    margin-top: 40px;
+    font-size: larger;
+}
+
+.select-estoque, .quant {
     width: 100%;
     padding: 15px;
-    border-radius: 15px;
+    margin-top: 20px;
+    border-radius: 9px;
+    box-sizing: border-box; /* garante que padding não afete a largura */
 }
 
-/* 
-- Estilo para o título principal
-- Define margem e cor do texto
-*/
-h1 {
-    margin: 15px 0;
-    color: var(--preto);
-}
-
-/* 
-- Estilo para subtítulos
-- Define largura total, margem e cor do texto
-*/
-h2 {
-    width: 100%;
-    margin: 10px 0;
-    color: var(--cinza);
-}
-
-/* 
-- Estilo para selects
-- Define largura (considerando o padding), padding, margem inferior, bordas arredondadas e cor da borda
-*/
-select {
-    width: calc(100% - 22px);
+.btn-estoque {
+    width: 20%;
     padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid var(--cinza-escuro);
+    margin-top: 15px;
+    border-radius: 15px ;
+    color: white;
+    background-color: rgba(56, 71, 115, 1);
+    transition: all 0.3s ease;
 }
 
-/* 
-- Estilo para inputs de tipo número
-- Define largura (considerando o padding), padding, margem inferior, bordas arredondadas e cor da borda
-*/
-input[type="number"] {
-    width: calc(100% - 45px);
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid var(--cinza-escuro);
-}
-
-/* 
-- Estilo para botões
-- Define padding, margem inferior, bordas arredondadas, borda, cor de fundo, cor do texto, cursor e tamanho da fonte
-*/
-button {
-    padding: 10px 20px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 2px solid var(--preto);
-    background-color: var(--verde);
-    color: var(--preto);
-    cursor: pointer;
-    font-size: 16px;
-}
-
-/* 
-- Estilo para botões ao passar o mouse
-- Define a cor de fundo e aplica um efeito de destaque
-*/
-button:hover {
-    background-color: var(--azul-claro);
+.btn-estoque:hover {
+    background-color: rgba(25, 35, 64, 0.8); /* Cor mais clara ou outra cor quando o mouse estiver sobre o botão */
+    transform: scale(1.05);
 }
