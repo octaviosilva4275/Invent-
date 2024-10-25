@@ -5,25 +5,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>Cadastro</title> 
-    <link rel="stylesheet" href="cadastro.css"> <!-- CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/cadastro.css') }}"> <!-- CSS externo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-cadastroinicial.css') }}">
     <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script> <!-- Font Awesome -->
-    <script src="/icone.js" defer></script> <!-- JavaScript carregado após o HTML -->
+    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script> <!-- JavaScript carregado após o HTML -->
     <link rel="icon" href="{{ url_for('static', filename='img/Inventlogo.png') }}">
 </head>
 <body> 
 <main> <!-- Conteúdo principal -->
     <div class="container-geral"> <!-- Contêiner geral -->
         <div class="darkmode"> <!-- Alternância entre modos claro e escuro -->
-            <img src="lua.png" alt="Modo Escuro" id="lua-icon"> 
-            <img src="sol.png" alt="Modo Claro" class="none" id="sol-icon"> 
+            <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon"> 
+            <img src="{{ url_for('static', filename='img/login-img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon"> 
             <div class="container-degrade"></div> <!-- Contêiner para gradiente -->
         </div>
         
         <section class="cadastro"> <!-- Seção do formulário de cadastro -->
             <div class="container-cadastro"> <!-- Contêiner do formulário -->
-                <form class="form-cadastro" action="{{ url_for('primeiro_login') }}" method="POST"> <!-- Formulário -->
+                <form class="form-cadastro" action="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" method="POST"> <!-- Formulário -->
                     <div class="titulo-cadastro"> <!-- Título do formulário -->
-                        <img src="/Inventlogo.png" alt=""> <!-- Logotipo -->
+                        <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt=""> <!-- Logotipo -->
                         <h2>Cadastro</h2> <!-- Título -->
                     </div>
 
@@ -60,7 +61,7 @@
 
                     <input type="submit" value="Cadastrar"> <!-- Botão de envio -->
                     <div class="links">
-                        <a href="#">Possui uma conta?</a>
+                        <a href="{{ url_for('login') }}">Possui uma conta?</a>
                     </div>
                 </form>
 

@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="inputBox">
-                        <input class="input-login" type="text" name="codigo_email" required>
+                        <input class="input-login" type="text" name="entrada" required>
                         <span>Código SN | Email</span>
                         <i></i>
                     </div>
@@ -39,8 +39,8 @@
                     </div>
                     <input class="in" type="submit" value="Entrar">
                     <div class="links">
-                        <a href="#">Esqueceu a senha?</a>
-                        <a href="#">Primeiro login?</a>
+                        <a href="{{ url_for('esquecer_senha') }}">Esqueceu a senha?</a>
+                        <a href="{{ url_for('cadastro') }}">Primeiro login?</a>
                     </div>
                 </form>
             </div>

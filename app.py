@@ -120,8 +120,8 @@ def solicitante():
 def login():
     conexao = conectar_banco_dados()
     if request.method == 'POST':
-        entrada = request.form['sn']
-        senha = request.form['password']
+        entrada = request.form['entrada']
+        senha = request.form['senha']
 
         cursor = conexao.cursor(dictionary=True)
         cursor.execute("SELECT * FROM users WHERE (sn = %s OR email = %s) AND senha = %s", (entrada, entrada, senha))
@@ -219,8 +219,8 @@ def editar_perfil():
 
 
 
-@app.route('/primeiro_login', methods=['GET', 'POST'])
-def primeiro_login():
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
     if request.method == 'POST':
         sn = request.form['sn']
         email = request.form['email']
