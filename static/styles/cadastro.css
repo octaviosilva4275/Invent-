@@ -32,7 +32,7 @@
     width: 100vw;
     height: 100vh;
     background-color: var(--cinza);
-    background-image: url('imagemfundo.png');
+    background-image: url('/static/img/cadastro/login-img/imagemfundo.png');
     background-size: 70%;
     background-position: 60px calc(100% + -40px);
     background-repeat: no-repeat;
@@ -379,6 +379,19 @@
     font-weight: bold;
    
 }
+
+.dark-mode .container-cadastro .form-cadastro .links a {
+    font-size: 0.9em;
+    color: var(--fontedark);
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: bold;
+   
+}
+.dark-mode .container-degrade{
+    box-shadow: 0 0 230px 75px #1c279b;
+}
+
 
 .container-cadastro .form-cadastro .links a:hover {
     color: #000000;

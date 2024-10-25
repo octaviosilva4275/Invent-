@@ -219,8 +219,8 @@ def editar_perfil():
 
 
 
-@app.route('/primeiro_login', methods=['GET', 'POST'])
-def primeiro_login():
+@app.route('/cadastro', methods=['GET', 'POST'])
+def cadastro():
     if request.method == 'POST':
         sn = request.form['sn']
         email = request.form['email']

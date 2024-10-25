@@ -6,7 +6,7 @@
         width: 100vw;
         height: 100vh;
         background-color: var(--cinza);
-        background-image: url(imagemfundo.png);
+        background-image: url(/static/img/cadastro/login-img/imagemfundo.png);
         background-size: 90%;
         background-position: -156px calc(79% + -34px);
         background-repeat: no-repeat;
@@ -17,7 +17,7 @@
 
 @media (max-width: 768px) {
     .container-geral {
-        background-image: url(gifhomem.gif);
+        background-image: url(/static/img/cadastro/login-img/gifhomem.gif);
         background-size: 125%;
         height: 100vh;
         width: 100vw;
@@ -77,7 +77,7 @@
         top: 540px;
     }
     .container-geral {
-        background-image: url(gifhomem.gif);
+        background-image: url(/static/img/cadastro/login-img/gifhomem.gif);
         background-size: 100%;
         height: 100vh;
         width: 100vw;
