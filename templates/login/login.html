@@ -1,53 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invent +</title>
-    <link rel="icon" href="/static/img/logo.png">
-    <link rel="stylesheet" href="/static/styles/login.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-login.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-login.css') }}">
+    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
+    <link rel="icon" href="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}">
 </head>
-
 <body>
-    {% include '/componentes.html' %}
-
-    <section class="login">
-        <div class="banner">
-            <!-- <img src="/static/img/banner.webp" alt=""> -->
+    <div class="container-geral">
+        <div class="darkmode">
+            <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
+            <img src="{{ url_for('static', filename='img/login-img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
+            <div class="container-degrade"></div>
         </div>
 
-        <div class="campo-login">
-            <div class="form-login">
-                <div class="titulo-login">
-                    <img src="/static/img/logo01.png" alt="logo">
-                    <h3>LOGIN</h3>
-                </div>
-                <form action="/login" method="POST">
-                    <div class="form-login">    
-                        <label for="sn">Código RN | Email</label>
-                        <input type="text" id="sn" name="sn" placeholder="Código SN | Email" required>
+        <div class="container1">
+            <div class="container2"></div>
+            <div class="container-form">
+                <form class="form-login" method="POST" action="{{ url_for('login') }}">
+                    <div class="titulo">
+                        <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt="">
+                        <h2>Login</h2>
                     </div>
 
-                    <div class="form-login">
-                        <label for="password">Senha</label>
-                        <input type="password" id="password" name="password" placeholder="Senha" required>
+                    <div class="inputBox">
+                        <input class="input-login" type="text" name="codigo_email" required>
+                        <span>Código SN | Email</span>
+                        <i></i>
                     </div>
-
-                    <div class="esqueceu-senha">
-                        <a href="{{ url_for('esquecer_senha') }}" class="password">Esqueceu a senha?</a>
+                    <div class="inputBox">
+                        <input class="input-login" type="password" name="senha" required>
+                        <span>Senha</span>
+                        <i></i>
                     </div>
-
-                    <button class="btn-login" type="submit">LOGIN</button>
+                    <input class="in" type="submit" value="Entrar">
+                    <div class="links">
+                        <a href="#">Esqueceu a senha?</a>
+                        <a href="#">Primeiro login?</a>
+                    </div>
                 </form>
-                
-                <div class="primeiro-login">
-                    <a href="{{ url_for('primeiro_login') }}" class="button color">Primeiro Login?</a>
-                </div>
             </div>
         </div>
-    </section>
+    </div>
 </body>
 </html>
