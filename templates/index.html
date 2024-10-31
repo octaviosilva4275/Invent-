@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <title>Index</title>
+
+    <!-- FontAwesome and Bootstrap -->
+    <script src="https://kit.fontawesome.com/19648b4beb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-index.css') }}">
+    <link rel="icon" href="/static/img/logoinvent+.png">
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .filter-button {
+            margin-left: 20px;
+        }
+        .container {
+            margin: 30px auto;
+        }
+        .container-estoque,
+        .container-saidas {
+            width: 100%;
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .container-estoque {
+            background-color: #E35F64;
+        }
+        .container-saidas {
+            background-color: #4BBF85;
+        }
+        .table {
+            background-color: #fff;
+            border-radius: 10px;
+            margin: 10px 0px 0px 0px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        caption {
+            font-size: 24px;
+            padding: 10px;
+            text-align: center;
+            color: #333;
+            font-weight: bold;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        thead {
+            background-color: #333;
+            color: white;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tbody tr:hover {
+            background-color: #ddd;
+        }
+
+        section a {
+            color: white;
+            text-decoration: none;
+        }
+        section h3 {
+            margin: 0;
+        }
+        .fa-check,
+        .fa-exclamation {
+            position: absolute;
+            font-size: 24px;
+        }
+        .fa-check {
+            right: 10px;
+            top: 10px;
+        }
+        .fa-exclamation {
+            right: 10px;
+            top: 10px;
+        }
+        .em-separacao { color: orange; font-weight: bold; }
+        .pronto-retirar { color: green; font-weight: bold; }
+        .aguardando-reposicao { color: rgb(212, 0, 0); font-weight: bold; }
+        .finalizado { color: grey; font-weight: bold; }
+    </style>
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <section class="container-estoque">
+                    <a href="{{ url_for('estoque_minimo') }}">
+                    <h3>Estoque mínimo:</h3>
+                    <figure><i class="fa-solid fa-exclamation"></i></figure>
+                    <span>{{ estoque_minimo }} Itens</span>
+                </a>
+                </section>
+            </div>
+            <div class="col-md-6">
+                <section class="container-saidas" id="saidas">
+                    <h3>Saídas hoje:</h3>
+                    <figure><i class="fa-solid fa-check"></i></figure>
+                    <span>{{ saídas_hoje|length }} Itens</span>
+
+                </section>
+            </div>
+        </div>
+
+        <section class="table">
+            <caption class="d-flex justify-content-between align-items-center">
+                <div class="flex"> <span class="historico">Histórico</span>
+                <button class="filter-button btn btn-primary" data-toggle="modal" data-target="#filterModal">Filtrar</button></div>
+            </caption>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Usuário</th>
+                            <th>Quantidade</th>
+                            <th>Status</th>
+                            <th>Última Atualização</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historicoTable">
+                        {% for item in historico_hoje %}
+                        <tr>
+                            <td data-label="Nome do Produto">{{ item.material }}</td>
+                            <td data-label="Usuário">{{ item.usuario }}</td>
+                            <td data-label="Quantidade">{{ item.quantidade }}</td>
+                            <td data-label="Status" class="{{ item.status|lower|replace(' ', '-') }}">{{ item.status }}</td>
+                            <td data-label="Última Atualização">{{ item.data_atualizacao.strftime('%H:%M:%S') if item.data_atualizacao else 'N/A' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal de Filtro -->
+    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Filtros</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="filterForm">
+                        <div class="form-group">
+                            <label for="statusFilter">Status</label>
+                            <select id="statusFilter" class="form-control">
+                                <option value="">Todos</option>
+                                <option value="Solicitado">Solicitado</option>
+                                <option value="Disponível para retirada">Disponível para retirada</option>
+                                <option value="Aguardando reposição">Aguardando reposição</option>
+                                <option value="Retirado">Retirado</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="usuarioFilter">Usuário</label>
+                            <input type="text" id="usuarioFilter" class="form-control" placeholder="Buscar por usuário">
+                        </div>
+                        <div class="form-group">
+                            <label for="produtoFilter">Produto</label>
+                            <input type="text" id="produtoFilter" class="form-control" placeholder="Buscar por produto">
+                        </div>
+                        <div class="form-group">
+                            <label for="orderFilter">Ordenar por</label>
+                            <select id="orderFilter" class="form-control">
+                                <option value="horario">Horário</option>
+                                <option value="usuario">Usuário</option>
+                                <option value="produto">Produto</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="applyFilters">Aplicar Filtros</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tdsStatus = document.querySelectorAll('td[data-label="Status"]');
+    const applyFiltersButton = document.getElementById('applyFilters');
+    const orderFilter = document.getElementById('orderFilter');
+
+    // Status Color Classes
+    tdsStatus.forEach(td => {
+        const status = td.textContent.trim();
+        if (status === "Retirado") {
+            td.classList.add('finalizado');
+        } else if (status === "Solicitado") {
+            td.classList.add('em-separacao');
+        } else if (status === "Aguardando reposição") {
+            td.classList.add('aguardando-reposicao');
+        } else if (status === "Disponivel para retirada") {
+            td.classList.add('pronto-retirar');
+        }
+    });
+
+    // Filtro e Ordenação
+    applyFiltersButton.addEventListener('click', function() {
+        const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+        const usuarioFilter = document.getElementById('usuarioFilter').value.toLowerCase();
+        const produtoFilter = document.getElementById('produtoFilter').value.toLowerCase();
+        const orderValue = orderFilter.value;
+
+        const rows = Array.from(document.querySelectorAll('#historicoTable tr'));
+
+        // Filtragem
+        rows.forEach(row => {
+            const statusCell = row.querySelector('td[data-label="Status"]');
+            const usuarioCell = row.querySelector('td[data-label="Usuário"]');
+            const produtoCell = row.querySelector('td[data-label="Nome do Produto"]');
+
+            const statusText = statusCell.textContent.toLowerCase();
+            const usuarioText = usuarioCell.textContent.toLowerCase();
+            const produtoText = produtoCell.textContent.toLowerCase();
+
+            const matchesStatus = !statusFilter || statusText.includes(statusFilter);
+            const matchesUsuario = !usuarioFilter || usuarioText.includes(usuarioFilter);
+            const matchesProduto = !produtoFilter || produtoText.includes(produtoFilter);
+
+            row.style.display = (matchesStatus && matchesUsuario && matchesProduto) ? '' : 'none';
+        });
+
+        // Ordenação
+        const filteredRows = Array.from(document.querySelectorAll('#historicoTable tr')).filter(row => row.style.display !== 'none');
+
+        filteredRows.sort((a, b) => {
+            const aValue = a.querySelector(`td[data-label="${orderValue === 'usuario' ? 'Usuário' : 'Nome do Produto'}"]`).textContent.toLowerCase();
+            const bValue = b.querySelector(`td[data-label="${orderValue === 'usuario' ? 'Usuário' : 'Nome do Produto'}"]`).textContent.toLowerCase();
+            return aValue.localeCompare(bValue);
+        });
+
+        // Atualiza a tabela
+        const tbody = document.querySelector('#historicoTable');
+        tbody.innerHTML = ''; // Limpa a tabela
+        filteredRows.forEach(row => tbody.appendChild(row));
+
+        $('#filterModal').modal('hide'); // Fecha o modal após aplicar os filtros
+    });
+});
+
+
+    </script>
+</body>
+</html>

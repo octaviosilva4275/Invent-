@@ -1,0 +1,30 @@
+.cadastro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background: rgb(0,71,102);
+    background: linear-gradient(6deg, rgba(0,71,102,1) 12%, rgba(177,196,204,1) 100%);
+}
+
+
+/* Campo de Cadastro */
+.campo-cadastro {
+
+    align-items: center;
+    background-color: var(--branco);
+    padding: 50px;
+    border-radius: 8px;
+    max-width: 1000px;
+    width: 100%;
+    /* Adicionando box-shadow para criar um efeito de profundidade */
+    box-shadow: 0 40px 40px rgba(0, 0, 0, 0.2); /* Sombra leve */
+    transition: box-shadow 0.3s ease; /* Transição suave para efeitos de foco */
+    height: 85%;
+}
+
+.campo-cadastro:hover {
+    /* Sombra mais intensa ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}

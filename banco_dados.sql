@@ -1,16 +1,16 @@
 -- Criação do banco de dados
-CREATE DATABASE almoxarifado;
+CREATE DATABASE IF NOT EXISTS almoxarifado;
 
 -- Seleciona o banco de dados para uso
 USE almoxarifado;
 
-
-CREATE USER 'tcc'@'localhost' IDENTIFIED BY '123';
+-- Criação do usuário
+CREATE USER IF NOT EXISTS 'tcc'@'localhost' IDENTIFIED BY '123';
 GRANT ALL PRIVILEGES ON almoxarifado.* TO 'tcc'@'localhost';
 FLUSH PRIVILEGES;
 
-
-CREATE TABLE users (
+-- Criação da tabela de usuários
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     sn VARCHAR(100) NOT NULL UNIQUE,
     nome VARCHAR(100),
@@ -20,21 +20,18 @@ CREATE TABLE users (
 );
 
 
--- Tabela de materiais sem fornecedor
-CREATE TABLE materials (
+-- Criação da tabela de materiais
+CREATE TABLE IF NOT EXISTS materials (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    descricao TEXT NOT NULL,
+    descricao VARCHAR(255),
     categoria ENUM('consumiveis', 'ferramentas', 'equipamentos') NOT NULL,
     localizacao VARCHAR(100),
     estoque_minimo INT,
     estoque_maximo INT
 );
 
-
-
-
--- Tabela de estoque
-CREATE TABLE estoque (
+-- Criação da tabela de estoque
+CREATE TABLE IF NOT EXISTS estoque (
     id INT AUTO_INCREMENT PRIMARY KEY,
     material_id INT,
     quantidade INT NOT NULL,
@@ -45,42 +42,53 @@ CREATE TABLE estoque (
     FOREIGN KEY (usuario_id) REFERENCES users(id)
 );
 
--- Tabela de requisições
-CREATE TABLE requisicoes (
+-- Criação da tabela de requisições
+CREATE TABLE IF NOT EXISTS requisicoes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     material_id INT,
     usuario_id INT,
     quantidade INT NOT NULL,
     data_requisicao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status ENUM('pendente', 'aprovada', 'rejeitada') DEFAULT 'pendente',
+    status ENUM('Solicitado', 'Disponivel para retirada', 'Aguardando reposição', 'Retirado') DEFAULT 'Solicitado',
     data_entrega TIMESTAMP NULL,
     observacao VARCHAR(255),
+    data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (material_id) REFERENCES materials(id),
     FOREIGN KEY (usuario_id) REFERENCES users(id)
 );
 
-CREATE TABLE requisicoes_historico (
+-- Criação da tabela de histórico de requisições
+CREATE TABLE IF NOT EXISTS requisicoes_historico (
     id INT PRIMARY KEY AUTO_INCREMENT,
     requisicao_id INT NOT NULL,
     data_aprovacao DATETIME NOT NULL,
     FOREIGN KEY (requisicao_id) REFERENCES requisicoes(id)
 );
 
-CREATE TABLE lembretes (
+-- Criação da tabela de lembretes
+CREATE TABLE IF NOT EXISTS lembretes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    destinatario VARCHAR(100),  -- Ou uma chave estrangeira para a tabela de usuários
+    destinatario INT,  -- Chave estrangeira para a tabela de usuários
     descricao TEXT,
-    data_lembrete DATE
+    data_lembrete DATE,
+    FOREIGN KEY (destinatario) REFERENCES users(id)
 );
 
-
+CREATE TABLE IF NOT EXISTS senha_resetada (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL
+);
 
 -- Inserção de exemplo para tabela de usuários
 INSERT INTO users (sn, nome, email, senha, cargo) VALUES 
 ('11', 'Admin', 'admin@example.com', 'senha123', 'admin'),
-('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario');
+('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario'),
+('33', 'Octavio', 'octavio@gmail.com', 'senha123', 'almoxarifado');
 
--- Inserção de exemplo para tabela de materiais sem fornecedor
+-- Inserção de exemplo para tabela de materiais
 INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) VALUES 
 ('Parafuso', 'consumiveis', 'Prateleira A1', 50, 500),
 ('Martelo', 'ferramentas', 'Prateleira B1', 10, 50),
@@ -128,145 +136,42 @@ INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoqu
 ('MARCADOR PARA RETRO PROJETOR - VERMELHO', 'consumiveis', 'Prateleira H3', 10, 100),
 ('MARCADOR PARA RETRO PROJETOR - VERDE', 'consumiveis', 'Prateleira I1', 10, 100),
 ('MARCADOR PARA RETRO PROJETOR - PRETO', 'consumiveis', 'Prateleira I1', 10, 100),
-('MARCADOR PERMANENTE - AZUL', 'consumiveis', 'Prateleira I2', 10, 100),
-('GRAFITE 0,9', 'consumiveis', 'Prateleira I2', 10, 100),
-('MOLHA DEDO', 'consumiveis', 'Prateleira J1', 10, 100),
-('BORRACHA BRANCA', 'consumiveis', 'Prateleira J1', 10, 100),
-('PERCEVEJO', 'consumiveis', 'Prateleira J2', 10, 100),
-('CLIPES GRANDE 0.8', 'consumiveis', 'Prateleira J2', 10, 100),
-('CLIPES GRANDE 0.2', 'consumiveis', 'Prateleira K1', 10, 100),
-('EXTRATOR', 'ferramentas', 'Prateleira K1', 5, 50),
-('ELÁSTICO DE BORRACHA', 'consumiveis', 'Prateleira K2', 10, 100),
-('POST-IT 76X102', 'consumiveis', 'Prateleira K2', 10, 100),
-('POST-IT 38X50', 'consumiveis', 'Prateleira L1', 10, 100),
-('PELÍCULA DE ADESIVO', 'consumiveis', 'Prateleira L1', 10, 100),
-('PRANCHETA', 'ferramentas', 'Prateleira L2', 10, 50),
-('TESOURA', 'ferramentas', 'Prateleira L2', 10, 50),
-('PRESILHA PARA PASTA', 'consumiveis', 'Prateleira M1', 10, 100),
-('GRAMPEADOR GRANDE', 'ferramentas', 'Prateleira M1', 5, 50),
-('GRAMPEADOR PROFISSIONAL', 'ferramentas', 'Prateleira M2', 5, 50),
-('SUPORTE PARA DUREX PEQUENO', 'ferramentas', 'Prateleira M2', 10, 50),
-('LÍQUIDO PARA LIMPAR QUADRO BRANCO', 'consumiveis', 'Prateleira N1', 10, 100),
-('GRAMPO GALVANIZADO', 'consumiveis', 'Prateleira N1', 10, 100),
-('CANETÃO AZUL', 'consumiveis', 'Prateleira N2', 10, 100),
-('CANETÃO PRETO', 'consumiveis', 'Prateleira N2', 10, 100),
-('CANETÃO VERMELHO', 'consumiveis', 'Prateleira O1', 10, 100),
-('RECARGA PARA CANETÃO PRETO', 'consumiveis', 'Prateleira O1', 10, 100),
-('RECARGA PARA CANETÃO AZUL', 'consumiveis', 'Prateleira O2', 10, 100),
-('RECARGA PARA CANETÃO VERMELHO', 'consumiveis', 'Prateleira O2', 10, 100),
-('ALMOFADA PARA CARIMBO', 'consumiveis', 'Prateleira P1', 10, 100),
-('PASTA DE A-Z', 'consumiveis', 'Prateleira P1', 10, 100),
-('PASTA CATÁLOGO', 'consumiveis', 'Prateleira P2', 10, 100),
-('PASTA DE PAPELÃO', 'consumiveis', 'Prateleira P2', 10, 100),
-('PASTA GRAMPO TRILHO', 'consumiveis', 'Prateleira P3', 10, 100),
-('LIVRO ATA', 'consumiveis', 'Prateleira P3', 10, 100),
-('PASTA COM CANALETA', 'consumiveis', 'Prateleira Q1', 10, 100),
-('PASTA EM L', 'consumiveis', 'Prateleira Q1', 10, 100),
-('ETIQUETA AUTOADESIVA 215,09X279,04MM', 'consumiveis', 'Prateleira Q2', 10, 100),
-('PAPEL VERGÊ VERDE', 'consumiveis', 'Prateleira Q2', 10, 100),
-('PAPEL VERGÊ MADRE PÉROLA', 'consumiveis', 'Prateleira Q3', 10, 100),
-('ETIQUETA AUTOADESIVA 33,9 X 101,6MM', 'consumiveis', 'Prateleira Q3', 10, 100),
-('ETIQUETA AUTOADESIVA 101,6 X 25,4MM', 'consumiveis', 'Prateleira R1', 10, 100),
-('ETIQUETA AUTOADESIVA 25,4X101,6MM', 'consumiveis', 'Prateleira R1', 10, 100);
+('LIVRO - ARTE', 'consumiveis', 'Prateleira I2', 10, 100),
+('LIVRO - MATEMÁTICA', 'consumiveis', 'Prateleira I2', 10, 100),
+('LIVRO - HISTÓRIA', 'consumiveis', 'Prateleira I3', 10, 100),
+('LIVRO - GEOGRAFIA', 'consumiveis', 'Prateleira I3', 10, 100),
+('CADERNO - CAPA DURA', 'consumiveis', 'Prateleira J1', 10, 100),
+('CADERNO - CAPA FLEXÍVEL', 'consumiveis', 'Prateleira J1', 10, 100),
+('PASTAS - TAMANHO A4', 'consumiveis', 'Prateleira J2', 10, 100),
+('PASTAS - TAMANHO OFÍCIO', 'consumiveis', 'Prateleira J2', 10, 100),
+('FITA - ADESIVA', 'consumiveis', 'Prateleira K1', 10, 100),
+('LIMPA VIDROS', 'consumiveis', 'Prateleira K1', 10, 100),
+('SABÃO - NEUTRO', 'consumiveis', 'Prateleira K2', 10, 100),
+('SABÃO - LÍQUIDO', 'consumiveis', 'Prateleira K2', 10, 100),
+('ALCOOL', 'consumiveis', 'Prateleira K3', 10, 100);
 
 -- Inserção de exemplo para tabela de estoque
-INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES 
-(1, 100, 'entrada', 1),
-(2, 20, 'entrada', 1);
+INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES
+(1, 20, 'entrada', 1),
+(2, 5, 'entrada', 1),
+(3, 15, 'saida', 2),
+(4, 10, 'entrada', 2),
+(5, 8, 'saida', 2),
+(6, 6, 'entrada', 1);
 
 -- Inserção de exemplo para tabela de requisições
-INSERT INTO requisicoes (material_id, usuario_id, quantidade, status) VALUES 
-(1, 2, 10, 'aprovada'),
-(2, 2, 5, 'pendente');
+INSERT INTO requisicoes (material_id, usuario_id, quantidade, status, observacao) VALUES 
+(1, 2, 10, 'Solicitado', 'Material solicitado para a reunião do projeto.'),
+(3, 1, 5, 'Solicitado', 'Material solicitado para a aula de matemática.'),
+(5, 2, 2, 'Aguardando reposição', 'Material solicitado para a biblioteca.'),
+(10, 1, 1, 'Disponivel para retirada', 'Material reservado para o evento.'),
+(15, 2, 3, 'Retirado', 'Material retirado para uso imediato.');
 
 
+-- Inserção de exemplo para tabela de lembretes
+INSERT INTO lembretes (destinatario, descricao, data_lembrete) VALUES 
+(1, 'Verificar a validade dos materiais', '2024-10-01'),
+(2, 'Organizar o estoque de materiais', '2024-10-05');
 
 
-INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES
-(1, 9, 'entrada', 1),        -- Parafuso (4 + 5)
-(2, 10, 'entrada', 1),       -- Martelo (5 + 5)
-(3, 16, 'entrada', 1),      -- PASTA ARQUIVO (11 + 5)
-(4, 5, 'entrada', 1),        -- APAGADOR (NULL + 5 -> 5)
-(5, 5, 'entrada', 1),        -- CORRETIVO EM FITA (NULL + 5 -> 5)
-(6, 5, 'entrada', 1),        -- BARBANTE 100% ALGODÃO (NULL + 5 -> 5)
-(7, 5, 'entrada', 1),        -- FITA CREPE 18X50M (NULL + 5 -> 5)
-(8, 5, 'entrada', 1),        -- FITA CREPE 24X50M (NULL + 5 -> 5)
-(9, 5, 'entrada', 1),        -- FITA CREPE 48X50M (NULL + 5 -> 5)
-(10, 5, 'entrada', 1),       -- FITA LARGA 48X45M (NULL + 5 -> 5)
-(11, 5, 'entrada', 1),       -- FITA LARGA 45X45M (NULL + 5 -> 5)
-(12, 5, 'entrada', 1),       -- FITA DUPLA FACE (NULL + 5 -> 5)
-(13, 5, 'entrada', 1),       -- DUREX 12X30M (NULL + 5 -> 5)
-(14, 5, 'entrada', 1),       -- DVD+R (NULL + 5 -> 5)
-(15, 5, 'entrada', 1),       -- CD-R (NULL + 5 -> 5)
-(16, 5, 'entrada', 1),       -- ESTILETE (NULL + 5 -> 5)
-(17, 5, 'entrada', 1),       -- PEN DRIVE 16G (NULL + 5 -> 5)
-(18, 5, 'entrada', 1),       -- CANETA HIDROGRÁFICA (NULL + 5 -> 5)
-(19, 5, 'entrada', 1),       -- PLASTICO A4 COM FUROS (NULL + 5 -> 5)
-(20, 5, 'entrada', 1),       -- CADERNO UNIVERSITÁRIO 1 MATÉRIA (NULL + 5 -> 5)
-(21, 5, 'entrada', 1),       -- PASTA EM L (NULL + 5 -> 5)
-(22, 5, 'entrada', 1),       -- FELTRO PARA APAGADOR (NULL + 5 -> 5)
-(23, 5, 'entrada', 1),       -- GIZ BRANCO (NULL + 5 -> 5)
-(24, 5, 'entrada', 1),       -- GIZ COLORIDO (NULL + 5 -> 5)
-(25, 5, 'entrada', 1),       -- LÁPIS DE COR (NULL + 5 -> 5)
-(26, 5, 'entrada', 1),       -- FITA MÁGICA (NULL + 5 -> 5)
-(27, 5, 'entrada', 1),       -- PONTA DE CANETÃO (NULL + 5 -> 5)
-(28, 5, 'entrada', 1),       -- APONTADOR COM DEPÓSITO (NULL + 5 -> 5)
-(29, 5, 'entrada', 1),       -- APONTADOR SEM DEPÓSITO (NULL + 5 -> 5)
-(30, 5, 'entrada', 1),       -- COLA BASTÃO (NULL + 5 -> 5)
-(31, 5, 'entrada', 1),       -- COLA BRANCA LÍQUIDA (NULL + 5 -> 5)
-(32, 5, 'entrada', 1),       -- GRAMPOS 26X06 (NULL + 5 -> 5)
-(33, 5, 'entrada', 1),       -- LÁPIS PRETO (NULL + 5 -> 5)
-(34, 5, 'entrada', 1),       -- CANETA BIC AZUL (NULL + 5 -> 5)
-(35, 5, 'entrada', 1),       -- CANETA BIC PRETA (NULL + 5 -> 5)
-(36, 5, 'entrada', 1),       -- CANETA BIC VERMELHA (NULL + 5 -> 5)
-(37, 5, 'entrada', 1),       -- MARCA TEXTO LARANJA (NULL + 5 -> 5)
-(38, 5, 'entrada', 1),       -- MARCA TEXTO AMARELO (NULL + 5 -> 5)
-(39, 5, 'entrada', 1),       -- MARCA TEXTO ROSA (NULL + 5 -> 5)
-(40, 5, 'entrada', 1),       -- MARCA TEXTO ROXO (NULL + 5 -> 5)
-(41, 5, 'entrada', 1),       -- MARCA TEXTO AZUL (NULL + 5 -> 5)
-(42, 5, 'entrada', 1),       -- MARCA TEXTO VERDE (NULL + 5 -> 5)
-(43, 5, 'entrada', 1),       -- MARCADOR PARA RETRO PROJETOR - AZUL (NULL + 5 -> 5)
-(44, 5, 'entrada', 1),       -- MARCADOR PARA RETRO PROJETOR - VERMELHO (NULL + 5 -> 5)
-(45, 5, 'entrada', 1),       -- MARCADOR PARA RETRO PROJETOR - VERDE (NULL + 5 -> 5)
-(46, 5, 'entrada', 1),       -- MARCADOR PARA RETRO PROJETOR - PRETO (NULL + 5 -> 5)
-(47, 5, 'entrada', 1),       -- MARCADOR PERMANENTE - AZUL (NULL + 5 -> 5)
-(48, 5, 'entrada', 1),       -- GRAFITE 0,9 (NULL + 5 -> 5)
-(49, 5, 'entrada', 1),       -- MOLHA DEDO (NULL + 5 -> 5)
-(50, 5, 'entrada', 1),       -- BORRACHA BRANCA (NULL + 5 -> 5)
-(51, 5, 'entrada', 1),       -- PERCEVEJO (NULL + 5 -> 5)
-(52, 5, 'entrada', 1),       -- CLIPS GRANDE 0.8 (NULL + 5 -> 5)
-(53, 5, 'entrada', 1),       -- CLIPS GRANDE 0.2 (NULL + 5 -> 5)
-(54, 5, 'entrada', 1),       -- EXTRATOR (NULL + 5 -> 5)
-(55, 5, 'entrada', 1),       -- ELÁSTICO DE BORRACHA (NULL + 5 -> 5)
-(56, 5, 'entrada', 1),       -- POST-IT 76X102 (NULL + 5 -> 5)
-(57, 5, 'entrada', 1),       -- POST-IT 38X50 (NULL + 5 -> 5)
-(58, 5, 'entrada', 1),       -- PELÍCULA DE ADESIVO (NULL + 5 -> 5)
-(59, 5, 'entrada', 1),       -- PRANCHETA (NULL + 5 -> 5)
-(60, 5, 'entrada', 1),       -- TESOURA (NULL + 5 -> 5)
-(61, 5, 'entrada', 1),       -- PRESILHA PARA PASTA (NULL + 5 -> 5)
-(62, 5, 'entrada', 1),       -- GRAMPEADOR GRANDE (NULL + 5 -> 5)
-(63, 5, 'entrada', 1),       -- GRAMPEADOR PROFISSIONAL (NULL + 5 -> 5)
-(64, 5, 'entrada', 1),       -- SUPORTE PARA DUREX PEQUENO (NULL + 5 -> 5)
-(65, 5, 'entrada', 1),       -- LÍQUIDO PARA LIMPAR QUADRO BRANCO (NULL + 5 -> 5)
-(66, 5, 'entrada', 1),       -- GRAMPO GALVANIZADO (NULL + 5 -> 5)
-(67, 5, 'entrada', 1),       -- CANETÃO AZUL (NULL + 5 -> 5)
-(68, 5, 'entrada', 1),       -- CANETÃO PRETO (NULL + 5 -> 5)
-(69, 5, 'entrada', 1),       -- CANETÃO VERMELHO (NULL + 5 -> 5)
-(70, 5, 'entrada', 1),       -- RECARGA PARA CANETÃO PRETO (NULL + 5 -> 5)
-(71, 5, 'entrada', 1),       -- RECARGA PARA CANETÃO AZUL (NULL + 5 -> 5)
-(72, 5, 'entrada', 1),       -- RECARGA PARA CANETÃO VERMELHO (NULL + 5 -> 5)
-(73, 5, 'entrada', 1),       -- ALMOFADA PARA CARIMBO (NULL + 5 -> 5)
-(74, 5, 'entrada', 1),       -- PASTA DE A-Z (NULL + 5 -> 5)
-(75, 5, 'entrada', 1),       -- PASTA CATÁLOGO (NULL + 5 -> 5)
-(76, 5, 'entrada', 1),       -- PASTA DE PAPELÃO (NULL + 5 -> 5)
-(77, 5, 'entrada', 1),       -- PASTA GRAMPO TRILHO (NULL + 5 -> 5)
-(78, 5, 'entrada', 1),       -- LIVRO ATA (NULL + 5 -> 5)
-(79, 5, 'entrada', 1),       -- PASTA COM CANALETA (NULL + 5 -> 5)
-(80, 5, 'entrada', 1),       -- PASTA EM L (NULL + 5 -> 5)
-(81, 5, 'entrada', 1),       -- ETIQUETA AUTOADESIVA 215,09X279,04MM (NULL + 5 -> 5)
-(82, 5, 'entrada', 1),       -- PAPEL VERGÊ VERDE (NULL + 5 -> 5)
-(83, 5, 'entrada', 1),       -- PAPEL VERGÊ MADRE PÉROLA (NULL + 5 -> 5)
-(84, 5, 'entrada', 1),       -- ETIQUETA AUTOADESIVA 33,9 X 101,6MM (NULL + 5 -> 5)
-(85, 5, 'entrada', 1),       -- ETIQUETA AUTOADESIVA 101,6 X 25,4MM (NULL + 5 -> 5)
-(86, 5, 'entrada', 1);       -- ETIQUETA AUTOADESIVA 25,4X101,6MM (NULL + 5 -> 5)
- 
+select * from users

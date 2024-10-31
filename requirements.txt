@@ -1,0 +1,15 @@
+blinker
+click
+colorama
+Flask
+itsdangerous
+Jinja2
+MarkupSafe
+mysql-connector-python
+python-dotenv
+Werkzeug
+Flask-Mail
+itsdangerous
+azure-storage-blob
+Gunicorn
+jwt

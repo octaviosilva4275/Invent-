@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-login.css') }}">
+    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
+    <link rel="icon" href="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}">
+</head>
+<body>
+    {% include 'componentes.html' %}
+    <div class="container-geral">
+        <div class="darkmode">
+            <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
+            <img src="{{ url_for('static', filename='img/login-img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
+            <div class="container-degrade"></div>
+        </div>
+
+        <div class="container1">
+            <div class="container2"></div>
+            <div class="container-form">
+                <form class="form-login" method="POST" action="{{ url_for('login') }}">
+                    <div class="titulo">
+                        <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt="">
+                        <h2>Login</h2>
+                    </div>
+
+                    <div class="inputBox">
+                        <input class="input-login" type="text" name="entrada" required>
+                        <span>Código SN | Email</span>
+                        <i></i>
+                    </div>
+                    <div class="inputBox">
+                        <input class="input-login" type="password" name="senha" required>
+                        <span>Senha</span>
+                        <i></i>
+                    </div>
+                    <input class="in" type="submit" value="Entrar">
+                    <div class="links">
+                        <a href="{{ url_for('esquecer_senha') }}">Esqueceu a senha?</a>
+                        <a href="{{ url_for('cadastro') }}">Primeiro login?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

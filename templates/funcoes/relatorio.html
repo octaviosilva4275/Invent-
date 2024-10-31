@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <title>Relatórios</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: auto;
+            margin-top: 30px;
+            background: #a8b4cc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            justify-content: center;
+            align-items: center;
+            width: auto;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: var(--azul-escuro);
+            color: var(--branco);
+            border-radius: 5px;
+            transition: all 0.3s ease, transform 0.2s ease;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .tabela {
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            color: white;
+        }
+        canvas{
+            background-color: white;
+        }
+        th {
+            background-color: #99a5bd;
+        }
+        .graficos {
+            margin-top: 20px;
+        }
+        h1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        #tipo_relatorio{
+            width: 80%;
+            padding: 13px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+
+    <div class="container">
+        <h1>Relatórios</h1>
+        <form method="POST">
+            <select name="tipo_relatorio" id="tipo_relatorio">
+                <option value="">Selecione o tipo de relatório:</option>
+                <option value="estoque">Relatório de Estoque</option>
+                <option value="movimentacao">Relatório de Movimentação</option>
+                <option value="solicitacoes_usuario">Solicitações por Usuário</option>
+                <option value="movimentacao_mensal">Movimentação Mensal</option>
+            </select>
+            <button type="submit">Gerar Relatório</button>
+        </form>
+
+        {% if relatorio %}
+        <div class="graficos">
+            <h3>Gráficos</h3>
+
+            {% if tipo_relatorio == 'movimentacao_mensal' %}
+                <canvas id="graficoMovimentacaoMensal"></canvas>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const ctx = document.getElementById('graficoMovimentacaoMensal').getContext('2d');
+                        const dados = {
+                            labels: [{% for item in relatorio %}'Mês {{ item.Mes }}',{% endfor %}],
+                            datasets: [
+                                {
+                                    label: 'Total Entrada',
+                                    data: [{% for item in relatorio %}{{ item.TotalEntrada }},{% endfor %}],
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Total Saída',
+                                    data: [{% for item in relatorio %}{{ item.TotalSaida }},{% endfor %}],
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        };
+                        const grafico = new Chart(ctx, {
+                            type: 'bar',
+                            data: dados,
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+            {% endif %}
+
+            {% if tipo_relatorio == 'estoque' %}
+                <canvas id="graficoEstoque"></canvas>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const ctx = document.getElementById('graficoEstoque').getContext('2d');
+                        const dados = {
+                            labels: [{% for item in relatorio %}'{{ item.Material }}',{% endfor %}],
+                            datasets: [{
+                                label: 'Quantidade em Estoque',
+                                data: [{% for item in relatorio %}{{ item.Quantidade }},{% endfor %}],
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        };
+                        const grafico = new Chart(ctx, {
+                            type: 'bar',
+                            data: dados,
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+            {% endif %}
+
+            {% if tipo_relatorio == 'movimentacao' %}
+                <canvas id="graficoMovimentacao"></canvas>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const ctx = document.getElementById('graficoMovimentacao').getContext('2d');
+                        const dados = {
+                            labels: [{% for item in relatorio %}'{{ item.Material }}',{% endfor %}],
+                            datasets: [{
+                                label: 'Quantidade Movimentada',
+                                data: [{% for item in relatorio %}{{ item.Quantidade }},{% endfor %}],
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        };
+                        const grafico = new Chart(ctx, {
+                            type: 'bar',
+                            data: dados,
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+            {% endif %}
+
+            {% if tipo_relatorio == 'solicitacoes_usuario' %}
+                <canvas id="graficoSolicitacoesUsuario"></canvas>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const ctx = document.getElementById('graficoSolicitacoesUsuario').getContext('2d');
+                        const dados = {
+                            labels: [{% for item in relatorio %}'{{ item.Usuario }}',{% endfor %}],
+                            datasets: [{
+                                label: 'Total de Solicitações',
+                                data: [{% for item in relatorio %}{{ item.TotalSolicitacoes }},{% endfor %}],
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                ],
+                                borderColor: [
+                                    'rgba(255, 99, 132, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                ],
+                                borderWidth: 1
+                            }]
+                        };
+                        const grafico = new Chart(ctx, {
+                            type: 'pie',
+                            data: dados,
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'top',
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+            {% endif %}
+            <h2>{{ relatorio_titulo }}</h2>
+            <div class="tabela">
+                <table>
+                    <thead>
+                        <tr>
+                            {% for key in relatorio[0].keys() %}
+                                <th>{{ key }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in relatorio %}
+                            <tr>
+                                {% for value in item.values() %}
+                                    <td>{{ value }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <script>
+                function formatarData(data) {
+                    const partes = data.split(' ');
+                    const dataPartes = partes[0].split('-');
+                    const horaPartes = partes[1];
+            
+                    return `${dataPartes[2]}/${dataPartes[1]}/${dataPartes[0]} ${horaPartes}`;
+                }
+            
+                document.addEventListener('DOMContentLoaded', function () {
+                    const tabela = document.getElementById('tabela-relatorio');
+                    const linhas = tabela.getElementsByTagName('tr');
+            
+                    for (let i = 0; i < linhas.length; i++) {
+                        const celulas = linhas[i].getElementsByTagName('td');
+                        if (celulas.length > 0) {
+                            const dataOriginal = celulas[0].textContent; // Pega a data da primeira célula
+                            const dataFormatada = formatarData(dataOriginal);
+                            celulas[0].textContent = dataFormatada; // Atualiza a célula com a data formatada
+                        }
+                    }
+                });
+            </script>
+
+
+            </div>
+        {% endif %}
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>

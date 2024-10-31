@@ -1,0 +1,171 @@
+/* Normalização do Navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+}
+
+/* HTML e Body */
+html, body {
+    height: 100%;
+    font-family: 'Amatic SC', cursive; /* Exemplo de fonte, adicione a fonte que preferir */
+    background-color: var(--cinza-claro);
+}
+
+/* Seção de Cadastro */
+.cadastro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px; /* Adicionado padding para evitar que o conteúdo fique colado nas bordas */
+}
+
+/* Campo de Cadastro */
+.campo-cadastro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #a8b4cc;
+    padding: 40px;
+    border-radius: 10px;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Adicionada transição para transformar */
+}
+
+.campo-cadastro:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px); /* Pequeno efeito de movimento ao passar o mouse */
+}
+
+/* Formulário de Cadastro */
+.form-cadastro {
+    text-align: left;
+    width: 100%;
+}
+
+/* Título do Cadastro com Logo */
+.titulo-cadastro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.titulo-cadastro img {
+    width: 80px; /* Dimensões ajustadas */
+    height: 80px;
+    margin-right: 10px;
+}
+
+.titulo-cadastro h2 {
+    font-size: 28px; /* Aumentado para maior destaque */
+    color: var(--azul-escuro);
+}
+
+/* Estilos para Inputs e Select */
+.input_nome,
+.input_categoria {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+input, select {
+    background-color: #f5f5f5; /* Cor de fundo mais clara */
+    color: #333;
+    transition: border-color 0.3s ease; /* Transição suave para bordas */
+}
+
+.input_nome input,
+.input_categoria select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid var(--cinza-azulado);
+    font-size: 16px;
+}
+
+.input_nome input:focus,
+.input_categoria select:focus {
+    border-color: var(--azul-escuro); /* Mudança de cor na borda ao focar */
+    outline: none; /* Remove o contorno padrão */
+}
+
+/* Inputs de Estoque */
+.input_estoque {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+.input_estoque input {
+    width: 48%;
+    padding: 12px; /* Ajustado para consistência */
+    border-radius: 5px;
+    border: 1px solid var(--cinza-azulado);
+    font-size: 16px;
+}
+
+/* Estilos do Botão de Cadastro */
+.btn-cadastro {
+    justify-content: center;
+    align-items: center;
+    width: 30%; /* Largura ajustada para um design mais equilibrado */
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+    border-radius: 5px;
+    transition: all 0.3s ease, transform 0.2s ease; /* Transição suave com transformação */
+}
+
+.btn-cadastro:hover {
+    background-color: var(--azul-claro);
+    transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
+}
+
+/* Container do Botão */
+.container-btn {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+}
+
+/* Mensagens de Flash */
+.flash-messages {
+    position: fixed;
+    top: 35px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 90%; /* Ajuste a largura conforme necessário */
+    max-width: 400px; /* Limite a largura máxima */
+    text-align: center; /* Centraliza o texto */
+    font-size: 18px;
+}
+
+.flash {
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra opcional */
+}
+
+.flash.error {
+    background-color: #e74c3c; /* Vermelho */
+}
+
+.flash.success {
+    background-color: #2ecc71; /* Verde */
+}
