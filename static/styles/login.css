@@ -1,402 +1,167 @@
 
-html, body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden; /* Impede a rolagem */
-}
-
-/* Reset básico */
+/* Normalização do Navegador
+   - Remove a margem e padding padrão dos elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Remove a estilização de listas e o sublinhado de links.
+   - Remove bordas padrão e define a fonte padrão. */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+    font-family: 'Amatic SC', sans-serif;
 }
 
-:root{
-    --cinza: #d6d6d6;
-    --dark: #04050D;
-    --fundo : #aab5ca;
-    --fundodark  :#192340;
-    --fonte : #000;
-    --fontedark : #fff;
-}
-
-.container1 {
+/* Normalização do html
+   - Define a largura e altura como 100% da viewport.
+   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
+   - Remove a barra de rolagem horizontal. */
+html {
     width: 100vw;
     height: 100vh;
-    background-color: var(--cinza);
-    background-image: url('/static/img/login-img/imagemfundo.png');
-    background-size: 70%; /* Tamanho da imagem */
-    background-position: 145px calc(100% + -40px); /* Move a imagem mais para a esquerda e para baixo */
-    background-repeat: no-repeat; /* Impede a repetição da imagem */
+    font-size: 62.5%; /* 1rem = 10px */
+    overflow: hidden;
+}
+
+/* Estilos para a classe de login
+   - Define um layout flexível para centralizar o conteúdo.
+   - Ocupa a largura e altura totais da tela.
+   - Define a posição como relativa para permitir a sobreposição do banner. */
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
     position: relative;
-    overflow: hidden;
 }
 
-
-
-.container-form {
-    width: 400px; /* Defina a largura */
-    height: 450px; /* Defina a altura */
-    background: rgba(28, 32, 73, 0.7);
-    border-radius: 10px;
-    box-shadow: rgba(76, 80, 122, 0.7)
-    0px 5px 15px;
-    overflow: hidden;
-    position: absolute; /* Mude para absolute */
-    top: 50%; /* Centraliza verticalmente */
-    left: 50%; /* Centraliza horizontalmente */
-    transform: translate(-50%, -50%); /* Ajusta a posição */
-}
-
-.container2 {
-    width: 60%;
-    height: 60%;
+/* Estilos para a área de banner
+   - Define a posição como absoluta para cobrir toda a tela.
+   - Define o z-index para ficar atrás do campo de login.
+   - Aplica uma imagem de fundo com sobreposição de gradiente. */
+.banner {
     position: absolute;
-    bottom: -60%;
-    border-radius: 50%;
-    right: 20%;
-    box-shadow: 0 0 230px 75px #1C2049;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: linear-gradient(rgba(32, 32, 32, 0.8), rgba(34, 34, 34, 0.8)), url(/static/img/banner.webp);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    overflow: hidden;
 }
-body.light-mode {
-    background-color: var(--cinza);
-    color: var(--fonte);
+
+.banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
 }
-body.dark-mode {
-    background-color: var(--dark);
-    color: var(--fontedark)
+
+/* Estilos para o campo de login
+   - Define um layout flexível para centralizar o conteúdo.
+   - Define a cor de fundo, padding e bordas arredondadas. */
+.campo-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--cinza-azulado);
+    padding: 50px;
+    border-radius: 8px;
 }
-.none {
+
+/* Estilos do formulário de login
+   - Define uma largura fixa e alinha o texto à esquerda. */
+.form-login {
+    margin-bottom: 50px;
+    text-align: left;
+    width: 32rem; /* Largura do formulário */
+}
+
+/* Título do login com logo
+   - Define um layout flexível para centralizar vertical e horizontalmente.
+   - Define o tamanho e o espaçamento da logo. */
+.titulo-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 70px;
+}
+
+.titulo-login img {
+    width: 90px;
+    height: 90px;
+    margin-right: 10px;
+}
+
+.titulo-login h3 {
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+/* Oculta os rótulos dos inputs
+   - Esconde os labels para inputs de login. */
+.form-login label {
     display: none;
 }
-.darkmode img {
-    cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    margin: 5px 5px;
-}
 
-.darkmode img.none {
-    opacity: 0; /* Ícone oculto */
-    transform: scale(0.8); /* Reduz um pouco o tamanho */
-}
-
-.darkmode .sol-icon{
-    background-color: var(--fontedark);
-}
-
-
-
-/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
-body.dark-mode {
-    background-color: var(--dark);
-    color: var(--fontedark);
-}
-
-/* Aplique cor do texto para outros elementos que não estão dentro do container */
-.dark-mode .container1,
-.dark-mode .container2 {
-    background-color: var(--dark);}
-
-/* Altere a cor dos textos em outros elementos que possam estar fora do container */
-.dark-mode .titulo h2,
-.dark-mode .container-form .form-login .input-login span,
-.dark-mode .container-form .form-login .links a {
-    color: var(--fontedark); 
-}
-
-.darkmode img{
-    z-index: 99;
-}
-
-
-.dark-mode .container-geral {
-    background-color: var(--dark);
-}
-
-.dark-mode .container-form {
-    background: rgba(10, 10, 30, 0.8); 
-}
-
-.dark-mode .container-form .form-login {
-    background: var(--fundodark);
-}
-
-.dark-mode .container-form .form-login .input-login input,
-.dark-mode .container-form .form-login .input-login select {
-    border-bottom: 2px solid  var(--fontedark);
-    color: var(--fontedark);
-}
-
-/* 
-   Estilos de texto no modo escuro
-   - Define a cor dos textos em vários elementos do formulário.
-*/
-.dark-mode .container-form .form-login .h2-login,
-.dark-mode .container-form .form-login .input-login span,
-.dark-mode .container-form .form-login .links a {
-    color: var(--fontedark);
-}
-
-/* 
-   Estilo do botão de submit no modo escuro
-   - Define a cor de fundo do botão.
-*/
-.dark-mode .container-form .form-login input[type="submit"] {
-    background: #2c3653; 
-}
-
-/* 
-   Estilo do ícone do sol no modo escuro
-   - Aplica um filtro ao ícone.
-*/
-.dark-mode #sol-icon {
-    filter: brightness(0) invert(1); 
-}
-
-/* 
-   Efeitos de foco nos inputs
-   - Define a animação de transição e cor dos labels quando o input é focado.
-*/
-.dark-mode .container-form .form-login .input-login input:focus ~ span,
-.dark-mode .container-form .form-login .input-login input:valid ~ span {
-    color: var(--fontedark);
-    transform: translateY(-24px);
-    font-size: 0.85em;
-}
-
-.dark-mode .container-form .form-login input[type="submit"] {
-    margin-top: 20px;
-    margin-bottom: 0px;
-    background-color: #384773;
-}
-.dark-mode #areas-senai{
-    border-bottom: 2px solid var(--fontedark);
-}
-.dark-mode .container-form form .inputBox span {
-    color: #fff; /* Cor branca */
-}
-
-
-.dark-mode .container-form form .inputBox input {
-    color: var(--fontedark); 
-    border-bottom: 2px solid var(--fontedark); 
-}
-
-.dark-mode .container-form form .inputBox input::placeholder {
-    color: var(--fontedark); /* Cor do placeholder */
-}
-
-.dark-mode .container-form .form-login .input-login span {
-    color: var(--fontedark); /* Cor do placeholder */
-}
-
-
-
-.dark-mode .container-form form .inputBox input:focus ~ span,
-.dark-mode .container-form form .inputBox input:valid ~ span{
-    color: var(--fonte);
-}
-
-.dark-mode > div > div.container1 > div.container-form > form > div:nth-child(2) > span{
-    color: var(--fontedark);
-}
-.dark-mode > div > div.container1 > div.container-form > form > div:nth-child(3) > span{
-    color: var(--fontedark);
-}
-
-.darkmode .container-form form input[type="submit"] {
-    margin-top: 20px;
-    background: #2c3653;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    font-size: 1.1em;
-    font-weight: 600;
+/* Estilos dos inputs de login
+   - Define a largura total, padding, borda e bordas arredondadas para os inputs. */
+.form-login input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--cinza);
     border-radius: 4px;
-    cursor: pointer;
-    transition: background 0.3s;
+    margin-top: 5px;
 }
 
-.dark-mode .container-form .form-login input[type="submit"]:hover {
-    background: #2c3653;
-}
-
-
-
-
-
-.titulo {
-    text-align: center; 
-  
-    
-}
-
-.titulo img {
-    display: block; 
-    margin: 0 auto; 
-    width: 70px; 
-    height: auto; 
-    transform: scale(1.8);
-}
-
-.inputBox {
-    margin-top: 20px; /* Adiciona espaço entre os campos de entrada */
-}
-
-
-/* Reset básico e estilo da fonte */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-/* Estilo do corpo com imagem de fundo */
-
- 
-/* Gradiente animado no contorno da caixa */
-.container-form::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 400px;
-    height: 450px;
-    background: linear-gradient(90deg, transparent, transparent, rgb(62, 50, 139), #d7dbff);
-    z-index: 1;
-    transform-origin: bottom right;
-    animation: animate 6s linear infinite;
-}
-
-/* Animação de rotação do gradiente */
-@keyframes animate {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-/* Formulário de login */
-.container-form form {
-    position: absolute;
-    inset: 1.5px;
-    background: #aab5ca;
-    border-radius: 10px;
-    padding: 30px 40px;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    
-}
-
-/* Estilo do título do formulário */
-.container-form form h2 {
-    color: #000000;
-    font-size: 2em;
-    font-weight: 600;
-    text-align: center;
-    letter-spacing: 0.1em;
-    margin-bottom: 20px;
-}
-
-
-
-/* Campo de entrada com estilo animado */
-.container-form form .inputBox {
-    position: relative;
-    margin-top: 35px;
-}
-
-.container-form form .inputBox input {
-    width: 100%;
-    padding: 10px 0;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #000000;
-    font-size: 1.2em;
-    border-bottom: 2px solid #000000;
-    transition: 0.3s;
-}
-
-.container-form form .inputBox span {
-    position: absolute;
-    left: 0;
-    padding: 10px 0;
-    pointer-events: none;
-    color: #000000;
-    font-size: 1.2em;
-    transition: 0.3s;
-}
-
-.container-form form .inputBox input:focus ~ span,
-.container-form form .inputBox input:valid ~ span {
-    color: #000000;
-    transform: translateY(-24px);
-    font-size: 0.85em;
-}
-
-.container-form form .inputBox i {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 2px;
-
-    transition: 0.3s;
-}
-
-.container-form form .inputBox input:focus ~ i,
-.container-form form .inputBox input:valid ~ i {
-    height: 44px;
-}
-
-.container-form form .links {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-    margin-top: 20px; /* Adicione margem extra se necessário */
-}
-
-.container-form form .links a {
-    font-size: 0.9em;
-    color: #000000;
-    text-decoration: none;
-    transition: 0.3s;
+/* Link de "esqueceu a senha"
+   - Define a cor, tamanho da fonte, negrito e sublinhado para o link. */
+.esqueceu-senha a {
+    color: var(--preto);
+    font-size: 12px;
     font-weight: bold;
+    margin-bottom: 30px;
+    text-decoration: underline;
+    display: block;
 }
 
-/* Adicione uma nova regra para o link "Primeiro login?" */
-.container-form form .links a:last-child {
-    
-    display: block; /* Faz com que o link ocupe toda a largura, se necessário */
-}
-
-
-.container-form form .links a:hover {
-    color: #000000;
-}
-
-/* Botão de envio */
-.container-form form input[type="submit"] {
-    margin-top: 20px;
-    background: #384773;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    font-size: 1.1em;
-    font-weight: 600;
-    border-radius: 4px;
+/* Estilos do botão de login
+   - Define o layout flexível, tamanho, cor de fundo, cor do texto e bordas arredondadas.
+   - Adiciona um efeito de hover para alterar a cor e aplicar uma escala. */
+.btn-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    font-size: 15px;
+    padding: 10px 20px;
     cursor: pointer;
-    transition: background 0.3s;
+    background-color: var(--azul-claro);
+    color: var(--branco);
+    border-radius: 5px;
+    margin: 30px auto 0;
 }
 
-.container-form form input[type="submit"]:hover {
-    background: #2c3653;
+.btn-login:hover {
+    background-color: var(--azul-escuro);
+    transform: scale(1.05);
+}
+
+/* Link para "primeiro login"
+   - Define a cor, tamanho da fonte, negrito e sublinhado para o link.
+   - Define uma margem superior. */
+.primeiro-login a {
+    color: var(--preto);
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    text-decoration: underline;
+    display: block;
+    margin: 30px auto 0;
 }
