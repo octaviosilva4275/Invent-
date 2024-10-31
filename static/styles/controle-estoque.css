@@ -1,123 +1,150 @@
-body{
-    background: rgb(0,71,102);
-    background: linear-gradient(6deg, rgba(0,71,102,1) 12%, rgba(177,196,204,1) 100%);
+/* 
+   Normalização do Navegador
+   - Remove margens e paddings padrão de todos os elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Remove o estilo de lista e a sublinha de links.
+   - Define a fonte padrão 'Amatic SC'.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+    font-family: 'Amatic SC', sans-serif;
 }
 
-html{
+/* 
+   Normalização do HTML e body
+   - Define a largura e altura como 100% da viewport.
+   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
+   - Remove o overflow horizontal.
+*/
+html {
+    width: 100%;
     height: 100%;
-
+    font-size: 62.5%;
+    overflow-x: hidden;
 }
 
-/* Estilo da Seção do Formulário */
-.form-section {
-    width: 80%;
-    max-width: 1000px;
-    background-color: var(--branco);
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark :#465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+body.light-mode {
+    background-color: var(--cinza);
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+.dark-mode .campo-estoque{
+    background-color: var(--fundodark);
+}
+.estoque {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--branco);
+}
+
+.campo-estoque {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:rgba(70, 94, 140, 0.51);
+    padding: 50px;
+    border-radius: 30px;
+    max-width: 900px;
+    width: 100%;
+    height: 80%;
+}
+
+.form-estoque {
+    text-align: left;
+    width: 100%;
+}
+
+.titulo-estoque{
+    display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 20px; /* Ajustado para bordas mais suaves */
-    padding: 30px; /* Aumentado o padding para mais espaçamento interno */
-    margin: 1% auto; /* Adicionado espaçamento automático para centralizar verticalmente */   
-    height: 95vh; 
+    font-size: 3.5rem;
 }
 
-/* Estilo do Formulário */
-form {
+.titulo-entrada, .titulo-saida{
+    margin-bottom: 5px;
+}
+
+.entrada, .saida {
+    margin-top: 40px;
+    font-size: larger;
+}
+
+.select-estoque, .quant {
     width: 100%;
-    background-color: var(--branco); /* Adicionada cor de fundo branca para o formulário */
-    padding: 20px; /* Aumentado o padding para maior conforto */
-    border-radius: 10px; /* Ajustado para bordas mais suaves */
-
-}
-
-/* Estilo do Título Principal */
-.form-section h1 {
-    margin: 15px 0;
-    color: var(--preto);
-    font-size: 28px; /* Aumentado o tamanho da fonte para mais destaque */
-    text-align: center; /* Centralizado o texto */
-}
-
-/* Estilo dos Subtítulos */
-.form-section h2 {
-    margin: 10px 0; /* Aumentado o espaço superior e inferior */
-    color: var(--cinza);
-    font-size: 22px; /* Ajustado o tamanho da fonte para uma hierarquia clara */
-    text-align: start; /* Centralizado o texto */
-}
-
-/* Estilo dos Campos de Seleção */
-select {
-    width: calc(100% - 22px);
-    padding: 12px; /* Aumentado o padding para mais conforto */
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid var(--cinza-azulado);
-    font-size: 16px; /* Ajustado o tamanho da fonte para consistência */
-}
-
-/* Estilo dos Campos de Entrada de Número */
-input[type="number"] {
-    width: calc(100% - 22px); /* Ajustado para alinhar com o campo select */
-    padding: 12px; /* Aumentado o padding para mais conforto */
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid var(--cinza-azulado);
-    font-size: 16px; /* Ajustado o tamanho da fonte para consistência */
-}
-
-/* Estilo dos Botões */
-button {
-    padding: 12px 20px; /* Aumentado o padding para mais conforto */
-    margin-top: 10px; /* Ajustado o espaçamento superior */
-    border-radius: 5px;
-    border: 2px solid rgba(190, 190, 190, 0.333);
-    background-color: var(--azul-claro);
-    color: var(--branco);
-    cursor: pointer;
-    font-size: 16px; /* Ajustado o tamanho da fonte */
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Adicionada uma transição suave */
-}
-
-/* Estilo do Botão ao Passar o Mouse */
-button:hover {
-    background-color: var(--azul-escuro);
-    transform: scale(1.05); /* Adicionado um leve efeito de aumento */
-}
-
-#quantidade, #material{
-    background-color: rgb(243, 243, 243);
-    color: black;
-    width: 100%;
-}
-
-
-
-
-.container-btn{
-    display: flex;
-    width: 100%;
-    justify-content: flex-end;
-    margin-right: -10px;
-}
-
-.btn-cadastro {
-
-    justify-content: center;
-    align-items: flex-end;
-    width: 25%;
     padding: 15px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: var(--azul-escuro);
-    color: var(--branco);
-    border-radius: 5px;
+    margin-top: 20px;
+    border-radius: 9px;
+    box-sizing: border-box; /* garante que padding não afete a largura */
+}
+
+.btn-estoque {
+    width: 20%;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 15px ;
+    color: white;
+    background-color: rgba(56, 71, 115, 1);
     transition: all 0.3s ease;
 }
 
-.btn-cadastro:hover {
-    background-color: var(--azul-claro);
+.btn-estoque:hover {
+    background-color: rgba(25, 35, 64, 0.8); /* Cor mais clara ou outra cor quando o mouse estiver sobre o botão */
     transform: scale(1.05);
 }

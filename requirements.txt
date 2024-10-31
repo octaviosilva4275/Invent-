@@ -8,4 +8,8 @@ MarkupSafe
 mysql-connector-python
 python-dotenv
 Werkzeug
+Flask-Mail
+itsdangerous
+azure-storage-blob
 Gunicorn
+jwt

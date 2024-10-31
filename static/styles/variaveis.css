@@ -1,4 +1,3 @@
-
 /* 
    Variáveis de Cores
    - Define cores para uso consistente em toda a folha de estilos.
@@ -12,45 +11,5 @@
     --cinza-azulado: #B1C4CC;    /* Cinza azulado */
     --verde: #4BBF85;            /* Verde */
     --vermelho: #E35F64;         /* Vermelho */
-    --hover-background: #fff;     /* Cor de fundo ao passar o mouse */
-    --hover-text: #161a2d;        /* Cor do texto ao passar o mouse */
+    --cinza-escuro: #666565;     /* Cinza escuro */
 }
-
-
-.flash-messages {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 350px;
-    z-index: 1000;
-}
-
-.flash {
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-}
-
-.flash.success {
-    background-color: #28a745; /* Verde para sucesso */
-}
-
-.flash.error {
-    background-color: #dc3545; /* Vermelho para erro */
-}
-
-.flash.warning {
-    background-color: #ffc107; /* Amarelo para aviso */
-}
-
-.flash.info {
-    background-color: #17a2b8; /* Azul para informações */
-}
-
-

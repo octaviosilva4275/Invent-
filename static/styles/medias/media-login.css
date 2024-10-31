@@ -1,98 +1,113 @@
-
-
-
-
-/* Media Queries para dispositivos móveis e tablets */
+/* Estilos aplicados para telas com largura de até 1024 pixels (tablets e dispositivos móveis maiores) */
 @media (max-width: 1024px) {
+    /* Oculta o banner em telas menores para liberar espaço */
     .banner {
-        display: none;  /* Oculta o banner para tablets e celulares */
+        display: none;
     }
     
+    /* Ajusta o container de login para ocupar toda a largura e altura da tela, e centraliza o conteúdo */
     .login {
-        width: 100vw;  /* Certifica que ocupa toda a largura */
-        height: 100vh;  /* Certifica que ocupa toda a altura */
-        justify-content: center;  /* Centraliza o conteúdo */
-        align-items: center;  /* Centraliza verticalmente */
+        width: 100vw;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
     }
     
+    /* Configura o campo de login para ocupar toda a largura e altura da tela, com padding, fundo sólido, e sem sombra */
     .campo-login {
-        width: 100vw;  /* O campo de login ocupa 100% da largura */
-        height: 100vh;  /* O campo de login ocupa 100% da altura */
-        padding: 20px;  /* Ajusta o padding */
-        background-color: rgba(217, 217, 217, 1);
-        display: flex;  /* Flex para centralizar conteúdo */
-        justify-content: center;  /* Centraliza horizontalmente o conteúdo do login */
-        align-items: center;  /* Centraliza verticalmente o conteúdo do login */
-        box-shadow: none;  /* Remove a sombra para manter o layout limpo */
-        border-radius: 0;  /* Remove as bordas arredondadas */
+        width: 100vw;
+        height: 100vh;
+        padding: 20px;
+        background-color: var(--cinza-azulado);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: none;
+        border-radius: 0;
     }
 
+    /* Define a largura do formulário de login como 90% da tela e centraliza-o */
     .form-login {
-        width: 90%;  /* Ajusta a largura do formulário para 90% */
-        margin: 0 auto;  /* Centraliza */
+        width: 90%;
+        margin: 0 auto;
     }
 
+    /* Ajusta o tamanho da fonte e a margem inferior do título do formulário de login */
     .titulo-login h3 {
-        font-size: 22px;  /* Ajusta o tamanho da fonte do título */
-        margin-bottom: 20px;  /* Margem inferior menor */
+        font-size: 22px;
+        margin-bottom: 20px;
     }
 
+    /* Define o padding dos campos de entrada do formulário */
     .form-login input {
-        padding: 10px;  /* Ajusta o padding dos inputs */
+        padding: 10px;
     }
 
+    /* Ajusta a largura, tamanho da fonte e padding do botão de login */
     .btn-login {
-        width: 70%;  /* Ajusta a largura do botão */
-        font-size: 14px;  /* Reduz o tamanho da fonte */
-        padding: 10px 15px;  /* Ajusta o padding */
+        width: 70%;
+        font-size: 14px;
+        padding: 10px 15px;
     }
 
+    /* Ajusta o tamanho da fonte e padding dos links de "Primeiro Login" e "Esqueceu Senha" */
     .primeiro-login a, .esqueceu-senha a {
-        font-size: 14px;  /* Ajusta o tamanho do texto */
+        font-size: 14px;
         padding: 10px;
     }
 }
 
+/* Estilos aplicados para telas com largura de até 768 pixels (dispositivos móveis menores) */
 @media (max-width: 768px) {
+    /* Ajusta o padding do campo de login para um valor menor */
     .campo-login {
-        width: 100vw;  /* O campo de login ocupa toda a largura */
-        height: 100vh;  /* O campo de login ocupa 100% da altura */
-        padding: 15px;  /* Menor padding em celulares */
+        width: 100vw;
+        height: 100vh;
+        padding: 15px;
     }
 
+    /* Reduz o tamanho da fonte do título do formulário de login */
     .titulo-login h3 {
-        font-size: 20px;  /* Reduz um pouco o tamanho do título */
+        font-size: 20px;
     }
 
+    /* Ajusta a largura do botão de login para ocupar 80% da tela */
     .btn-login {
-        width: 80%;  /* O botão ocupa 80% da largura */
+        width: 80%;
     }
 
+    /* Define a largura do formulário de login como 100% da tela */
     .form-login {
-        width: 100%;  /* O formulário ocupa toda a largura */
+        width: 100%;
     }
 
+    /* Reduz o tamanho da fonte dos campos de entrada do formulário */
     .form-login input {
-        font-size: 14px;  /* Reduz o tamanho da fonte dos inputs */
+        font-size: 14px;
     }
 }
 
+/* Estilos aplicados para telas com largura de até 480 pixels (celulares) */
 @media (max-width: 480px) {
+    /* Ajusta o padding do campo de login para um valor ainda menor */
     .campo-login {
-        width: 100vw;  /* O campo de login ocupa 100% da largura */
-        height: 100vh;  /* O campo de login ocupa 100% da altura */
-        padding: 10px;  /* Padding ainda menor */
+        width: 100vw;
+        height: 100vh;
+        padding: 10px;
     }
 
+    /* Reduz ainda mais o tamanho da fonte do título do formulário de login */
     .titulo-login h3 {
-        font-size: 18px;  /* Reduz ainda mais o tamanho do título */
+        font-size: 18px;
     }
 
+    /* Define a largura do formulário de login como 100% da tela */
     .form-login {
-        width: 100%;  /* Formulário ocupa toda a largura */
+        width: 100%;
     }
 
+    /* Ajusta a largura do botão de login para ocupar 90% da tela */
     .btn-login {
-        width: 90%;  /* Botão ocupa 90% da largura */
+        width: 90%;
     }
 }

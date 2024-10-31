@@ -46,21 +46,23 @@ body{
 }
 
 .sidebar .sidebar-header {
-  display: flex;
   align-items: center;
 }
 
 .sidebar .sidebar-header img {
-  width: 42px;
+  width: 58px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  margin: auto;
 }
 
 .sidebar .sidebar-header h2 {
   color: #fff;
-  font-size: 1.25rem;
+  font-size: 24px;
   font-weight: 600;
   white-space: nowrap;
-  margin-left: 23px;
+  margin-left: 65px;
 }
 
 .sidebar-links h4 {
@@ -73,6 +75,7 @@ body{
 
 .sidebar-links h4 span {
   opacity: 0;
+  font-size: 16px;
 }
 
 .sidebar:hover .sidebar-links h4 span {
@@ -98,6 +101,10 @@ body{
   transform: scaleX(0);
 }
 
+.sidebar:hover .sidebar-header img{
+  width: 58px;
+}
+
 .sidebar-links {
   list-style: none;
   margin-top: 20px;
@@ -113,11 +120,12 @@ body{
 .sidebar-links li a {
   display: flex;
   align-items: center;
-  gap: 0 20px;
+  gap: 0 13px;
   color: #fff;
   font-weight: 500;
   white-space: nowrap;
   padding: 15px 10px;
+  font-size: 16px;
   text-decoration: none;
   transition: 0.2s ease;
 }
@@ -147,12 +155,12 @@ body{
 }
 
 .user-profile h3 {
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
 }
 
 .user-profile span {
-  font-size: 0.775rem;
+  font-size: 12.4px;
   font-weight: 600;
 }
 
@@ -172,8 +180,10 @@ body{
 }
 
 .sidebar-header img{
-  transform: scale(1.5, 1.5);
+  transform: scale(1.3, 1.3);
 }
+
+
 
 @media (max-width: 468px) {
   .sidebar{
@@ -251,9 +261,48 @@ body{
 }
 }
 
+
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+/* Aplique cor do texto para outros elementos que não estão dentro do container */
+.dark-mode .container1,
+.dark-mode .container2 {
+    background-color: var(--dark);}
+
+/* Altere a cor dos textos em outros elementos que possam estar fora do container */
+.dark-mode .titulo h2,
+.dark-mode .container-form .form-login .input-login span,
+.dark-mode .container-form .form-login .links a {
+    color: var(--fontedark); 
+}
   </style>
 </head>
 <body>
+  {% include '/componentes.html' %}
   <header>
     <div class="container-dashboard-header">
       <img src="{{ url_for('static', filename='img/logoinvent+.png') }}" alt="logo" class="logo"/>
@@ -267,13 +316,19 @@ body{
   <aside class="sidebar">
     <div class="sidebar-header">
       <img src="{{ url_for('static', filename='img/logoinvent+.png') }}" alt="logo" />
-      <h2>Inventory</h2>
+      <h2>Invent +</h2>
     </div>
   </div>
   <ul class="sidebar-links">
+    {% if session['user_cargo'] == 'admin' %}
+    <li>
+        <a href="{{ url_for('admin') }}">
+            <span class="material-symbols-outlined"> admin_panel_settings </span>Painel Administração</a>
+    </li>
+    {% endif %}
 
-
-  {% if session['user_cargo'] == 'almoxarifado' %}
+  {% if session['user_cargo'] == 'almoxarifado'  or session['user_cargo'] == 'admin' %}
+  
   <h4>
     <div class="menu-separator"></div>
     <span>Menu Principal</span>
@@ -282,44 +337,52 @@ body{
 
   <li>
     <a href="{{ url_for('dashboard') }}">
-        <span class="material-symbols-outlined"> dashboard </span>Dashboard</a>
+        <span class="material-symbols-outlined"> dashboard </span>Início</a>
   </li>
   <li>
       <a href="{{ url_for('cadastro_material') }}"><span class="material-symbols-outlined"> overview </span>Cadastro material</a>
   </li>
   <li>
-      <a href="{{ url_for('relatorios') }}"><span class="material-symbols-outlined"> monitoring </span>Relatorios</a>
-  </li>
+    <a href="{{ url_for('controle_estoque') }}"><span class="material-symbols-outlined"> groups </span>Movimentação</a>
+</li>
   <li>
-      <a href="{{ url_for('controle_estoque') }}"><span class="material-symbols-outlined"> groups </span>Controle Estoque</a>
+      <a href="{{ url_for('relatorios') }}"><span class="material-symbols-outlined"> monitoring </span>Relatórios</a>
   </li>
 
+
+
   {% endif %}
+
+ 
   <h4>
       <span>Geral</span>
       <div class="menu-separator"></div>
   </h4>
-  {% if session['user_cargo'] != 'almoxarifado' %}
+  {% if session['user_cargo'] != 'almoxarifado' or session['user_cargo'] == 'almoxarifado-nao-verificado' %}
   <li>
-      <a href="{{ url_for('requisicao_material') }}"><span class="material-symbols-outlined"> folder </span>Requisicao Material</a>
+      <a href="{{ url_for('requisicao_material') }}"><span class="material-symbols-outlined"> folder </span>Requisição Material</a>
   </li>
   {% endif %}
-  {% if session['user_cargo'] == 'almoxarifado' %}
+  {% if session['user_cargo'] == 'almoxarifado' or session['user_cargo'] == 'admin' %}
   <li>
-      <a href="{{ url_for('requisicao_material_admin') }}"><span class="material-symbols-outlined"> folder </span>Requisicao Material Admin</a>
+      <a href="{{ url_for('requisicao_material_admin') }}">
+          <span class="material-symbols-outlined"> folder </span>Requisições</a>
   </li>
   {% endif %}
+  
+ 
   <h4>
-    <span>Account</span>
+    <span>Conta</span>
     <div class="menu-separator"></div>
   </h4>
   <li>
-    <a href="#"><span class="material-symbols-outlined"> account_circle </span>Profile</a>
+    <a href="{{ url_for('editar_perfil') }}">
+      <span class="material-symbols-outlined"> account_circle </span>Perfil
+    </a>
   </li>
-
   {% if session.get('logged_in') %}
   <li>
-    <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined"> logout </span>Logout</a>
+    <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined"> logout </span>Sair</a>
   </li>
   {% endif %}
   </ul>
@@ -329,7 +392,7 @@ body{
           <img src="{{ url_for('static', filename='img/user.png') }}" style="background-color: white;" alt="logo" />
               <div class="user-detail">
                   {% if session.get('logged_in') %}
-                    <h3>{{ session['user_rn'] }}</h3>
+                    <h3>{{ usuario['nome'] }}</h3>
                     <span>{{ session['user_cargo'] }}</span>
                   {% else %}
                     <h3>Usuário não logado</h3>

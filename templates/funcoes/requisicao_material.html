@@ -82,21 +82,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Requisição de Material</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
 
     <style>
-        h1, h2 {
-            color: #2196F3;
+        body {
+            overflow: auto;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            margin-bottom: 10px;
         }
 
         form {
             background-color: #fff;
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
             margin-bottom: 30px;
         }
 
-        .input-group, .form-group {
+        .input-group,
+        .form-group {
             margin-bottom: 20px;
         }
 
@@ -106,72 +118,334 @@
             font-weight: bold;
         }
 
-        select, input[type="number"], textarea {
+        select,
+        input[type="number"],
+        textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        select:focus,
+        input[type="number"]:focus,
+        textarea:focus {
+            border-color: #2196F3;
+            outline: none;
+            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
         }
 
         button[type="submit"] {
-            background-color: #2196F3;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+            padding: 10px;
+            font-size: 16px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
+            background-color: var(--azul-escuro);
+            color: var(--branco);
+            border-radius: 5px;
+            transition: all 0.3s ease, transform 0.2s ease;
         }
 
         button[type="submit"]:hover {
             background-color: #1976D2;
+            transform: scale(1.05);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden; /* Para bordas arredondadas */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px;
             text-align: left;
+            transition: background-color 0.3s;
         }
 
         th {
             background-color: #f2f2f2;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9; /* Muda a cor ao passar o mouse */
         }
 
         #minhas-requisicoes-table {
             margin-top: 30px;
+            font-size: 14px;
         }
-        .em-separacao { color: orange; font-weight: bold; }
-        .pronto-retirar { color: green; font-weight: bold; }
-        .aguardando-estoque { color: rgb(212, 0, 0); font-weight: bold; }
-        .finalizado { color: grey; font-weight: bold; }
+
+        .em-separacao {
+            color: orange;
+            font-weight: bold;
+        }
+
+        .pronto-retirar {
+            color: green;
+            font-weight: bold;
+        }
+
+        .aguardando-estoque {
+            color: rgb(212, 0, 0);
+            font-weight: bold;
+        }
+
+        .finalizado {
+            color: grey;
+            font-weight: bold;
+        }
+
+        /* Estilo para tooltips */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Estilos do tutorial */
+        .highlight {
+            position: relative;
+            z-index: 10;
+            outline: 2px solid #FFEB3B;
+            outline-offset: -4px;
+        }
+
+        .highlight-table {
+            position: relative;
+            z-index: 10;
+            outline: 2px solid #FFEB3B;
+            outline-offset: -4px;
+            background-color: #f9f9f9;
+        }
+
+        #tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9;
+        }
+
+        #tutorial-message {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            max-width: fit-content;
+            margin-left: 90px;
+        }
+
+        /* Estilo para as mensagens do tutorial */
+        .tutorial-message {
+            background-color: #fff;
+            /* Fundo branco */
+            border: 2px solid #2196F3;
+            /* Borda azul */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 300px;
+            /* Largura máxima */
+            position: relative;
+        }
+
+        .tutorial-message p {
+            font-size: 16px;
+            /* Tamanho da fonte */
+            color: #333;
+            /* Cor do texto */
+            margin: 0 0 10px;
+            /* Margem embaixo do parágrafo */
+        }
+
+        /* Botão de próximo passo */
+        .next-step {
+            background-color: #2196F3;
+            /* Cor de fundo */
+            color: white;
+            /* Cor do texto */
+            padding: 10px 15px;
+            /* Padding do botão */
+            border: none;
+            /* Remover borda padrão */
+            border-radius: 4px;
+            /* Bordas arredondadas */
+            cursor: pointer;
+            /* Mão ao passar o mouse */
+            font-weight: bold;
+            /* Negrito */
+            transition: background-color 0.3s;
+            /* Transição suave */
+        }
+
+        .next-step:hover {
+            background-color: #1976D2;
+            /* Cor ao passar o mouse */
+        }
+
+        #tutorial-message .step-2 {
+            margin-top: 30px;
+        }
+
+        /* Classes para cada mensagem do tutorial */
+        .step-1,
+        .step-2,
+        .step-3,
+        .step-4,
+        .step-5 {
+            margin-left: 135px;
+            background-color: #ddd;
+            max-width: fit-content;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .step-1 {
+            margin-top: 170px;
+        }
+
+        .step-2 {
+            margin-top: 265px;
+        }
+
+        .step-3 {
+            margin-top: 395px;
+        }
+
+        .step-4 {
+            margin-top: 395px;
+            margin-left: 320px;
+        }
+
+        .step-5 {
+            margin-left: 45%;
+            margin-top: 450px;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (max-width: 768px) {
+            .step-1,
+            .step-2,
+            .step-3,
+            .step-4,
+            .step-5 {
+                margin-left: 30px;
+            }
+
+            .step-1 {
+                margin-top: 225px;
+            }
+
+            .step-2 {
+                margin-top: 315px;
+            }
+
+            .step-3 {
+                margin-top: 445px;
+            }
+
+            .step-4 {
+                margin-left: 200px;
+                margin-top: 420px;
+            }
+
+            .step-5 {
+                margin-left: 20%;
+                margin-top: 850px;
+            }
+
+            #minhas-requisicoes-table {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
     {% include '/dashboard/dashboard.html' %}
-    
+
+    <div id="tutorial-overlay">
+        <div class="tutorial-message step-1">
+            <p>Selecione o material desejado aqui.</p>
+            <button class="next-step">Próximo</button>
+        </div>
+        <div class="tutorial-message step-2" style="display: none;">
+            <p>Informe a quantidade desejada neste campo.</p>
+            <button class="next-step">Próximo</button>
+        </div>
+        <div class="tutorial-message step-3" style="display: none;">
+            <p>Adicione uma observação, se necessário.</p>
+            <button class="next-step">Próximo</button>
+        </div>
+        <div class="tutorial-message step-4" style="display: none;">
+            <p>Clique aqui para enviar sua requisição.</p>
+            <button class="next-step">Próximo</button>
+        </div>
+        <div class="tutorial-message step-5" style="display: none;">
+            <p>Aqui estão suas requisições feitas.</p>
+            <button class="next-step">Fechar Tutorial</button>
+        </div>
+    </div>
+
     <form action="{{ url_for('requisicao_material') }}" method="POST">
         <h2>Requisição de Material</h2>
         <div class="input-group">
-            <label for="material">Material:</label>
+            <label for="material" class="tooltip">Material:
+                <span class="tooltiptext">Selecione o material desejado.</span>
+            </label>
             <select id="material" name="material_id" required>
                 {% for material in materiais %}
-                <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})</option>
+                <option value="{{ material.id }}">{{ material.descricao }} (Estoque: {{ material.quantidade if material.quantidade is not none else 0 }})</option>
                 {% endfor %}
             </select>
         </div>
 
         <div class="input-group">
-            <label for="quantidade">Quantidade:</label>
+            <label for="quantidade" class="tooltip">Quantidade:
+                <span class="tooltiptext">Informe a quantidade desejada.</span>
+            </label>
             <input type="number" id="quantidade" name="quantidade" min="1" required>
         </div>
 
@@ -183,7 +457,7 @@
         <button type="submit">Enviar Requisição</button>
     </form>
 
-    <h3>Minhas Requisições Pendentes</h3>
+    <h3>Minhas Requisições</h3>
     {% if minhas_requisicoes %}
     <table id="minhas-requisicoes-table">
         <thead>
@@ -198,8 +472,11 @@
             {% for requisicao in minhas_requisicoes %}
             <tr>
                 <td>{{ requisicao.material }}</td>
-                <td>{{ requisicao.quantidade }}</td>
-                <td class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponível para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% endif %}">{{ requisicao.status }}</td>
+                <td>{{ requisicao.quantidade if requisicao.quantidade is not none else 0 }}</td>
+                <td class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponivel para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% endif %}">
+                    {{ requisicao.status }}
+                </td>
+                
                 <td>{{ requisicao.data_atualizacao }}</td>
             </tr>
             {% endfor %}
@@ -212,6 +489,55 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
+            // Verifica se o tutorial já foi exibido nesta sessão
+            if (!sessionStorage.getItem('tutorialCompleted')) {
+                // Variáveis do tutorial
+                let currentStep = 0;
+                const tutorialSteps = [
+                    { element: '#material', text: 'Selecione o material desejado aqui.', className: 'step-1' },
+                    { element: '#quantidade', text: 'Informe a quantidade desejada neste campo.', className: 'step-2' },
+                    { element: '#observacao', text: 'Adicione uma observação, se necessário.', className: 'step-3' },
+                    { element: 'button[type="submit"]', text: 'Clique aqui para enviar sua requisição.', className: 'step-4' },
+                    { element: '#minhas-requisicoes-table', text: 'Aqui estão suas requisições feitas.', className: 'step-5' }
+                ];
+
+                // Função para mostrar o passo atual do tutorial
+                function showTutorialStep(step) {
+                    $('.tutorial-message').hide(); // Oculta todos os passos
+                    $('.tutorial-message').eq(step).show(); // Mostra apenas o passo atual
+                    $('#tutorial-overlay').show(); // Exibe o overlay
+
+                    // Remover highlight de todos os elementos
+                    tutorialSteps.forEach((step) => {
+                        $(step.element).removeClass('highlight');
+                        $(step.element).removeClass('highlight-table'); // Remove highlight da tabela
+                    });
+
+                    // Adiciona highlight ao elemento atual
+                    if (step === 4) { // Se for o passo da tabela
+                        $('#minhas-requisicoes-table').addClass('highlight-table'); // Destaca a tabela
+                    } else {
+                        $(tutorialSteps[step].element).addClass('highlight').focus(); // Foca no elemento atual
+                    }
+                }
+
+                // Evento de clique para passar para o próximo passo
+                $(document).on('click', '.next-step', function () {
+                    if (currentStep < tutorialSteps.length - 1) {
+                        currentStep++;
+                        showTutorialStep(currentStep);
+                    } else {
+                        $('#tutorial-overlay').hide(); // Fecha o tutorial no último passo
+                        $('#minhas-requisicoes-table').removeClass('highlight-table'); // Remove o highlight da tabela após o tutorial
+                        sessionStorage.setItem('tutorialCompleted', 'true'); // Marca o tutorial como concluído
+                    }
+                });
+
+                // Inicia o tutorial
+                showTutorialStep(currentStep);
+            }
+
+            // Função para atualizar a tabela de requisições
             function atualizarTabela() {
                 $.ajax({
                     url: "{{ url_for('api_minhas_requisicoes') }}",
@@ -222,14 +548,20 @@
 
                         if (data.length > 0) {
                             data.forEach(function (requisicao) {
-                                let row = '<tr>' +
-                                    '<td>' + requisicao.material + '</td>' +
-                                    '<td>' + requisicao.quantidade + '</td>' +
-                                    '<td class="' + (requisicao.status === 'Solicitado' ? 'em-separacao' : requisicao.status === 'Disponivel para retirada' ? 'pronto-retirar' : requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 'finalizado') + '">' + requisicao.status + '</td>' +
-                                    '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
-                                    '</tr>';
-                                tableBody.append(row);
-                            });
+                            let row = '<tr>' +
+                                '<td>' + requisicao.material + '</td>' +
+                                '<td>' + requisicao.quantidade + '</td>' +
+                                '<td class="' + 
+                                (requisicao.status === 'Solicitado' ? 'em-separacao' : 
+                                requisicao.status === 'Disponivel para retirada' ? 'pronto-retirar' : 
+                                requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 
+                                requisicao.status === 'Retirado' ? 'finalizado' : 
+                                'status-desconhecido') + '">' + requisicao.status + '</td>' +
+                                '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
+                                '</tr>';
+                            tableBody.append(row);
+                        });
+
                         } else {
                             tableBody.append('<tr><td colspan="4">Você ainda não fez nenhuma requisição.</td></tr>');
                         }
@@ -240,14 +572,16 @@
                 });
             }
 
+            // Chama a função de atualizar tabela e define intervalo
             atualizarTabela();
             setInterval(atualizarTabela, 5000);
-        });
 
-        function formatarData(dataString) {
-            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-            return new Date(dataString).toLocaleDateString('pt-BR', options).replace(' ', ' de ');
-        }
+            // Função para formatar a data
+            function formatarData(dataString) {
+                const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+                return new Date(dataString).toLocaleDateString('pt-BR', options).replace(' ', ' de ');
+            }
+        });
     </script>
 </body>
 

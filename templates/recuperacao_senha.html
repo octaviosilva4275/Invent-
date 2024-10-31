@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperação de Senha - Invent +</title>
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <link rel="icon" href="/static/img/logo.png">
+    <link rel="stylesheet" href="/static/styles/login.css">
+    <link rel="stylesheet" href="/static/styles/medias/media-login.css">
+    <link rel="stylesheet" href="/static/styles/variaveis.css">
+</head>
+
+<body>
+
+    <!-- Seção de recuperação de senha -->
+    <section class="recuperacao-senha">
+        <!-- Container do formulário -->
+        <div class="form-recuperacao">
+            <div class="titulo-recuperacao">
+                <h3>Nova de Senha</h3>
+            </div>
+            <!-- Formulário para recuperação de senha -->
+            <form action="/esquecer_senha" method="POST">
+                <label for="sn">Código SN | Email</label>
+                <input type="text" id="sn" name="sn" placeholder="Código SN | Email" required>
+                <button class="btn-recuperacao" type="submit">Enviar Link de Redefinição</button>
+            </form>
+
+            <!-- Link para voltar ao login -->
+            <div class="voltar-login">
+                <a href="{{ url_for('login') }}" class="button">Voltar ao Login</a>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

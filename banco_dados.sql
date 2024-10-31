@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     cargo VARCHAR(100)
 );
 
+
 -- Criação da tabela de materiais
 CREATE TABLE IF NOT EXISTS materials (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -73,10 +74,19 @@ CREATE TABLE IF NOT EXISTS lembretes (
     FOREIGN KEY (destinatario) REFERENCES users(id)
 );
 
+CREATE TABLE IF NOT EXISTS senha_resetada (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    token VARCHAR(255) NOT NULL UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL
+);
+
 -- Inserção de exemplo para tabela de usuários
 INSERT INTO users (sn, nome, email, senha, cargo) VALUES 
 ('11', 'Admin', 'admin@example.com', 'senha123', 'admin'),
-('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario');
+('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario'),
+('33', 'Octavio', 'octavio@gmail.com', 'senha123', 'almoxarifado');
 
 -- Inserção de exemplo para tabela de materiais
 INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) VALUES 
