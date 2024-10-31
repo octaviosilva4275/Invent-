@@ -1,4 +1,10 @@
-/* Normalização do Navegador */
+/* 
+   Normalização do Navegador
+   - Remove margens e paddings padrão de todos os elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Remove o estilo de lista e a sublinha de links.
+   - Define a fonte padrão 'Amatic SC'.
+*/
 * {
     margin: 0;
     padding: 0;
@@ -6,166 +12,180 @@
     list-style: none;
     text-decoration: none;
     border: none;
+    font-family: 'Amatic SC', sans-serif;
 }
 
-/* HTML e Body */
-html, body {
+/* 
+   Normalização do HTML e body
+   - Define a largura e altura como 100% da viewport.
+   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
+   - Remove o overflow horizontal.
+*/
+html {
+    width: 100%;
     height: 100%;
-    font-family: 'Amatic SC', cursive; /* Exemplo de fonte, adicione a fonte que preferir */
-    background-color: var(--cinza-claro);
+    font-size: 62.5%;
+    overflow-x: hidden;
 }
 
-/* Seção de Cadastro */
-.cadastro {
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark  : #465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+
+
+body.light-mode {
+    background-color: var(--cinza);
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+.dark-mode .campo-material{
+    background-color: var(--fundodark);
+}
+.material {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100vw;
     height: 100vh;
-    padding: 20px; /* Adicionado padding para evitar que o conteúdo fique colado nas bordas */
+    background-color: var(--branco);
 }
 
-/* Campo de Cadastro */
-.campo-cadastro {
+.campo-material {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #a8b4cc;
-    padding: 40px;
-    border-radius: 10px;
+    background-color:rgba(70, 94, 140, 0.51);
+    padding: 50px;
+    border-radius: 30px;
     max-width: 900px;
     width: 100%;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease, transform 0.3s ease; /* Adicionada transição para transformar */
+    height: 80%;
 }
 
-.campo-cadastro:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px); /* Pequeno efeito de movimento ao passar o mouse */
-}
-
-/* Formulário de Cadastro */
-.form-cadastro {
+.form-material {
     text-align: left;
     width: 100%;
 }
 
-/* Título do Cadastro com Logo */
-.titulo-cadastro {
+.titulo-material{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 30px;
+    padding: 20px;
+    margin-top: -50px;
+    margin-bottom: 60px;
+    font-size: 3.5rem;
 }
 
-.titulo-cadastro img {
-    width: 80px; /* Dimensões ajustadas */
-    height: 80px;
-    margin-right: 10px;
+.input-material{
+    font-weight: bolder;
+    color: black;
 }
 
-.titulo-cadastro h2 {
-    font-size: 28px; /* Aumentado para maior destaque */
-    color: var(--azul-escuro);
+/* Define o estilo para os campos de entrada de texto */
+.input-material[type="text"] {
+width: 100%;
+padding: 15px;
+margin: 10px 0;
+border: none;
+border-radius: 10px;
+background-color: #f4f4f4;
+font-size: 14px;
 }
 
-/* Estilos para Inputs e Select */
-.input_nome,
-.input_categoria {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+.select-categoria {
     width: 100%;
-}
-
-input, select {
-    background-color: #f5f5f5; /* Cor de fundo mais clara */
-    color: #333;
-    transition: border-color 0.3s ease; /* Transição suave para bordas */
-}
-
-.input_nome input,
-.input_categoria select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 5px;
-    border: 1px solid var(--cinza-azulado);
-    font-size: 16px;
-}
-
-.input_nome input:focus,
-.input_categoria select:focus {
-    border-color: var(--azul-escuro); /* Mudança de cor na borda ao focar */
-    outline: none; /* Remove o contorno padrão */
-}
-
-/* Inputs de Estoque */
-.input_estoque {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    gap: 20px;
-}
-
-.input_estoque input {
-    width: 48%;
-    padding: 12px; /* Ajustado para consistência */
-    border-radius: 5px;
-    border: 1px solid var(--cinza-azulado);
-    font-size: 16px;
-}
-
-/* Estilos do Botão de Cadastro */
-.btn-cadastro {
-    justify-content: center;
-    align-items: center;
-    width: 30%; /* Largura ajustada para um design mais equilibrado */
     padding: 15px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: var(--azul-escuro);
-    color: var(--branco);
-    border-radius: 5px;
-    transition: all 0.3s ease, transform 0.2s ease; /* Transição suave com transformação */
+    margin-top: 10px;
+    border-radius: 9px;
+    box-sizing: border-box; /* garante que padding não afete a largura */
 }
 
-.btn-cadastro:hover {
-    background-color: var(--azul-claro);
-    transform: scale(1.05); /* Efeito de aumento ao passar o mouse */
-}
-
-/* Container do Botão */
-.container-btn {
-    display: flex;
+.input-material[type="number"] {
     width: 100%;
-    justify-content: flex-end;
-}
-
-/* Mensagens de Flash */
-.flash-messages {
-    position: fixed;
-    top: 35px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    width: 90%; /* Ajuste a largura conforme necessário */
-    max-width: 400px; /* Limite a largura máxima */
-    text-align: center; /* Centraliza o texto */
-    font-size: 18px;
-}
-
-.flash {
     padding: 15px;
     margin: 10px 0;
-    border-radius: 5px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    font-size: 14px;
+}
+
+/* Define a linha contendo os campos de estoque mínimo e máximo */
+.estoques {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Ajusta a largura dos campos de número na mesma linha */
+.input-material[type="number"] {
+    width: 48%;
+}
+
+/* Estiliza o botão de submissão */
+.btn-material {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 15px;
     color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra opcional */
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 90px;
+    background-color: rgba(25, 35, 64, 1);
+    transition: all 0.3s ease;
 }
 
-.flash.error {
-    background-color: #e74c3c; /* Vermelho */
-}
-
-.flash.success {
-    background-color: #2ecc71; /* Verde */
+/* Define o comportamento do botão quando o cursor passa sobre ele */
+.btn-material:hover {
+    background-color: rgba(25, 35, 64, 0.8); /* Cor mais clara ou outra cor quando o mouse estiver sobre o botão */
+    transform: scale(1.05);
 }
