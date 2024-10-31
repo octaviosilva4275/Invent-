@@ -259,6 +259,44 @@ body{
 }
 }
 
+
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+/* Aplique cor do texto para outros elementos que não estão dentro do container */
+.dark-mode .container1,
+.dark-mode .container2 {
+    background-color: var(--dark);}
+
+/* Altere a cor dos textos em outros elementos que possam estar fora do container */
+.dark-mode .titulo h2,
+.dark-mode .container-form .form-login .input-login span,
+.dark-mode .container-form .form-login .links a {
+    color: var(--fontedark); 
+}
   </style>
 </head>
 <body>
@@ -310,6 +348,7 @@ body{
   </li>
 
 
+
   {% endif %}
 
  
@@ -335,9 +374,10 @@ body{
     <div class="menu-separator"></div>
   </h4>
   <li>
-    <a href="{{ url_for('editar_perfil')}}"><span class="material-symbols-outlined"> account_circle </span>Perfil</a>
+    <a href="{{ url_for('editar_perfil') }}">
+      <span class="material-symbols-outlined"> account_circle </span>Perfil
+    </a>
   </li>
-
   {% if session.get('logged_in') %}
   <li>
     <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined"> logout </span>Sair</a>
