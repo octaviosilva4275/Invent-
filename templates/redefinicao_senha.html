@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <title>Redefinição de Senha</title>
+</head>
+<body>
+    <h3>Redefinir Senha</h3>
+    <form action="/redefinir_senha?token={{ token }}" method="POST">
+        <label for="nova_senha">Nova Senha:</label>
+        <input type="password" id="nova_senha" name="nova_senha" required>
+        <button type="submit">Redefinir Senha</button>
+    </form>
+</body>
+</html>

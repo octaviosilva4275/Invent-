@@ -24,7 +24,7 @@
 /* Telas Médias (Tablets) */
 @media (max-width: 768px) {
     .cadastro {
-        background-color: var(--cinza-azulado); /* Mantém o fundo verde */
+        background-color: var(--branco); /* Mantém o fundo verde */
         height: auto; /* Permite o conteúdo expandir verticalmente */
         padding: 20px;
     }

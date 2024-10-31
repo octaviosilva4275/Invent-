@@ -1,10 +1,4 @@
-/* 
-   Normalização do Navegador
-   - Remove margens e paddings padrão de todos os elementos.
-   - Define a caixa de todos os elementos como "box-sizing: border-box".
-   - Remove o estilo de lista e a sublinha de links.
-   - Define a fonte padrão 'Amatic SC'.
-*/
+/* Normalização do Navegador */
 * {
     margin: 0;
     padding: 0;
@@ -12,20 +6,13 @@
     list-style: none;
     text-decoration: none;
     border: none;
-    font-family: 'Amatic SC', sans-serif;
 }
 
-/* 
-   Normalização do HTML e body
-   - Define a largura e altura como 100% da viewport.
-   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
-   - Remove o overflow horizontal.
-*/
-html {
-    width: 100%;
+/* HTML e Body */
+html, body {
     height: 100%;
-    font-size: 62.5%;
-    overflow-x: hidden;
+    font-family: 'Amatic SC', cursive; /* Exemplo de fonte, adicione a fonte que preferir */
+    background-color: var(--cinza-claro);
 }
 
 body {
@@ -93,13 +80,13 @@ body.dark-mode {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100vw;
     height: 100vh;
-    background-color: var(--branco);
+    padding: 20px; /* Adicionado padding para evitar que o conteúdo fique colado nas bordas */
 }
 
 .campo-material {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color:rgba(70, 94, 140, 0.51);

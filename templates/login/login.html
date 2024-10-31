@@ -1,73 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invent +</title>
-    <link rel="icon" href="/static/img/logo.png">
-    <link rel="stylesheet" href="/static/styles/login.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-login.css">
-
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-login.css') }}">
+    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
+    <link rel="icon" href="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}">
 </head>
-
 <body>
-
-<main>
-    <!-- Seção que engloba tudo da tela de login -->
-    <section class="login">
-
-        <!-- Container do banner -->
-        <div class="banner">
-            <!-- <img src="/static/img/banner.webp" alt=""> -->
+    {% include 'componentes.html' %}
+    <div class="container-geral">
+        <div class="darkmode">
+            <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
+            <img src="{{ url_for('static', filename='img/login-img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
+            <div class="container-degrade"></div>
         </div>
 
-        <!-- Campo login com o formulário -->
-        <div class="campo-login">
-
-            <!-- Container form -->
-            <div class="form-login">
-                <!-- Título -->
-                <div class="titulo-login">
-                    <img src="/static/img/logo01.png" alt="logo">
-                    <h3>LOGIN</h3>
-                </div>
-                <!-- Formulário de login -->
-                <form action="/login" method="POST">
-                    <!-- Campo de entrada para o código RN ou email -->
-                    <div class="form-login">
-                        <label for="rn">Codigo RN | Email</label>
-                        <!-- Campo de texto para inserir o código RN ou email -->
-                        <input type="text" id="rn" name="rn" placeholder="Codigo SN | Email" required>
+        <div class="container1">
+            <div class="container2"></div>
+            <div class="container-form">
+                <form class="form-login" method="POST" action="{{ url_for('login') }}">
+                    <div class="titulo">
+                        <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt="">
+                        <h2>Login</h2>
                     </div>
 
-                    <!-- Campo de entrada para a senha -->
-                    <div class="form-login">
-                        <label for="password">Senha</label>
-                        <!-- Campo de senha para inserir a senha do usuário -->
-                        <input type="password" id="password" name="password" placeholder="Password" required>
+                    <div class="inputBox">
+                        <input class="input-login" type="text" name="entrada" required>
+                        <span>Código SN | Email</span>
+                        <i></i>
                     </div>
-
-                    <!-- Link para recuperação de senha -->
-                    <div class="esqueceu-senha">
-                        <a href="#" class="password">Esqueceu a senha?</a>
+                    <div class="inputBox">
+                        <input class="input-login" type="password" name="senha" required>
+                        <span>Senha</span>
+                        <i></i>
                     </div>
-
-                    <!-- Botão de submissão do formulário -->
-                    <button class="btn-login" type="submit">LOGIN</button>
+                    <input class="in" type="submit" value="Entrar">
+                    <div class="links">
+                        <a href="{{ url_for('esquecer_senha') }}">Esqueceu a senha?</a>
+                        <a href="{{ url_for('cadastro') }}">Primeiro login?</a>
+                    </div>
                 </form>
-                
-                <!-- Seção para o primeiro login, que oferece um link para novos usuários -->
-                <div class="primeiro-login">
-                    <!-- Link para a página de primeiro login, com uma URL gerada dinamicamente -->
-                    <a href="{{ url_for('primeiro_login') }}" class="button color">Primeiro Login?</a>
-                </div>
             </div>
         </div>
-    </section>
-</main>
+    </div>
 </body>
-
 </html>
-

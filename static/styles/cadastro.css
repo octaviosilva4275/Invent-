@@ -1,0 +1,465 @@
+/* 
+   Reset básico
+   - Remove margens e paddings padrão de todos os elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Define a fonte padrão como 'Poppins'.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 
+   Variáveis CSS
+   - Define cores utilizadas no tema da aplicação.
+*/
+:root{
+    --cinza: #d6d6d6;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark  :#192340;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+
+/* 
+   Estilo do container geral
+   - Define dimensões e imagem de fundo do container.
+*/
+.container-geral {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--cinza);
+    background-image: url('/static/img/cadastro/login-img/imagemfundo.png');
+    background-size: 70%;
+    background-position: 60px calc(100% + -40px);
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 
+   Controle de visibilidade
+   - Classe para ocultar elementos.
+*/
+.none {
+    display: none; 
+}
+
+
+#lua-icon, #sol-icon {
+    transition: opacity 0.3s ease;
+}
+
+.none {
+    opacity: 0;
+    pointer-events: none; /* Previne clique no ícone escondido */
+}
+
+/* 
+   Estilos do modo escuro
+   - Define estilos para ícones de tema.
+*/
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+/* 
+   Estilos para o modo escuro
+   - Define cores de fundo e texto quando o modo escuro é ativado.
+*/
+.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+/* 
+   Estilos específicos no modo escuro
+   - Ajustes em diferentes elementos do formulário e container.
+*/
+.dark-mode .container-geral {
+    background-color: var(--dark);
+}
+
+.dark-mode .container-cadastro {
+    background: rgba(10, 10, 30, 0.8); 
+}
+
+.dark-mode .container-cadastro .form-cadastro {
+    background: var(--fundodark);
+}
+
+.dark-mode .container-cadastro .form-cadastro .input-cadastro input,
+.dark-mode .container-cadastro .form-cadastro .input-cadastro select {
+    border-bottom: 2px solid  var(--fontedark);
+    color: var(--fontedark);
+}
+
+/* 
+   Estilos de texto no modo escuro
+   - Define a cor dos textos em vários elementos do formulário.
+*/
+.dark-mode .container-cadastro .form-cadastro .h2-cadastro,
+.dark-mode .container-cadastro .form-cadastro .input-cadastro span,
+.dark-mode .container-cadastro .form-cadastro  {
+    color: var(--fontedark);
+}
+
+
+
+/* 
+   Estilo do botão de submit no modo escuro
+   - Define a cor de fundo do botão.
+*/
+.dark-mode .container-cadastro .form-cadastro input[type="submit"] {
+    background: #2c3653; 
+}
+
+/* 
+   Estilo do ícone do sol no modo escuro
+   - Aplica um filtro ao ícone.
+*/
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+/* 
+   Efeitos de foco nos inputs
+   - Define a animação de transição e cor dos labels quando o input é focado.
+*/
+.dark-mode .container-cadastro .form-cadastro .input-cadastro input:focus ~ span,
+.dark-mode .container-cadastro .form-cadastro .input-cadastro input:valid ~ span {
+    color: var(--fontedark);
+    transform: translateY(-24px);
+    font-size: 0.85em;
+}
+
+.dark-mode .container-cadastro .form-cadastro input[type="submit"] {
+    margin-top: 41px;
+    margin-bottom: 20px;
+    background: #384773;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.dark-mode .container-cadastro .form-cadastro input[type="submit"]:hover {
+    background: #2c3653;
+}
+
+.dark-mode #areas-senai{
+    border-bottom: 2px solid var(--fontedark);
+}
+
+.dark-mode .container-form .form-login .h2-login,
+.dark-mode .container-form .form-login .input-login span,
+.dark-mode .container-form .form-login .links a {
+    color: var(--fontedark);
+}
+
+/* 
+   Estilo do container de cadastro
+   - Define dimensões, cores, bordas e sombras.
+*/
+.container-cadastro {
+    width: 550px; 
+    height: 600px;
+    background: rgba(28, 32, 73, 0.7);
+    border-radius: 10px;
+    box-shadow: rgba(76, 80, 122, 0.7) 0px 5px 15px;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+}
+
+/* 
+   Efeito degradê de fundo
+   - Define um elemento para o efeito de degradê.
+*/
+.container-degrade {
+    width: 60%;
+    height: 60%;
+    position: absolute;
+    bottom: -60%;
+    border-radius: 50%;
+    right: 20%;
+    box-shadow: 0 0 230px 75px #1C2049;
+}
+
+/* 
+   Estilo do título do cadastro
+   - Centraliza e define margem do título.
+*/
+.titulo-cadastro {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.titulo-cadastro img {
+    display: block;
+    margin: 0 auto;
+    width: 70px;
+    height: auto;
+    transform: scale(1.8);
+}
+.links {
+    position: absolute;
+    bottom: 20px; /* Ajuste a distância do fundo */
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 
+   Efeito de fundo do container de cadastro
+   - Cria uma animação de rotação com um degradê.
+*/
+.container-cadastro::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 500px; 
+    height: 550px; 
+    background: linear-gradient(90deg, transparent, transparent, rgb(62, 50, 139), #d7dbff);
+    z-index: 1;
+    transform-origin: bottom right;
+    animation: animate 6s linear infinite;
+}
+
+/* 
+   Animação de rotação
+   - Define a animação para a camada de fundo.
+*/
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* 
+   Estilo do formulário de cadastro
+   - Define layout, cor de fundo e padding.
+*/
+.container-cadastro .form-cadastro {
+    position: absolute;
+    inset: 1.5px;
+    background: var(--fundo);
+    border-radius: 10px;
+    padding: 0 40px; 
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 
+   Estilo do cabeçalho do formulário
+   - Define tamanho e cor do título do formulário.
+*/
+.container-cadastro .form-cadastro .h2-cadastro {
+    color: #000000;
+    font-size: 2em;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0.1em;
+    margin-bottom: 15px;
+}
+
+/* 
+   Estilo dos campos de entrada
+   - Define layout e margem dos campos de entrada.
+*/
+.container-cadastro .form-cadastro .input-cadastro {
+    position: relative;
+    margin-top: 35px;
+}
+
+/* 
+   Estilo dos inputs
+   - Define dimensões, cores e efeitos de transição.
+*/
+.container-cadastro .form-cadastro .input-cadastro input {
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #000000;
+    font-size: 1.2em;
+    border-bottom: 2px solid #000000;
+    transition: 0.3s;
+}
+
+/* 
+   Estilo do label dos inputs
+   - Define animação e transição do label quando o input é focado.
+*/
+.container-cadastro .form-cadastro .input-cadastro span {
+    position: absolute;
+    left: 0;
+    padding: 10px 0;
+    pointer-events: none;
+    color: var(--fonte);
+    font-size: 1.2em;
+    transition: 0.3s;
+}
+
+.container-cadastro .form-cadastro .input-cadastro input:focus ~ span,
+.container-cadastro .form-cadastro .input-cadastro input:valid ~ span {
+    color: #000000;
+    transform: translateY(-24px);
+    font-size: 0.85em;
+}
+
+/* 
+   Estilo do indicador de foco dos inputs
+   - Define transição do indicador de foco.
+*/
+.container-cadastro .form-cadastro .input-cadastro i {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    transition: 0.3s;
+}
+
+.container-cadastro .form-cadastro .input-cadastro input:focus ~ i,
+.container-cadastro .form-cadastro .input-cadastro input:valid ~ i {
+    height: 44px;
+}
+
+/* 
+   Estilo dos links do formulário
+   - Define layout e espaçamento entre os links.
+*/
+.container-cadastro .form-cadastro .links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* 
+   Estilo dos links
+   - Define cor e efeito de transição.
+*/
+.container-cadastro .form-cadastro .links a {
+    font-size: 0.9em;
+    color: #000000;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: bold;
+   
+}
+
+.dark-mode .container-cadastro .form-cadastro .links a {
+    font-size: 0.9em;
+    color: var(--fontedark);
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: bold;
+   
+}
+.dark-mode .container-degrade{
+    box-shadow: 0 0 230px 75px #1c279b;
+}
+
+
+.container-cadastro .form-cadastro .links a:hover {
+    color: #000000;
+}
+.dark-mode .container-cadastro .form-cadastro .links a:hover {
+    color: var(--fontedark); /* Mantém a mesma cor ao passar o mouse */
+    text-decoration: none; /* Mantém sem sublinhado */
+}
+/* 
+   Estilo do botão de submit
+   - Define margens, cor e efeito de transição ao passar o mouse.
+*/
+.container-cadastro .form-cadastro input[type="submit"] {
+    margin-top: 41px;
+    margin-bottom: 20px;
+    background: #384773;
+    color: #fff;
+    border: none;
+    padding: 20px;
+    font-size: 1.1em;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.container-cadastro .form-cadastro input[type="submit"]:hover {
+    background: #2c3653;
+}
+
+/* 
+   Estilo dos selects
+   - Define layout e transições para os campos select.
+*/
+.container-cadastro .form-cadastro .input-cadastro select {
+    width: 100%; 
+    padding: 10px 0;
+    background: transparent; 
+    border: none;
+    outline: none; 
+    color: #000000; 
+    font-size: 1.2em; 
+    border-bottom: 2px solid #000000; 
+    transition: 0.3s;
+}
+
+/* 
+   Estilo dos selects em foco
+   - Define transição do foco.
+*/
+.container-cadastro .form-cadastro .input-cadastro select:focus {
+    border-bottom: 2px solid #000000; 
+}
+
+/* 
+   Estilo das opções do select
+   - Define a cor das opções.
+*/
+.container-cadastro .form-cadastro .input-cadastro select option {
+    color: #000000; 
+}
+
+/* Animação de rotação */
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

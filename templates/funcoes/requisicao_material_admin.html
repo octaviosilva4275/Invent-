@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Requisições de Material - Admin</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .em-separacao { color: orange; font-weight: bold; }
+        .pronto-retirar { color: green; font-weight: bold; }
+        .aguardando-estoque { color: rgb(212, 0, 0); font-weight: bold; }
+        .finalizado { color: grey; font-weight: bold; }
+        h4 { margin-top: 80px; }
+    </style>
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+
+    <div class="container mt-5">
+        <h2>Requisições por Status</h2>
+    
+        {% for status, color in [('Solicitado', 'em-separacao'), ('Disponivel para retirada', 'pronto-retirar'), ('Aguardando reposição', 'aguardando-estoque'), ('Retirado', 'finalizado')] %}
+        <h4>{{ status }}</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>Quantidade</th>
+                    <th>Estoque</th>
+                    <th>Usuário</th>
+                    <th>Status</th>
+                    <th>Observação</th>
+                    <th>Última Atualização</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for requisicao in requisicoes %}
+                {% if requisicao.status == status %}
+                <tr>
+                    <td>{{ requisicao.material }}</td>
+                    <td class="quantidade">{{ requisicao.quantidade }}</td>
+                    <td class="estoque">{{ requisicao.quantidade_estoque }}</td>                    
+                    <td>{{ requisicao.usuario }}</td>
+                    <td class="{{ color }}">{{ requisicao.status }}</td>
+                    <td>{{ requisicao.observacao }}</td>
+                    <td>{{ requisicao.data_atualizacao | default('N/A') }}</td>
+                    <td>
+                        <button class="btn btn-secondary" data-toggle="modal" data-target="#acaoModal" 
+                                data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}"
+                                data-quantidade="{{ requisicao.quantidade }}" data-estoque="{{ requisicao.quantidade_estoque }}">
+                            Ações
+                        </button>
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="acaoModal" tabindex="-1" role="dialog" aria-labelledby="acaoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="acaoModalLabel">Atualizar Requisição</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="modal-material"></p>
+                    <p>Quantidade: <span id="modal-quantidade"></span></p>
+                    <p>Estoque disponível: <span id="modal-estoque"></span></p>
+                    <form id="acaoForm">
+                        <input type="hidden" name="requisicao_id" id="requisicao_id" value="">
+                        <button type="button" class="btn btn-warning" onclick="atualizarStatus('Solicitado')">Solicitado</button>
+                        <button type="button" class="btn btn-success" onclick="atualizarStatus('Disponivel para retirada')">Disponível para retirada</button>
+                        <button type="button" class="btn btn-danger" onclick="atualizarStatus('Aguardando reposição')">Aguardando reposição</button>
+                        <button type="button" class="btn btn-secondary" onclick="atualizarStatus('Retirado')">Retirado</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#acaoModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var requisicaoId = button.data('id');
+            var material = button.data('material');
+            var quantidade = button.data('quantidade');
+            var estoque = button.data('estoque');
+
+            var modal = $(this);
+            modal.find('#requisicao_id').val(requisicaoId);
+            modal.find('#modal-material').text('Material: ' + material);
+            modal.find('#modal-quantidade').text(quantidade);
+            modal.find('#modal-estoque').text(estoque);
+        });
+
+        function atualizarStatus(status) {
+            var requisicaoId = $('#requisicao_id').val();
+            var quantidade = parseInt($('#modal-quantidade').text());
+            var estoque = parseInt($('#modal-estoque').text());
+
+            // Verifica se a quantidade requisitada é maior que a quantidade no estoque apenas para "Retirado"
+            if (status === 'Retirado' && quantidade > estoque) {
+                alert('Estoque insuficiente para retirar! Disponível: ' + estoque);
+                return;
+            }
+
+            $.ajax({
+                url: "{{ url_for('atualizar_requisicao') }}",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    requisicao_id: requisicaoId,
+                    acao: status
+                }),
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Erro ao atualizar a requisição: ' + response.error);
+                    }
+                },
+                error: function(error) {
+                    console.error('Erro ao atualizar status:', error);
+                    alert('Erro ao atualizar status. Tente novamente mais tarde.');
+                }
+            });
+        }
+    </script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
