@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque</title>
+    <link rel="stylesheet" href="/static/styles/controle-estoque.css">
+    <script src="/static/controle-estoque.js"></script>
+</head>
+<body>
+<main>
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
+    
+    <section class="estoque">
+        <div class="campo-estoque">
+            <form class="form-estoque">
+                <h1 class="titulo-estoque">Controle de Estoque</h1>
+                <div class="entrada">
+                    <h2 class="titulo-entrada">Entrada</h2>
+                    <select class="select-estoque" id="entrada-item">
+                        <option value="">Selecione o item</option>
+                        <!-- Opções de itens para entrada -->
+                    </select>
+                    <input class="quant" type="number" id="quantidade" name="quantidade" placeholder="Quantidade">
+                    <button class="btn-estoque" type="submit">Confirmar</button>
+                </div>
+                <div class="saida">
+                    <h2 class="titulo-saida">Saída</h2>
+                    <select class="select-estoque" id="saida-item">
+                        <option value="">Selecione o item</option>
+                        <!-- Opções de itens para saída -->
+                    </select>
+                    <input  class="quant" type="number" id="quantidade" name="quantidade" placeholder="Quantidade">
+                    <button class="btn-estoque" type="submit">Confirmar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>
