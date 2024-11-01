@@ -105,6 +105,10 @@ body.dark-mode table {
     background-color: var(--branco);
 }
 
+form{
+    width: 1000px;
+}
+
 .container-requisicoes {
     background-color: rgba(70, 94, 140, 0.51);
     padding: 50px;

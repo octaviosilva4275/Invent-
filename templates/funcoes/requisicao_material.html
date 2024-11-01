@@ -10,16 +10,7 @@
 <body>
     {% include '/dashboard/dashboard.html' %}
     
-    <div id="tutorial-overlay">
-        {% for step in range(1, 6) %}
-        <div class="tutorial-message step-{{ step }}" {% if step != 1 %} style="display: none;" {% endif %}>
-            <p>{% if step == 1 %} Selecione o material desejado aqui. {% elif step == 2 %} Informe a quantidade desejada neste campo.
-            {% elif step == 3 %} Adicione uma observação, se necessário. {% elif step == 4 %} Clique aqui para enviar sua requisição.
-            {% elif step == 5 %} Aqui estão suas requisições feitas. {% endif %}</p>
-            <button class="next-step">{% if step < 5 %} Próximo {% else %} Fechar Tutorial {% endif %}</button>
-        </div>
-        {% endfor %}
-    </div>
+
 
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
@@ -58,13 +49,7 @@
 
                     <button class="btn-requisicoes">Enviar Requisição</button>
                 </div>
-            </div>
-        </form>
-        {% if materiais %}
-        <p>Materiais carregados corretamente.</p>
-    {% else %}
-        <p>Não há materiais para exibir.</p>
-    {% endif %}
+
         <div class="minhas-requisicoes">
             <h2 class="titulo-pendente">Minhas Requisições Pendentes:</h2>
             <table>
@@ -100,6 +85,9 @@
         </div>
     </section>
 
+            </div>
+        </form>
+        
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function () {
