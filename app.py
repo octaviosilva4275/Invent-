@@ -173,37 +173,52 @@ def editar_perfil():
     usuario_id = session.get('user_id')
 
     if request.method == 'POST':
-        sn = request.form['sn']  # O código SN
         nome = request.form['nome']
         email = request.form['email']
-        senha = request.form['senha']
+        senha_atual = request.form['senha_atual']
+        nova_senha = request.form['senha']
         confirmar_senha = request.form['confirmar_senha']
 
         cursor = conexao.cursor()
-        
-        if senha and senha != confirmar_senha:  # Verifica se as senhas coincidem
-            flash('As senhas não coincidem. Tente novamente.', 'error')
-            cursor.close()
-            conexao.close()
-            return redirect(url_for('editar_perfil'))
 
-        try:
-            if senha:  # Se a senha foi fornecida, atualiza
-                cursor.execute("UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s", (nome, email, senha, usuario_id))
-            else:  # Se a senha não foi fornecida, não atualiza
-                cursor.execute("UPDATE users SET nome = %s, email = %s WHERE id = %s", (nome, email, usuario_id))
-            
-            conexao.commit()
-            flash('Perfil atualizado com sucesso!', 'success')
+        # Valida se a senha atual está correta, caso o usuário esteja tentando trocá-la
+        if nova_senha:
+            cursor.execute("SELECT senha FROM users WHERE id = %s", (usuario_id,))
+            senha_bd = cursor.fetchone()[0]
 
-        except Exception as e:
-            print(f"Erro ao atualizar perfil: {e}")
-            flash('Erro ao atualizar o perfil. Tente novamente.', 'error')
+            # Verifica a senha atual
+            if not senha_atual or senha_atual != senha_bd:
+                flash('A senha atual está incorreta.', 'error')
+                cursor.close()
+                conexao.close()
+                return redirect(url_for('editar_perfil'))
 
-        finally:
-            cursor.close()
-            conexao.close()
+            # Verifica se a nova senha tem pelo menos 8 caracteres
+            if len(nova_senha) < 8:
+                flash('A nova senha deve ter pelo menos 8 caracteres.', 'error')
+                cursor.close()
+                conexao.close()
+                return redirect(url_for('editar_perfil'))
 
+            # Verifica se a nova senha coincide com a confirmação
+            if nova_senha != confirmar_senha:
+                flash('As novas senhas não coincidem.', 'error')
+                cursor.close()
+                conexao.close()
+                return redirect(url_for('editar_perfil'))
+
+            # Atualiza a senha no banco de dados
+            cursor.execute("UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s", 
+                           (nome, email, nova_senha, usuario_id))
+        else:
+            # Atualiza somente o nome e o email, sem mudar a senha
+            cursor.execute("UPDATE users SET nome = %s, email = %s WHERE id = %s", 
+                           (nome, email, usuario_id))
+
+        conexao.commit()
+        flash('Perfil atualizado com sucesso!', 'success')
+        cursor.close()
+        conexao.close()
         return redirect(url_for('editar_perfil'))
 
     cursor = conexao.cursor(dictionary=True)
@@ -213,6 +228,7 @@ def editar_perfil():
     conexao.close()
     
     return render_template('editar_perfil.html', usuario=usuario)
+
 
 
 
