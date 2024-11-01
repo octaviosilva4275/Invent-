@@ -173,37 +173,52 @@ def editar_perfil():
     usuario_id = session.get('user_id')
 
     if request.method == 'POST':
-        sn = request.form['sn']  # O código SN
         nome = request.form['nome']
         email = request.form['email']
-        senha = request.form['senha']
+        senha_atual = request.form['senha_atual']
+        nova_senha = request.form['senha']
         confirmar_senha = request.form['confirmar_senha']
 
         cursor = conexao.cursor()
-        
-        if senha and senha != confirmar_senha:  # Verifica se as senhas coincidem
-            flash('As senhas não coincidem. Tente novamente.', 'error')
-            cursor.close()
-            conexao.close()
-            return redirect(url_for('editar_perfil'))
 
-        try:
-            if senha:  # Se a senha foi fornecida, atualiza
-                cursor.execute("UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s", (nome, email, senha, usuario_id))
-            else:  # Se a senha não foi fornecida, não atualiza
-                cursor.execute("UPDATE users SET nome = %s, email = %s WHERE id = %s", (nome, email, usuario_id))
-            
-            conexao.commit()
-            flash('Perfil atualizado com sucesso!', 'success')
+        # Valida se a senha atual está correta, caso o usuário esteja tentando trocá-la
+        if nova_senha:
+            cursor.execute("SELECT senha FROM users WHERE id = %s", (usuario_id,))
+            senha_bd = cursor.fetchone()[0]
 
-        except Exception as e:
-            print(f"Erro ao atualizar perfil: {e}")
-            flash('Erro ao atualizar o perfil. Tente novamente.', 'error')
+            # Verifica a senha atual
+            if not senha_atual or senha_atual != senha_bd:
+                flash('A senha atual está incorreta.', 'error')
+                cursor.close()
+                conexao.close()
+                return redirect(url_for('editar_perfil'))
 
-        finally:
-            cursor.close()
-            conexao.close()
+            # Verifica se a nova senha tem pelo menos 8 caracteres
+            if len(nova_senha) < 8:
+                flash('A nova senha deve ter pelo menos 8 caracteres.', 'error')
+                cursor.close()
+                conexao.close()
+                return redirect(url_for('editar_perfil'))
 
+            # Verifica se a nova senha coincide com a confirmação
+            if nova_senha != confirmar_senha:
+                flash('As novas senhas não coincidem.', 'error')
+                cursor.close()
+                conexao.close()
+                return redirect(url_for('editar_perfil'))
+
+            # Atualiza a senha no banco de dados
+            cursor.execute("UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s", 
+                           (nome, email, nova_senha, usuario_id))
+        else:
+            # Atualiza somente o nome e o email, sem mudar a senha
+            cursor.execute("UPDATE users SET nome = %s, email = %s WHERE id = %s", 
+                           (nome, email, usuario_id))
+
+        conexao.commit()
+        flash('Perfil atualizado com sucesso!', 'success')
+        cursor.close()
+        conexao.close()
         return redirect(url_for('editar_perfil'))
 
     cursor = conexao.cursor(dictionary=True)
@@ -213,6 +228,7 @@ def editar_perfil():
     conexao.close()
     
     return render_template('editar_perfil.html', usuario=usuario)
+
 
 
 
@@ -342,47 +358,32 @@ def cadastro_material():
     if 'user_id' in session:
         cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
         usuario = cursor.fetchone()
+    if 'user_id' in session:
+        user_id = session['user_id']
+        if request.method == 'POST':
+            descricao = request.form['descricao']
+            categoria = request.form['categoria']
 
-    # Definindo as categorias diretamente
-    categorias = [
-        {'id': 'consumiveis', 'nome': 'Consumíveis'},
-        {'id': 'ferramentas', 'nome': 'Ferramentas'},
-        {'id': 'equipamentos', 'nome': 'Equipamentos'},
-        {'id': 'materiais_de_escritorio', 'nome': 'Materiais de Escritório'},
-        {'id': 'limpeza', 'nome': 'Limpeza'},
-        {'id': 'tecnologia', 'nome': 'Tecnologia'},
-        {'id': 'marcenaria', 'nome': 'Marcenaria'},
-        {'id': 'papelaria', 'nome': 'Papelaria'},
-        {'id': 'seguranca', 'nome': 'Segurança'}
-    ]
+            estoque_minimo = int(request.form['estoque_minimo'] or 0)
+            estoque_maximo = int(request.form['estoque_maximo'] or 0)
 
-    if request.method == 'POST':
-        nome_produto = request.form['nome_produto']  # Captura o nome do produto
-        descricao = request.form['descricao_produto']
-        categoria = request.form['categoria']
-        estoque_minimo = int(request.form['estoque_minimo'] or 0)
-        codigo_produto = int(request.form['codigo_produto'] or 0)  # Captura o código do produto
+            try:
+                query_insert = ("INSERT INTO materials (descricao, categoria, estoque_minimo, estoque_maximo) "
+                                "VALUES (%s, %s, %s, %s)")
+                cursor.execute(query_insert, (descricao, categoria, estoque_minimo, estoque_maximo))
+                conexao.commit()
 
-        try:
-            query_insert = ("INSERT INTO materials (nome, descricao, categoria, estoque_minimo, codigo_produto) "
-                            "VALUES (%s, %s, %s, %s, %s)")
-            cursor.execute(query_insert, (nome_produto, descricao, categoria, estoque_minimo, codigo_produto))
-            conexao.commit()
+                flash('Material cadastrado com sucesso!', 'success')
+                return redirect(url_for('cadastro_material'))
 
-            flash('Material cadastrado com sucesso!', 'success')
-            return redirect(url_for('cadastro_material'))
-
-        except mysql.connector.Error as err:
-            flash('Erro ao cadastrar material: {}'.format(err), 'error')
-            return redirect(url_for('cadastro_material'))
+            except mysql.connector.Error as err:
+                flash('Erro ao cadastrar material: {}'.format(err), 'error')
+                return redirect(url_for('cadastro_material'))
 
     cursor.close()
     conexao.close()
 
-    return render_template('funcoes/cadastro_material.html', usuario=usuario, categorias=categorias)
-
-
-
+    return render_template('funcoes/cadastro_material.html', usuario=usuario)
 
 
 
@@ -520,7 +521,7 @@ def controle_estoque():
         usuario = cursor.fetchone()
 
     try:
-        # Obtendo todos os materiais e calculando a quantidade disponível
+        # Obtain all materials and calculate available quantity
         cursor.execute(""" 
             SELECT 
                 m.id, 
@@ -532,7 +533,7 @@ def controle_estoque():
             FROM materials m
             LEFT JOIN estoque e ON m.id = e.material_id
             GROUP BY m.id
-            ORDER BY m.descricao ASC  -- Ordena os materiais de A-Z
+            ORDER BY m.descricao ASC  -- Sort materials A-Z
         """)
         materiais = cursor.fetchall()
 
@@ -549,38 +550,34 @@ def controle_estoque():
 
 
 
-
 @app.route('/registrar_entrada', methods=['POST'])
 def registrar_entrada():
     if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         return redirect(url_for('solicitante'))
-    
-    material_id = request.form.get('material_id')
-    quantidade = request.form.get('quantidade')
+    if request.method == 'POST':
+        material_id = request.form['material_id']
+        quantidade = int(request.form['quantidade'])
+        usuario_id = session['user_id'] 
 
-    # Verificar se os valores foram fornecidos
-    if not material_id or not quantidade:
-        flash('Por favor, selecione um item e insira a quantidade.', 'error')
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+            query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'entrada', %s)"
+            cursor.execute(query_insert, (material_id, quantidade, usuario_id))
+            conexao.commit()
+            
+            flash('Entrada registrada com sucesso!', 'success')  # Adicionando flash aqui
+        except Exception as e:
+            print(f"Erro ao registrar entrada: {e}")
+            flash('Erro ao registrar entrada.', 'error')
+        finally:
+            cursor.close()
+            conexao.close()
+
         return redirect(url_for('controle_estoque'))
 
-    quantidade = int(quantidade)
-    usuario_id = session['user_id']
-    conexao = conectar_banco_dados()
-    cursor = conexao.cursor()
 
-    try:
-        query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'entrada', %s)"
-        cursor.execute(query_insert, (material_id, quantidade, usuario_id))
-        conexao.commit()
-        flash('Entrada registrada com sucesso!', 'success')
-    except Exception as e:
-        print(f"Erro ao registrar entrada: {e}")
-        flash('Erro ao registrar entrada.', 'error')
-    finally:
-        cursor.close()
-        conexao.close()
-
-    return redirect(url_for('controle_estoque'))
 
 
 @app.route('/registrar_saida', methods=['POST'])
@@ -588,38 +585,36 @@ def registrar_saida():
     if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         return redirect(url_for('solicitante'))
 
-    material_id = request.form.get('material_id')
-    quantidade = request.form.get('quantidade')
+    if request.method == 'POST':
+        material_id = request.form['material_id']
+        quantidade = int(request.form['quantidade'])
+        usuario_id = session['user_id'] 
 
-    if not material_id or not quantidade:
-        flash('Por favor, selecione um item e insira a quantidade.', 'error')
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor()
+
+        try:
+            # Verifica o estoque atual do material
+            cursor.execute("SELECT SUM(quantidade) FROM estoque WHERE material_id = %s", (material_id,))
+            estoque_atual = cursor.fetchone()[0] or 0
+
+            if estoque_atual >= quantidade:
+                query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
+                cursor.execute(query_insert, (material_id, quantidade, usuario_id))
+                conexao.commit()
+                flash('Saída registrada com sucesso!', 'success')
+            else:
+                flash('Estoque insuficiente para registrar a saída.', 'error')
+
+        except Exception as e:
+            print(f"Erro ao registrar saída: {e}")
+            flash('Erro ao registrar saída.', 'error')
+
+        finally:
+            cursor.close()
+            conexao.close()
+
         return redirect(url_for('controle_estoque'))
-
-    quantidade = int(quantidade)
-    usuario_id = session['user_id'] 
-    conexao = conectar_banco_dados()
-    cursor = conexao.cursor()
-
-    try:
-        cursor.execute("SELECT SUM(quantidade) FROM estoque WHERE material_id = %s", (material_id,))
-        estoque_atual = cursor.fetchone()[0] or 0
-
-        if estoque_atual >= quantidade:
-            query_insert = "INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES (%s, %s, 'saida', %s)"
-            cursor.execute(query_insert, (material_id, quantidade, usuario_id))
-            conexao.commit()
-            flash('Saída registrada com sucesso!', 'success')
-        else:
-            flash('Estoque insuficiente para registrar a saída.', 'error')
-
-    except Exception as e:
-        print(f"Erro ao registrar saída: {e}")
-        flash('Erro ao registrar saída.', 'error')
-    finally:
-        cursor.close()
-        conexao.close()
-
-    return redirect(url_for('controle_estoque'))
 
 
 
