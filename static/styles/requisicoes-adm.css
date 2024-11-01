@@ -39,7 +39,7 @@
 */
 
 :root{
-    --cinza: #ffffff;
+    --branco: #ffffff;
     --dark: #04050D;
     --fundo : #aab5ca;
     --fundodark  :#192340;
@@ -55,7 +55,7 @@ html {
 
 
 body.light-mode {
-    background-color: var(--cinza);
+    background-color: var(--branco);
     color: var(--fonte);
 }
 body.dark-mode {
@@ -111,7 +111,6 @@ body {
     flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
     width: 100vw;
     height: 100vh;
-    background-color: var(--branco);
 }
 
 .container-solicitacao {
@@ -259,7 +258,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--cinza-azulado);
+    background-color: var(--branco-azulado);
     padding: 50px;
     border-radius: 8px;
     max-width: 900px;

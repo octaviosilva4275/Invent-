@@ -24,7 +24,17 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS materials (
     id INT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(255),
-    categoria ENUM('consumiveis', 'ferramentas', 'equipamentos') NOT NULL,
+    categoria ENUM(
+        'consumiveis', 
+        'ferramentas', 
+        'equipamentos', 
+        'materiais_de_escritorio', 
+        'limpeza', 
+        'tecnologia', 
+        'movelaria', 
+        'papelaria', 
+        'seguranca'
+    ) NOT NULL,
     localizacao VARCHAR(100),
     estoque_minimo INT,
     estoque_maximo INT

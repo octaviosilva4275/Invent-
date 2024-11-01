@@ -46,7 +46,7 @@ body {
 
 
 body.light-mode {
-    background-color: var(--cinza);
+    background-color: var(--branco);
     color: var(--fonte);
 }
 body.dark-mode {
@@ -95,7 +95,6 @@ body.dark-mode {
     align-items: center;
     width: 100vw;
     height: 100vh;
-    background-color: var(--branco);
 }
 
 .campo-material {
