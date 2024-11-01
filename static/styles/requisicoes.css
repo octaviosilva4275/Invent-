@@ -259,7 +259,7 @@ td {
     
     .disabled-tutorial {
         pointer-events: none;
-        opacity: 0.5;
+        opacity: 1;
     }
 
     /* Destaque especial para tabelas no tutorial */
