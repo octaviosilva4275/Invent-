@@ -17,27 +17,35 @@
     
     <section class="estoque">
         <div class="campo-estoque">
-            <form class="form-estoque">
-                <h1 class="titulo-estoque">Controle de Estoque</h1>
+            <h1 class="titulo-estoque">Controle de Estoque</h1>
+            <form class="form-estoque" method="POST" action="{{ url_for('registrar_entrada') }}">
                 <div class="entrada">
                     <h2 class="titulo-entrada">Entrada</h2>
-                    <select class="select-estoque" id="entrada-item">
+                    <select class="select-estoque" name="material_id">
                         <option value="">Selecione o item</option>
-                        <!-- Opções de itens para entrada -->
+                        {% for material in materiais %}
+                            <option value="{{ material.id }}">{{ material.descricao }} - Disponível: {{ material.quantidade_disponivel }}</option>
+                        {% endfor %}
                     </select>
-                    <input class="quant" type="number" id="quantidade" name="quantidade" placeholder="Quantidade">
-                    <button class="btn-estoque" type="submit">Confirmar</button>
-                </div>
-                <div class="saida">
-                    <h2 class="titulo-saida">Saída</h2>
-                    <select class="select-estoque" id="saida-item">
-                        <option value="">Selecione o item</option>
-                        <!-- Opções de itens para saída -->
-                    </select>
-                    <input  class="quant" type="number" id="quantidade" name="quantidade" placeholder="Quantidade">
-                    <button class="btn-estoque" type="submit">Confirmar</button>
+                    <input class="quant" type="number" name="quantidade" placeholder="Quantidade" required>
+                    <button class="btn-estoque" type="submit">Confirmar Entrada</button>
                 </div>
             </form>
+            
+            <form class="form-estoque" method="POST" action="{{ url_for('registrar_saida') }}">
+                <div class="saida">
+                    <h2 class="titulo-saida">Saída</h2>
+                    <select class="select-estoque" name="material_id">
+                        <option value="">Selecione o item</option>
+                        {% for material in materiais %}
+                            <option value="{{ material.id }}">{{ material.descricao }} - Disponível: {{ material.quantidade_disponivel }}</option>
+                        {% endfor %}
+                    </select>
+                    <input class="quant" type="number" name="quantidade" placeholder="Quantidade" required>
+                    <button class="btn-estoque" type="submit">Confirmar Saída</button>
+                </div>
+            </form>
+            
         </div>
     </section>
 </main>

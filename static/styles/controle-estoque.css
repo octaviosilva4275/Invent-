@@ -102,9 +102,15 @@ body.dark-mode {
     padding: 50px;
     border-radius: 30px;
     max-width: 900px;
+    flex-direction: column;
     width: 100%;
     height: 80%;
 }
+
+.select-estoque{
+    margin-bottom: 15px;
+}
+
 
 .form-estoque {
     text-align: left;

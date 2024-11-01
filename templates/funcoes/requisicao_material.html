@@ -42,7 +42,7 @@
         <h1 class="titulo-requisicoes">Requisição de Materiais</h1>
         <div class="form-requisicoes">
             <label for="produto">Material:</label>
-            <input placeholder="Produto" type="text" id="produto" name="produto">
+            <input placeholder="Produto (Quantidade:20)" type="text" id="produto" name="produto">
         </div>
         <div class="form-requisicoes">
             <label  for="quantidade">Quantidade:</label>
@@ -104,10 +104,6 @@
             // Remove destaque e desativação de todos os elementos
             $('input, textarea, .btn-requisicoes, table, label').removeClass('highlight disabled-tutorial');
 
-            // Desativa todos os elementos do formulário
-            $('input, textarea, .btn-requisicoes, table').addClass('disabled-tutorial');
-
-
             // Desativa os elementos que não estão no passo atual
             $('input, textarea, .btn-requisicoes, table').not(tutorialSteps[step].element).addClass('disabled-tutorial');
 
@@ -128,12 +124,8 @@
                     $('#tutorial-overlay').hide(); // Fecha o tutorial no último passo
                     $('input, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial'); // Reativa todos os campos
                     sessionStorage.setItem('tutorialCompleted', 'true'); // Marca o tutorial como concluído
-                    $('body').removeClass('tutorial-active'); // Remove a classe tutorial-active para desativar o contorno
-                    
-                    // Dá um refresh na página ao final do tutorial
-                    location.reload();
-                    }
-                });
+                }
+            });
 
             // Inicia o tutorial
             showTutorialStep(currentStep);

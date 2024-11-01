@@ -10,28 +10,36 @@
 <body>
 <main>
     {% include '/dashboard/dashboard.html' %}
+    
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
         <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
     </div>
+    
     <section class="material">
-    <div class="campo-material">
-        <form class="form-material">
-            <h1 class="titulo-material">Cadastro de Materiais</h1>
-            <input class="input-material" type="text" placeholder="Nome do produto">
-            <input class="input-material" type="text" placeholder="Descrição do produto">
-            <div class="estoques">
-                <input class="input-material" type="number" placeholder="Estoque mínimo">
-                <input class="input-material" type="number" placeholder="Estoque máximo">
-            </div>
-            <select class="select-categoria" id="categoria">
-                <option value="">Categoria</option>
-                <!-- Opções de itens para entrada -->
-            </select>
-            <button class="btn-material" type="submit">Cadastrar</button>
-        </form>
-    </div></section>
+        <div class="campo-material">
+            <form class="form-material" method="POST" action="{{ url_for('cadastro_material') }}">
+                <h1 class="titulo-material">Cadastro de Materiais</h1>
+
+                <input class="input-material" name="nome_produto" type="text" placeholder="Nome do produto" required>
+                <input class="input-material" name="descricao_produto" type="text" placeholder="Descrição do produto" required>
+                
+                <div class="estoques">
+                    <input class="input-material" name="estoque_minimo" type="number" placeholder="Estoque mínimo" required>
+                    <input class="input-material" name="codigo_produto" type="number" placeholder="Código Produto" required>
+                </div>
+                
+                <select class="select-categoria" name="categoria" required>
+                    <option value="">Categoria</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endfor %}
+                </select>
+                
+                <button class="btn-material" type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </section>
 </main>
 </body>
 </html>
- 
