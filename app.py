@@ -746,10 +746,14 @@ def requisicao_material():
     # Lógica para exibir o formulário e as requisições do usuário
     cursor = conexao.cursor(dictionary=True)
     try:
-        cursor.execute("SELECT m.id, m.descricao, SUM(e.quantidade) as quantidade "
-                       "FROM materials m "
-                       "LEFT JOIN estoque e ON m.id = e.material_id "
-                       "GROUP BY m.id")
+        cursor.execute("""
+            SELECT m.id, m.codigo_produto, m.descricao, SUM(e.quantidade) as quantidade
+            FROM materials m
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id
+        """)
+
+
         materiais = cursor.fetchall()
 
         if usuario_id:
@@ -780,10 +784,12 @@ def requisicao_material():
         cursor.close()
         conexao.close()
 
+    print("Renderizando template com materiais:", materiais)
     return render_template('funcoes/requisicao_material.html', 
-                           materiais=materiais, 
-                           minhas_requisicoes=minhas_requisicoes, 
-                           usuario=usuario)
+                        materiais=materiais, 
+                        minhas_requisicoes=minhas_requisicoes, 
+                        usuario=usuario)
+
 
 
 

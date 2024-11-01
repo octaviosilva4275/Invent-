@@ -111,7 +111,7 @@ body.dark-mode table {
     border-radius: 30px;
     max-width: 900px;
     width: 100%;
-    height: 80%;
+    height: 100%;
 }
 
 .titulo-requisicoes {
@@ -133,7 +133,7 @@ body.dark-mode table {
 
 }
 
-.form-requisicoes input, .form-requisicoes textarea {
+.form-requisicoes input,.form-requisicoes select, .form-requisicoes textarea {
     width: 100%;
     padding: 10px;
     font-weight: bolder;
