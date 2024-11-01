@@ -121,6 +121,7 @@ body.dark-mode table {
 .form-requisicoes {
     margin-bottom: 15px;
     font-size: 1.9;
+    z-index: 999;
 }
 
 .form-requisicoes label {
@@ -183,3 +184,70 @@ td {
     font-size: 1.3rem;
 }
 
+    /* Estilos para o Tutorial Overlay */
+    #tutorial-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7); /* Fundo semitransparente */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000; /* Sobrepõe outros elementos */
+    }
+
+    /* Estilo das mensagens do tutorial */
+    .tutorial-message {
+        background-color: #fff;
+        color: #333;
+        padding: 20px;
+        border-radius: 15px;
+        max-width: 300px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        font-size: 1.6rem;
+        font-weight: bold;
+    }
+
+    .tutorial-message p {
+        margin-bottom: 15px;
+    }
+
+    .tutorial-message .next-step {
+        background-color: #192340;
+        color: #fff;
+        padding: 8px 16px;
+        font-size: 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .tutorial-message .next-step:hover {
+        background-color: rgba(25, 35, 64, 0.8);
+        transform: scale(1.05);
+    }
+
+    /* Destaque para os campos do tutorial */
+    .highlight {
+        outline: 3px solid #ffeb3b; /* Cor de destaque */
+        border-radius: 8px;
+
+        transition: outline 0.3s ease, background-color 0.3s ease;
+    }
+
+    /* Desativar interações nos campos fora do tutorial */
+    .disabled-tutorial {
+        pointer-events: none; /* Desativa interações */
+        opacity: 0.5; /* Reduz opacidade para indicar desativação */
+    }
+
+    /* Destaque especial para tabelas no tutorial */
+    .highlight-table {
+        outline: 3px solid #4CAF50; /* Cor de destaque para tabela */
+        border-radius: 8px;
+        background-color: rgba(76, 175, 80, 0.1); /* Fundo suave */
+    }

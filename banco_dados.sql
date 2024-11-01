@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS materials (
         'materiais_de_escritorio', 
         'limpeza', 
         'tecnologia', 
-        'movelaria', 
+        'marcenaria', 
         'papelaria', 
         'seguranca'
     ) NOT NULL,

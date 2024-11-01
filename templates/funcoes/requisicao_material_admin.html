@@ -4,57 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitação de Pedido</title>
-    <link rel="stylesheet" href="/static/styles/requisicoes-adm.css">
-    <script src="/static/darkmode js/darkmode.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/requisicoes-adm.css') }}">
+    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    {% include '/dashboard/dashboard.html' %}
     <main>
         <div class="darkmode">
-            <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
-            <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+            <img src="{{ url_for('static', filename='img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
+            <img src="{{ url_for('static', filename='img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
         </div>
-    <section class="solicitacao">
-        <div class="container-solicitacao">
-        <h1 class="titulo-solicitacao">Solicitação de pedido</h1>
-        <div class="campo-solicitacao">
-            <!-- Primeira tabela -->
-            <table class="tabela-solicitacao">
-                <thead>
-                    <tr>
-                        <th>Nome do Solicitante</th>
-                        <th>Produto</th>
-                        <th>Status</th>
-                        <th>Quantidade</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                            <div class="btn-solicitacao">
-                            <button class="btn-aprovar">APROVAR</button>
-                            <button class="btn-aguardo">AGUARDO</button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        
+        <section class="solicitacao">
+            <div class="container-solicitacao">
+                <h1 class="titulo-solicitacao">Solicitação de pedido</h1>
+                <div class="campo-solicitacao">
+                    <!-- Tabela de solicitações -->
+                    <table class="tabela-solicitacao">
+                        <thead>
+                            <tr>
+                                <th>Nome do Solicitante</th>
+                                <th>Produto</th>
+                                <th>Status</th>
+                                <th>Observação</th>
+                                <th>Quantidade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for requisicao in requisicoes %}
+                            <tr>
+                                <td>{{ requisicao.usuario }}</td>
+                                <td>{{ requisicao.material }}</td>
+                                <td class="{{ requisicao.status | lower | replace(" ", "-") }}">{{ requisicao.status }}</td>
+                                <td>{{ requisicao.observacao }}</td>
+                                <td>{{ requisicao.quantidade }}</td>
+                                <td>
+                                    <div class="btn-solicitacao">
+                                        <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'Aprovado')">APROVAR</button>
+                                        <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal" 
+                                            data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}"
+                                            data-quantidade="{{ requisicao.quantidade }}" data-estoque="{{ requisicao.quantidade_estoque }}">
+                                            Ações
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="acaoModal" tabindex="-1" role="dialog" aria-labelledby="acaoModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="acaoModalLabel">Atualizar Requisição</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="modal-material"></p>
+                            <p>Quantidade: <span id="modal-quantidade"></span></p>
+                            <p>Estoque disponível: <span id="modal-estoque"></span></p>
+                            <form id="acaoForm">
+                                <input type="hidden" name="requisicao_id" id="requisicao_id" value="">
+                                <button type="button" class="btn btn-warning" onclick="atualizarStatus('Solicitado')">Solicitado</button>
+                                <button type="button" class="btn btn-success" onclick="atualizarStatus('Disponivel para retirada')">Disponível para retirada</button>
+                                <button type="button" class="btn btn-danger" onclick="atualizarStatus('Aguardando reposição')">Aguardando reposição</button>
+                                <button type="button" class="btn btn-secondary" onclick="atualizarStatus('Retirado')">Retirado</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+        $('#acaoModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var requisicaoId = button.data('id');
+            var material = button.data('material');
+            var quantidade = button.data('quantidade');
+            var estoque = button.data('estoque');
 
-        </div></div>
-    </section>
-</main>
+            var modal = $(this);
+            modal.find('#requisicao_id').val(requisicaoId);
+            modal.find('#modal-material').text('Material: ' + material);
+            modal.find('#modal-quantidade').text(quantidade);
+            modal.find('#modal-estoque').text(estoque);
+        });
+
+        function atualizarStatus(status) {
+            var requisicaoId = $('#requisicao_id').val();
+            var quantidade = parseInt($('#modal-quantidade').text());
+            var estoque = parseInt($('#modal-estoque').text());
+
+            if (status === 'Retirado' && quantidade > estoque) {
+                alert('Estoque insuficiente para retirar! Disponível: ' + estoque);
+                return;
+            }
+
+            $.ajax({
+                url: "{{ url_for('atualizar_requisicao') }}",
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    requisicao_id: requisicaoId,
+                    acao: status
+                }),
+                success: function(response) {
+                    if (response.success) {
+                        location.reload();
+                    } else {
+                        alert('Erro ao atualizar a requisição: ' + response.error);
+                    }
+                },
+                error: function(error) {
+                    console.error('Erro ao atualizar status:', error);
+                    alert('Erro ao atualizar status. Tente novamente mais tarde.');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
-
-
-
-
-
-
 
 
 
