@@ -265,3 +265,22 @@ td {
         border-radius: 8px;
         background-color: rgba(76, 175, 80, 0.1); /* Fundo suave */
     }
+
+    .step-1 {
+        margin-top: -155px;
+
+    }
+
+    .step-2 {
+        margin-top: 8px;
+
+    }
+
+    .step-3 {
+        margin-top: 295px;
+
+    }
+
+    .step-5{
+        margin-top: 307px;
+    }
