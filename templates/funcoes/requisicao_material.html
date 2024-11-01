@@ -101,103 +101,105 @@
     </section>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // Verifica se o tutorial já foi exibido nesta sessão
-        if (!sessionStorage.getItem('tutorialCompleted')) {
-            let currentStep = 0;
-            const tutorialSteps = [
-                { element: '#produto', text: 'Selecione o material desejado aqui.' },
-                { element: '#quantidade', text: 'Informe a quantidade desejada neste campo.' },
-                { element: '#observacao', text: 'Adicione uma observação, se necessário.' },
-                { element: '.btn-requisicoes', text: 'Clique aqui para enviar sua requisição.' },
-                { element: 'table', text: 'Aqui estão suas requisições feitas.' }
-            ];
 
-            // Função para mostrar o passo atual do tutorial
-            function showTutorialStep(step) {
-            $('.tutorial-message').hide(); // Oculta todos os passos
-            $('.tutorial-message').eq(step).show(); // Mostra apenas o passo atual
-            $('#tutorial-overlay').show(); // Exibe o overlay
+
+<script>
+$(document).ready(function () {
+    if (!sessionStorage.getItem('tutorialCompleted')) {
+        let currentStep = 0;
+        const tutorialSteps = [
+            { element: '#material_id', text: 'Selecione o material desejado aqui.' },
+            { element: '#quantidade', text: 'Informe a quantidade desejada neste campo.' },
+            { element: '#observacao', text: 'Adicione uma observação, se necessário.' },
+            { element: '.btn-requisicoes', text: 'Clique aqui para enviar sua requisição.' },
+            { element: 'table', text: 'Aqui estão suas requisições feitas.' }
+        ];
+
+        function showTutorialStep(step) {
+            $('.tutorial-message').hide();
+            $('.tutorial-message').eq(step).show();
+            $('#tutorial-overlay').show();
 
             // Remove destaque e desativação de todos os elementos
-            $('input, textarea, .btn-requisicoes, table, label').removeClass('highlight disabled-tutorial');
+            $('select, textarea, .btn-requisicoes, table, label').removeClass('highlight disabled-tutorial');
+
+            // Desativa todos os elementos do formulário
+            $('select, textarea, .btn-requisicoes, table').addClass('disabled-tutorial');
 
             // Desativa os elementos que não estão no passo atual
-            $('input, textarea, .btn-requisicoes, table').not(tutorialSteps[step].element).addClass('disabled-tutorial');
+            $('select, textarea, .btn-requisicoes, table').not(tutorialSteps[step].element).addClass('disabled-tutorial');
 
             // Adiciona destaque ao elemento atual e ao label associado
             const currentElement = $(tutorialSteps[step].element);
             currentElement.addClass('highlight').focus();
-            currentElement.prev('label').addClass('highlight'); // Destaca o label
+            currentElement.prev('label').addClass('highlight');
 
-            // Role a página para o elemento em destaque
+            // Rola a página para o elemento em destaque
             $('html, body').animate({ scrollTop: currentElement.offset().top - 100 }, 'slow');
+        }
+
+        // Evento de clique para passar para o próximo passo
+        $(document).on('click', '.next-step', function () {
+            if (currentStep < tutorialSteps.length - 1) {
+                currentStep++;
+                showTutorialStep(currentStep);
+            } else {
+                $('#tutorial-overlay').hide();
+                $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
+                sessionStorage.setItem('tutorialCompleted', 'true');
+                location.reload();
             }
-            // Evento de clique para passar para o próximo passo
-            $(document).on('click', '.next-step', function () {
-                if (currentStep < tutorialSteps.length - 1) {
-                    currentStep++;
-                    showTutorialStep(currentStep);
+        });
+
+        showTutorialStep(currentStep);
+    } else {
+        $('#tutorial-overlay').hide();
+        $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
+        sessionStorage.setItem('tutorialCompleted', 'true');
+    }
+
+    function atualizarTabela() {
+        $.ajax({
+            url: "/api/minhas_requisicoes",
+            type: 'GET',
+            success: function (data) {
+                let tableBody = $('#minhas-requisicoes-table tbody');
+                tableBody.empty();
+
+                if (data.length > 0) {
+                    data.forEach(function (requisicao) {
+                        let row = '<tr>' +
+                            '<td>' + requisicao.material + '</td>' +
+                            '<td>' + requisicao.quantidade + '</td>' +
+                            '<td class="' + 
+                            (requisicao.status === 'Solicitado' ? 'em-separacao' : 
+                            requisicao.status === 'Disponivel para retirada' ? 'pronto-retirar' : 
+                            requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 
+                            requisicao.status === 'Retirado' ? 'finalizado' : 
+                            'status-desconhecido') + '">' + requisicao.status + '</td>' +
+                            '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    });
                 } else {
-                    $('#tutorial-overlay').hide(); // Fecha o tutorial no último passo
-                    $('input, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial'); // Reativa todos os campos
-                    sessionStorage.setItem('tutorialCompleted', 'true'); // Marca o tutorial como concluído
+                    tableBody.append('<tr><td colspan="4">Você ainda não fez nenhuma requisição.</td></tr>');
                 }
-            });
+            },
+            error: function (error) {
+                console.error('Erro na requisição AJAX:', error);
+            }
+        });
+    }
 
-            // Inicia o tutorial
-            showTutorialStep(currentStep);
-        } else {
-            $('#tutorial-overlay').hide(); // Fecha o tutorial no último passo
-            $('input, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial'); // Reativa todos os campos
-            sessionStorage.setItem('tutorialCompleted', 'true'); // Marca o tutorial como concluído
-        }
+    atualizarTabela();
+    setInterval(atualizarTabela, 5000);
 
-        // Função para atualizar a tabela de requisições
-        function atualizarTabela() {
-            $.ajax({
-                url: "{{ url_for('api_minhas_requisicoes') }}",
-                type: 'GET',
-                success: function (data) {
-                    let tableBody = $('#minhas-requisicoes-table tbody');
-                    tableBody.empty();
+    function formatarData(dataString) {
+        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+        return new Date(dataString).toLocaleDateString('pt-BR', options).replace(' ', ' de ');
+    }
+});
 
-                    if (data.length > 0) {
-                        data.forEach(function (requisicao) {
-                            let row = '<tr>' +
-                                '<td>' + requisicao.material + '</td>' +
-                                '<td>' + requisicao.quantidade + '</td>' +
-                                '<td class="' + 
-                                (requisicao.status === 'Solicitado' ? 'em-separacao' : 
-                                requisicao.status === 'Disponivel para retirada' ? 'pronto-retirar' : 
-                                requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 
-                                requisicao.status === 'Retirado' ? 'finalizado' : 
-                                'status-desconhecido') + '">' + requisicao.status + '</td>' +
-                                '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
-                                '</tr>';
-                            tableBody.append(row);
-                        });
-                    } else {
-                        tableBody.append('<tr><td colspan="4">Você ainda não fez nenhuma requisição.</td></tr>');
-                    }
-                },
-                error: function (error) {
-                    console.error('Erro na requisição AJAX:', error);
-                }
-            });
-        }
-
-        // Chama a função de atualizar tabela e define intervalo
-        atualizarTabela();
-        setInterval(atualizarTabela, 5000);
-
-        // Função para formatar a data
-        function formatarData(dataString) {
-            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-            return new Date(dataString).toLocaleDateString('pt-BR', options).replace(' ', ' de ');
-        }
-    });
 </script>
 </body>
 </html>
