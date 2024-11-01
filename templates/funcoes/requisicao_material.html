@@ -97,20 +97,24 @@
 
             // Função para mostrar o passo atual do tutorial
             function showTutorialStep(step) {
-                $('.tutorial-message').hide(); // Oculta todos os passos
-                $('.tutorial-message').eq(step).show(); // Mostra apenas o passo atual
-                $('#tutorial-overlay').show(); // Exibe o overlay
+            $('.tutorial-message').hide(); // Oculta todos os passos
+            $('.tutorial-message').eq(step).show(); // Mostra apenas o passo atual
+            $('#tutorial-overlay').show(); // Exibe o overlay
 
-                // Remove destaque e desativação de todos os elementos
-                $('input, textarea, .btn-requisicoes, table').removeClass('highlight disabled-tutorial');
+            // Remove destaque e desativação de todos os elementos
+            $('input, textarea, .btn-requisicoes, table, label').removeClass('highlight disabled-tutorial');
 
-                // Desativa apenas os elementos que não estão no passo atual
-                $('input, textarea, .btn-requisicoes, table').not(tutorialSteps[step].element).addClass('disabled-tutorial');
+            // Desativa os elementos que não estão no passo atual
+            $('input, textarea, .btn-requisicoes, table').not(tutorialSteps[step].element).addClass('disabled-tutorial');
 
-                // Adiciona destaque ao elemento atual e o ativa
-                $(tutorialSteps[step].element).addClass('highlight').focus();
+            // Adiciona destaque ao elemento atual e ao label associado
+            const currentElement = $(tutorialSteps[step].element);
+            currentElement.addClass('highlight').focus();
+            currentElement.prev('label').addClass('highlight'); // Destaca o label
+
+            // Role a página para o elemento em destaque
+            $('html, body').animate({ scrollTop: currentElement.offset().top - 100 }, 'slow');
             }
-
             // Evento de clique para passar para o próximo passo
             $(document).on('click', '.next-step', function () {
                 if (currentStep < tutorialSteps.length - 1) {
@@ -125,6 +129,10 @@
 
             // Inicia o tutorial
             showTutorialStep(currentStep);
+        } else {
+            $('#tutorial-overlay').hide(); // Fecha o tutorial no último passo
+            $('input, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial'); // Reativa todos os campos
+            sessionStorage.setItem('tutorialCompleted', 'true'); // Marca o tutorial como concluído
         }
 
         // Função para atualizar a tabela de requisições
