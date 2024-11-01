@@ -52,10 +52,13 @@ body.dark-mode {
 .none {
     display: none;
 }
+
+
 .darkmode img {
     cursor: pointer;
     transition: opacity 0.3s ease, transform 0.3s ease;
     position: absolute;
+    left: 97%;
     width: 40px;
     height: 40px;
     margin: 5px 5px;
@@ -127,9 +130,13 @@ body.dark-mode {
 .select-estoque, .quant {
     width: 100%;
     padding: 15px;
-    margin-top: 20px;
+    margin-top: 0px;
     border-radius: 9px;
     box-sizing: border-box; /* garante que padding não afete a largura */
+}
+
+#quantidade{
+    margin-top: 20px;
 }
 
 .btn-estoque {

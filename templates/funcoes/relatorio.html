@@ -3,73 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+    <link rel="stylesheet" href="/static/styles/relatorios.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/variaveis.css') }}">
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <script src="/static/javascript/darkmode.js"></script>
     <title>Relatórios</title>
     <style>
-        .container {
-            max-width: 800px;
-            margin: auto;
-            margin-top: 30px;
-            background: #a8b4cc;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        button {
-            justify-content: center;
-            align-items: center;
-            width: auto;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: var(--azul-escuro);
-            color: var(--branco);
-            border-radius: 5px;
-            transition: all 0.3s ease, transform 0.2s ease;
-        }
-        h1, h2, h3 {
-            color: #333;
-        }
-        .tabela {
-            margin: 20px 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            color: white;
-        }
-        canvas{
-            background-color: white;
-        }
-        th {
-            background-color: #99a5bd;
-        }
-        .graficos {
-            margin-top: 20px;
-        }
-        h1 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        #tipo_relatorio{
-            width: 80%;
-            padding: 13px;
-            border-radius: 3px;
-        }
+
     </style>
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
-
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
     <div class="container">
         <h1>Relatórios</h1>
         <form method="POST">

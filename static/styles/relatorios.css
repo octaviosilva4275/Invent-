@@ -1,3 +1,16 @@
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #465E8C;
+    --fundodark  :#000000;
+    --fonte : #000;
+    --fontedark : #fff;
+    --fundotabela : #192340CC;
+}
+
+
+
+
 .cadastro {
     display: flex;
     justify-content: center;
@@ -8,6 +21,14 @@
     background: linear-gradient(6deg, rgba(0,71,102,1) 12%, rgba(177,196,204,1) 100%);
 }
 
+
+.dark-mode .container{
+    background-color: var(--fundo);
+}
+
+.dark-mode h1{
+    color: var(--fontedark);
+}
 
 /* Campo de Cadastro */
 .campo-cadastro {
@@ -27,4 +48,114 @@
 .campo-cadastro:hover {
     /* Sombra mais intensa ao passar o mouse */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 30px;
+    background: #a8b4cc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+button {
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+    border-radius: 5px;
+    transition: all 0.3s ease, transform 0.2s ease;
+}
+h1, h2, h3 {
+    color: #333;
+}
+.tabela {
+    margin: 20px 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: white;
+}
+canvas{
+    background-color: white;
+}
+th {
+    background-color: #99a5bd;
+}
+.graficos {
+    margin-top: 20px;
+}
+h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+#tipo_relatorio{
+    width: 80%;
+    padding: 13px;
+    border-radius: 3px;
+}
+
+
+body.light-mode {
+    background-color: var(--branco);
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--fundodark);
+}
+
+
+.dark-mode h2{
+    color: var(--branco);
+}
+
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    left: 97%;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+.dark-mode .container-solicitacao {
+background-color: #465E8C;
+}
+
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+.dark-mode .titulo-solicitacao {
+    color: white;
 }
