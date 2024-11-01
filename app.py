@@ -78,26 +78,16 @@ EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 # verificar_tabela()
 
+import mysql.connector
+from mysql.connector import Error
+
 def conectar_banco_dados():
-    # use_remote_db = os.getenv('USE_REMOTE_DB', 'False').lower() == 'true'
-    # print(f"USE_REMOTE_DB: {use_remote_db}")
-    
     try:
-        # if use_remote_db:
-        #     print("Tentando conectar ao banco de dados remoto...")
-        #     conexao = mysql.connector.connect(
-        #         host=os.getenv('MYSQL_HOST'),
-        #         user=os.getenv('MYSQL_USER'),
-        #         password=os.getenv('MYSQL_PASSWORD'),
-        #         database=os.getenv('MYSQL_DB'),
-        #         port=int(os.getenv('MYSQL_PORT'))
-        #     )
-        # else:
-        print("Tentando conectar ao banco de dados local...")
+        print("Tentando conectar ao banco de dados remoto...")
         conexao = mysql.connector.connect(
-            host='localhost',
-            user='tcc',
-            password='123',
+            host='inventcc.mysql.database.azure.com',
+            user='invent@inventcc',
+            password='SENAI2024.',
             database='almoxarifado',
         )
         print("Conexão estabelecida com sucesso!")
