@@ -173,7 +173,8 @@ table {
     width: 100%;
     background-color: rgba(70, 94, 140, 0.61);
     color: rgb(0, 0, 0);
-    border-radius: 20px;
+    border-radius: 10px;
+    outline: none;
 }
 
 th{
