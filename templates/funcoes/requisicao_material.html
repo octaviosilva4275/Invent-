@@ -129,6 +129,10 @@
 
             // Inicia o tutorial
             showTutorialStep(currentStep);
+        } else {
+            $('#tutorial-overlay').hide(); // Fecha o tutorial no último passo
+            $('input, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial'); // Reativa todos os campos
+            sessionStorage.setItem('tutorialCompleted', 'true'); // Marca o tutorial como concluído
         }
 
         // Função para atualizar a tabela de requisições
