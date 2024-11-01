@@ -127,6 +127,8 @@ body.dark-mode table {
 .form-requisicoes label {
     font-size:large;
     margin-bottom: 5px;
+    outline: transparent;
+
 }
 
 .form-requisicoes input, .form-requisicoes textarea {
@@ -191,15 +193,15 @@ td {
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.7); /* Fundo semitransparente */
+        background-color: rgba(0, 0, 0, 0.7); /* Fundo mais escuro para melhorar o contraste */
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 1000; /* Sobrepõe outros elementos */
+        z-index: 1000; /* Coloca o overlay acima de todos os elementos */
     }
-
-    /* Estilo das mensagens do tutorial */
+    
     .tutorial-message {
+        position: relative;
         background-color: #fff;
         color: #333;
         padding: 20px;
@@ -209,6 +211,7 @@ td {
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         font-size: 1.6rem;
         font-weight: bold;
+        z-index: 1100; /* Coloca a mensagem do tutorial acima do overlay */
     }
 
     .tutorial-message p {
@@ -232,17 +235,28 @@ td {
     }
 
     /* Destaque para os campos do tutorial */
+    /* Ajusta o texto e o placeholder dos inputs destacados */
     .highlight {
-        outline: 3px solid #ffeb3b; /* Cor de destaque */
+        position: relative;
+        outline: 3px solid #ffeb3b; /* Destaque com contorno amarelo */
         border-radius: 8px;
-        z-index: 9999;
-        transition: outline 0.3s ease, background-color 0.3s ease;
+        z-index: 1100;
+       
+        color: #ffffff; /* Ajusta a cor do texto */
     }
 
-    /* Desativar interações nos campos fora do tutorial */
+    /* Estilo específico para o placeholder do input em destaque */
+    .highlight::placeholder {
+        color: #333; /* Cor mais escura para o placeholder */
+        opacity: 1; /* Garante que o placeholder seja visível */
+    }
+
+    /* Ajusta o label do campo destacado para maior visibilidade */
+   
+    
     .disabled-tutorial {
-        pointer-events: none; /* Desativa interações */
-        opacity: 0.5; /* Reduz opacidade para indicar desativação */
+        pointer-events: none;
+        opacity: 0.5;
     }
 
     /* Destaque especial para tabelas no tutorial */
