@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <script src="/static/darkmode js/darkmode.js"></script>
     <title>Editar Perfil</title>
     <style>
         body {
@@ -17,7 +18,7 @@
             height: 100vh;
         }
         .container {
-            background: white;
+            background: rgba(70, 94, 140, 0.51);
             border-radius: 8px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -67,13 +68,82 @@
         .btn:hover {
             background-color: #0056b3;
         }
+        body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+:root{
+    --branco: #f4f4f4;
+    --dark: #04050D;
+    --fundo : #465E8C;
+    --fundodark  :#192340;
+    --fonte : #000;
+    --fontedark : #fff;
+    --fundotabela : #192340CC;
+}
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    left: 97%;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+
+body.dark-mode table {
+    background-color: var(--fundotabela); /* Aplica a cor da variável */
+    color: var(--fontedark); /* Ajusta a cor do texto, se necessário */
+}
+.dark-mode .container{
+    background-color: var(--fundo);
+}
+
+.dark-mode label{
+    color: var(--branco);
+}
+
+.dark-mode h1{
+    color: var(--branco);
+}
+a{
+    text-decoration: none;
+}
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 
 <body>
     {% include '/dashboard/dashboard.html' %}
-
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
     <div class="container">
         <h1>Editar Perfil</h1>
 

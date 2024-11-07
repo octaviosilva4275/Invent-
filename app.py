@@ -1,13 +1,9 @@
 import os
-import uuid
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify, flash
 import mysql.connector
 from mysql.connector import Error
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
-import jwt
-import hashlib
-import time
 import secrets
 from datetime import datetime, timedelta
 
@@ -272,63 +268,69 @@ def verificar_autenticacao():
 
 @app.route('/dashboard')
 def dashboard():
-
-    if 'user_id' in session:
-        user_id = session['user_id']
-
     if 'user_id' not in session:
         flash('Você precisa estar logado para acessar essa página.', 'error')
         return redirect(url_for('login'))
 
+    user_id = session['user_id']
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
-    if 'user_id' in session:
-        user_id = session['user_id']
-        try:
-            # Obter detalhes dos produtos abaixo do estoque mínimo
-            cursor.execute("""
-                SELECT m.id, m.descricao, m.estoque_minimo, 
-                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
-                                SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
-                FROM materials m
-                LEFT JOIN estoque e ON m.id = e.material_id
-                GROUP BY m.id 
-                HAVING quantidade_atual <= m.estoque_minimo
-            """)
-            produtos_estoque_minimo = cursor.fetchall()
-            estoque_minimo = len(produtos_estoque_minimo)
 
-            # Atualizar consulta para incluir data_atualizacao
-            cursor.execute("""
-                SELECT r.id, r.quantidade, r.status, m.descricao AS material, u.nome AS usuario, r.data_atualizacao
-                FROM requisicoes r
-                JOIN materials m ON r.material_id = m.id
-                JOIN users u ON r.usuario_id = u.id
-                WHERE DATE(r.data_requisicao) = CURDATE()
-            """)
-            historico_hoje = cursor.fetchall()
+    try:
+        # Obter detalhes dos produtos abaixo do estoque mínimo
+        cursor.execute("""
+            SELECT m.id, m.descricao, m.estoque_minimo, 
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) - 
+                            SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_atual
+            FROM materials m
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id 
+            HAVING quantidade_atual <= m.estoque_minimo
+        """)
+        produtos_estoque_minimo = cursor.fetchall()
+        estoque_minimo = len(produtos_estoque_minimo)
 
-            # Obter nome do usuário logado
-            cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
-            usuario = cursor.fetchone()
+        # Contar todas as requisições com status 'Retirado' hoje
+        cursor.execute("""
+            SELECT COUNT(*) AS total_retirados
+            FROM requisicoes r
+            WHERE r.status = 'Retirado' AND DATE(r.data_requisicao) = CURDATE()
+        """)
+        requisicoes_retiradas = cursor.fetchone()
+        total_retirados = requisicoes_retiradas['total_retirados'] if requisicoes_retiradas else 0
 
-        except mysql.connector.Error as err:
-            print(f"Erro: {err}")
-            estoque_minimo = 0
-            produtos_estoque_minimo = []
-            historico_hoje = []
-            usuario = None
+        # Atualizar consulta para incluir data_atualizacao (se necessário)
+        cursor.execute("""
+            SELECT r.id, r.quantidade, r.status, m.descricao AS material, u.nome AS usuario, r.data_atualizacao
+            FROM requisicoes r
+            JOIN materials m ON r.material_id = m.id
+            JOIN users u ON r.usuario_id = u.id
+            WHERE DATE(r.data_requisicao) = CURDATE()
+        """)
+        historico_hoje = cursor.fetchall()
 
-        finally:
-            cursor.close()
-            conexao.close()
+        # Obter nome do usuário logado
+        cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
+        usuario = cursor.fetchone()
 
-        return render_template('index.html', 
-                            estoque_minimo=estoque_minimo,
-                            produtos_estoque_minimo=produtos_estoque_minimo,
-                            historico_hoje=historico_hoje,
-                            usuario=usuario,
-                            )  # Passando o usuário para o template
+    except mysql.connector.Error as err:
+        print(f"Erro: {err}")
+        estoque_minimo = 0
+        produtos_estoque_minimo = []
+        historico_hoje = []
+        usuario = None
+        total_retirados = 0
+
+    finally:
+        cursor.close()
+        conexao.close()
+
+    return render_template('index.html', 
+                           estoque_minimo=estoque_minimo,
+                           produtos_estoque_minimo=produtos_estoque_minimo,
+                           historico_hoje=historico_hoje,
+                           usuario=usuario,
+                           total_retirados=total_retirados)  # Passando o total de retirados para o template
 
 
 
@@ -642,19 +644,22 @@ def api_requisicoes_admin():
         cursor.execute("""
             SELECT 
                 r.id,
-                m.descricao as material,
+                m.descricao AS material,
                 r.quantidade,
-                u.nome as usuario, 
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'entrada'), 0) -
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
+                u.nome AS usuario,
                 r.status,
                 r.data_entrega,
-                r.data_atualizacao,
-                r.observacao
+                r.observacao,
+                DATE_FORMAT(r.data_atualizacao, '%Y-%m-%d %H:%i:%s') AS data_atualizacao
             FROM requisicoes r
             JOIN materials m ON r.material_id = m.id
-            JOIN users u ON r.usuario_id = u.id 
-            WHERE r.status != 'aprovada'  
-            ORDER BY r.status DESC 
+            JOIN users u ON r.usuario_id = u.id
+            WHERE r.status != 'aprovada'
+            ORDER BY r.data_atualizacao DESC
         """)
+
         requisicoes = cursor.fetchall()
     except:
         print('Erro ao buscar requisições')
@@ -799,27 +804,27 @@ def requisicao_material_admin():
         cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
         usuario = cursor.fetchone()
 
-    # Query for requisitions
-    cursor.execute("""  
-        SELECT 
-            r.id,
-            m.descricao AS material,
-            r.quantidade,
-            COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'entrada'), 0) -
-            COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
-            u.nome AS usuario,
-            r.status,
-            r.data_entrega,
-            r.observacao,
-            DATE_FORMAT(r.data_atualizacao, '%H:%i') AS data_atualizacao
-        FROM requisicoes r
-        JOIN materials m ON r.material_id = m.id
-        JOIN users u ON r.usuario_id = u.id
-        WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()
-        ORDER BY r.status DESC 
-    """)
+        # Query for requisitions
+        cursor.execute("""  
+            SELECT 
+                r.id,
+                m.descricao AS material,
+                r.quantidade,
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'entrada'), 0) -
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
+                u.nome AS usuario,
+                r.status,
+                r.data_entrega,
+                r.observacao,
+                DATE_FORMAT(r.data_atualizacao, '%H:%i') AS data_atualizacao
+            FROM requisicoes r
+            JOIN materials m ON r.material_id = m.id
+            JOIN users u ON r.usuario_id = u.id
+            WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()
+            ORDER BY r.status DESC 
+        """)
 
-    requisicoes = cursor.fetchall()
+        requisicoes = cursor.fetchall()
 
     cursor.close()
     conexao.close()
@@ -1099,6 +1104,9 @@ def estoque_minimo():
 
 
 
+
+
+
 @app.route('/historico_requisicoes')
 def historico_requisicoes():
     conexao = conectar_banco_dados()
@@ -1120,6 +1128,11 @@ def historico_requisicoes():
 
     return render_template('historico_requisicoes.html', requisicoes=requisicoes_historico)
 
+meses_portugues = {
+    1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril", 5: "Maio", 6: "Junho",
+    7: "Julho", 8: "Agosto", 9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro"
+}
+
 @app.route('/relatorio', methods=['GET', 'POST'])
 def relatorios():
     if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
@@ -1128,8 +1141,8 @@ def relatorios():
     relatorio = None
     relatorio_titulo = None
     tipo_relatorio = None
-
     usuario = None
+
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
@@ -1156,7 +1169,7 @@ def relatorios():
                 cursor.execute("""
                     SELECT e.data_movimentacao AS Data, m.descricao AS Material, 
                            e.tipo_movimentacao AS Tipo, COALESCE(e.quantidade, 0) AS Quantidade, 
-                           u.nome AS Usuário
+                           u.nome AS Usuario
                     FROM estoque e
                     JOIN materials m ON e.material_id = m.id
                     JOIN users u ON e.usuario_id = u.id
@@ -1184,15 +1197,25 @@ def relatorios():
                 """)
                 relatorio = cursor.fetchall()
                 relatorio_titulo = "Movimentação Mensal"
+                
+                # Converte os números dos meses para nome em português
+                for item in relatorio:
+                    mes_numero = item['Mes']
+                    item['Mes'] = meses_portugues.get(mes_numero, str(mes_numero))  # Converte para português ou mantém o número caso não haja
 
         except mysql.connector.Error as err:
-            print(f"Erro ao gerar relatório: {err}")
+            flash(f"Erro ao gerar relatório: {err}", 'error')
 
         finally:
             cursor.close()
             conexao.close()
 
-    return render_template('funcoes/relatorio.html', relatorio=relatorio, relatorio_titulo=relatorio_titulo, tipo_relatorio=tipo_relatorio, usuario=usuario)
+    return render_template('funcoes/relatorio.html', 
+                           relatorio=relatorio, 
+                           relatorio_titulo=relatorio_titulo, 
+                           tipo_relatorio=tipo_relatorio, 
+                           usuario=usuario)
+
 
 
 

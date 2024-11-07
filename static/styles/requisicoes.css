@@ -36,7 +36,7 @@ body {
 }
 
 :root{
-    --cinza: #ffffff;
+    --branco: #f4f4f4;
     --dark: #04050D;
     --fundo : #465E8C;
     --fundodark  :#192340;
@@ -45,7 +45,7 @@ body {
     --fundotabela : #192340CC;
 }
 body.light-mode {
-    background-color: var(--cinza);
+    background-color: var(--branco);
     color: var(--fonte);
 }
 body.dark-mode {
@@ -102,7 +102,6 @@ body.dark-mode table {
     flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
     width: 100vw;
     height: 100vh;
-    background-color: var(--branco);
 }
 
 form{
