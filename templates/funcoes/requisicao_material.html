@@ -36,7 +36,9 @@
                         <label for="material_id">Material:</label>
                         <select id="material_id" name="material_id">
                             {% for material in materiais %}
-                            <option value="{{ material.id }}">{{ material.descricao }} (Quantidade: {{ material.quantidade }})
+                                <option value="{{ material.id }}">
+                                    {{ material.descricao }} (Quantidade: {{ material.quantidade }})
+                                </option>
                             {% else %}
                                 <option>Sem materiais disponíveis</option>
                             {% endfor %}
@@ -58,43 +60,44 @@
 
                     <button class="btn-requisicoes">Enviar Requisição</button>
                 </div>
+                <div class="minhas-requisicoes">
+                    <h2 class="titulo-pendente">Minhas Requisições Pendentes:</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CÓDIGO</th>
+                                <th>MATERIAL</th>
+                                <th>QUANTIDADE</th>
+                                <th>STATUS</th>
+                                <th>ULTIMA ATUALIZAÇÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if minhas_requisicoes %}
+                                {% for requisicao in minhas_requisicoes %}
+                                <tr>
+                                    <td>{{ requisicao.id }}</td>
+                                    <td>{{ requisicao.material }}</td>
+                                    <td>{{ requisicao.quantidade }}</td>
+                                    <td class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponivel para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% else %}status-desconhecido{% endif %}">
+                                        {{ requisicao.status }}
+                                    </td>
+                                    <td>{{ requisicao.data_atualizacao }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="5">Você ainda não fez nenhuma requisição.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
             </div>
         </form>
 
-        <div class="minhas-requisicoes">
-            <h2 class="titulo-pendente">Minhas Requisições Pendentes:</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>CÓDIGO</th>
-                        <th>MATERIAL</th>
-                        <th>QUANTIDADE</th>
-                        <th>STATUS</th>
-                        <th>DATA DE ENTREGA</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if minhas_requisicoes %}
-                        {% for requisicao in minhas_requisicoes %}
-                        <tr>
-                            <td>{{ requisicao.id }}</td>
-                            <td>{{ requisicao.material }}</td>
-                            <td>{{ requisicao.quantidade }}</td>
-                            <td class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponivel para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% else %}status-desconhecido{% endif %}">
-                                {{ requisicao.status }}
-                            </td>
-                            <td>{{ requisicao.data_entrega }}</td>
-                        </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="5">Você ainda não fez nenhuma requisição.</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-        </div>
-    </section>
+        
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -202,14 +205,7 @@ $(document).ready(function () {
 
     // Inicia o tutorial
     $(document).ready(function() {
-        bloquearCamposTutorial(true);  // Bloqueia os campos no início do tutorial
 
-        // Quando o tutorial avançar para o próximo campo
-        $('#nextButton').click(function() {
-            if ($('.input-tutorial').last().hasClass('highlight')) {
-                bloquearCamposTutorial(false);  // Desbloqueia os campos ao terminar o tutorial
-            }
-        });
     });
 
 

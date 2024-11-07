@@ -650,7 +650,7 @@ def api_requisicoes_admin():
                 COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
                 u.nome AS usuario,
                 r.status,
-                r.data_entrega,
+                r.data_atualizacao,
                 r.observacao,
                 DATE_FORMAT(r.data_atualizacao, '%Y-%m-%d %H:%i:%s') AS data_atualizacao
             FROM requisicoes r
@@ -691,7 +691,7 @@ def api_minhas_requisicoes():
             m.descricao as material,
             r.quantidade,
             r.status,
-            r.data_entrega,
+            r.data_atualizacao,
             r.data_atualizacao
         FROM requisicoes r
         JOIN materials m ON r.material_id = m.id
@@ -741,13 +741,11 @@ def requisicao_material():
     cursor = conexao.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT m.id, m.codigo_produto, m.descricao, SUM(e.quantidade) as quantidade
+            SELECT m.id, m.descricao, COALESCE(SUM(e.quantidade), 0) as quantidade
             FROM materials m
             LEFT JOIN estoque e ON m.id = e.material_id
             GROUP BY m.id
         """)
-
-
         materiais = cursor.fetchall()
 
         if usuario_id:
@@ -760,17 +758,33 @@ def requisicao_material():
                     m.descricao as material,
                     r.quantidade,
                     r.status,
-                    r.data_entrega 
+                    r.data_atualizacao
                 FROM requisicoes r
                 JOIN materials m ON r.material_id = m.id
                 WHERE r.usuario_id = %s
             """, (usuario_id,))
             minhas_requisicoes = cursor.fetchall()
+
+            # Formatar a data de entrega antes de passar para o template
+            for requisicao in minhas_requisicoes:
+                if requisicao['data_atualizacao']:
+                    # Verifica se é uma string ou objeto datetime e formata
+                    if isinstance(requisicao['data_atualizacao'], str):
+                        # Se for string, converte para datetime
+                        try:
+                            requisicao['data_atualizacao'] = datetime.strptime(requisicao['data_atualizacao'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M')
+                        except ValueError:
+                            requisicao['data_atualizacao'] = 'Data inválida'
+                    else:
+                        requisicao['data_atualizacao'] = requisicao['data_atualizacao'].strftime('%d/%m/%Y %H:%M')
+                else:
+                    requisicao['data_atualizacao'] = 'N/A'  # Caso a data não esteja disponível
+
         else:
             minhas_requisicoes = []
 
-    except:
-        print("Erro ao buscar dados")
+    except Exception as e:
+        print("Erro ao buscar dados:", e)
         materiais = []
         minhas_requisicoes = []
 
@@ -783,6 +797,7 @@ def requisicao_material():
                         materiais=materiais, 
                         minhas_requisicoes=minhas_requisicoes, 
                         usuario=usuario)
+
 
 
 
@@ -814,7 +829,7 @@ def requisicao_material_admin():
                 COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
                 u.nome AS usuario,
                 r.status,
-                r.data_entrega,
+                r.data_atualizacao,
                 r.observacao,
                 DATE_FORMAT(r.data_atualizacao, '%H:%i') AS data_atualizacao
             FROM requisicoes r
@@ -1023,7 +1038,7 @@ def atualizar_requisicao():
                 if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
                     nova_quantidade = estoque_atual[0] - quantidade_requisitada
                     cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
-                    cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
+                    cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_atualizacao = NOW() WHERE id = %s", (requisicao_id,))
                 else:
                     cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
 
@@ -1117,7 +1132,7 @@ def historico_requisicoes():
             m.descricao as material,
             rh.quantidade,
             u.nome as usuario,
-            rh.data_aprovacao as data_entrega  # Use a data de aprovação como data de entrega
+            rh.data_aprovacao as data_atualizacao  # Use a data de aprovação como data de entrega
         FROM requisicoes_historico rh
         JOIN materials m ON rh.material_id = m.id
         JOIN users u ON rh.usuario_id = u.id

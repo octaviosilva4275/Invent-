@@ -100,7 +100,6 @@ body.dark-mode table {
     justify-content: center;
     align-items: center;
     flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
-    width: 100vw;
     height: 100vh;
 }
 
