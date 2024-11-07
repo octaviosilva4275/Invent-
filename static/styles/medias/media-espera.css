@@ -1,0 +1,123 @@
+@media (max-width: 533px) {
+    .img-espera img {
+
+        margin-left: -65px;
+    }
+}
+
+
+/* Para dispositivos móveis (menos de 480px) */
+@media (max-width: 480px) {
+    .container-espera {
+        padding: 20px; /* Menos padding em telas menores */
+        width: 90%; /* Ocupa 90% da largura disponível */
+    }
+    
+    .img-espera img {
+        width: 468px;
+        height: auto;
+        margin-top: -50px;
+        transform: scale(1.5);
+        margin-left: -76px
+    }
+    }
+    .img-espera{
+        width: 460px;
+        height: 180px;
+    }
+
+    .conteudo-espera {
+        font-size: 1.4rem; /* Reduz o tamanho da fonte */
+    }
+
+    .texto-espera {
+        margin-top: 0; /* Remove margem superior */
+    }
+
+    .btn {
+        margin: auto;
+        margin-top: 10px; /* Mantém a margem para o botão */
+    }
+
+/* Para tablets (de 481px a 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .container-espera {
+        padding: 30px; /* Ajusta o padding */
+        width: 85%; /* Largura um pouco maior */
+    }
+
+
+    .conteudo-espera {
+        font-size: 1.5rem; /* Tamanho de fonte intermediário */
+    }
+    .btn {
+        margin: auto;
+        margin-top: 10px; /* Mantém a margem para o botão */
+    }
+    .img-espera img {
+        transform: scale(2.5);
+        width: 300px;
+        height: auto;
+        margin-left: 99px;
+        margin-top: 20px;
+    }
+}
+
+
+/* Para dispositivos móveis (menos de 480px) */
+@media (max-width: 455px) {
+    .img-espera img {
+        margin-left: -10px;
+    }
+}
+/* Para telas grandes (acima de 768px) */
+@media (max-width: 769px) {
+    .container-espera {
+        width: 75%; /* Aumenta a largura para telas grandes */
+        padding: 40px; /* Ajusta o padding */
+    }
+
+    .img-espera img {
+        max-width: 300px; /* Define a largura da imagem */
+    }
+
+    .conteudo-espera {
+        font-size: 1.6rem; /* Mantém o tamanho padrão */
+    }
+
+    .btn {
+        margin: auto;
+        margin-top: 10px; /* Mantém a margem para o botão */
+    }
+}
+
+
+@media (max-width: 375px) {
+    .img-espera img {
+        margin-left: -187px;
+        margin-top: 13px;
+    }
+}
+
+@media (max-width: 393px) {
+    .img-espera img {
+        margin-left: -187px;
+        margin-top: 13px;
+    }
+}
+
+@media (max-width: 414px) {
+    .img-espera img {
+        margin-left: -187px;
+        margin-top: 13px;
+    }
+}
+
+
+@media (max-width: 520px) {
+    .img-espera img {
+        margin-left: -187px;
+        margin-top: 13px;
+    }
+}
+

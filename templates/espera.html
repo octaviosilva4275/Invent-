@@ -3,60 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <title>Aguardando Liberação</title>
-    <style>
-        body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.container {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 40px;
-    width: 90%;
-    max-width: 400px;
-}
-
-h1 {
-    color: #333;
-    margin-bottom: 20px;
-}
-
-p {
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 20px;
-}
-
-.btn {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.btn:hover {
-    background-color: #0056b3;
-}
-
-    </style>
+    <link rel="stylesheet" href="/static/styles/espera.css">
+    <link rel="stylesheet" href="/static/styles/medias/media-espera.css">
+    <script src="/static/javascript/darkmode.js"></script>
+  
 </head>
 <body>
-    <div class="container">
-        <div class="content">
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
+
+    <div class="container-espera">
+        <div class="conteudo-espera">
+            <div class="img-espera">
+                <img src="/static/img/imagem-espera.gif" alt="">
+            </div>
+        <div class="texto-espera">
             <h1>Aguardando Liberação</h1>
             <p>Seu acesso está aguardando aprovação do administrador.</p>
             <p>Por favor, entre em contato para mais informações.</p>
