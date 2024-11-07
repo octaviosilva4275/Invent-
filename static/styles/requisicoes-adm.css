@@ -224,7 +224,8 @@ table{
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
-    font-size: 1.4rem; /* Aumentado para melhor visualização */
+    font-size: 1.6rem; /* Aumentado para melhor visualização */
+    font-weight: 500;
 }
 
 
@@ -360,7 +361,7 @@ body {
     font-weight: bold;
 }
 
-.finalizado {
+td .finalizado {
     color: grey;
-    font-weight: bold;
+    font-size: 18px;
 }
