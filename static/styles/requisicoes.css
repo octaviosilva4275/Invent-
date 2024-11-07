@@ -129,18 +129,35 @@ form{
     z-index: 999;
 }
 
+/* Define o estilo das labels em branco para o tutorial */
+.tutorial-active .form-requisicoes label {
+    color: white !important;
+    
+}
+
+/* Estilo padrão para labels */
 .form-requisicoes label {
+    color: black; /* Cor original fora do tutorial */
     font-size:large;
     margin-bottom: 5px;
     outline: transparent;
-
+   
 }
+
+.form-requisicoes label.highlight {
+    color: white !important;
+    font-size:large;
+    margin-bottom: 5px;
+    outline: transparent;
+}
+
 
 .form-requisicoes input,.form-requisicoes select, .form-requisicoes textarea {
     width: 100%;
     padding: 10px;
     font-weight: bolder;
     border-radius: 10px;
+    background-color: white;
 }
 
 .form-resquisicoes textarea {
@@ -159,7 +176,7 @@ form{
 }
 
 .btn-requisicoes:hover {
-    background-color: rgba(25, 35, 64, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     transform: scale(1.05);
 }
 
@@ -252,10 +269,15 @@ td {
         color: #000000; /* Ajusta a cor do texto */
     }
 
+    .btn-requisicoes.highlight {
+        color: #ffffff !important; /* Força a cor do texto a permanecer branca */
+    }
+
     /* Estilo específico para o placeholder do input em destaque */
     .highlight::placeholder {
         color: #333; /* Cor mais escura para o placeholder */
         opacity: 1; /* Garante que o placeholder seja visível */
+        
     }
 
     /* Ajusta o label do campo destacado para maior visibilidade */
@@ -291,3 +313,12 @@ td {
     .step-5{
         margin-top: 307px;
     }
+
+    /* Desativa inputs e textarea durante o tutorial */
+    input.disabled-tutorial,
+    textarea.disabled-tutorial,
+    select.disabled-tutorial,
+    button.disabled-tutorial {
+    pointer-events: none;
+    opacity: 1; /* Torna o elemento visualmente diferente para indicar desativação */
+}

@@ -10,7 +10,16 @@
 <body>
     {% include '/dashboard/dashboard.html' %}
     
-
+    <div id="tutorial-overlay">
+        {% for step in range(1, 6) %}
+        <div class="tutorial-message step-{{ step }}" {% if step != 1 %} style="display: none;" {% endif %}>
+            <p>{% if step == 1 %} Selecione o material desejado aqui. {% elif step == 2 %} Informe a quantidade desejada neste campo.
+            {% elif step == 3 %} Adicione uma observação, se necessário. {% elif step == 4 %} Clique aqui para enviar sua requisição.
+            {% elif step == 5 %} Aqui estão suas requisições feitas. {% endif %}</p>
+            <button class="next-step">{% if step < 5 %} Próximo {% else %} Fechar Tutorial {% endif %}</button>
+        </div>
+        {% endfor %}
+    </div>
 
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
@@ -49,6 +58,8 @@
 
                     <button class="btn-requisicoes">Enviar Requisição</button>
                 </div>
+            </div>
+        </form>
 
         <div class="minhas-requisicoes">
             <h2 class="titulo-pendente">Minhas Requisições Pendentes:</h2>
@@ -85,9 +96,6 @@
         </div>
     </section>
 
-            </div>
-        </form>
-        
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
@@ -104,47 +112,52 @@ $(document).ready(function () {
         ];
 
         function showTutorialStep(step) {
-            $('.tutorial-message').hide();
-            $('.tutorial-message').eq(step).show();
-            $('#tutorial-overlay').show();
+            
+            // Remove destaque dos elementos anteriores
+            $('.highlight').removeClass('highlight');
+            $('.disabled-tutorial').removeClass('disabled-tutorial');
 
-            // Remove destaque e desativação de todos os elementos
-            $('select, textarea, .btn-requisicoes, table, label').removeClass('highlight disabled-tutorial');
-
-            // Desativa todos os elementos do formulário
-            $('select, textarea, .btn-requisicoes, table').addClass('disabled-tutorial');
-
-            // Desativa os elementos que não estão no passo atual
-            $('select, textarea, .btn-requisicoes, table').not(tutorialSteps[step].element).addClass('disabled-tutorial');
-
-            // Adiciona destaque ao elemento atual e ao label associado
+            // Adiciona o destaque ao elemento atual
             const currentElement = $(tutorialSteps[step].element);
             currentElement.addClass('highlight').focus();
-            currentElement.prev('label').addClass('highlight');
+            currentElement.prev('label').addClass('highlight'); // Adiciona destaque ao label, se houver
 
-            // Rola a página para o elemento em destaque
+            // Ofusca os outros elementos e ativa o atual
+            $('select, textarea, .btn-requisicoes, table').not(currentElement).addClass('disabled-tutorial');
+
+            // Atualiza o texto do tutorial e exibe o overlay
+            $('#tutorial-overlay').show();
+            $('.tutorial-message').hide();
+            $('.tutorial-message').eq(step).show();
+
+            // Rolagem suave até o elemento destacado
             $('html, body').animate({ scrollTop: currentElement.offset().top - 100 }, 'slow');
         }
 
-        // Evento de clique para passar para o próximo passo
+        // Avança para o próximo passo do tutorial
         $(document).on('click', '.next-step', function () {
             if (currentStep < tutorialSteps.length - 1) {
                 currentStep++;
                 showTutorialStep(currentStep);
             } else {
+                // Finaliza o tutorial
                 $('#tutorial-overlay').hide();
                 $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
+                $('.highlight').removeClass('highlight');
                 sessionStorage.setItem('tutorialCompleted', 'true');
                 location.reload();
             }
         });
 
+        // Inicia o tutorial na primeira etapa
         showTutorialStep(currentStep);
     } else {
         $('#tutorial-overlay').hide();
         $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
-        sessionStorage.setItem('tutorialCompleted', 'true');
     }
+
+    
+
 
     function atualizarTabela() {
         $.ajax({
@@ -182,10 +195,24 @@ $(document).ready(function () {
     atualizarTabela();
     setInterval(atualizarTabela, 5000);
 
-    function formatarData(dataString) {
-        const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
-        return new Date(dataString).toLocaleDateString('pt-BR', options).replace(' ', ' de ');
+        // Função para bloquear os campos específicos durante o tutorial
+    function bloquearCamposTutorial(bloquear) {
+        $('#quantidade, #material, #observacao').prop('disabled', bloquear);  // Bloqueia ou desbloqueia os campos
     }
+
+    // Inicia o tutorial
+    $(document).ready(function() {
+        bloquearCamposTutorial(true);  // Bloqueia os campos no início do tutorial
+
+        // Quando o tutorial avançar para o próximo campo
+        $('#nextButton').click(function() {
+            if ($('.input-tutorial').last().hasClass('highlight')) {
+                bloquearCamposTutorial(false);  // Desbloqueia os campos ao terminar o tutorial
+            }
+        });
+    });
+
+
 });
 
 </script>
