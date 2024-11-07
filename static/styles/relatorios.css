@@ -1,5 +1,5 @@
 :root{
-    --cinza: #ffffff;
+    --branco:#f4f4f4;
     --dark: #04050D;
     --fundo : #465E8C;
     --fundodark  :#000000;
@@ -158,4 +158,9 @@ background-color: #465E8C;
 
 .dark-mode .titulo-solicitacao {
     color: white;
+}
+
+
+.dark-mode h1, h2, h3 {
+    color: var(--branco);
 }

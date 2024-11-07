@@ -153,6 +153,7 @@ body.dark-mode {
     color: white;
     background-color: rgba(56, 71, 115, 1);
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .btn-estoque:hover {
