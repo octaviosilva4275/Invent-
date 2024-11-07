@@ -644,19 +644,22 @@ def api_requisicoes_admin():
         cursor.execute("""
             SELECT 
                 r.id,
-                m.descricao as material,
+                m.descricao AS material,
                 r.quantidade,
-                u.nome as usuario, 
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'entrada'), 0) -
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
+                u.nome AS usuario,
                 r.status,
-                r.data_entrega,
                 r.data_atualizacao,
-                r.observacao
+                r.observacao,
+                DATE_FORMAT(r.data_atualizacao, '%Y-%m-%d %H:%i:%s') AS data_atualizacao
             FROM requisicoes r
             JOIN materials m ON r.material_id = m.id
-            JOIN users u ON r.usuario_id = u.id 
-            WHERE r.status != 'aprovada'  
-            ORDER BY r.status DESC 
+            JOIN users u ON r.usuario_id = u.id
+            WHERE r.status != 'aprovada'
+            ORDER BY r.data_atualizacao DESC
         """)
+
         requisicoes = cursor.fetchall()
     except:
         print('Erro ao buscar requisições')
@@ -688,7 +691,7 @@ def api_minhas_requisicoes():
             m.descricao as material,
             r.quantidade,
             r.status,
-            r.data_entrega,
+            r.data_atualizacao,
             r.data_atualizacao
         FROM requisicoes r
         JOIN materials m ON r.material_id = m.id
@@ -738,13 +741,11 @@ def requisicao_material():
     cursor = conexao.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT m.id, m.codigo_produto, m.descricao, SUM(e.quantidade) as quantidade
+            SELECT m.id, m.descricao, COALESCE(SUM(e.quantidade), 0) as quantidade
             FROM materials m
             LEFT JOIN estoque e ON m.id = e.material_id
             GROUP BY m.id
         """)
-
-
         materiais = cursor.fetchall()
 
         if usuario_id:
@@ -757,17 +758,33 @@ def requisicao_material():
                     m.descricao as material,
                     r.quantidade,
                     r.status,
-                    r.data_entrega 
+                    r.data_atualizacao
                 FROM requisicoes r
                 JOIN materials m ON r.material_id = m.id
                 WHERE r.usuario_id = %s
             """, (usuario_id,))
             minhas_requisicoes = cursor.fetchall()
+
+            # Formatar a data de entrega antes de passar para o template
+            for requisicao in minhas_requisicoes:
+                if requisicao['data_atualizacao']:
+                    # Verifica se é uma string ou objeto datetime e formata
+                    if isinstance(requisicao['data_atualizacao'], str):
+                        # Se for string, converte para datetime
+                        try:
+                            requisicao['data_atualizacao'] = datetime.strptime(requisicao['data_atualizacao'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M')
+                        except ValueError:
+                            requisicao['data_atualizacao'] = 'Data inválida'
+                    else:
+                        requisicao['data_atualizacao'] = requisicao['data_atualizacao'].strftime('%d/%m/%Y %H:%M')
+                else:
+                    requisicao['data_atualizacao'] = 'N/A'  # Caso a data não esteja disponível
+
         else:
             minhas_requisicoes = []
 
-    except:
-        print("Erro ao buscar dados")
+    except Exception as e:
+        print("Erro ao buscar dados:", e)
         materiais = []
         minhas_requisicoes = []
 
@@ -780,6 +797,7 @@ def requisicao_material():
                         materiais=materiais, 
                         minhas_requisicoes=minhas_requisicoes, 
                         usuario=usuario)
+
 
 
 
@@ -801,27 +819,27 @@ def requisicao_material_admin():
         cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
         usuario = cursor.fetchone()
 
-    # Query for requisitions
-    cursor.execute("""  
-        SELECT 
-            r.id,
-            m.descricao AS material,
-            r.quantidade,
-            COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'entrada'), 0) -
-            COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
-            u.nome AS usuario,
-            r.status,
-            r.data_entrega,
-            r.observacao,
-            DATE_FORMAT(r.data_atualizacao, '%H:%i') AS data_atualizacao
-        FROM requisicoes r
-        JOIN materials m ON r.material_id = m.id
-        JOIN users u ON r.usuario_id = u.id
-        WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()
-        ORDER BY r.status DESC 
-    """)
+        # Query for requisitions
+        cursor.execute("""  
+            SELECT 
+                r.id,
+                m.descricao AS material,
+                r.quantidade,
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'entrada'), 0) -
+                COALESCE((SELECT SUM(quantidade) FROM estoque WHERE material_id = m.id AND tipo_movimentacao = 'saida'), 0) AS quantidade_estoque,
+                u.nome AS usuario,
+                r.status,
+                r.data_atualizacao,
+                r.observacao,
+                DATE_FORMAT(r.data_atualizacao, '%H:%i') AS data_atualizacao
+            FROM requisicoes r
+            JOIN materials m ON r.material_id = m.id
+            JOIN users u ON r.usuario_id = u.id
+            WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()
+            ORDER BY r.status DESC 
+        """)
 
-    requisicoes = cursor.fetchall()
+        requisicoes = cursor.fetchall()
 
     cursor.close()
     conexao.close()
@@ -1020,7 +1038,7 @@ def atualizar_requisicao():
                 if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
                     nova_quantidade = estoque_atual[0] - quantidade_requisitada
                     cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
-                    cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_entrega = NOW() WHERE id = %s", (requisicao_id,))
+                    cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_atualizacao = NOW() WHERE id = %s", (requisicao_id,))
                 else:
                     cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
 
@@ -1114,7 +1132,7 @@ def historico_requisicoes():
             m.descricao as material,
             rh.quantidade,
             u.nome as usuario,
-            rh.data_aprovacao as data_entrega  # Use a data de aprovação como data de entrega
+            rh.data_aprovacao as data_atualizacao  # Use a data de aprovação como data de entrega
         FROM requisicoes_historico rh
         JOIN materials m ON rh.material_id = m.id
         JOIN users u ON rh.usuario_id = u.id
@@ -1125,6 +1143,11 @@ def historico_requisicoes():
 
     return render_template('historico_requisicoes.html', requisicoes=requisicoes_historico)
 
+meses_portugues = {
+    1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril", 5: "Maio", 6: "Junho",
+    7: "Julho", 8: "Agosto", 9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro"
+}
+
 @app.route('/relatorio', methods=['GET', 'POST'])
 def relatorios():
     if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
@@ -1133,8 +1156,8 @@ def relatorios():
     relatorio = None
     relatorio_titulo = None
     tipo_relatorio = None
-
     usuario = None
+
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
@@ -1161,7 +1184,7 @@ def relatorios():
                 cursor.execute("""
                     SELECT e.data_movimentacao AS Data, m.descricao AS Material, 
                            e.tipo_movimentacao AS Tipo, COALESCE(e.quantidade, 0) AS Quantidade, 
-                           u.nome AS Usuário
+                           u.nome AS Usuario
                     FROM estoque e
                     JOIN materials m ON e.material_id = m.id
                     JOIN users u ON e.usuario_id = u.id
@@ -1189,15 +1212,25 @@ def relatorios():
                 """)
                 relatorio = cursor.fetchall()
                 relatorio_titulo = "Movimentação Mensal"
+                
+                # Converte os números dos meses para nome em português
+                for item in relatorio:
+                    mes_numero = item['Mes']
+                    item['Mes'] = meses_portugues.get(mes_numero, str(mes_numero))  # Converte para português ou mantém o número caso não haja
 
         except mysql.connector.Error as err:
-            print(f"Erro ao gerar relatório: {err}")
+            flash(f"Erro ao gerar relatório: {err}", 'error')
 
         finally:
             cursor.close()
             conexao.close()
 
-    return render_template('funcoes/relatorio.html', relatorio=relatorio, relatorio_titulo=relatorio_titulo, tipo_relatorio=tipo_relatorio, usuario=usuario)
+    return render_template('funcoes/relatorio.html', 
+                           relatorio=relatorio, 
+                           relatorio_titulo=relatorio_titulo, 
+                           tipo_relatorio=tipo_relatorio, 
+                           usuario=usuario)
+
 
 
 

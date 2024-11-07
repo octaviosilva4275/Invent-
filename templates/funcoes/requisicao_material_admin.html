@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitação de Pedido</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/requisicoes-adm.css') }}">
+
     <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}"></script>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/requisicoes-adm.css') }}">
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
@@ -17,57 +19,109 @@
             <img src="{{ url_for('static', filename='img/lua.png') }}" alt="Modo Escuro" id="lua-icon">
             <img src="{{ url_for('static', filename='img/sol.png') }}" alt="Modo Claro" class="none" id="sol-icon">
         </div>
-        
+
         <section class="solicitacao">
             <div class="container-solicitacao">
-                <h1 class="titulo-solicitacao">Solicitação de pedido</h1>
+                <h1 class="titulo-solicitacao">Solicitação de Pedido                <!-- Botão para abrir o modal de filtro -->
+                    <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#filtroModal">
+                        Filtros
+                    </button></h1>
 
-                <!-- Tabela para cada status -->
-                {% set status_labels = {'Solicitado': 'Solicitado', 'Disponível para retirada': 'Disponível para Retirada', 'Aguardando reposição': 'Aguardando Reposição', 'Retirado': 'Retirado'} %}
-                
-                {% for status, label in status_labels.items() %}
-                    <h2>{{ label }}</h2>
-                    <div class="campo-solicitacao">
-                        <table class="tabela-solicitacao">
-                            <thead>
-                                <tr>
-                                    <th>Nome do Solicitante</th>
-                                    <th>Produto</th>
-                                    <th>Status</th>
-                                    <th>Observação</th>
-                                    <th>Última Requisição</th>
-                                    <th>Quantidade</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for requisicao in requisicoes if requisicao.status == status %}
-                                <tr>
-                                    <td>{{ requisicao.usuario }}</td>
-                                    <td>{{ requisicao.material }}</td>
-                                    <td class="{{ requisicao.status | lower | replace(" ", "-") }}">{{ requisicao.status }}</td>
-                                    <td>{{ requisicao.observacao }}</td>
-                                    <td>{{ requisicao.data_atualizacao }}</td>
-                                    <td>{{ requisicao.quantidade }}</td>
-                                    <td>
-                                        <div class="btn-solicitacao">
-                                            <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
-                                            <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal" 
-                                                data-id="{{ requisicao.id }}" data-material="{{ requisicao.material }}"
-                                                data-quantidade="{{ requisicao.quantidade }}" data-estoque="{{ requisicao.quantidade_estoque }}">
-                                                Ações
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endfor %}
+
+
+                <!-- Tabela única para todas as requisições -->
+                <div class="campo-solicitacao">
+                    <table class="tabela-solicitacao table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nome do Solicitante</th>
+                                <th>Produto</th>
+                                <th>Status</th>
+                                <th>Observação</th>
+                                <th>Última Atualização</th>
+                                <th>Quantidade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-corpo">
+                            {% for requisicao in requisicoes %}
+                            <tr class="requisicao" data-nome="{{ requisicao.usuario | lower }}" data-produto="{{ requisicao.material | lower }}" data-status="{{ requisicao.status | lower }}">
+                                <td>{{ requisicao.usuario }}</td>
+                                <td>{{ requisicao.material }}</td>
+                                <td class="{{ requisicao.status | lower | replace(" ", "-") }}">{{ requisicao.status }}</td>
+                                <td>{{ requisicao.observacao }}</td>
+                                <td>{{ requisicao.data_atualizacao }}</td>
+                                <td>{{ requisicao.quantidade }}</td>
+                                <td>
+                                    <div class="btn-solicitacao">
+                                        <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
+                                        <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
+                                            data-id="{{ requisicao.id }}"
+                                            data-material="{{ requisicao.material }}"
+                                            data-quantidade="{{ requisicao.quantidade }}"
+                                            data-estoque="{{ requisicao.quantidade_estoque }}">
+                                            Ações
+                                        </button>
+                                    
+                                    
+                                    
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            
-            <!-- Modal -->
+
+            <!-- Modal de Filtros -->
+            <div class="modal fade" id="filtroModal" tabindex="-1" role="dialog" aria-labelledby="filtroModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="filtroModalLabel">Aplicar Filtros</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="filtroForm">
+                                <div class="row">
+                                    <!-- Filtro de status -->
+                                    <div class="col-md-4">
+                                        <label for="filtro-status">Status</label>
+                                        <select class="form-control" id="filtro-status">
+                                            <option value="">Todos</option>
+                                            <option value="Solicitado">Solicitado</option>
+                                            <option value="Disponivel para retirada">Disponível para Retirada</option>
+                                            <option value="Aguardando reposição">Aguardando Reposição</option>
+                                            <option value="Retirado">Retirado</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Filtro de nome do solicitante -->
+                                    <div class="col-md-4">
+                                        <label for="filtro-nome">Solicitante</label>
+                                        <input type="text" class="form-control" id="filtro-nome" placeholder="Nome do solicitante">
+                                    </div>
+
+                                    <!-- Filtro de produto -->
+                                    <div class="col-md-4">
+                                        <label for="filtro-produto">Produto</label>
+                                        <input type="text" class="form-control" id="filtro-produto" placeholder="Produto">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-primary" onclick="filtrarTabela()">Aplicar Filtros</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for requisicao in requisicoes %}
+            <!-- Modal de Ação -->
             <div class="modal fade" id="acaoModal" tabindex="-1" role="dialog" aria-labelledby="acaoModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -79,12 +133,12 @@
                         </div>
                         <div class="modal-body">
                             <p id="modal-material"></p>
-                            <p>Quantidade: <span id="modal-quantidade"></span></p>
-                            <p>Estoque disponível: <span id="modal-estoque"></span></p>
+                            <p>Quantidade solicitada: <span id="modal-quantidade">{{ requisicao.quantidade }}</span></p>
+                            <p>Estoque disponível: <span id="modal-estoque"></span>{{ requisicao.quantidade_estoque }}</p>
                             <form id="acaoForm">
                                 <input type="hidden" name="requisicao_id" id="requisicao_id" value="">
                                 <button type="button" class="btn btn-warning" onclick="atualizarStatus('Solicitado')">Solicitado</button>
-                                <button type="button" class="btn btn-success" onclick="atualizarStatus('Disponível para retirada')">Disponível para retirada</button>
+                                <button type="button" class="btn btn-success" onclick="atualizarStatus('Disponivel para retirada')">Disponível para retirada</button>
                                 <button type="button" class="btn btn-danger" onclick="atualizarStatus('Aguardando reposição')">Aguardando reposição</button>
                                 <button type="button" class="btn btn-secondary" onclick="atualizarStatus('Retirado')">Retirado</button>
                             </form>
@@ -92,23 +146,79 @@
                     </div>
                 </div>
             </div>
+            {% endfor %}
+
         </section>
     </main>
+
+
     
     <script>
-        $('#acaoModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var requisicaoId = button.data('id');
-            var material = button.data('material');
-            var quantidade = button.data('quantidade');
-            var estoque = button.data('estoque');
 
-            var modal = $(this);
-            modal.find('#requisicao_id').val(requisicaoId);
-            modal.find('#modal-material').text('Material: ' + material);
-            modal.find('#modal-quantidade').text(quantidade);
-            modal.find('#modal-estoque').text(estoque);
-        });
+$(document).ready(function() {
+    // Aplique a cor de status assim que a página carregar
+    $('tr.requisicao').each(function() {
+        var status = $(this).find('td:nth-child(3)').text().toLowerCase();  // Seleciona a célula do status e converte para minúsculas
+
+        // Verifica o status e aplica a classe correspondente
+        if (status === 'solicitado') {
+            $(this).find('td:nth-child(3)').addClass('status-solicitado');
+        } else if (status === 'disponivel para retirada') {
+            $(this).find('td:nth-child(3)').addClass('status-disponivel');
+        } else if (status === 'aguardando reposição') {
+            $(this).find('td:nth-child(3)').addClass('status-aguardando');
+        } else if (status === 'retirado') {
+            $(this).find('td:nth-child(3)').addClass('status-retirado');
+        }
+    });
+});
+
+
+        // Função para filtrar a tabela com base nos filtros
+        function filtrarTabela() {
+            var nome = $('#filtro-nome').val().toLowerCase();
+            var produto = $('#filtro-produto').val().toLowerCase();
+            var status = $('#filtro-status').val().toLowerCase();
+
+            // Iterando por todas as linhas da tabela
+            $('#tabela-corpo tr').each(function() {
+                var nomeSolicitante = $(this).data('nome');
+                var produtoRequisicao = $(this).data('produto');
+                var statusRequisicao = $(this).data('status');
+
+                // Verificar se a linha atende aos critérios de filtro
+                if ((nomeSolicitante.includes(nome) || nome === '') &&
+                    (produtoRequisicao.includes(produto) || produto === '') &&
+                    (statusRequisicao.includes(status) || status === '')) {
+                    $(this).show();  // Exibir a linha
+                } else {
+                    $(this).hide();  // Ocultar a linha
+                }
+            });
+
+            // Fechar o modal após aplicar o filtro
+            $('#filtroModal').modal('hide');
+        }
+
+        $('#acaoModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget); // O botão que acionou o modal
+    var requisicaoId = button.data('id'); // Obtém o ID da requisição
+    var material = button.data('material'); // Obtém o nome do material
+    var quantidade = button.data('quantidade'); // Obtém a quantidade solicitada
+    var estoque = button.data('estoque'); // Obtém o estoque disponível
+
+    var modal = $(this);
+
+    // Preenche os dados no modal
+    modal.find('#requisicao_id').val(requisicaoId); // Preenche o ID no campo escondido
+    modal.find('#modal-material').text('Material: ' + material); // Preenche o material
+    modal.find('#modal-quantidade').text(quantidade); // Preenche a quantidade solicitada
+    modal.find('#modal-estoque').text(estoque); // Preenche o estoque disponível
+});
+
+
+
+
 
         function atualizarStatus(status) {
             var requisicaoId = $('#requisicao_id').val();
