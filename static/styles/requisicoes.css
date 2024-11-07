@@ -102,6 +102,7 @@ body.dark-mode table {
     flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
     width: 100vw;
     height: 100vh;
+    background-color: white;
 }
 
 form{
