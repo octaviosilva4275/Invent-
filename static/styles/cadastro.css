@@ -145,7 +145,7 @@
    - Define a animação de transição e cor dos labels quando o input é focado.
 */
 .dark-mode .container-cadastro .form-cadastro .input-cadastro input:focus ~ span,
-.dark-mode .container-cadastro .form-cadastro .input-cadastro input:valid ~ span {
+.dark-mode .container-cadastro .form-cadastro .input-cadastro input ~ span {
     color: var(--fontedark);
     transform: translateY(-24px);
     font-size: 0.85em;
@@ -390,7 +390,7 @@
    
 }
 .dark-mode .container-degrade{
-    box-shadow: 0 0 230px 75px #1c279b;
+    box-shadow: 0 0 230px 75px #1C2049;
 }
 
 
