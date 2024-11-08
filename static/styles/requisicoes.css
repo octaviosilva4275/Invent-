@@ -98,13 +98,16 @@ body.dark-mode table {
 .dark-mode.requisicoes {
     background-color: var(--dark);
 }
+
+
+
 .requisicoes {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
     height: 100vh;
-    background-color: white;
+
 }
 
 form{
