@@ -1,113 +1,138 @@
-/* Estilos aplicados para telas com largura de até 1024 pixels (tablets e dispositivos móveis maiores) */
-@media (max-width: 1024px) {
-    /* Oculta o banner em telas menores para liberar espaço */
-    .banner {
-        display: none;
-    }
-    
-    /* Ajusta o container de login para ocupar toda a largura e altura da tela, e centraliza o conteúdo */
-    .login {
+@media (max-width: 820px) {
+    .container1 {
         width: 100vw;
         height: 100vh;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    /* Configura o campo de login para ocupar toda a largura e altura da tela, com padding, fundo sólido, e sem sombra */
-    .campo-login {
-        width: 100vw;
-        height: 100vh;
-        padding: 20px;
-        background-color: var(--cinza-azulado);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: none;
-        border-radius: 0;
-    }
-
-    /* Define a largura do formulário de login como 90% da tela e centraliza-o */
-    .form-login {
-        width: 90%;
-        margin: 0 auto;
-    }
-
-    /* Ajusta o tamanho da fonte e a margem inferior do título do formulário de login */
-    .titulo-login h3 {
-        font-size: 22px;
-        margin-bottom: 20px;
-    }
-
-    /* Define o padding dos campos de entrada do formulário */
-    .form-login input {
-        padding: 10px;
-    }
-
-    /* Ajusta a largura, tamanho da fonte e padding do botão de login */
-    .btn-login {
-        width: 70%;
-        font-size: 14px;
-        padding: 10px 15px;
-    }
-
-    /* Ajusta o tamanho da fonte e padding dos links de "Primeiro Login" e "Esqueceu Senha" */
-    .primeiro-login a, .esqueceu-senha a {
-        font-size: 14px;
-        padding: 10px;
+        background-color: var(--cinza);
+        background-image: url(imagemfundo.png);
+        background-size: 112%;
+        background-position: -155px calc(66% + -40px);
+        background-repeat: no-repeat;
+        position: relative;
+        overflow: hidden;
     }
 }
-
-/* Estilos aplicados para telas com largura de até 768 pixels (dispositivos móveis menores) */
 @media (max-width: 768px) {
-    /* Ajusta o padding do campo de login para um valor menor */
-    .campo-login {
-        width: 100vw;
+
+    .container1 {
+        background-image: url(gifhomem.gif);
+        background-size: 130%;
         height: 100vh;
-        padding: 15px;
+        width: 100vw;
+        background-position: -105px calc(100% + 150px);
     }
 
-    /* Reduz o tamanho da fonte do título do formulário de login */
-    .titulo-login h3 {
-        font-size: 20px;
+
+    .container-form {
+        background: none;
+        box-shadow: none;
     }
 
-    /* Ajusta a largura do botão de login para ocupar 80% da tela */
-    .btn-login {
-        width: 80%;
-    }
+    .container-form form {
+        position: absolute;
+        inset: 1.5px;
+        background: transparent;
+        border-radius: 10px;
+        padding: 30px 40px;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+}
 
-    /* Define a largura do formulário de login como 100% da tela */
-    .form-login {
-        width: 100%;
-    }
+.container-form .form-login .links {
+    position: absolute;
+    top: 540px;
+}
+.dark-mode .container-form {
+    background-color: transparent;
+}
 
-    /* Reduz o tamanho da fonte dos campos de entrada do formulário */
-    .form-login input {
-        font-size: 14px;
+.dark-mode .container-form .form-login {
+    background-color: transparent;
+}
+
+.container-form::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 500px; 
+    height: 550px; 
+    background: none;
+    z-index: 1;
+    transform-origin: bottom right;
+    animation: animate 6s linear infinite;
+}
+}
+
+@media (max-width: 575px) {
+    .container-form .form-login .links {
+
+        position: absolute;
+        top: 540px;
+    }
+    .container1 {
+        background-image: url(gifhomem.gif);
+        background-size: 128%;
+        height: 100vh;
+        width: 100vw;
+        background-position: -79px calc(144% + -40px);
     }
 }
 
-/* Estilos aplicados para telas com largura de até 480 pixels (celulares) */
 @media (max-width: 480px) {
-    /* Ajusta o padding do campo de login para um valor ainda menor */
-    .campo-login {
-        width: 100vw;
-        height: 100vh;
-        padding: 10px;
+    .container1 {
+        background-size: 150%; /* Tamanho ajustado */
+        background-position: -110px calc(122% + -28px);
     }
+    .container-form .form-login .links {
 
-    /* Reduz ainda mais o tamanho da fonte do título do formulário de login */
-    .titulo-login h3 {
-        font-size: 18px;
-    }
-
-    /* Define a largura do formulário de login como 100% da tela */
-    .form-login {
-        width: 100%;
-    }
-
-    /* Ajusta a largura do botão de login para ocupar 90% da tela */
-    .btn-login {
-        width: 90%;
+        position: absolute;
+        top: 540px;
     }
 }
+
+
+@media (max-width: 430px) {
+    .container-form .form-login .links {
+
+        position: absolute;
+        top: 540px;
+    }
+}
+
+@media (max-width: 414px) {
+    .container-form .form-login .links {
+
+        position: absolute;
+        top: 550px;
+    }
+}
+
+@media (max-width: 375px) {
+    .container1 {
+        background-size: 150%;
+        background-position: -110px calc(134% + -28px);
+    }
+
+
+    .container-form .form-login .links a {
+        margin-bottom: 65px;
+    }
+
+   
+}
+
+
+@media (max-width: 360px) {
+    .container-form .form-login .links {
+
+        position: absolute;
+        top: 540px;
+    }
+    .container1 {
+
+        background-size: 141%;
+        background-position: -67px calc(121% + -32px);;
+    }
+}
+
