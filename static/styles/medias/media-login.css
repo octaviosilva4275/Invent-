@@ -71,7 +71,7 @@
         top: 540px;
     }
     .container1 {
-        background-image: url(gifhomem.gif);
+        background-image: url('/static/img/login-img/gifhomem.gif');
         background-size: 128%;
         height: 100vh;
         width: 100vw;
