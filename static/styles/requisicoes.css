@@ -95,6 +95,9 @@ body.dark-mode table {
     color: var(--fontedark); /* Ajusta a cor do texto, se necessário */
 }
 
+.dark-mode.requisicoes {
+    background-color: var(--dark);
+}
 .requisicoes {
     display: flex;
     justify-content: center;
