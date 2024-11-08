@@ -157,6 +157,17 @@ form{
     outline: transparent;
 }
 
+.form-requisicoes input,.form-requisicoes select, .form-requisicoes textarea.highlight{
+    width: 100%;
+    padding: 10px;
+    font-weight: bolder;
+    border-radius: 10px;
+    background-color: white;
+    pointer-events: none !important;
+
+}
+
+
 
 .form-requisicoes input,.form-requisicoes select, .form-requisicoes textarea {
     width: 100%;
@@ -164,6 +175,7 @@ form{
     font-weight: bolder;
     border-radius: 10px;
     background-color: white;
+    
 }
 
 .form-resquisicoes textarea {
@@ -263,6 +275,7 @@ td {
         transform: scale(1.05);
     }
 
+
     /* Destaque para os campos do tutorial */
     /* Ajusta o texto e o placeholder dos inputs destacados */
     .highlight{
@@ -289,7 +302,7 @@ td {
     /* Ajusta o label do campo destacado para maior visibilidade */
    
     
-    .disabled-tutorial {
+    .disabled-tutorial.highlight {
         pointer-events: none;
         opacity: 1;
     }
@@ -320,11 +333,17 @@ td {
         margin-top: 307px;
     }
 
+    #material_id{
+        background-color: white;
+    }
+
     /* Desativa inputs e textarea durante o tutorial */
-    input.disabled-tutorial,
+    input.disabled-tutorial
     textarea.disabled-tutorial,
     select.disabled-tutorial,
     button.disabled-tutorial {
-    pointer-events: none;
-    opacity: 1; /* Torna o elemento visualmente diferente para indicar desativação */
+    pointer-events: none !important;
+    opacity: 1 !important; /* Torna o elemento visualmente diferente para indicar desativação */
 }
+
+

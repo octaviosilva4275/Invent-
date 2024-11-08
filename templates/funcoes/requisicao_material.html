@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/styles/requisicoes.css">
     <script src="/static/darkmode js/darkmode.js"></script>
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <title>Requisição de Materiais</title>
 </head>
 <body>
@@ -133,8 +134,19 @@ $(document).ready(function () {
             $('.tutorial-message').hide();
             $('.tutorial-message').eq(step).show();
 
+            // Desabilita todos os inputs do formulário e adiciona a classe 'disabled'
+            $('#myForm :input').prop('disabled', true).addClass('disabled');
+
+            // Habilita apenas o input atual e remove a classe 'disabled'
+            $(tutorialSteps[step].element).prop('disabled', false).removeClass('disabled');
+
             // Rolagem suave até o elemento destacado
             $('html, body').animate({ scrollTop: currentElement.offset().top - 100 }, 'slow');
+
+            // Desabilita todos os campos do formulário
+            $('#myForm :input').prop('disabled', true);
+            // Habilita o campo atual
+            $(tutorialSteps[step].element).prop('disabled', false);
         }
 
         // Avança para o próximo passo do tutorial
@@ -198,10 +210,29 @@ $(document).ready(function () {
     atualizarTabela();
     setInterval(atualizarTabela, 5000);
 
-        // Função para bloquear os campos específicos durante o tutorial
-    function bloquearCamposTutorial(bloquear) {
-        $('#quantidade, #material, #observacao').prop('disabled', bloquear);  // Bloqueia ou desbloqueia os campos
+    document.querySelectorAll('input, select, textarea').forEach(element => {
+        element.setAttribute('readonly', true); // Bloqueia a digitação
+    });
+    document.querySelectorAll('input').forEach(element => {
+        element.setAttribute('disabled', true); // Bloqueia selects
+    });
+
+
+    function desbloquearCampos() {
+        document.querySelectorAll('input, select, textarea').forEach(element => {
+            element.removeAttribute('readonly'); // Libera a digitação
+        });
+        document.querySelectorAll('input').forEach(element => {
+            element.removeAttribute('disabled'); // Libera selects
+        });
     }
+
+    // Chame bloquearCampos() no início do tutorial e desbloquearCampos() ao final
+    bloquearCampos();
+
+
+        
+
 
     // Inicia o tutorial
     $(document).ready(function() {
