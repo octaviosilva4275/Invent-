@@ -62,15 +62,15 @@
    Estilos do modo escuro
    - Define estilos para ícones de tema.
 */
+
 .darkmode img {
-    cursor: pointer;
+    position: fixed; 
+    right: 10px; 
+    top: 10px; 
+    width: 40px; 
+    height: 40px; 
     transition: opacity 0.3s ease, transform 0.3s ease;
-    position: absolute;
-    left: 97%;
-    width: 40px;
-    height: 40px;
-    margin: 5px 5px;
-}
+    z-index: 1000; }
 
 .darkmode img.none {
     opacity: 0; /* Ícone oculto */
