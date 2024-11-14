@@ -74,8 +74,7 @@ EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 # verificar_tabela()
 
-import mysql.connector
-from mysql.connector import Error
+
 
 def conectar_banco_dados():
     try:
@@ -121,7 +120,7 @@ def login():
 
         if usuario:
             if usuario['cargo'] == 'almoxarifado-nao-verificado':
-                return redirect(url_for('espera'))  # Redireciona para a tela de espera
+                return redirect(url_for('espera'))
             
             session['logged_in'] = True
             session['user_id'] = usuario['id']
@@ -354,32 +353,42 @@ def cadastro_material():
     if 'user_id' in session:
         cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
         usuario = cursor.fetchone()
-    if 'user_id' in session:
-        user_id = session['user_id']
-        if request.method == 'POST':
-            descricao = request.form['descricao']
-            categoria = request.form['categoria']
 
-            estoque_minimo = int(request.form['estoque_minimo'] or 0)
-            estoque_maximo = int(request.form['estoque_maximo'] or 0)
+    # Listar categorias disponíveis
+    categorias = ['consumiveis', 'ferramentas', 'equipamentos', 'materiais_de_escritorio', 
+                  'limpeza', 'tecnologia', 'marcenaria', 'papelaria', 'seguranca']
 
-            try:
-                query_insert = ("INSERT INTO materials (descricao, categoria, estoque_minimo, estoque_maximo) "
-                                "VALUES (%s, %s, %s, %s)")
-                cursor.execute(query_insert, (descricao, categoria, estoque_minimo, estoque_maximo))
-                conexao.commit()
+    # Modificar cada categoria para ter a primeira letra maiúscula e espaços no lugar de underscores
+    categorias_formatadas = [categoria.replace('_', ' ').capitalize() for categoria in categorias]
 
-                flash('Material cadastrado com sucesso!', 'success')
-                return redirect(url_for('cadastro_material'))
+    if request.method == 'POST':
+        descricao = request.form['descricao_produto']
+        categoria = request.form['categoria']
+        estoque_minimo = int(request.form['estoque_minimo'] or 0)
+        codigo_produto = int(request.form['codigo_produto'] or 0)
 
-            except mysql.connector.Error as err:
-                flash('Erro ao cadastrar material: {}'.format(err), 'error')
-                return redirect(url_for('cadastro_material'))
+        try:
+            # Inserção na tabela com os campos corretos
+            query_insert = ("INSERT INTO materials (descricao, categoria, estoque_minimo, codigo_produto) "
+                            "VALUES (%s, %s, %s, %s)")
+            cursor.execute(query_insert, (descricao, categoria, estoque_minimo, codigo_produto))
+            conexao.commit()
+
+            flash('Material cadastrado com sucesso!', 'success')
+            return redirect(url_for('cadastro_material'))
+
+        except mysql.connector.Error as err:
+            flash('Erro ao cadastrar material: {}'.format(err), 'error')
 
     cursor.close()
     conexao.close()
 
-    return render_template('funcoes/cadastro_material.html', usuario=usuario)
+    return render_template(
+        'funcoes/cadastro_material.html',
+        usuario=usuario,
+        categorias=categorias_formatadas
+    )
+
 
 
 

@@ -19,8 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     cargo VARCHAR(100)
 );
 
-
--- Criação da tabela de materiais
+-- Criação da tabela de materiais com a substituição do estoque_maximo por codigo_produto
 CREATE TABLE IF NOT EXISTS materials (
     id INT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(255),
@@ -37,7 +36,7 @@ CREATE TABLE IF NOT EXISTS materials (
     ) NOT NULL,
     localizacao VARCHAR(100),
     estoque_minimo INT,
-    estoque_maximo INT
+    codigo_produto INT
 );
 
 -- Criação da tabela de estoque
@@ -98,8 +97,8 @@ INSERT INTO users (sn, nome, email, senha, cargo) VALUES
 ('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario'),
 ('33', 'Octavio', 'octavio@gmail.com', 'senha123', 'almoxarifado');
 
--- Inserção de exemplo para tabela de materiais
-INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoque_maximo) VALUES 
+-- Inserção de exemplo para tabela de materiais com código_produto no lugar de estoque_maximo
+INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, codigo_produto) VALUES 
 ('Parafuso', 'consumiveis', 'Prateleira A1', 50, 500),
 ('Martelo', 'ferramentas', 'Prateleira B1', 10, 50),
 ('PASTA ARQUIVO', 'consumiveis', 'Prateleira A1', 10, 100),
@@ -143,45 +142,4 @@ INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, estoqu
 ('MARCA TEXTO AZUL', 'consumiveis', 'Prateleira H2', 10, 100),
 ('MARCA TEXTO VERDE', 'consumiveis', 'Prateleira H2', 10, 100),
 ('MARCADOR PARA RETRO PROJETOR - AZUL', 'consumiveis', 'Prateleira H3', 10, 100),
-('MARCADOR PARA RETRO PROJETOR - VERMELHO', 'consumiveis', 'Prateleira H3', 10, 100),
-('MARCADOR PARA RETRO PROJETOR - VERDE', 'consumiveis', 'Prateleira I1', 10, 100),
-('MARCADOR PARA RETRO PROJETOR - PRETO', 'consumiveis', 'Prateleira I1', 10, 100),
-('LIVRO - ARTE', 'consumiveis', 'Prateleira I2', 10, 100),
-('LIVRO - MATEMÁTICA', 'consumiveis', 'Prateleira I2', 10, 100),
-('LIVRO - HISTÓRIA', 'consumiveis', 'Prateleira I3', 10, 100),
-('LIVRO - GEOGRAFIA', 'consumiveis', 'Prateleira I3', 10, 100),
-('CADERNO - CAPA DURA', 'consumiveis', 'Prateleira J1', 10, 100),
-('CADERNO - CAPA FLEXÍVEL', 'consumiveis', 'Prateleira J1', 10, 100),
-('PASTAS - TAMANHO A4', 'consumiveis', 'Prateleira J2', 10, 100),
-('PASTAS - TAMANHO OFÍCIO', 'consumiveis', 'Prateleira J2', 10, 100),
-('FITA - ADESIVA', 'consumiveis', 'Prateleira K1', 10, 100),
-('LIMPA VIDROS', 'consumiveis', 'Prateleira K1', 10, 100),
-('SABÃO - NEUTRO', 'consumiveis', 'Prateleira K2', 10, 100),
-('SABÃO - LÍQUIDO', 'consumiveis', 'Prateleira K2', 10, 100),
-('ALCOOL', 'consumiveis', 'Prateleira K3', 10, 100);
-
--- Inserção de exemplo para tabela de estoque
-INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VALUES
-(1, 20, 'entrada', 1),
-(2, 5, 'entrada', 1),
-(3, 15, 'saida', 2),
-(4, 10, 'entrada', 2),
-(5, 8, 'saida', 2),
-(6, 6, 'entrada', 1);
-
--- Inserção de exemplo para tabela de requisições
-INSERT INTO requisicoes (material_id, usuario_id, quantidade, status, observacao) VALUES 
-(1, 2, 10, 'Solicitado', 'Material solicitado para a reunião do projeto.'),
-(3, 1, 5, 'Solicitado', 'Material solicitado para a aula de matemática.'),
-(5, 2, 2, 'Aguardando reposição', 'Material solicitado para a biblioteca.'),
-(10, 1, 1, 'Disponivel para retirada', 'Material reservado para o evento.'),
-(15, 2, 3, 'Retirado', 'Material retirado para uso imediato.');
-
-
--- Inserção de exemplo para tabela de lembretes
-INSERT INTO lembretes (destinatario, descricao, data_lembrete) VALUES 
-(1, 'Verificar a validade dos materiais', '2024-10-01'),
-(2, 'Organizar o estoque de materiais', '2024-10-05');
-
-
-select * from users
+('MARCADOR PARA RETRO PROJETOR - PRETO', 'consumiveis', 'Prateleira H3', 10, 100);
