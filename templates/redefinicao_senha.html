@@ -2,16 +2,48 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
-    <title>Redefinição de Senha</title>
+    <title>Recuperação de Senha</title>
+    <link rel="stylesheet" href="redefinirsenha.css">
+    <script src="/icone.js" defer></script> <!-- Adicione defer para garantir que o JS seja carregado após o HTML -->
+    <link rel="icon" href="{{ url_for('static', filename='img/Inventlogo.png') }}">
+
 </head>
 <body>
-    <h3>Redefinir Senha</h3>
-    <form action="/redefinir_senha?token={{ token }}" method="POST">
-        <label for="nova_senha">Nova Senha:</label>
-        <input type="password" id="nova_senha" name="nova_senha" required>
-        <button type="submit">Redefinir Senha</button>
-    </form>
+    <div class="container-geral">
+    <div class="darkmode">
+        <img src="lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="sol.png" alt="Modo Claro" class="none" id="sol-icon">
+        <div class="container-degrade">
+        </div>
+    </div>
+
+    
+    <div class="container1">
+        <div class="container2"></div>
+    
+
+    <div class="container-senha">
+        <form class="form-senha">
+            <div class="titulo">
+                <img src="/Inventlogo.png" alt="">
+                <h2>Redefinir Senha</h2>
+            </div>
+
+            <div class="inputBox">
+                <input class="input-senha" type="text" required>
+                <span>Nova Senha:</span>
+                <button class="btn-recuperacao" type="submit">Redefinir Senha</button>
+                <i></i>
+            </div>
+              <!-- Link para voltar ao login -->
+              <div class="voltar-login">
+                <a href="{{ url_for('login') }}" class="button">Voltar ao Login</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
 </body>
 </html>
