@@ -69,16 +69,16 @@ body.dark-mode {
 .none {
     display: none;
 }
+/* Adicionando estilo para posicionar o ícone do modo escuro à direita */
 .darkmode img {
-    cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    position: absolute;
-    width: 40px;
-    left: 97%;
+    position: fixed;
+    right: 10px; 
+    top: 10px; 
+    width: 40px; 
     height: 40px;
-    margin: 5px 5px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1000; 
 }
-
 .darkmode img.none {
     opacity: 0; /* Ícone oculto */
     transform: scale(0.8); /* Reduz um pouco o tamanho */
