@@ -1,39 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperação de Senha - Invent +</title>
-    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
-    <link rel="icon" href="/static/img/logo.png">
-    <link rel="stylesheet" href="/static/styles/login.css">
-    <link rel="stylesheet" href="/static/styles/medias/media-login.css">
-    <link rel="stylesheet" href="/static/styles/variaveis.css">
+    <title>Recuperação de Senha</title>
+    <link rel="stylesheet" href="/static/styles/recuperacao_senha.css">
+    <link rel="stylesheet" href="/static/styles/medias/media-recuperacao_senha.css">
+    <script src="/icone.js" defer></script> <!-- Adicione defer para garantir que o JS seja carregado após o HTML -->
+    <link rel="icon" href="{{ url_for('static', filename='img/Inventlogo.png') }}">
+
 </head>
-
 <body>
+    <div class="container-geral">
+    <div class="darkmode">
+        <img src="lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="sol.png" alt="Modo Claro" class="none" id="sol-icon">
+        <div class="container-degrade">
+        </div>
+    </div>
 
-    <!-- Seção de recuperação de senha -->
-    <section class="recuperacao-senha">
-        <!-- Container do formulário -->
-        <div class="form-recuperacao">
-            <div class="titulo-recuperacao">
-                <h3>Nova de Senha</h3>
+    
+    <div class="container1">
+        <div class="container2"></div>
+    
+
+    <div class="container-senha">
+        <form class="form-senha">
+            <div class="titulo">
+                <img src="/Inventlogo.png" alt="">
+                <h2>Nova Senha</h2>
             </div>
-            <!-- Formulário para recuperação de senha -->
-            <form action="/esquecer_senha" method="POST">
-                <label for="sn">Código SN | Email</label>
-                <input type="text" id="sn" name="sn" placeholder="Código SN | Email" required>
-                <button class="btn-recuperacao" type="submit">Enviar Link de Redefinição</button>
-            </form>
 
-            <!-- Link para voltar ao login -->
-            <div class="voltar-login">
+            <div class="inputBox">
+                <input class="input-senha" type="text" required>
+                <span>Código SN | Email</span>
+                <button class="btn-recuperacao" type="submit">Enviar Link de Redefinição</button>
+                <i></i>
+            </div>
+
+              <!-- Link para voltar ao login -->
+              <div class="voltar-login">
                 <a href="{{ url_for('login') }}" class="button">Voltar ao Login</a>
             </div>
-        </div>
-    </section>
+        </form>
+    </div>
+</div>
+</div>
 </body>
-
 </html>
