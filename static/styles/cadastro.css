@@ -70,7 +70,9 @@
     width: 40px; 
     height: 40px; 
     transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1000; }
+    z-index: 1000;
+    cursor: pointer;
+ }
 
 .darkmode img.none {
     opacity: 0; /* Ícone oculto */
