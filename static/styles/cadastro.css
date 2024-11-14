@@ -180,6 +180,10 @@
     color: var(--fontedark);
 }
 
+.dark-mode .container-cadastro .form-cadastro .links a {
+    color: var(--fontedark);
+}
+
 /* 
    Estilo do container de cadastro
    - Define dimensões, cores, bordas e sombras.
@@ -381,6 +385,8 @@
     font-weight: bold;
    
 }
+
+
 
 .container-cadastro .form-cadastro .links a:hover {
     color: #000000;
