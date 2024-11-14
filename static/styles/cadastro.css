@@ -62,17 +62,16 @@
    Estilos do modo escuro
    - Define estilos para ícones de tema.
 */
-
+/* Adicionando estilo para posicionar o ícone do modo escuro à direita */
 .darkmode img {
-    position: fixed; 
-    right: 10px; 
-    top: 10px; 
-    width: 40px; 
-    height: 40px; 
+    position: fixed; /* Fixa o ícone na tela */
+    right: 10px; /* Ajusta a posição à direita */
+    top: 10px; /* Ajusta a posição no topo */
+    width: 40px; /* Define o tamanho menor do ícone */
+    height: 40px; /* Define o tamanho menor do ícone */
     transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1000;
-    cursor: pointer;
- }
+    z-index: 1000; /* Garante que o ícone fique acima de outros elementos */
+}
 
 .darkmode img.none {
     opacity: 0; /* Ícone oculto */
@@ -147,7 +146,7 @@
    - Define a animação de transição e cor dos labels quando o input é focado.
 */
 .dark-mode .container-cadastro .form-cadastro .input-cadastro input:focus ~ span,
-.dark-mode .container-cadastro .form-cadastro .input-cadastro input ~ span {
+.dark-mode .container-cadastro .form-cadastro .input-cadastro input:valid ~ span {
     color: var(--fontedark);
     transform: translateY(-24px);
     font-size: 0.85em;
@@ -178,6 +177,10 @@
 .dark-mode .container-form .form-login .h2-login,
 .dark-mode .container-form .form-login .input-login span,
 .dark-mode .container-form .form-login .links a {
+    color: var(--fontedark);
+}
+
+.dark-mode .container-cadastro .form-cadastro .links a {
     color: var(--fontedark);
 }
 
@@ -383,17 +386,6 @@
    
 }
 
-.dark-mode .container-cadastro .form-cadastro .links a {
-    font-size: 0.9em;
-    color: var(--fontedark);
-    text-decoration: none;
-    transition: 0.3s;
-    font-weight: bold;
-   
-}
-.dark-mode .container-degrade{
-    box-shadow: 0 0 230px 75px #1C2049;
-}
 
 
 .container-cadastro .form-cadastro .links a:hover {
