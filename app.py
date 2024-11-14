@@ -6,7 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Mail, Message
 import secrets
 from datetime import datetime, timedelta
-
+from contextlib import closing
 # from twilio.rest import Client
 # from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
@@ -733,8 +733,19 @@ def requisicao_material():
 
     if request.method == 'POST':
         material_id = request.form['material_id']
-        quantidade = int(request.form['quantidade'])
+        quantidade = request.form.get('quantidade')
         observacao = request.form.get('observacao')
+
+        # Verificar se quantidade está vazia ou nula
+        if not quantidade:
+            flash('Por favor, preencha o campo de quantidade.', 'error')
+            return redirect(url_for('requisicao_material'))
+
+        try:
+            quantidade = int(quantidade)  # Conversão segura para inteiro
+        except ValueError:
+            flash('Quantidade inválida. Por favor, insira um número.', 'error')
+            return redirect(url_for('requisicao_material'))
 
         cursor = conexao.cursor()
         try:
@@ -743,7 +754,7 @@ def requisicao_material():
             conexao.commit()
             flash('Requisição de material enviada com sucesso!', 'success')
         except Exception as e:
-            print(f"Erro ao criar requisição: {e}")
+            print("Erro ao criar requisição:", e)
             flash('Ocorreu um erro ao enviar a requisição. Por favor, tente novamente mais tarde.', 'error')
         finally:
             cursor.close()
@@ -778,19 +789,26 @@ def requisicao_material():
             """, (usuario_id,))
             minhas_requisicoes = cursor.fetchall()
 
-            # Formatar a data de atualização
+            # Formatar a data de entrega antes de passar para o template
             for requisicao in minhas_requisicoes:
                 if requisicao['data_atualizacao']:
-                    requisicao['data_atualizacao'] = (datetime.strptime(requisicao['data_atualizacao'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M')
-                                                      if isinstance(requisicao['data_atualizacao'], str) else requisicao['data_atualizacao'].strftime('%d/%m/%Y %H:%M'))
+                    # Verifica se é uma string ou objeto datetime e formata
+                    if isinstance(requisicao['data_atualizacao'], str):
+                        # Se for string, converte para datetime
+                        try:
+                            requisicao['data_atualizacao'] = datetime.strptime(requisicao['data_atualizacao'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M')
+                        except ValueError:
+                            requisicao['data_atualizacao'] = 'Data inválida'
+                    else:
+                        requisicao['data_atualizacao'] = requisicao['data_atualizacao'].strftime('%d/%m/%Y %H:%M')
                 else:
-                    requisicao['data_atualizacao'] = 'N/A'
+                    requisicao['data_atualizacao'] = 'N/A'  # Caso a data não esteja disponível
 
         else:
             minhas_requisicoes = []
 
     except Exception as e:
-        print(f"Erro ao buscar dados: {e}")
+        print("Erro ao buscar dados:", e)
         materiais = []
         minhas_requisicoes = []
 
@@ -800,9 +818,9 @@ def requisicao_material():
 
     print("Renderizando template com materiais:", materiais)
     return render_template('funcoes/requisicao_material.html', 
-                           materiais=materiais, 
-                           minhas_requisicoes=minhas_requisicoes, 
-                           usuario=usuario)
+                        materiais=materiais, 
+                        minhas_requisicoes=minhas_requisicoes, 
+                        usuario=usuario)
 
 
 
@@ -1180,6 +1198,7 @@ def relatorios():
                     FROM materials m
                     LEFT JOIN estoque e ON m.id = e.material_id
                     GROUP BY m.id
+                    ORDER BY m.descricao ASC  -- Ordena os materiais em ordem alfabética
                 """)
                 relatorio = cursor.fetchall()
                 relatorio_titulo = "Relatório de Estoque"

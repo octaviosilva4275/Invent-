@@ -87,7 +87,9 @@ color: #d9534f;  /* Cor vermelha para "Aguardando reposição" */
 
 }
 
-
+option{
+    font-size: 15px;
+}
 
 body.light-mode {
     background-color: var(--branco);

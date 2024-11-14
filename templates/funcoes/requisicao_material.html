@@ -6,12 +6,14 @@
     <link rel="stylesheet" href="/static/styles/requisicoes.css">
     <script src="/static/darkmode js/darkmode.js"></script>
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <title>Requisição de Materiais</title>
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
-    
-    <!-- <div id="tutorial-overlay">
+
+    <div id="tutorial-overlay">
         {% for step in range(1, 6) %}
         <div class="tutorial-message step-{{ step }}" {% if step != 1 %} style="display: none;" {% endif %}>
             <p>{% if step == 1 %} Selecione o material desejado aqui. {% elif step == 2 %} Informe a quantidade desejada neste campo.
@@ -20,7 +22,7 @@
             <button class="next-step">{% if step < 5 %} Próximo {% else %} Fechar Tutorial {% endif %}</button>
         </div>
         {% endfor %}
-    </div> -->
+    </div>
 
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
@@ -32,7 +34,10 @@
             <div class="container-requisicoes">
                 <div class="campo-requisicoes">
                     <h1 class="titulo-requisicoes">Requisição de Materiais</h1>
-                    
+
+
+
+
                     <div class="form-requisicoes">
                         <label for="material_id">Material:</label>
                         <select id="material_id" name="material_id">
@@ -44,9 +49,6 @@
                                 <option>Sem materiais disponíveis</option>
                             {% endfor %}
                         </select>
-                        
-                        
-
                     </div>
 
                     <div class="form-requisicoes">
@@ -61,9 +63,12 @@
 
                     <button class="btn-requisicoes">Enviar Requisição</button>
                 </div>
+
                 <div class="minhas-requisicoes">
                     <h2 class="titulo-pendente">Minhas Requisições Pendentes:</h2>
-                    <table>
+
+
+                    <table id="minhas-requisicoes-table">
                         <thead>
                             <tr>
                                 <th>CÓDIGO</th>
@@ -83,7 +88,6 @@
                                     <td class="{% if requisicao.status == 'Solicitado' %}status-solicitado{% elif requisicao.status == 'Disponivel para retirada' %}status-disponivel{% elif requisicao.status == 'Aguardando reposição' %}status-aguardando{% elif requisicao.status == 'Retirado' %}status-retirado{% else %}status-desconhecido{% endif %}">
                                         {{ requisicao.status }}
                                     </td>
-                                    
                                     <td>{{ requisicao.data_atualizacao }}</td>
                                 </tr>
                                 {% endfor %}
@@ -95,155 +99,93 @@
                         </tbody>
                     </table>
                 </div>
-            </section>
             </div>
         </form>
+    </section>
 
-        
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        // Tutorial
+        if (!sessionStorage.getItem('tutorialCompleted')) {
+            let currentStep = 0;
+            const tutorialSteps = [
+                { element: '#material_id', text: 'Selecione o material desejado aqui.' },
+                { element: '#quantidade', text: 'Informe a quantidade desejada neste campo.' },
+                { element: '#observacao', text: 'Adicione uma observação, se necessário.' },
+                { element: '.btn-requisicoes', text: 'Clique aqui para enviar sua requisição.' },
+                { element: 'table', text: 'Aqui estão suas requisições feitas.' }
+            ];
 
+            function showTutorialStep(step) {
+                $('.highlight').removeClass('highlight');
+                $('.disabled-tutorial').removeClass('disabled-tutorial');
+                const currentElement = $(tutorialSteps[step].element);
+                currentElement.addClass('highlight').focus();
+                currentElement.prev('label').addClass('highlight');
+                $('select, textarea, .btn-requisicoes, table').not(currentElement).addClass('disabled-tutorial');
+                $('#tutorial-overlay').show();
+                $('.tutorial-message').hide();
+                $('.tutorial-message').eq(step).show();
+                $('#myForm :input').prop('disabled', true).addClass('disabled');
+                $(tutorialSteps[step].element).prop('disabled', false).removeClass('disabled');
+                $('html, body').animate({ scrollTop: currentElement.offset().top - 100 }, 'slow');
+            }
 
-<!-- <script>
-$(document).ready(function () {
-    if (!sessionStorage.getItem('tutorialCompleted')) {
-        let currentStep = 0;
-        const tutorialSteps = [
-            { element: '#material_id', text: 'Selecione o material desejado aqui.' },
-            { element: '#quantidade', text: 'Informe a quantidade desejada neste campo.' },
-            { element: '#observacao', text: 'Adicione uma observação, se necessário.' },
-            { element: '.btn-requisicoes', text: 'Clique aqui para enviar sua requisição.' },
-            { element: 'table', text: 'Aqui estão suas requisições feitas.' }
-        ];
+            $(document).on('click', '.next-step', function () {
+                if (currentStep < tutorialSteps.length - 1) {
+                    currentStep++;
+                    showTutorialStep(currentStep);
+                } else {
+                    $('#tutorial-overlay').hide();
+                    $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
+                    $('.highlight').removeClass('highlight');
+                    sessionStorage.setItem('tutorialCompleted', 'true');
+                    location.reload();
+                }
+            });
 
-        function showTutorialStep(step) {
-            
-            // Remove destaque dos elementos anteriores
-            $('.highlight').removeClass('highlight');
-            $('.disabled-tutorial').removeClass('disabled-tutorial');
-
-            // Adiciona o destaque ao elemento atual
-            const currentElement = $(tutorialSteps[step].element);
-            currentElement.addClass('highlight').focus();
-            currentElement.prev('label').addClass('highlight'); // Adiciona destaque ao label, se houver
-
-            // Ofusca os outros elementos e ativa o atual
-            $('select, textarea, .btn-requisicoes, table').not(currentElement).addClass('disabled-tutorial');
-
-            // Atualiza o texto do tutorial e exibe o overlay
-            $('#tutorial-overlay').show();
-            $('.tutorial-message').hide();
-            $('.tutorial-message').eq(step).show();
-
-            // Desabilita todos os inputs do formulário e adiciona a classe 'disabled'
-            $('#myForm :input').prop('disabled', true).addClass('disabled');
-
-            // Habilita apenas o input atual e remove a classe 'disabled'
-            $(tutorialSteps[step].element).prop('disabled', false).removeClass('disabled');
-
-            // Rolagem suave até o elemento destacado
-            $('html, body').animate({ scrollTop: currentElement.offset().top - 100 }, 'slow');
-
-            // Desabilita todos os campos do formulário
-            $('#myForm :input').prop('disabled', true);
-            // Habilita o campo atual
-            $(tutorialSteps[step].element).prop('disabled', false);
+            showTutorialStep(currentStep);
+        } else {
+            $('#tutorial-overlay').hide();
+            $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
         }
 
-        // Avança para o próximo passo do tutorial
-        $(document).on('click', '.next-step', function () {
-            if (currentStep < tutorialSteps.length - 1) {
-                currentStep++;
-                showTutorialStep(currentStep);
-            } else {
-                // Finaliza o tutorial
-                $('#tutorial-overlay').hide();
-                $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
-                $('.highlight').removeClass('highlight');
-                sessionStorage.setItem('tutorialCompleted', 'true');
-                location.reload();
-            }
-        });
 
-        // Inicia o tutorial na primeira etapa
-        showTutorialStep(currentStep);
-    } else {
-        $('#tutorial-overlay').hide();
-        $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
-    }
-
-    
-
-
-    function atualizarTabela() {
+    // Função para atualizar a tabela com base no filtro de status
+    function atualizarTabela(statusFilter = '') {
         $.ajax({
-            url: "/api/minhas_requisicoes",
+            url: "/api/minhas_requisicoes",  // URL para buscar as requisições filtradas
             type: 'GET',
             success: function (data) {
                 let tableBody = $('#minhas-requisicoes-table tbody');
-                tableBody.empty();
-
-                if (data.length > 0) {
-                    data.forEach(function (requisicao) {
+                tableBody.empty();  // Limpa a tabela antes de adicionar as novas linhas
+                let filteredData = data.filter(function (requisicao) {
+                    if (statusFilter === '') return true;  // Se não houver filtro, mostra todas
+                    return requisicao.status === statusFilter;  // Filtra pelo status
+                });
+                if (filteredData.length > 0) {
+                    filteredData.forEach(function (requisicao) {
                         let row = '<tr>' +
+                            '<td>' + requisicao.id + '</td>' +
                             '<td>' + requisicao.material + '</td>' +
                             '<td>' + requisicao.quantidade + '</td>' +
-                            '<td class="' + 
-                            (requisicao.status === 'Solicitado' ? 'em-separacao' : 
-                            requisicao.status === 'Disponivel para retirada' ? 'pronto-retirar' : 
-                            requisicao.status === 'Aguardando reposição' ? 'aguardando-estoque' : 
-                            requisicao.status === 'Retirado' ? 'finalizado' : 
-                            'status-desconhecido') + '">' + requisicao.status + '</td>' +
-                            '<td>' + (requisicao.data_atualizacao ? formatarData(requisicao.data_atualizacao) : '') + '</td>' +
+                            '<td>' + requisicao.status + '</td>' +
+                            '<td>' + requisicao.data_atualizacao + '</td>' +
                             '</tr>';
-                        tableBody.append(row);
+                        tableBody.append(row);  // Adiciona as linhas filtradas na tabela
                     });
                 } else {
-                    tableBody.append('<tr><td colspan="4">Você ainda não fez nenhuma requisição.</td></tr>');
+                    tableBody.append('<tr><td colspan="5">Nenhuma requisição encontrada com o filtro aplicado.</td></tr>');
                 }
-            },
-            error: function (error) {
-                console.error('Erro na requisição AJAX:', error);
             }
         });
     }
-
-    atualizarTabela();
-    setInterval(atualizarTabela, 5000);
-
-    document.querySelectorAll('input, select, textarea').forEach(element => {
-        element.setAttribute('readonly', true); // Bloqueia a digitação
-    });
-    document.querySelectorAll('input').forEach(element => {
-        element.setAttribute('disabled', true); // Bloqueia selects
-    });
-
-
-    function desbloquearCampos() {
-        document.querySelectorAll('input, select, textarea').forEach(element => {
-            element.removeAttribute('readonly'); // Libera a digitação
-        });
-        document.querySelectorAll('input').forEach(element => {
-            element.removeAttribute('disabled'); // Libera selects
-        });
-    }
-
-    // Chame bloquearCampos() no início do tutorial e desbloquearCampos() ao final
-    bloquearCampos();
-
-
-        
-
-
-    // Inicia o tutorial
-    $(document).ready(function() {
-
-    });
-
-
 });
 
-
-</script> -->
+    </script>
 </body>
 </html>

@@ -54,19 +54,23 @@
                                 <td>{{ requisicao.quantidade }}</td>
                                 <td>
                                     <div class="btn-solicitacao">
-                                        <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
-                                        <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
-                                            data-id="{{ requisicao.id }}"
-                                            data-material="{{ requisicao.material }}"
-                                            data-quantidade="{{ requisicao.quantidade }}"
-                                            data-estoque="{{ requisicao.quantidade_estoque }}">
-                                            Ações
-                                        </button>
-                                    
-                                    
-                                    
+                                        {% if requisicao.status == 'Retirado' %}
+                                            <a href="{{ url_for('relatorios') }}" class="btn btn-primary">
+                                                VER RELATORIO
+                                            </a>
+                                        {% else %}
+                                            <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
+                                            <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
+                                                data-id="{{ requisicao.id }}"
+                                                data-material="{{ requisicao.material }}"
+                                                data-quantidade="{{ requisicao.quantidade }}"
+                                                data-estoque="{{ requisicao.quantidade_estoque }}">
+                                                Ações
+                                            </button>
+                                        {% endif %}
                                     </div>
                                 </td>
+                                
                             </tr>
                             {% endfor %}
                         </tbody>

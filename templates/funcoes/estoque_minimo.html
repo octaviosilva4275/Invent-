@@ -8,19 +8,19 @@
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
 </head>
 <body>
-  {% include '/dashboard/dashboard.html' %}
+    {% include '/dashboard/dashboard.html' %}
 
     <div class="container mt-5">
         <h1>Materiais com Estoque Mínimo</h1>
 
         {% if materiais %}
-            <table class="table table-striped">
+            <table id="materiaisTable" class="table table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Descrição</th>
                         <th>Estoque Mínimo</th>
-                        <th>Quantidade Atual</th> 
+                        <th onclick="ordenarTabela(3)">Quantidade Atual</th> <!-- Clique para ordenar -->
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +29,7 @@
                         <td>{{ material.id }}</td>
                         <td>{{ material.descricao }}</td>
                         <td>{{ material.estoque_minimo }}</td>
-                        <td>{{ material.quantidade_atual }}</td> 
+                        <td>{{ material.quantidade_atual }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -38,6 +38,28 @@
             <p>Nenhum material com estoque mínimo atingido no momento.</p>
         {% endif %}
     </div>
+
+    <script>
+        // Função para ordenar a tabela pela quantidade atual
+        function ordenarTabela(colunaIndex) {
+            let table = document.getElementById("materiaisTable");
+            let rows = Array.from(table.rows).slice(1);  // Excluir cabeçalho
+            
+            rows.sort((a, b) => {
+                let valA = parseInt(a.cells[colunaIndex].innerText) || 0;
+                let valB = parseInt(b.cells[colunaIndex].innerText) || 0;
+                return valA - valB;
+            });
+
+            // Remover todas as linhas e reordenar
+            rows.forEach(row => table.appendChild(row));
+        }
+
+        // Ordena automaticamente ao carregar a página
+        window.onload = function() {
+            ordenarTabela(3); // 3 é o índice da coluna "Quantidade Atual"
+        };
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
