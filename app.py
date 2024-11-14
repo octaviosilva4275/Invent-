@@ -700,7 +700,6 @@ def api_minhas_requisicoes():
             m.descricao as material,
             r.quantidade,
             r.status,
-            r.data_atualizacao,
             r.data_atualizacao
         FROM requisicoes r
         JOIN materials m ON r.material_id = m.id
@@ -708,9 +707,14 @@ def api_minhas_requisicoes():
         """, (usuario_id,))
         minhas_requisicoes = cursor.fetchall()
 
-    except:
-        print("Erro ao buscar requisições do usuário")
-        return jsonify([]), 500  # Retorna uma lista vazia em caso de erro
+        # Formatação de data no JSON
+        for requisicao in minhas_requisicoes:
+            requisicao['data_atualizacao'] = (datetime.strptime(requisicao['data_atualizacao'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') 
+                                              if requisicao['data_atualizacao'] else 'N/A')
+
+    except Exception as e:
+        print(f"Erro ao buscar requisições do usuário: {e}")
+        return jsonify([]), 500
 
     finally:
         cursor.close()
@@ -738,8 +742,8 @@ def requisicao_material():
             cursor.execute(inserir, (material_id, usuario_id, quantidade, observacao))
             conexao.commit()
             flash('Requisição de material enviada com sucesso!', 'success')
-        except:
-            print("Erro ao criar requisição")
+        except Exception as e:
+            print(f"Erro ao criar requisição: {e}")
             flash('Ocorreu um erro ao enviar a requisição. Por favor, tente novamente mais tarde.', 'error')
         finally:
             cursor.close()
@@ -774,26 +778,19 @@ def requisicao_material():
             """, (usuario_id,))
             minhas_requisicoes = cursor.fetchall()
 
-            # Formatar a data de entrega antes de passar para o template
+            # Formatar a data de atualização
             for requisicao in minhas_requisicoes:
                 if requisicao['data_atualizacao']:
-                    # Verifica se é uma string ou objeto datetime e formata
-                    if isinstance(requisicao['data_atualizacao'], str):
-                        # Se for string, converte para datetime
-                        try:
-                            requisicao['data_atualizacao'] = datetime.strptime(requisicao['data_atualizacao'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M')
-                        except ValueError:
-                            requisicao['data_atualizacao'] = 'Data inválida'
-                    else:
-                        requisicao['data_atualizacao'] = requisicao['data_atualizacao'].strftime('%d/%m/%Y %H:%M')
+                    requisicao['data_atualizacao'] = (datetime.strptime(requisicao['data_atualizacao'], '%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M')
+                                                      if isinstance(requisicao['data_atualizacao'], str) else requisicao['data_atualizacao'].strftime('%d/%m/%Y %H:%M'))
                 else:
-                    requisicao['data_atualizacao'] = 'N/A'  # Caso a data não esteja disponível
+                    requisicao['data_atualizacao'] = 'N/A'
 
         else:
             minhas_requisicoes = []
 
     except Exception as e:
-        print("Erro ao buscar dados:", e)
+        print(f"Erro ao buscar dados: {e}")
         materiais = []
         minhas_requisicoes = []
 
@@ -803,11 +800,9 @@ def requisicao_material():
 
     print("Renderizando template com materiais:", materiais)
     return render_template('funcoes/requisicao_material.html', 
-                        materiais=materiais, 
-                        minhas_requisicoes=minhas_requisicoes, 
-                        usuario=usuario)
-
-
+                           materiais=materiais, 
+                           minhas_requisicoes=minhas_requisicoes, 
+                           usuario=usuario)
 
 
 

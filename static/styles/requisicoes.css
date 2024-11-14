@@ -163,7 +163,7 @@ form{
     font-weight: bolder;
     border-radius: 10px;
     background-color: white;
-    pointer-events: none !important;
+    /* pointer-events: none !important; */
 
 }
 
@@ -283,8 +283,6 @@ td {
         outline: 3px solid #ffeb3b; /* Destaque com contorno amarelo */
         border-radius: 8px;
         z-index: 1100;
-    
-       
         color: #000000; /* Ajusta a cor do texto */
     }
 
@@ -303,7 +301,7 @@ td {
    
     
     .disabled-tutorial.highlight {
-        pointer-events: none;
+        /* pointer-events: none; */
         opacity: 1;
     }
 
@@ -342,8 +340,28 @@ td {
     textarea.disabled-tutorial,
     select.disabled-tutorial,
     button.disabled-tutorial {
-    pointer-events: none !important;
+    /* pointer-events: none !important; */
     opacity: 1 !important; /* Torna o elemento visualmente diferente para indicar desativação */
 }
 
 
+/* Cores para cada status */
+.status-solicitado {
+    color: #f0ad4e;  /* Cor laranja para "Solicitado" */
+}
+
+.status-disponivel {
+    color: #45cf8a;  /* Cor verde para "Disponível para retirada" */
+}
+
+.status-aguardando {
+    color: #d9534f;  /* Cor vermelha para "Aguardando reposição" */
+}
+
+.status-retirado {
+    color: #cacaca;  /* Cor cinza para "Retirado" */
+}
+
+.status-desconhecido {
+    color: #999; /* Cor para status desconhecido */
+}

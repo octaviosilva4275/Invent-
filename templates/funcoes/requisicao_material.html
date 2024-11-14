@@ -11,7 +11,7 @@
 <body>
     {% include '/dashboard/dashboard.html' %}
     
-    <div id="tutorial-overlay">
+    <!-- <div id="tutorial-overlay">
         {% for step in range(1, 6) %}
         <div class="tutorial-message step-{{ step }}" {% if step != 1 %} style="display: none;" {% endif %}>
             <p>{% if step == 1 %} Selecione o material desejado aqui. {% elif step == 2 %} Informe a quantidade desejada neste campo.
@@ -20,7 +20,7 @@
             <button class="next-step">{% if step < 5 %} Próximo {% else %} Fechar Tutorial {% endif %}</button>
         </div>
         {% endfor %}
-    </div>
+    </div> -->
 
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
@@ -80,9 +80,10 @@
                                     <td>{{ requisicao.id }}</td>
                                     <td>{{ requisicao.material }}</td>
                                     <td>{{ requisicao.quantidade }}</td>
-                                    <td class="{% if requisicao.status == 'Solicitado' %}em-separacao{% elif requisicao.status == 'Disponivel para retirada' %}pronto-retirar{% elif requisicao.status == 'Aguardando reposição' %}aguardando-estoque{% elif requisicao.status == 'Retirado' %}finalizado{% else %}status-desconhecido{% endif %}">
+                                    <td class="{% if requisicao.status == 'Solicitado' %}status-solicitado{% elif requisicao.status == 'Disponivel para retirada' %}status-disponivel{% elif requisicao.status == 'Aguardando reposição' %}status-aguardando{% elif requisicao.status == 'Retirado' %}status-retirado{% else %}status-desconhecido{% endif %}">
                                         {{ requisicao.status }}
                                     </td>
+                                    
                                     <td>{{ requisicao.data_atualizacao }}</td>
                                 </tr>
                                 {% endfor %}
@@ -103,7 +104,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
-<script>
+<!-- <script>
 $(document).ready(function () {
     if (!sessionStorage.getItem('tutorialCompleted')) {
         let currentStep = 0;
@@ -242,6 +243,7 @@ $(document).ready(function () {
 
 });
 
-</script>
+
+</script> -->
 </body>
 </html>
