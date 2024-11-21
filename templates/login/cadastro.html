@@ -32,7 +32,7 @@
                         <span>Código SN</span>
                     </div>
                     <div class="input-cadastro">
-                        <input type="email" id="email" name="email" required>
+                        <input type="text" id="email" name="email" required>
                         <span>Email</span>
                     </div>
                     <div class="input-cadastro">
@@ -68,5 +68,20 @@
         </section>
     </div>
 </main>
+<script>
+        document.querySelector('.form-cadastro').addEventListener('submit', function(event) {
+        // Captura o valor do campo de email
+        const email = document.getElementById('email').value;
+
+        // Expressão regular para validar o formato do email
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        // Se o email não corresponder ao padrão, exibe um alerta e cancela o envio do formulário
+        if (!emailPattern.test(email)) {
+            alert('Por favor, insira um email válido.');
+            event.preventDefault(); // Impede o envio do formulário
+        }
+    });
+</script>
 </body>
 </html>
