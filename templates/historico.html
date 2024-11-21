@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Corrigida</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/historico.css') }}">
+    <link rel="stylesheet" href="/static/styles/historico.css">
+    <link rel="stylesheet" href="/static/styles/medias/media-historico.css">
+    <script src="/static/javascript/darkmode.js"></script>
+    l
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+    <main>
+        <div class="darkmode">
+            <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+            <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+        </div>
+        <!-- Status Containers -->
+        <div class="container-caixas">
+            <!-- Red Box -->
+            <div class="caixa estoque-minimo">
+                <div>Estoque mínimo</div>
+                <span>X</span>
+            </div>
+
+            <!-- Green Box -->
+            <div class="caixa saidas">
+                <div>Saídas</div>
+                <span>X</span>
+            </div>
+        </div>
+
+        <!-- Panel -->
+        <div class="container-historico">
+            <!-- Panel Header -->
+            <div class="header-historico">
+                Histórico
+            </div>
+
+            <!-- Panel Content -->
+            <div class="painel-solicitante">
+                <div>
+                    <span># Solicitante</span>
+                    <div class="circle"></div>
+                    <div>User 01</div>
+                </div>
+                <div class="divider"></div>
+                <div>
+                    <span>Data</span>
+                    <div class="date">12 / 04 / 2024</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

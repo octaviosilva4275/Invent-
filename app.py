@@ -339,6 +339,35 @@ def dashboard():
 # ---------------------------------------------------- FIM DA TELA INICIAL ----------------------------------------------------
 
 
+@app.route('/historico')
+def historico():
+    if 'user_id' not in session:
+        flash('Você precisa estar logado para acessar essa página.', 'error')
+        return redirect(url_for('login'))
+
+    # Conectando ao banco de dados
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
+    
+    # Substitua a consulta SQL abaixo pela sua consulta real
+    cursor.execute("SELECT * FROM users WHERE id = %s", (session['user_id'],))  # Exemplo de consulta
+    
+    # Obtendo o usuário da consulta
+    usuario = cursor.fetchone()
+
+    if usuario is None:
+        flash('Usuário não encontrado.', 'error')
+        return redirect(url_for('login'))  # Caso não encontre o usuário
+    
+    # Fechar a conexão com o banco de dados
+    cursor.close()
+    conexao.close()
+
+    # Renderiza o template com o usuário recuperado
+    return render_template("historico.html", usuario=usuario)
+
+
+
 # ---------------------------------------------------- CADASTRO MATERIAL ----------------------------------------------------
 @app.route('/cadastro_material', methods=['GET', 'POST'])
 def cadastro_material():
