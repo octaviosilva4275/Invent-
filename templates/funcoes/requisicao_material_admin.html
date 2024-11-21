@@ -11,6 +11,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/requisicoes-adm.css') }}">
+    <link rel="stylesheet" href="/static/styles/solicitacao.css">
+    <script src="/static/javascript/darkmode.js"></script>
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
@@ -46,7 +48,7 @@
                             <tr class="requisicao" data-nome="{{ requisicao.usuario | lower }}" data-produto="{{ requisicao.material | lower }}" data-status="{{ requisicao.status | lower }}">
                                 <td>{{ requisicao.usuario }}</td>
                                 <td>{{ requisicao.material }}</td>
-                                <td class="{{ requisicao.status | lower | replace(" ", "-") }}">{{ requisicao.status }}</td>
+                                <td class="{{ requisicao.status | lower | replace(' ', '-') }}">{{ requisicao.status }}</td>
                                 <td>{{ requisicao.observacao }}</td>
                                 <td>{{ requisicao.data_atualizacao }}</td>
                                 <td>{{ requisicao.quantidade }}</td>
