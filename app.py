@@ -324,7 +324,7 @@ def dashboard():
         cursor.close()
         conexao.close()
 
-    return render_template('historico.html', 
+    return render_template('index.html', 
                            estoque_minimo=estoque_minimo,
                            produtos_estoque_minimo=produtos_estoque_minimo,
                            historico_hoje=historico_hoje,
