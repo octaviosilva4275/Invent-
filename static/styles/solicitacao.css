@@ -44,10 +44,7 @@ body {
 }
 
 
-body.light-mode {
-    background-color: var(--cinza);
-    color: var(--fonte);
-}
+
 body.dark-mode {
     background-color: var(--dark);
     color: var(--fontedark)
@@ -58,10 +55,12 @@ body.dark-mode {
 .darkmode img {
     cursor: pointer;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    position: absolute;
+    position: fixed; /* Fixa a posição em relação à viewport */
+    top: 20px; /* Distância do topo */
+    right: 20px; /* Distância do canto direito */
     width: 40px;
     height: 40px;
-    margin: -90px 5px 5px;
+    z-index: 1000; /* Certifica-se de que a imagem fique acima de outros elementos */
 }
 
 .darkmode img.none {
