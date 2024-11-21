@@ -45,10 +45,7 @@ body {
 }
 
 
-body.light-mode {
-    background-color: var(--branco);
-    color: var(--fonte);
-}
+
 body.dark-mode {
     background-color: var(--dark);
     color: var(--fontedark)
@@ -62,11 +59,13 @@ body.dark-mode {
     cursor: pointer;
     transition: opacity 0.3s ease, transform 0.3s ease;
     position: absolute;
-    left: 97%;
     width: 40px;
     height: 40px;
-    margin: 5px 5px;
+    right: 10px; 
+    top: 10px; 
+    margin: 5px; 
 }
+
 
 .darkmode img.none {
     opacity: 0; /* Ícone oculto */
@@ -76,8 +75,6 @@ body.dark-mode {
 .darkmode .sol-icon{
     background-color: var(--fontedark);
 }
-
-
 
 /* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
 body.dark-mode {
@@ -91,6 +88,10 @@ body.dark-mode {
 
 .dark-mode .campo-material{
     background-color: var(--fundodark);
+}
+
+.dark-mode .titulo-material{
+    color: var(--fontedark);
 }
 .material {
     display: flex;
