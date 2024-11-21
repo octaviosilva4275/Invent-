@@ -50,12 +50,10 @@ main{
     align-items: center;
     flex-direction: column;
 
+
 }
 
-body.light-mode {
-    background-color: var(--cinza);
-    color: var(--fonte);
-}
+
 body.dark-mode {
     background-color: var(--dark);
     color: var(--fontedark)
