@@ -26,11 +26,11 @@
                 <div class="entrada">
                     <h2 class="titulo-entrada">Entrada</h2>
                     <div class="search-container">
-                        <input type="text" id="search-entrada" class="search-estoque" placeholder="Pesquise o item..." onclick="toggleList('lista-entrada')">
+                        <input type="text" id="search-entrada" class="search-estoque" placeholder="Pesquise o item..." onclick="toggleList('lista-entrada')" autocomplete="off">
                         <ul id="lista-entrada" class="lista-estoque">
                             {% for material in materiais %}
                                 <li class="item-estoque" data-id="{{ material.id }}" data-descricao="{{ material.descricao }}">
-                                    {{ material.descricao }} - Disponível: {{ material.quantidade_disponivel }}
+                                    {{ material.descricao }} ({{ material.codigo_produto }}) - Disponível: {{ material.quantidade_disponivel }}
                                 </li>
                             {% endfor %}
                         </ul>
@@ -48,11 +48,11 @@
                 <div class="saida">
                     <h2 class="titulo-saida">Saída</h2>
                     <div class="search-container">
-                        <input type="text" id="search-saida" class="search-estoque" placeholder="Pesquise o item..." onclick="toggleList('lista-saida')">
+                        <input type="text" id="search-saida" class="search-estoque" placeholder="Pesquise o item..." onclick="toggleList('lista-saida')" autocomplete="off">
                         <ul id="lista-saida" class="lista-estoque">
                             {% for material in materiais %}
                                 <li class="item-estoque" data-id="{{ material.id }}" data-descricao="{{ material.descricao }}">
-                                    {{ material.descricao }} - Disponível: {{ material.quantidade_disponivel }}
+                                    {{ material.descricao }} ({{ material.codigo_produto }}) - Disponível: {{ material.quantidade_disponivel }}
                                 </li>
                             {% endfor %}
                         </ul>

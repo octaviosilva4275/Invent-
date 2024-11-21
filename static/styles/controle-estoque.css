@@ -238,6 +238,11 @@ body.dark-mode {
     cursor: pointer;
 }
 
+
+.dark-mode .btn-estoque{
+    background-color: rgba(25, 35, 64, 1);
+}
+
 .btn-estoque:hover {
     background-color: rgba(25, 35, 64, 0.8); /* Cor mais clara ou outra cor quando o mouse estiver sobre o botão */
     transform: scale(1.05);

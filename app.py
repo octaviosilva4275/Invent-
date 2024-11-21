@@ -520,17 +520,18 @@ def controle_estoque():
 
     usuario = None
     usuario_id = session.get('user_id')
-  
+
     if usuario_id:
         cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
         usuario = cursor.fetchone()
 
     try:
-        # Obtain all materials and calculate available quantity
+        # Obtain all materials and calculate available quantity, including codigo_produto
         cursor.execute(""" 
             SELECT 
                 m.id, 
                 m.descricao, 
+                m.codigo_produto,  -- Including the product code
                 COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) AS total_entrada,
                 COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS total_saida,
                 COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) - 
@@ -551,6 +552,7 @@ def controle_estoque():
         conexao.close()
 
     return render_template('funcoes/controle_estoque.html', materiais=materiais, usuario=usuario)
+
 
 
 

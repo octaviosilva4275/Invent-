@@ -163,21 +163,14 @@ body {
     max-width: 1280px;
     width: 100%;
     height: 80%;
-    overflow-y: auto; /* Adicionado overflow-y para rolagem vertical */
-    scrollbar-width: thin; /* Para navegadores que suportam essa propriedade */
+    overflow-y: auto;
+    scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.7) transparent;
-    transition: background-color 0.3s ease; /* Transição suave */
+    transition: background-color 0.3s ease;
 }
 
-/* Estilo personalizado para a barra de rolagem no Chrome, Edge e Safari */
 .container-solicitacao::-webkit-scrollbar {
     width: 8px;
-}
-
-.table td, .table th {
-    padding: .75rem;
-    vertical-align:middle;
-    border-top: 1px solid #dee2e6;
 }
 
 .container-solicitacao::-webkit-scrollbar-track {
@@ -190,12 +183,17 @@ body {
     border: 2px solid transparent;
 }
 
-.container-solicitacao::-webkit-scrollbar-thumb:hover, .btn-info:hover {
+.container-solicitacao::-webkit-scrollbar-thumb:hover {
     background-color: rgba(70, 94, 140, 1);
 }
 
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
 
-table{
+table {
     margin-bottom: 30px;
 }
 
@@ -203,17 +201,15 @@ table{
 .titulo-solicitacao {
     font-size: 3.5rem;
     text-align: center;
-    margin-bottom: 40px; /* Ajustado para posicionar melhor o título */
+    margin-bottom: 40px;
 }
 
-/* Container da tabela */
 .campo-solicitacao {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Estilo da tabela */
 .tabela-solicitacao {
     width: 100%;
     border-collapse: collapse;
@@ -226,10 +222,9 @@ table{
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
-    font-size: 1.6rem; /* Aumentado para melhor visualização */
+    font-size: 1.6rem;
     font-weight: 500;
 }
-
 
 .tabela-solicitacao th {
     background-color: #f0f0f0;
@@ -238,14 +233,11 @@ table{
     font-weight: bold;
 }
 
-
-
-/* Estilo para os botões */
 .btn-solicitacao {
     display: flex;
-    flex-direction: column; /* Organiza os botões um embaixo do outro */
-    align-items: center; /* Centraliza os botões horizontalmente */
-    gap: 10px; /* Espaço entre os botões */
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
 .btn-aprovar, .btn-aguardo {
@@ -269,40 +261,17 @@ table{
     color: #fff;
 }
 
-.btn-aprovar:hover, .btn-info:hover {
+.btn-aprovar:hover, .btn-aguardo:hover {
     background-color: rgba(25, 35, 64, 0.8);
     transform: scale(1.05);
-}
-
-.btn-aguardo:hover{
-    background-color: rgba(25, 35, 64, 0.8);
-    transform: scale(1.05);
-}
-
-/* 
-   Normalização do HTML e body
-   - Define a largura e altura como 100% da viewport.
-   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
-   - Remove o overflow horizontal.
-*/
-html {
-    width: 100%;
-    height: 100%;
-    font-size: 62.5%;
-    overflow-x: hidden;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
 }
 
 .titulo-requisicoes {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
     margin-bottom: 30px;
 }
 
@@ -312,16 +281,8 @@ body {
     margin-right: 10px;
 }
 
-.titulo-requisicoes {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-}
-
 .container-cards {
-    text-align: center; /* Isso garante que tudo dentro deste contêiner esteja centralizado */
+    text-align: center;
 }
 
 .section-requisicoes {
@@ -332,7 +293,6 @@ body {
     height: 100vh;
     background-color: var(--branco);
 }
-
 
 .container-cards {
     display: flex;
@@ -346,11 +306,67 @@ body {
     height: 80%;
 }
 
-/* Adicione estilos para as classes de status */
-/* Estilo dos status adicionais */
-.em-separacao {
-    color: orange;
-    font-weight: bold;
+/* Responsividade */
+@media (max-width: 768px) {
+    .titulo-solicitacao {
+        font-size: 2.5rem;
+    }
+
+    .campo-solicitacao {
+        gap: 10px;
+    }
+
+    .tabela-solicitacao th, .tabela-solicitacao td {
+        font-size: 1.4rem;
+        padding: 8px;
+    }
+
+    .btn-solicitacao {
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .btn-aprovar, .btn-aguardo {
+        width: 80px;
+        font-size: 1rem;
+    }
+
+    .container-solicitacao {
+        padding: 20px;
+    }
+
+    .container-cards {
+        flex-direction: column;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo-solicitacao {
+        font-size: 2rem;
+    }
+
+    .tabela-solicitacao th, .tabela-solicitacao td {
+        font-size: 1.2rem;
+        padding: 6px;
+    }
+
+    .btn-aprovar, .btn-aguardo {
+        width: 70px;
+        font-size: 0.9rem;
+    }
+
+    .container-solicitacao {
+        padding: 10px;
+    }
+
+    .container-cards {
+        padding: 10px;
+    }
+
+    .btn-solicitacao {
+        flex-direction: column;
+    }
 }
 
 .pronto-retirar {

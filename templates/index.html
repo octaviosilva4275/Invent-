@@ -23,6 +23,16 @@
         .filter-button {
             margin-left: 20px;
         }
+
+        .flex{
+            justify-content: center;
+            align-items: center;
+            display: flex
+        }
+        
+        .historico{
+            margin-top: 5px;
+        }
         .container {
             margin: 30px auto;
         }
@@ -169,7 +179,7 @@
                             <select id="statusFilter" class="form-control">
                                 <option value="">Todos</option>
                                 <option value="Solicitado">Solicitado</option>
-                                <option value="Disponível para retirada">Disponível para retirada</option>
+                                <option value="Disponivel para retirada">Disponível para retirada</option>
                                 <option value="Aguardando reposição">Aguardando reposição</option>
                                 <option value="Retirado">Retirado</option>
                             </select>
@@ -195,6 +205,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                     <button type="button" class="btn btn-primary" id="applyFilters">Aplicar Filtros</button>
+                    <button type="button" class="btn btn-danger" id="clearFilters">Limpar Filtros</button> <!-- Botão de limpar -->
+                    
                 </div>
             </div>
         </div>
