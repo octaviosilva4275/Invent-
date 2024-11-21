@@ -1176,6 +1176,7 @@ def atualizar_requisicao():
                 assunto = f'Aviso: Atualização de Requisição - {nome_produto}'
                 corpo = f"""
                 <p>A requisição referente ao produto <span class="strong-text">"{nome_produto}"</span> foi atualizada para <span class="strong-text">"{acao}"</span>.</p>
+
                 """
 
                 
