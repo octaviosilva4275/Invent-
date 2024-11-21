@@ -53,15 +53,15 @@ body.dark-mode {
     display: none;
 }
 
-
 .darkmode img {
     cursor: pointer;
     transition: opacity 0.3s ease, transform 0.3s ease;
     position: absolute;
-    left: 97%;
     width: 40px;
     height: 40px;
-    margin: 5px 5px;
+    margin: 5px;
+    right: 10px; /* Posiciona a imagem no lado direito */
+    top: 10px; /* Ajusta a distância da parte superior */
 }
 
 .darkmode img.none {
