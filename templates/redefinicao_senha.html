@@ -14,38 +14,42 @@
 </head>
 <body>
     <div class="container-geral">
-    <div class="darkmode">
-        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
-        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
-        <div class="container-degrade">
+        <div class="darkmode">
+            <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+            <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+            <div class="container-degrade"></div>
+        </div>
+
+        {% include 'componentes.html' %}
+
+        <div class="container1">
+            <div class="container2"></div>
+
+            <div class="container-senha">
+                <form class="form-senha" method="POST">
+                    <div class="titulo">
+                        <img src="/static/img/logoinvent+.png" alt="">
+                        <h2>Redefinir Senha</h2>
+                    </div>
+                
+                    <!-- Campo oculto para enviar o token -->
+                    <input type="hidden" name="token" value="{{ token }}">
+                
+                    <div class="inputBox">
+                        <input class="input-senha" type="password" name="nova_senha" required minlength="8">
+                        <span>Nova Senha:</span>
+                        <button class="btn-recuperacao" type="submit">Redefinir Senha</button>
+                        <i></i>
+                    </div>
+                
+                    <!-- Link para voltar ao login -->
+                    <div class="voltar-login">
+                        <a href="{{ url_for('login') }}" class="button">Voltar ao Login</a>
+                    </div>
+                </form>
+                
+            </div>
         </div>
     </div>
-
-    
-    <div class="container1">
-        <div class="container2"></div>
-    
-
-    <div class="container-senha">
-        <form class="form-senha">
-            <div class="titulo">
-                <img src="/static/img/logoinvent+.png" alt="">
-                <h2>Redefinir Senha</h2>
-            </div>
-
-            <div class="inputBox">
-                <input class="input-senha" type="text" required>
-                <span>Nova Senha:</span>
-                <button class="btn-recuperacao" type="submit">Redefinir Senha</button>
-                <i></i>
-            </div>
-              <!-- Link para voltar ao login -->
-              <div class="voltar-login">
-                <a href="{{ url_for('login') }}" class="button">Voltar ao Login</a>
-            </div>
-        </form>
-    </div>
-</div>
-</div>
 </body>
 </html>

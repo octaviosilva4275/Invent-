@@ -769,8 +769,10 @@ def requisicao_material():
             FROM materials m
             LEFT JOIN estoque e ON m.id = e.material_id
             GROUP BY m.id
+            ORDER BY m.descricao ASC
         """)
         materiais = cursor.fetchall()
+
 
         if usuario_id:
             cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
@@ -876,33 +878,103 @@ def requisicao_material_admin():
 
 
 
-def enviar_email_almoxarifado(destinatario, assunto, corpo):
+def enviar_email_almoxarifado(destinatario, assunto, corpo, tipo="requisicao"):
     remetente = "almoxarifadoinvent@gmail.com"
     senha = "gcormxmospfzsowq"  # Use uma senha de aplicativo se necessário
 
+    # Corpo do e-mail em formato HTML simples
+    corpo_html = f"""
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+            }}
+            .container {{
+                width: 100%;
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }}
+            .header {{
+                text-align: center;
+                padding-bottom: 20px;
+            }}
+            .header img {{
+                max-width: 120px;  /* Ajuste a largura máxima da logo */
+                height: auto;
+            }}
+            h2 {{
+                color: #465E8C;
+                margin-bottom: 20px;
+            }}
+            p {{
+                font-size: 16px;
+                color: #333333;
+                margin-bottom: 10px;
+            }}
+            .strong-text {{
+                font-weight: bold;
+            }}
+            .button {{
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #384773;
+                color: #ffffff;
+                text-decoration: none;
+                border-radius: 5px;
+                margin-top: 20px;
+            }}
+            .footer {{
+                font-size: 12px;
+                color: #999999;
+                margin-top: 20px;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <!-- Logo -->
+                <img src="https://inventmais.blob.core.windows.net/arquivos/inventmais.png" alt="Logo Almoxarifado">
+            </div>
+            <h2>{assunto}</h2>
+            <p>{corpo}</p>
+    """
+
+    if tipo == "senha":
+        corpo_html += f"""
+            <a href="{corpo}" class="button">Redefinir Senha</a>
+        """
+    elif tipo == "requisicao":
+        corpo_html += f"""
+            <p>Por favor, verifique as informações da sua requisição no sistema.</p>
+        """
+    
+    corpo_html += f"""
+            <p class="footer">Atenciosamente,<br>Equipe Almoxarifado</p>
+        </div>
+    </body>
+    </html>
+    """
+
+    # Criar a mensagem do e-mail
     mensagem = MIMEMultipart()
     mensagem['From'] = remetente
     mensagem['To'] = destinatario
     mensagem['Subject'] = assunto
 
-    corpo_html = f"""
-    <html>
-    <body>
-        <h2>{assunto}</h2>
-        <p>{corpo}</p>
-        <p>Atenciosamente,<br>Almoxarifado</p>
-    </body>
-    </html>
-    """
-
-    # Debug para verificar o conteúdo
-    print(f"Corpo do e-mail: {corpo}")
-    print(f"Corpo HTML: {corpo_html}")
-
-    parte_html = MIMEText(corpo_html, 'html',"ANSI")
+    parte_html = MIMEText(corpo_html, 'html', "ANSI")
     mensagem.attach(parte_html)
 
     try:
+        # Conectar e enviar o e-mail
         with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
             smtp.starttls()
             smtp.login(remetente, senha)
@@ -914,6 +986,11 @@ def enviar_email_almoxarifado(destinatario, assunto, corpo):
 
 
 
+
+
+
+
+
 def gerar_token(email):
     token = secrets.token_urlsafe(16)  # Gera um token seguro
     expires_at = datetime.now() + timedelta(hours=1)  # Define a expiração para 1 hora
@@ -921,16 +998,17 @@ def gerar_token(email):
 
 @app.route('/esquecer_senha', methods=['GET', 'POST'])
 def esquecer_senha():
+    flash_message = None  # Variável para armazenar a mensagem de flash
+
     if request.method == 'POST':
-        data = request.form  # Use request.form para receber dados do formulário
-        sn = data.get('sn')
+        sn_ou_email = request.form.get('sn_email')  # Captura o SN ou e-mail do formulário
 
         # Conecte-se ao banco de dados
         conn = mysql.connector.connect(user='tcc', password='123', database='almoxarifado')
         cursor = conn.cursor()
 
-        # Verifique se o usuário existe
-        cursor.execute("SELECT email FROM users WHERE sn = %s", (sn,))
+        # Verifique se o SN ou o e-mail existe
+        cursor.execute("SELECT email FROM users WHERE sn = %s OR email = %s", (sn_ou_email, sn_ou_email))
         result = cursor.fetchone()
 
         if result:
@@ -943,7 +1021,6 @@ def esquecer_senha():
                            (email, token, expires_at))
             conn.commit()
 
-            # Verifique se a inserção foi bem-sucedida
             if cursor.rowcount > 0:
                 print("Token inserido com sucesso.")
             else:
@@ -954,15 +1031,23 @@ def esquecer_senha():
             corpo_email = f"Clique no seguinte link para redefinir sua senha: {link_redefinicao}"
             enviar_email_almoxarifado(email, "Redefinição de Senha", corpo_email)
 
-            cursor.close()
-            conn.close()
-            return jsonify({"mensagem": "E-mail de redefinição de senha enviado com sucesso!"}), 200
+            # Definir a mensagem de sucesso
+            flash_message = "E-mail de redefinição de senha enviado com sucesso!"
+        else:
+            # Definir a mensagem de erro
+            flash_message = "Usuário não encontrado."
 
         cursor.close()
         conn.close()
-        return jsonify({"mensagem": "Usuário não encontrado."}), 404
 
-    return render_template('recuperacao_senha.html')  # Para o método GET, retorne o formulário
+        # Redireciona para a mesma página, passando a mensagem flash
+        return render_template('recuperacao_senha.html', flash_message=flash_message)
+
+    return render_template('recuperacao_senha.html', flash_message=flash_message)
+
+
+
+
 
 @app.route('/redefinir_senha', methods=['GET', 'POST'])
 def redefinir_senha():
@@ -997,13 +1082,19 @@ def redefinir_senha():
             cursor.close()
             conn.close()
 
-            return redirect(url_for('login'))
+            # Flash de sucesso
+            flash("Senha redefinida com sucesso! Você pode agora fazer login.", "success")
+            return redirect(url_for('login'))  # Redireciona para a página de login
         else:
             cursor.close()
             conn.close()
-            return jsonify({"mensagem": "Token inválido ou expirado."}), 400
+
+            # Flash de erro
+            flash("Token inválido ou expirado.", "error")
+            return redirect(url_for('redefinir_senha', token=token))  # Redireciona de volta para o formulário
         
-@app.route('/atualizar_requisicao', methods=['POST']) 
+        
+@app.route('/atualizar_requisicao', methods=['POST'])  
 def atualizar_requisicao():
     if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         return redirect(url_for('solicitante'))
@@ -1016,14 +1107,16 @@ def atualizar_requisicao():
     cursor = conexao.cursor()
 
     try:
-        # Obter material e quantidade da requisição
-        cursor.execute("SELECT material_id, quantidade FROM requisicoes WHERE id = %s", (requisicao_id,))
+        # Obter material, quantidade e usuário da requisição
+        cursor.execute("SELECT material_id, quantidade, usuario_id FROM requisicoes WHERE id = %s", (requisicao_id,))
         requisicao = cursor.fetchone()
 
         if requisicao:
             material_id = requisicao[0]
             quantidade_requisitada = requisicao[1]
+            usuario_id = requisicao[2]  # ID do usuário que fez a requisição
 
+        # Atualizar o status conforme a ação
         if acao == 'Solicitado':
             cursor.execute("UPDATE requisicoes SET status = 'Solicitado' WHERE id = %s", (requisicao_id,))
         
@@ -1066,17 +1159,30 @@ def atualizar_requisicao():
 
         conexao.commit()
 
-        # Enviar e-mail após a atualização (ignore erros)
-        assunto = f'Aviso: Requisição {requisicao_id} atualizada'
-        corpo = f'A requisição com ID {requisicao_id} foi atualizada para {acao}.'
-
-        # Tente enviar o e-mail
+        # Recuperar o nome do produto e e-mail do usuário que fez a requisição
         try:
-            email_usuario = session.get('user_email')
-            if email_usuario:
+            cursor.execute("SELECT email FROM users WHERE id = %s", (usuario_id,))
+            usuario = cursor.fetchone()
+            if usuario:
+                # Recuperar nome do produto
+                cursor.execute("SELECT descricao FROM materials WHERE id = %s", (material_id,))
+                material = cursor.fetchone()
+                if material:
+                    nome_produto = material[0]  # Nome do produto relacionado à requisição
+                else:
+                    nome_produto = "Produto não encontrado"
+
+                email_usuario = usuario[0]  # E-mail do usuário relacionado à requisição
+                assunto = f'Aviso: Atualização de Requisição - {nome_produto}'
+                corpo = f"""
+                <p>A requisição referente ao produto <span class="strong-text">"{nome_produto}"</span> foi atualizada para <span class="strong-text">"{acao}"</span>.</p>
+                """
+
+                
+                # Enviar o e-mail
                 enviar_email_almoxarifado(email_usuario, assunto, corpo)
             else:
-                print("E-mail do usuário não encontrado na sessão.")
+                print("Usuário não encontrado para a requisição.")
         except Exception as email_error:
             print(f"Erro ao tentar enviar o e-mail: {email_error}")  # Ignora erro de envio
 
@@ -1088,6 +1194,7 @@ def atualizar_requisicao():
         conexao.close()
 
     return jsonify({'success': 'Status atualizado com sucesso'})
+
 
 
 

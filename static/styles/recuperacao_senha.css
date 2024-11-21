@@ -24,7 +24,7 @@ html, body {
     width: 100vw;
     height: 100vh;
     background-color: var(--cinza);
-    background-image: url('imagemfundo.png');
+    background-image: url('/static/img/login-img/imagemfundo.png');
     background-size: 70%; /* Tamanho da imagem */
     background-position: 145px calc(100% + -40px); /* Move a imagem mais para a esquerda e para baixo */
     background-repeat: no-repeat; /* Impede a repetição da imagem */
@@ -438,7 +438,7 @@ body.dark-mode {
 }
 
 .btn-recuperacao {
-    
+    cursor: pointer;
     margin-top: 50px;
     margin-bottom: 20px;
     background: #384773;

@@ -180,7 +180,7 @@ option{
     font-weight: bolder;
     border-radius: 10px;
     background-color: white;
-    
+    font-size: 13px;
 }
 
 .form-resquisicoes textarea {

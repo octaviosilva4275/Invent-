@@ -13,6 +13,7 @@
 
 </head>
 <body>
+    {% include 'componentes.html' %}
     <div class="container-geral">
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
@@ -21,32 +22,44 @@
         </div>
     </div>
 
-    
     <div class="container1">
         <div class="container2"></div>
-    
 
     <div class="container-senha">
-        <form class="form-senha">
+        <!-- Formulário para recuperação de senha -->
+        <form class="form-senha" method="POST">
             <div class="titulo">
                 <img src="/static/img/logoinvent+.png" alt="">
-                <h2>Nova Senha</h2>
+                <h2>Recuperação de Senha</h2>
             </div>
 
             <div class="inputBox">
-                <input class="input-senha" type="text" required>
-                <span>Código SN | Email</span>
+                <input class="input-senha" type="text" name="sn_email" required>
+                <span>Código SN | E-mail</span>
                 <button class="btn-recuperacao" type="submit">Enviar Link de Redefinição</button>
-                <i></i>
+
             </div>
 
-              <!-- Link para voltar ao login -->
-              <div class="voltar-login">
+            <!-- Link para voltar ao login -->
+            <div class="voltar-login">
                 <a href="{{ url_for('login') }}" class="button">Voltar ao Login</a>
             </div>
         </form>
     </div>
 </div>
 </div>
+<script>
+        $(document).ready(function() {
+        if ($('.alert').length > 0) {
+            setTimeout(function() {
+                window.location.href = '/esquecer_senha';  // Redireciona após 3 segundos
+            }, 3000);
+        }
+
+        $(".alert-close").click(function() {
+            $(this).closest(".alert").fadeOut();
+        });
+    });
+</script>
 </body>
 </html>

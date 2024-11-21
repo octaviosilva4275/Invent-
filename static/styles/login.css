@@ -24,7 +24,7 @@ html, body {
 .container1 {
     width: 100vw;
     height: 100vh;
-    background-color: var(--cinza);
+
     background-image: url('/static/img/login-img/imagemfundo.png');
     background-size: 70%; /* Tamanho da imagem */
     background-position: 145px calc(100% + -40px); /* Move a imagem mais para a esquerda e para baixo */
