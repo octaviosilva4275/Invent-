@@ -69,11 +69,9 @@ body.dark-mode {
     position: absolute;
     width: 40px;
     height: 40px;
-    margin: 5px;
-    right: 10px; /* Posiciona a imagem no lado direito */
-    top: 10px; /* Ajusta a distância da parte superior */
+    left: 10px;  /* Distância do canto esquerdo */
+    top: 10px;   /* Distância do topo, ajuste conforme necessário */
 }
-
 
 
 .darkmode img.none {
