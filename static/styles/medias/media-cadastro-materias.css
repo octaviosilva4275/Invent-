@@ -1,7 +1,19 @@
+
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark  : #465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+    --fundoresponsivo : #DBE7FF;
+
+}
+
 /* Responsividade para dispositivos móveis */
 @media (max-width: 768px) {
     body {
-        background-color: rgba(219, 231, 255, 1);
+        background-color: var(--fundoresponsivo);
         display: flex;
         flex-direction: column;
         align-items: center;
