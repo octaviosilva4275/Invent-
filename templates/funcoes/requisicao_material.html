@@ -110,7 +110,7 @@
         if (!sessionStorage.getItem('tutorialCompleted')) {
             let currentStep = 0;
             const tutorialSteps = [
-                { element: '#material_id', text: 'Selecione o material desejado aqui.' },
+                { element: '.search-estoque', text: 'Selecione o material desejado aqui.' },
                 { element: '#quantidade', text: 'Informe a quantidade desejada neste campo.' },
                 { element: '#observacao', text: 'Adicione uma observação, se necessário.' },
                 { element: '.btn-requisicoes', text: 'Clique aqui para enviar sua requisição.' },
@@ -123,7 +123,7 @@
                 const currentElement = $(tutorialSteps[step].element);
                 currentElement.addClass('highlight').focus();
                 currentElement.prev('label').addClass('highlight');
-                $('select, textarea, .btn-requisicoes, table').not(currentElement).addClass('disabled-tutorial');
+                $('.search-estoque, textarea, .btn-requisicoes, table').not(currentElement).addClass('disabled-tutorial');
                 $('#tutorial-overlay').show();
                 $('.tutorial-message').hide();
                 $('.tutorial-message').eq(step).show();
@@ -138,7 +138,7 @@
                     showTutorialStep(currentStep);
                 } else {
                     $('#tutorial-overlay').hide();
-                    $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
+                    $('.search-estoque, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
                     $('.highlight').removeClass('highlight');
                     sessionStorage.setItem('tutorialCompleted', 'true');
                     location.reload();
@@ -148,7 +148,7 @@
             showTutorialStep(currentStep);
         } else {
             $('#tutorial-overlay').hide();
-            $('select, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
+            $('.search-estoque, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
         }
 
 

@@ -261,6 +261,24 @@ body{
 }
 }
 
+#modo-escuro-mobile{
+      display: none;
+    }
+@media (max-width: 468px) {
+    .darkmode {
+        display: flex;             /* Exibe o contêiner com flexbox */
+        align-items: center;       /* Alinha as imagens verticalmente */
+        justify-content: flex-end; /* Alinha as imagens à direita */
+        gap: 10px;                 /* Espaçamento entre as imagens */
+    }
+    #modo-escuro-mobile{
+      display: flex;
+    }
+    .darkmode #lua-icon, .darkmode #sol-icon{
+      display: none;
+    }
+}
+
 
   </style>
 </head>
@@ -343,6 +361,16 @@ body{
       <span class="material-symbols-outlined"> account_circle </span>Perfil
     </a>
   </li>
+  <li id="modo-escuro-mobile">
+    <a href="#">
+      <span></span>Modo Escuro
+      <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" class="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none sol-icon">
+      </div>
+    </a>
+  </li>
+  
   {% if session.get('logged_in') %}
   <li>
     <a href="{{ url_for('logout') }}"><span class="material-symbols-outlined"> logout </span>Sair</a>

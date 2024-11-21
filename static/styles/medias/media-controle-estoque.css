@@ -6,7 +6,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start; /* Garante que o conteúdo fique alinhado ao topo */
-        padding: 20px;
         height: 100vh; /* Garante que o conteúdo seja centralizado verticalmente */
         margin: 0;
     }
@@ -37,7 +36,7 @@
     .titulo-estoque {
         font-size: 2.8rem;
         text-align: center; /* Centraliza o título */
-        margin-bottom: 30%; /* Ajusta o espaço abaixo do título */
+
     }
 
     /* Alinhamento dos campos 'Entrada' e 'Saída' */
