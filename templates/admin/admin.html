@@ -4,55 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interface Almoxarifado</title>
-    <link rel="stylesheet" href="/static/styles/solicitacao.css">
+    <link rel="stylesheet" href="/static/styles/admin.css">
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
     <script src="/static/javascript/darkmode.js"></script>
-
-
 </head>
 <body>
+    {% include '/dashboard/dashboard.html' %}
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
         <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
     </div>
+
     <!-- Primeira sessão: Solicitação para Almoxarife -->
     <div class="gerenciamento">
         <h2>Solicitação para Almoxarife</h2>
-        <table class="tabela-solicitacao">
-            <thead>
-                <tr>
-                    <th>Nome do Solicitante</th>
-                    <th>Código SN</th>
-                    <th>Email</th>
-                    <th>Id</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                        <div class="btn-gerenciar">
-                        <button class="aprovado">APROVAR</button>
-                        <button class="excluir">EXCLUIR</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        {% set usuarios_nao_verificados = usuarios | selectattr('cargo', 'equalto', 'almoxarifado-nao-verificado') | list %}
+
+        {% if usuarios_nao_verificados %}
+            <table class="tabela-solicitacao" id="tabelaUsuarios">
+                <thead>
+                    <tr>
+                        <th>Nome do Solicitante</th>
+                        <th>Código SN</th>
+                        <th>Email</th>
+                        <th>Id</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios_nao_verificados %}
+                    <tr data-usuario-id="{{ usuario.id }}">
+                        <td>{{ usuario.nome }}</td>
+                        <td>{{ usuario.sn }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.id }}</td>
+                        <td>
+                            <!-- Formulário para Aprovar -->
+                            <form action="{{ url_for('aprovar_usuario') }}" method="POST">
+                                <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                                <button class="aprovado" type="submit">APROVAR</button>
+                            </form>
+
+                            <!-- Formulário para Excluir -->
+                            <form action="{{ url_for('excluir_usuario') }}" method="POST">
+                                <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                                <button class="excluir" type="submit">EXCLUIR</button>
+                            </form>
+
+                            <!-- Botão para Editar -->
+                            <button class="editar" onclick="openModal({{ usuario.id }}, '{{ usuario.nome }}', '{{ usuario.email }}', '{{ usuario.sn }}', '{{ usuario.cargo }}')">EDITAR</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="font-size: 16px;">Não há solicitações pendentes para Almoxarifado.</p>
+        {% endif %}
     </div>
 
     <!-- Segunda sessão: Gerenciar Usuários -->
     <div class="gerenciamento">
         <h2>Gerenciar Usuários</h2>
-        <select class="select-usuario">
-            <option>Usuario desejado</option>
+
+        <!-- Select para escolher o usuário -->
+        <select class="select-usuario" id="selectUsuario" onchange="filtrarUsuariosTabela()">
+            <option value="">Usuario desejado</option>
+            {% for usuario in usuarios %}
+                <option value="{{ usuario.id }}">{{ usuario.nome }}</option>
+            {% endfor %}
         </select>
-        <table class="tabela-solicitacao">
+        
+        <table class="tabela-solicitacao" id="tabelaUsuarios">
             <thead>
                 <tr>
                     <th>Nome do Solicitante</th>
@@ -63,152 +87,99 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                {% for usuario in usuarios %}
+                <tr data-usuario-id="{{ usuario.id }}">
+                    <td>{{ usuario.nome }}</td> <!-- Exibindo o nome do usuário -->
+                    <td>{{ usuario.sn }}</td> <!-- Exibindo o código SN -->
+                    <td>{{ usuario.email }}</td> <!-- Exibindo o email -->
+                    <td>{{ usuario.id }}</td> <!-- Exibindo o ID -->
                     <td>
-                        <div class="btn-gerenciar">
-                        <button class="excluir">EXCLUIR</button>
-                        </div>
+                        <!-- Formulário para Excluir -->
+                        <form action="{{ url_for('excluir_usuario') }}" method="POST">
+                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                            <button class="excluir" type="submit">EXCLUIR</button>
+                        </form>
+
+                        <!-- Botão para Editar -->
+                        <button class="editar" onclick="openModal({{ usuario.id }}, '{{ usuario.nome }}', '{{ usuario.email }}', '{{ usuario.sn }}', '{{ usuario.cargo }}')">EDITAR</button>
                     </td>
                 </tr>
-            </tbody>
-        </table>
-    </div>
-</body>
-</html>
-
-<body>
-    {% include '/dashboard/dashboard.html' %}
-    <h1>Painel de Administração</h1>
-
-    <!-- Container para Aprovação de Solicitações de Almoxarife -->
-    <div class="container">
-        <h2>Aprovar Solicitações de Almoxarife</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome do Solicitante</th>
-                    <th>Código SN</th>
-                    <th>Email</th>
-                    <th>Cargo</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios if usuario.cargo == 'almoxarifado-nao-verificado' %}
-                    <tr>
-                        <td>{{ usuario.nome }}</td>
-                        <td>{{ usuario.sn }}</td>
-                        <td>{{ usuario.email }}</td>
-                        <td>{{ usuario.cargo }}</td>
-                        <td>
-                            <form method="POST" action="{{ url_for('aprovar_usuario') }}">
-                                <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                                <button type="submit" class="btn-approve">Aprovar</button>
-                            </form>
-                        </td>
-                    </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
-    <!-- Container para Gerenciar Usuários -->
-    <div class="container">
-        <h2>Gerenciar Usuários</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome do Usuário</th>
-                    <th>Código SN</th>
-                    <th>Email</th>
-                    <th>Cargo</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                    <tr>
-                        <td>{{ usuario.nome }}</td>
-                        <td>{{ usuario.sn }}</td>
-                        <td>{{ usuario.email }}</td>
-                        <td>{{ usuario.cargo }}</td>
-                        <td>
-                            <button class="btn-edit" 
-                                onclick="openModal('{{ usuario.id }}', '{{ usuario.nome }}', '{{ usuario.email }}', '{{ usuario.cargo }}', '{{ usuario.sn }}')">Editar</button>
-                            <form id="deleteUserForm{{ usuario.id }}" method="POST" action="{{ url_for('excluir_usuario') }}">
-                                <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                                <button type="button" class="btn-danger" onclick="confirmDelete({{ usuario.id }})">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Modal para editar o usuário -->
-    <div id="editModal" class="modal">
+    <!-- Modal de edição -->
+    <div id="editModal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Editar Usuário</h2>
-            <form method="POST" action="{{ url_for('admin') }}">
-                <input type="hidden" id="editUserId" name="user_id">
-                <label for="editUserNome">Nome:</label>
-                <input type="text" id="editUserNome" name="nome" required placeholder="Insira o nome">
-                <label for="editUserEmail">Email:</label>
-                <input type="email" id="editUserEmail" name="email" required placeholder="Insira o email">
-                <label for="editUserSn">Código SN:</label>
-                <input type="text" id="editUserSn" name="sn" required placeholder="Insira o Código SN">
-                <label for="editUserCargo">Cargo:</label>
-                <input type="text" id="editUserCargo" name="cargo" required placeholder="Insira o cargo">
-                <label for="editUserSenha">Senha:</label>
-                <input type="password" id="editUserSenha" name="senha" placeholder="Insira a senha">
-                <button type="submit" id="modal-btn">Salvar Alterações</button>
+            <h2>Editar Perfil</h2>
+            <form id="editForm" action="{{ url_for('editar_usuario') }}" method="POST">
+                <input type="hidden" name="user_id" id="modalUserId">
+                <label for="nome">Nome:</label>
+                <input type="text" name="nome" id="modalNome" required><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="modalEmail" required><br><br>
+
+                <label for="sn">Código SN:</label>
+                <input type="text" name="sn" id="modalSn"><br><br>
+
+                <label for="cargo">Cargo:</label>
+                <select name="cargo" id="modalCargo">
+                    <option value="almoxarifado">Almoxarifado</option>
+                    <option value="admin">Admin</option>
+                </select><br><br>
+
+                <label for="senha">Senha:</label>
+                <input type="password" name="senha" id="modalSenha" required><br><br>
+
+                <button type="submit">Salvar Alterações</button>
             </form>
         </div>
     </div>
 
     <script>
-        function confirmDelete(userId) {
-            Swal.fire({
-                title: "Você tem certeza?",
-                text: "Essa ação não poderá ser revertida!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sim, excluir!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('deleteUserForm' + userId).submit();
+        // Função para filtrar a tabela de usuários ao selecionar um no select
+        function filtrarUsuariosTabela() {
+            var select = document.getElementById("selectUsuario");
+            var usuarioId = select.value;  // Obter o valor selecionado
+            var rows = document.querySelectorAll("#tabelaUsuarios tbody tr");  // Todas as linhas da tabela
+
+            // Iterar sobre as linhas da tabela
+            rows.forEach(function(row) {
+                // Obter o ID do usuário da linha
+                var rowUsuarioId = row.getAttribute("data-usuario-id");
+
+                if (usuarioId === "" || rowUsuarioId === usuarioId) {
+                    row.style.display = "";  // Mostrar a linha
+                } else {
+                    row.style.display = "none";  // Ocultar a linha
                 }
             });
         }
 
-        function openModal(userId, nome, email, cargo, sn) {
-            document.getElementById('editUserId').value = userId;
-            document.getElementById('editUserNome').value = nome;
-            document.getElementById('editUserEmail').value = email;
-            document.getElementById('editUserSn').value = sn;
-            document.getElementById('editUserCargo').value = cargo;
-            document.getElementById('editModal').style.display = "block";
+        // Função para abrir o modal e preencher os campos com os dados do usuário
+        function openModal(id, nome, email, sn, cargo) {
+            document.getElementById("modalUserId").value = id;
+            document.getElementById("modalNome").value = nome;
+            document.getElementById("modalEmail").value = email;
+            document.getElementById("modalSn").value = sn;
+            document.getElementById("modalCargo").value = cargo;
+            document.getElementById("editModal").style.display = "block";
         }
 
+        // Função para fechar o modal
         function closeModal() {
-            document.getElementById('editModal').style.display = "none";
+            document.getElementById("editModal").style.display = "none";
         }
 
+        // Fechar o modal quando clicar fora do modal
         window.onclick = function(event) {
-            const modal = document.getElementById('editModal');
-            if (event.target === modal) {
+            if (event.target == document.getElementById("editModal")) {
                 closeModal();
             }
         }
     </script>
 </body>
-</html>
 </html>

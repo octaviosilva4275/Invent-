@@ -436,27 +436,24 @@ def admin():
     # Obter o nome do usuário logado
     cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
     usuario_logado = cursor.fetchone()
-    if 'user_id' in session:
-        user_id = session['user_id']
-        if request.method == 'POST':
-            # Capturar os dados do formulário
-            user_id = request.form.get('user_id')
-            nome = request.form.get('nome')
-            email = request.form.get('email')
-            sn = request.form.get('sn', '')  # Atribui um valor padrão vazio se 'sn' não estiver presente
-            cargo = request.form.get('cargo')
-            senha = request.form.get('senha')
 
-            # Verificar se o usuário tem permissão para mudar cargos (somente admins)
-            if session['user_cargo'] == 'admin':
-                query_update = "UPDATE users SET nome = %s, email = %s, sn = %s, cargo = %s, senha = %s WHERE id = %s"
-                cursor.execute(query_update, (nome, email, sn, cargo, senha, user_id))
-            else:
-                query_update = "UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s"
-                cursor.execute(query_update, (nome, email, senha, user_id))
-            
-            conexao.commit()
-            flash('Usuário atualizado com sucesso!', 'success')
+    if request.method == 'POST':
+        user_id = request.form.get('user_id')
+        nome = request.form.get('nome')
+        email = request.form.get('email')
+        sn = request.form.get('sn', '')  # Atribui um valor padrão vazio se 'sn' não estiver presente
+        cargo = request.form.get('cargo')
+        senha = request.form.get('senha')
+
+        if session['user_cargo'] == 'admin':
+            query_update = "UPDATE users SET nome = %s, email = %s, sn = %s, cargo = %s, senha = %s WHERE id = %s"
+            cursor.execute(query_update, (nome, email, sn, cargo, senha, user_id))
+        else:
+            query_update = "UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s"
+            cursor.execute(query_update, (nome, email, senha, user_id))
+        
+        conexao.commit()
+        flash('Usuário atualizado com sucesso!', 'success')
 
     # Buscar todos os usuários
     cursor.execute("SELECT * FROM users")
@@ -467,20 +464,13 @@ def admin():
 
     return render_template('admin/admin.html', usuarios=usuarios, usuario=usuario_logado)
 
-
-
-
-
-
-
-
 @app.route('/aprovar_usuario', methods=['POST'])
 def aprovar_usuario():
     user_id = request.form['user_id']
     conexao = conectar_banco_dados()
     cursor = conexao.cursor()
 
-    # Atualiza o cargo do usuário
+    # Atualiza o cargo do usuário para 'almoxarifado'
     query_update = "UPDATE users SET cargo = 'almoxarifado' WHERE id = %s"
     cursor.execute(query_update, (user_id,))
     conexao.commit()
@@ -491,7 +481,6 @@ def aprovar_usuario():
     flash('Usuário aprovado com sucesso!', 'success')
     return redirect(url_for('admin'))
 
-
 @app.route('/excluir_usuario', methods=['POST'])
 def excluir_usuario():
     user_id = request.form['user_id']
@@ -500,15 +489,13 @@ def excluir_usuario():
     cursor = conexao.cursor()
 
     try:
-        # Remover referências na tabela lembretes
+        # Remover referências nas tabelas relacionadas
         query_delete_lembretes = "DELETE FROM lembretes WHERE destinatario = %s"
         cursor.execute(query_delete_lembretes, (user_id,))
 
-        # Remover referências na tabela requisicoes
         query_delete_requisicoes = "DELETE FROM requisicoes WHERE usuario_id = %s"
         cursor.execute(query_delete_requisicoes, (user_id,))
 
-        # Remover referências na tabela estoque
         query_delete_estoque = "DELETE FROM estoque WHERE usuario_id = %s"
         cursor.execute(query_delete_estoque, (user_id,))
 
@@ -519,7 +506,6 @@ def excluir_usuario():
 
         flash('Usuário excluído com sucesso!', 'success')
     except mysql.connector.errors.IntegrityError as e:
-
         flash('Não é possível excluir o usuário. Existem registros associados.', 'error')
         conexao.rollback()
     except Exception as e:
@@ -533,8 +519,38 @@ def excluir_usuario():
     return redirect(url_for('admin'))
 
 
+@app.route('/editar_usuario', methods=['POST', 'GET'])
+def editar_usuario():
+    user_id = request.form['user_id']  # Obtém o ID do usuário a ser editado
 
+    # Conectar ao banco de dados
+    conexao = conectar_banco_dados()
+    cursor = conexao.cursor(dictionary=True)
 
+    if request.method == 'POST':
+        # Captura os dados atualizados do formulário de edição
+        nome = request.form.get('nome')
+        email = request.form.get('email')
+        sn = request.form.get('sn', '')  # Atribui um valor vazio caso o SN não seja enviado
+        cargo = request.form.get('cargo')
+        senha = request.form.get('senha')
+
+        # Atualiza as informações do usuário no banco de dados
+        query_update = "UPDATE users SET nome = %s, email = %s, sn = %s, cargo = %s, senha = %s WHERE id = %s"
+        cursor.execute(query_update, (nome, email, sn, cargo, senha, user_id))
+        conexao.commit()
+
+        flash('Usuário atualizado com sucesso!', 'success')
+        return redirect(url_for('admin'))  # Redireciona para a página de administração após a atualização
+
+    # Busca os dados do usuário para preencher no formulário
+    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+    usuario = cursor.fetchone()
+
+    cursor.close()
+    conexao.close()
+
+    return render_template('editar_usuario.html', usuario=usuario)
 
 
 # ---------------------------------------------------- CONTROLE DE ESTOQUE ----------------------------------------------------
@@ -854,7 +870,6 @@ def requisicao_material():
                         materiais=materiais, 
                         minhas_requisicoes=minhas_requisicoes, 
                         usuario=usuario)
-
 
 
 

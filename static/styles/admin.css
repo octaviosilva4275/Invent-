@@ -45,7 +45,7 @@ body {
 
 
 body.light-mode {
-    background-color: var(--cinza);
+    background-color: white;
     color: var(--fonte);
 }
 body.dark-mode {
@@ -146,7 +146,7 @@ body.dark-mode {
     gap: 10px; /* Espaço entre os botões */
 }
 
-.aprovado, .excluir {
+.aprovado, .excluir, .editar {
     width: 100px;
     padding: 5px;
     margin-bottom: 5px;
@@ -185,4 +185,88 @@ body.dark-mode {
     margin-bottom: 20px;
     border-radius: 5px;
     border: 1px solid #ccc;
+}
+
+
+/* Modal */
+.modal {
+    display: none; /* Inicialmente oculto */
+    position: fixed;
+    z-index: 9999; /* Coloca o modal acima de outros elementos */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Permite rolar se necessário */
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+}
+
+/* Conteúdo do Modal */
+.modal-content {
+    background-color: white;
+    margin: 15% auto; /* Centraliza o conteúdo na tela */
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%; /* Largura do modal, você pode ajustar conforme necessário */
+    max-width: 600px; /* Limita a largura máxima */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo para o botão de fechar */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Alteração de cor ao passar o mouse sobre o botão de fechar */
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo dos formulários dentro do modal */
+.modal-content h2 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Inputs e botões dentro do modal */
+.modal-content input,
+.modal-content select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1.2rem;
+}
+
+/* Estilo do botão de salvar alterações */
+.modal-content button {
+    padding: 10px 20px;
+    background-color: #465E8C; /* Cor de fundo do botão */
+    color: white;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Alteração de cor ao passar o mouse sobre o botão de salvar */
+.modal-content button:hover {
+    background-color: #3c4f76; /* Cor mais escura no hover */
+    transform: scale(1.05);
+}
+
+
+.darkmode img {
+    left: 96vw;
 }
