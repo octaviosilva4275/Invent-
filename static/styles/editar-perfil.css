@@ -37,10 +37,7 @@ body {
     --fontedark : #fff;
 }
 
-body.light-mode {
-    background-color: var(--cinza);
-    color: var(--fonte);
-}
+
 body.dark-mode {
     background-color: var(--dark);
     color: var(--fontedark)
@@ -77,7 +74,7 @@ body.dark-mode {
 }
 
 .dark-mode label{
-    color: var(--cinza);
+    color: white;
 }
 /* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
 body.dark-mode {
