@@ -1,0 +1,196 @@
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    body {
+        background-color: #dce4f0; /* Cor de fundo conforme a imagem */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start; /* Garante que o conteúdo fique alinhado ao topo */
+        height: 100vh; /* Garante que o conteúdo seja centralizado verticalmente */
+        margin: 0;
+    }
+
+    .dark-mode  .form-estoque {
+       background-color: #000;
+    }
+
+    .form-estoque {
+        width: 100vw;
+    }
+
+    .campo-estoque {
+        flex-direction: column;
+        background-color: #dce4f0;
+        border-radius: 20px;
+        padding: 20px;
+        width: 95%; /* Largura quase completa para dispositivos menores */
+        max-width: 600px; /* Largura máxima */
+        box-sizing: border-box; /* Para garantir que o padding não afete a largura */
+        display: flex;
+        margin-top: 5%; /* Espaço entre o topo e o conteúdo */
+    }
+    .dark-mode .campo-estoque{
+        background-color: #000;
+    }
+
+    .titulo-estoque {
+        font-size: 2.8rem;
+        text-align: center; /* Centraliza o título */
+
+    }
+
+    /* Alinhamento dos campos 'Entrada' e 'Saída' */
+    .entrada, .saida {
+        width: 90%; /* Campos ocupam 90% da largura */
+        margin-bottom: 20%; /* Espaço entre os campos */
+        padding: 15px;
+        border-radius: 15px;
+        background-color: #b0bddb; /* Fundo mais claro */
+        box-sizing: border-box; /* Garante que o padding não afete a largura */
+        opacity: 0; /* Começam invisíveis */
+        animation-duration: 1s; /* Duração da animação */
+        animation-timing-function: ease-out; /* Tipo de transição */
+        animation-fill-mode: forwards; /* Mantém a posição final após a animação */
+    }
+
+    .entrada {
+        margin-left: 0; /* Campo de entrada encostado no lado esquerdo */
+        animation-name: entrar-esquerda; /* Animação do lado esquerdo */
+    }
+
+    .saida {
+        margin-left: auto; /* Campo de saída encostado no lado direito */
+        animation-name: entrar-direita; /* Animação do lado direito */
+    }
+
+    /* Animação para o campo de entrada surgindo do lado esquerdo */
+    @keyframes entrar-esquerda {
+        0% {
+            transform: translateX(-100%); /* Começa fora da tela, à esquerda */
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0); /* Termina na posição original */
+            opacity: 1;
+        }
+    }
+
+    /* Animação para o campo de saída surgindo do lado direito */
+    @keyframes entrar-direita {
+        0% {
+            transform: translateX(100%); /* Começa fora da tela, à direita */
+            opacity: 0;
+        }
+        100% {
+            transform: translateX(0); /* Termina na posição original */
+            opacity: 1;
+        }
+    }
+
+    .titulo-entrada, .titulo-saida {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: #2e3c57; /* Cor de título */
+    }
+
+    .select-estoque, .quant {
+        width: 100%; /* Inputs ocupam toda a largura */
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 8px;
+    }
+
+    .btn-estoque {
+        width: 100%; /* Botão ocupa toda a largura */
+        padding: 10px;
+        background-color: rgba(56, 71, 115, 1);
+        color: white;
+        border-radius: 10px;
+        text-align: center;
+        margin-top: 15px;
+    }
+}
+
+
+
+
+
+/* Responsividade para tablets e notebooks */
+@media (min-width: 768px) and (max-width: 1024px) {
+    body {
+        background-color: #dce4f0; /* Cor de fundo */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Centraliza verticalmente */
+        padding: 30px;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .form-estoque {
+        width: 90vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Garante o alinhamento central */
+        justify-content: center;
+    }
+    .dark-mode  .form-estoque {
+        background-color: #000;
+     }
+
+    .campo-estoque {
+        flex-direction: column;
+        background-color: #dce4f0;
+        border-radius: 25px;
+        padding: 30px;
+        width: 95%; /* Largura maior para melhor visibilidade */
+        max-width: 800px; /* Aumenta a largura máxima */
+        box-sizing: border-box;
+        display: flex;
+        margin-top: 3%;
+    }
+    .dark-mode .campo-estoque {
+        background-color: #000;
+    }
+
+    .titulo-estoque {
+        font-size: 4.5rem; /* Aumenta o tamanho da fonte */
+        text-align: center;
+        margin-bottom: 20%; /* Ajusta o espaçamento */
+    }
+
+    .entrada, .saida {
+        width: 90%; /* Campos maiores */
+        margin-bottom: 15%;
+        padding: 20px; /* Aumenta o padding para melhor usabilidade */
+        border-radius: 20px;
+        background-color: #b0bddb;
+        box-sizing: border-box;
+    }
+
+    .titulo-entrada, .titulo-saida {
+        font-size: 3rem; /* Aumenta o tamanho da fonte */
+        margin-bottom: 15px;
+        color: #2e3c57;
+    }
+
+    .select-estoque, .quant {
+        width: 100%;
+        padding: 15px; /* Aumenta o padding */
+        margin-top: 15px;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: large;
+    }
+
+    .btn-estoque {
+        width: 100%;
+        padding: 15px; /* Botão maior */
+        background-color: rgba(56, 71, 115, 1);
+        color: white;
+        border-radius: 12px;
+        text-align: center;
+        margin-top: 20px;
+    }
+}

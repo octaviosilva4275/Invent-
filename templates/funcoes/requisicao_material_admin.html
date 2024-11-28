@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Pedido</title>
+
+    <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/requisicoes-adm.css') }}">
+</head>
+<body>
+    {% include '/dashboard/dashboard.html' %}
+    <main>
+        <div class="darkmode">
+            <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+            <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+        </div>
+
+        <section class="solicitacao">
+            <div class="container-solicitacao">
+                <h1 class="titulo-solicitacao">Solicitação de Pedido
+                    <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#filtroModal">
+                        Filtros
+                    </button>
+                </h1>
+
+                <div class="campo-solicitacao">
+                    <table class="tabela-solicitacao table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Nome do Solicitante</th>
+                                <th>Produto</th>
+                                <th>Status</th>
+                                <th>Observação</th>
+                                <th>Última Atualização</th>
+                                <th>Quantidade</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-corpo">
+                            {% for requisicao in requisicoes %}
+                            <tr class="requisicao" data-nome="{{ requisicao.usuario | lower }}" data-produto="{{ requisicao.material | lower }}" data-status="{{ requisicao.status | lower }}">
+                                <td>{{ requisicao.usuario }}</td>
+                                <td>{{ requisicao.material }}</td>
+                                <td class="{{ requisicao.status | lower | replace(" ", "-") }}">{{ requisicao.status }}</td>
+                                <td>{{ requisicao.observacao }}</td>
+                                <td>{{ requisicao.data_atualizacao }}</td>
+                                <td>{{ requisicao.quantidade }}</td>
+                                <td>
+                                    <div class="btn-solicitacao">
+                                        {% if requisicao.status == 'Retirado' %}
+                                            <a href="{{ url_for('relatorios') }}" class="btn btn-primary">
+                                                VER RELATORIO
+                                            </a>
+                                        {% else %}
+                                            <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
+                                            <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
+                                                data-id="{{ requisicao.id }}"
+                                                data-material="{{ requisicao.material }}"
+                                                data-quantidade="{{ requisicao.quantidade }}"
+                                                data-estoque="{{ requisicao.quantidade_estoque }}">
+                                                Ações
+                                            </button>
+                                        
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+<!-- Modal de Filtro -->
+<div class="modal fade" id="filtroModal" tabindex="-1" role="dialog" aria-labelledby="filtroModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filtroModalLabel">Filtros</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="filtro-nome">Nome do Solicitante</label>
+                    <input type="text" class="form-control" id="filtro-nome" placeholder="Filtrar por nome">
+                </div>
+                <div class="form-group">
+                    <label for="filtro-produto">Produto</label>
+                    <input type="text" class="form-control" id="filtro-produto" placeholder="Filtrar por produto">
+                </div>
+                <div class="form-group">
+                    <label for="filtro-status">Status</label>
+                    <select class="form-control" id="filtro-status">
+                        <option value="">Selecione</option>
+                        <option value="solicitado">Solicitado</option>
+                        <option value="disponivel para retirada">Disponível para Retirada</option>
+                        <option value="aguardando reposição">Aguardando Reposição</option>
+                        <option value="retirado">Retirado</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="limpar-filtros">Limpar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="filtro-aplicar">Aplicar Filtro</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal de Ações -->
+<div class="modal fade" id="acaoModal" tabindex="-1" role="dialog" aria-labelledby="acaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="acaoModalLabel">Ação para Requisição</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-material"></p>
+                <p id="modal-quantidade"></p>
+                <p id="modal-estoque"></p>
+
+                <!-- Novo campo para escolher a ação -->
+                <div class="form-group">
+                    <label for="acao-status">Escolha a Ação</label>
+                    <select class="form-control" id="acao-status">
+                        <option value="Disponivel para retirada">Disponível para Retirada</option>
+                        <option value="Aguardando reposição">Aguardando Reposição</option>
+                        <option value="Retirado">Retirado</option>
+                        <option value="Aprovada">Aprovada</option>
+                    </select>
+                </div>
+
+                <form id="acaoForm">
+                    <input type="hidden" id="requisicao_id">
+                    <!-- Adicionar outros campos conforme necessário -->
+                </form>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary" id="confirmar-acao">Confirmar Ação</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Carregamento -->
+<div class="modal" tabindex="-1" id="loadingModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Aguarde...</h5>
+        </div>
+        <div class="modal-body">
+          <p>Estamos processando a sua solicitação. Isso pode levar alguns segundos.</p>
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Carregando...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+        </section>
+    </main>
+
+<script>
+    $(document).ready(function() {
+    // Função para adicionar classes de status às linhas da tabela
+    $('tr.requisicao').each(function() {
+        var status = $(this).find('td:nth-child(3)').text().trim().toLowerCase();
+        switch (status) {
+            case 'solicitado':
+                $(this).find('td:nth-child(3)').addClass('status-solicitado');
+                break;
+            case 'disponivel para retirada':
+                $(this).find('td:nth-child(3)').addClass('status-disponivel');
+                break;
+            case 'aguardando reposição':
+                $(this).find('td:nth-child(3)').addClass('status-aguardando');
+                break;
+            case 'retirado':
+                $(this).find('td:nth-child(3)').addClass('status-retirado');
+                break;
+            default:
+                console.warn('Status desconhecido:', status);
+        }
+    });
+
+    // Aplicação de classes de status com base no texto
+    $('tr.requisicao').each(function() {
+        var status = $(this).find('td:eq(2)').text().toLowerCase();
+        $(this).addClass(status.replace(/\s+/g, '-'));
+    });
+
+
+// Função para aplicar os filtros
+$('#filtro-aplicar').click(function() {
+    var nome = $('#filtro-nome').val().toLowerCase();
+    var produto = $('#filtro-produto').val().toLowerCase();
+    var status = $('#filtro-status').val().toLowerCase();
+
+    $('#tabela-corpo tr').each(function() {
+        var tr_nome = $(this).data('nome');
+        var tr_produto = $(this).data('produto');
+        var tr_status = $(this).data('status');
+
+        if (
+            (nome === '' || tr_nome.indexOf(nome) > -1) &&
+            (produto === '' || tr_produto.indexOf(produto) > -1) &&
+            (status === '' || tr_status.indexOf(status) > -1)
+        ) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+
+    // Fechar o modal após aplicar os filtros
+    $('#filtroModal').modal('hide');
+
+    // Remover manualmente o backdrop se ele não desaparecer
+    $('.modal-backdrop').remove();
+});
+
+    $('#limpar-filtros').click(function() {
+    // Limpa os campos de filtro
+    $('#filtro-nome').val('');
+    $('#filtro-produto').val('');
+    $('#filtro-status').val('');
+    
+    // Exibe todas as linhas na tabela novamente
+    $('#tabela-corpo tr').show();
+});
+
+    $('#acaoForm').submit(function(e) {
+        e.preventDefault();
+        var id = $('#requisicao_id').val();
+        var status = $('#acao-status').val();
+        $.ajax({
+            url: '/atualizar_status',
+            method: 'POST',
+            data: {
+                id: id,
+                status: status
+            },
+            success: function(response) {
+                $('#acaoModal').modal('hide');
+                location.reload();
+            }
+        });
+    });
+
+    // Evento para abrir o modal de ação e preencher os dados
+    $('#tabela-corpo').on('click', '.btn-aguardo', function() {
+        var button = $(this);
+        
+        var requisicaoId = button.data('id');
+        var material = button.data('material');
+        var quantidade = button.data('quantidade');
+        var estoque = button.data('estoque');
+        
+        // Preenche os campos do modal
+        $('#acaoModal #requisicao_id').val(requisicaoId);
+        $('#acaoModal #modal-material').text('Material: ' + material);
+        $('#acaoModal #modal-quantidade').text('Quantidade: ' + quantidade);
+        $('#acaoModal #modal-estoque').text('Estoque: ' + estoque);
+        
+        // Exibe o modal
+        $('#acaoModal').modal('show');
+    });
+
+    $('#confirmar-acao').on('click', function() {
+    var requisicaoId = $('#requisicao_id').val();
+    var acaoStatus = $('#acao-status').val();  // Pega o status selecionado
+    
+    // Exibe o modal de carregamento
+    $('#loadingModal').modal('show');
+
+    // Realiza a atualização do status via AJAX
+    $.ajax({
+        url: '/atualizar_requisicao',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            requisicao_id: requisicaoId,
+            acao: acaoStatus  // Envia a nova ação para o backend
+        }),
+        success: function(response) {
+            if (response.success) {
+                alert('Ação confirmada com sucesso!');
+                location.reload();  // Atualiza a página para refletir a mudança
+            } else {
+                alert('Erro ao confirmar ação');
+            }
+        },
+        error: function(xhr, status, error) {
+            alert('Erro na requisição AJAX: ' + error);
+        },
+        complete: function() {
+            // Fecha o modal de carregamento
+            $('#loadingModal').modal('hide');
+        }
+    });
+
+    // Fecha o modal de Ação
+    $('#acaoModal').modal('hide');
+});
+
+});
+
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

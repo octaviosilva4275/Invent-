@@ -1,0 +1,50 @@
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+    /* Centralizar as caixas verticalmente */
+    .container-caixas {
+        flex-direction: column; /* Alinha as caixas verticalmente */
+        align-items: center;
+        width: 100%; /* Ocupa toda a largura */
+        gap: 2rem; /* Espaço entre as caixas */
+    }
+
+    .caixa {
+        width: 90%; /* Ocupa 90% da largura da tela */
+        max-width: 300px; /* Limite de largura para caixas maiores */
+        font-size: 1.6rem; /* Tamanho da fonte adequado para mobile */
+    }
+
+    /* Ajustar o painel de histórico */
+    .container-historico {
+        width: 90%; /* Ocupa 90% da largura da tela */
+        max-width: 400px; /* Limite de largura */
+        margin: 20px auto; /* Espaçamento acima e abaixo */
+        height: auto; /* Ajusta a altura ao conteúdo */
+        padding: 20px; /* Reduz o padding */
+    }
+
+    .header-historico {
+        font-size: 1.8rem; /* Aumenta o título */
+    }
+
+    .painel-solicitante {
+        flex-direction: column; /* Alinha os elementos verticalmente */
+        gap: 1rem; /* Adiciona espaço entre os itens */
+    }
+
+    .painel-solicitante div {
+        align-items: flex-start; /* Alinha os textos à esquerda */
+    }
+
+    .divider {
+        display: none; /* Remove o divisor no layout vertical */
+    }
+
+    /* Ajuste do ícone de dark mode */
+    .darkmode img {
+        width: 30px; /* Reduz o tamanho dos ícones */
+        height: 30px;
+        left: 5px; /* Ajusta a posição no canto esquerdo */
+        top: 5px;
+    }
+}

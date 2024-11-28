@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invent +</title>
+    <link rel="stylesheet" href="/static/styles/index.css">
+</head>
+<body>
+    <div class="banner">
+        <h1 class="invent-plus visible">Por onde deseja começar?</h1>
+        <div class="botoes">
+            <button class="btn visible">Cadastro Material</button>
+            <button class="btn visible">Relatórios</button>
+            <button class="btn visible">Gerenciar Almoxarife</button>
+            <button class="btn visible">Requisição Material</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const texts = document.querySelectorAll('.text');
+    const buttons = document.querySelectorAll('.btn');
+
+    // Função para revelar textos
+    function revealTexts() {
+        texts.forEach((text, index) => {
+            setTimeout(() => {
+                text.classList.add('visible');
+            }, index * 500);
+        });
+    }
+
+    // Função para revelar botões com direções aleatórias
+    function revealButtons() {
+        buttons.forEach((button, index) => {
+            setTimeout(() => {
+                button.classList.add('visible');
+            }, (index + 1) * 500);
+        });
+    }
+
+    // Executa as funções de revelação de texto e botões
+    revealTexts();
+    revealButtons();
+});
+
+    </script>
+</body>
+</html>

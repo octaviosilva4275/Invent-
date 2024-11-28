@@ -1,0 +1,249 @@
+/* 
+   Normalização do Navegador
+   - Remove margens e paddings padrão de todos os elementos.
+   - Define a caixa de todos os elementos como "box-sizing: border-box".
+   - Remove o estilo de lista e a sublinha de links.
+   - Define a fonte padrão 'Amatic SC'.
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
+    border: none;
+    font-family: 'Amatic SC', sans-serif;
+}
+
+/* 
+   Normalização do HTML e body
+   - Define a largura e altura como 100% da viewport.
+   - Ajusta a unidade rem para que 1rem seja equivalente a 10px.
+   - Remove o overflow horizontal.
+*/
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 62.5%;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+:root{
+    --cinza: #ffffff;
+    --dark: #04050D;
+    --fundo : #aab5ca;
+    --fundodark :#465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+body.light-mode {
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+.none {
+    display: none;
+}
+
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    right: 10px; /* Posiciona a imagem no lado direito */
+    top: 10px; /* Ajusta a distância da parte superior */
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+.dark-mode .campo-estoque{
+    background-color: var(--fundodark);
+}
+.estoque {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.campo-estoque {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:rgba(70, 94, 140, 0.51);
+    padding: 50px;
+    border-radius: 30px;
+    max-width: 900px;
+    flex-direction: column;
+    width: 100%;
+    height: 80%;
+}
+
+.select-estoque{
+    margin-bottom: 15px;
+}
+
+
+.form-estoque {
+    text-align: left;
+    width: 100%;
+}
+
+.titulo-estoque{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+}
+
+.titulo-entrada, .titulo-saida{
+    margin-bottom: 5px;
+}
+
+.entrada, .saida {
+    margin-top: 40px;
+    font-size: larger;
+}
+
+.search-estoque, .quant, #search-entrada{
+    width: 100%;
+    padding: 15px;
+    margin-top: 0px;
+    border-radius: 9px;
+    box-sizing: border-box; /* garante que padding não afete a largura */
+}
+
+
+        /* Estilos básicos para o container de busca */
+        .search-container {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .search-estoque {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        .search-estoque:focus {
+            border-color: rgba(70, 94, 140, 0.51); /* Cor de foco */
+            outline: none;
+        }
+
+        .lista-estoque {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-top: none;
+            max-height: 200px;  /* Altura máxima com overflow */
+            overflow-y: auto;   /* Faz com que a lista tenha rolagem */
+            background-color: #fff;
+            font-size: 14px;
+            position: absolute;
+            width: 100%;
+            z-index: 1;
+            border-radius: 4px;
+            display: none;  /* Oculta por padrão */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            transition: opacity 0.3s ease-in-out;  /* Animação suave de entrada e saída */
+        }
+
+        .item-estoque {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .item-estoque:hover {
+            background-color: #f0f0f0;
+        }
+
+        .item-estoque:hover {
+            background-color: #f0f0f0; /* Destaque ao passar o mouse */
+        }
+    
+        /* Estilização personalizada da barra de rolagem */
+        /* Para navegadores Webkit (Chrome, Safari, Edge, etc.) */
+        .lista-estoque::-webkit-scrollbar {
+            width: 8px;  /* Largura da barra de rolagem */
+            background-color: #f0f0f0;  /* Cor de fundo da barra de rolagem */
+        }
+    
+        .lista-estoque::-webkit-scrollbar-thumb {
+            background-color: rgba(70, 94, 140, 0.51);  /* Cor do "polegar" da barra de rolagem */
+            border-radius: 10px;  /* Bordas arredondadas */
+            transition: background-color 0.3s ease;  /* Transição suave */
+        }
+    
+        .lista-estoque::-webkit-scrollbar-thumb:hover {
+            background-color: #45a049;  /* Cor do "polegar" ao passar o mouse */
+        }
+    
+        .lista-estoque::-webkit-scrollbar-track {
+            background-color: #e0e0e0;  /* Cor do fundo da trilha da barra de rolagem */
+            border-radius: 10px;  /* Bordas arredondadas */
+        }
+    
+        /* Para Firefox (estilização da barra de rolagem com scrollbar-width) */
+        .lista-estoque {
+            scrollbar-width: thin;  /* Espessura da barra de rolagem */
+            scrollbar-color: rgba(70, 94, 140, 0.51) #e0e0e0;  /* Cor do "polegar" e fundo da trilha */
+        }
+
+#quantidade{
+    margin-top: 20px;
+}
+
+.btn-estoque {
+    width: 20%;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 15px ;
+    color: white;
+    background-color: rgba(56, 71, 115, 1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+
+.dark-mode .btn-estoque{
+    background-color: rgba(25, 35, 64, 1);
+}
+
+.btn-estoque:hover {
+    background-color: rgba(25, 35, 64, 0.8); /* Cor mais clara ou outra cor quando o mouse estiver sobre o botão */
+    transform: scale(1.05);
+}

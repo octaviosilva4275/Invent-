@@ -1,13 +1,51 @@
 
 /* Media Queries para Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .container {
-        flex-direction: column;
+        margin: auto;
+        margin-left: 25px;
+        width: calc(100% - 25px);
     }
 
     .container-saidas,
     .container-estoque {
+        width: 35%;
+
+    }
+
+    .fa-check,
+    .fa-exclamation {
+        font-size: 20px;
+    }
+
+    .fa-check {
+        right: 10px;
+        top: 10px;
+        transform: scale(1.5 , 1.5);
+        
+    }
+
+    .fa-exclamation {
+        right: 10px;
+        top: 10px;
+        transform: scale(1.5 , 1.5);
+    }
+
+}
+
+
+/* Media Queries para Responsividade */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        margin: auto;
+        margin-left: auto;
         width: 85%;
+    }
+
+    .container-saidas,
+    .container-estoque {
+        width: 100%;
         margin: 10px 0;
     }
 
@@ -28,10 +66,59 @@
         top: 10px;
         transform: scale(1.5 , 1.5);
     }
-    .container{
-        margin-left: 35px;
+
+}
+
+
+
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    /* Esconder a estrutura da tabela e mostrar os blocos empilhados */
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    /* Ocultar o cabeçalho da tabela */
+    thead {
+        display: none;
+    }
+
+    /* Estilo para cada linha da tabela */
+    tbody tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    /* Estilo para cada célula */
+    tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+    }
+
+    /* Adicionar pseudo-elemento para cada célula que contenha o rótulo */
+    tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    /* Remover borda da última célula */
+    tbody td:last-child {
+        border-bottom: none;
     }
 }
+
 
 @media (max-width: 480px) {
     .fa-check,

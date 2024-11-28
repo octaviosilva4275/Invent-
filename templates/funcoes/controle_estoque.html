@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Estoque</title>
+    <link rel="stylesheet" href="/static/styles/controle-estoque.css">
+    <script src="/static/javascript/darkmode.js"></script>
+    <link rel="stylesheet" href="/static/styles/medias/media-controle-estoque.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<main>
+    {% include '/dashboard/dashboard.html' %}
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
+    
+    <section class="estoque">
+        <div class="campo-estoque">
+            <h1 class="titulo-estoque">Controle de Estoque</h1>
+
+            <form class="form-estoque" method="POST" action="{{ url_for('registrar_entrada') }}">
+                <div class="entrada">
+                    <h2 class="titulo-entrada">Entrada</h2>
+                    <div class="search-container">
+                        <input type="text" id="search-entrada" class="search-estoque" placeholder="Pesquise o item..." onclick="toggleList('lista-entrada')" autocomplete="off">
+                        <ul id="lista-entrada" class="lista-estoque">
+                            {% for material in materiais %}
+                                <li class="item-estoque" data-id="{{ material.id }}" data-descricao="{{ material.descricao }}">
+                                    {{ material.descricao }} ({{ material.codigo_produto }}) - Disponível: {{ material.quantidade_disponivel }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Campo oculto para enviar o material_id -->
+                    <input type="hidden" id="material_id_entrada" name="material_id" value="">
+                    <input class="quant" type="number" name="quantidade" placeholder="Quantidade" required>
+                    <button class="btn-estoque" type="submit">Confirmar Entrada</button>
+                </div>
+            </form>
+
+
+
+            <form class="form-estoque" method="POST" action="{{ url_for('registrar_saida') }}">
+                <div class="saida">
+                    <h2 class="titulo-saida">Saída</h2>
+                    <div class="search-container">
+                        <input type="text" id="search-saida" class="search-estoque" placeholder="Pesquise o item..." onclick="toggleList('lista-saida')" autocomplete="off">
+                        <ul id="lista-saida" class="lista-estoque">
+                            {% for material in materiais %}
+                                <li class="item-estoque" data-id="{{ material.id }}" data-descricao="{{ material.descricao }}">
+                                    {{ material.descricao }} ({{ material.codigo_produto }}) - Disponível: {{ material.quantidade_disponivel }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- Campo oculto para enviar o material_id -->
+                    <input type="hidden" id="material_id_saida" name="material_id" value="">
+                    <input class="quant" type="number" name="quantidade" placeholder="Quantidade" required>
+                    <button class="btn-estoque" type="submit">Confirmar Saída</button>
+                </div>
+            </form>
+            
+            
+            
+            
+
+            
+            
+            
+        </div>
+    </section>
+</main>
+
+<script>
+// Função para alternar a visibilidade da lista de itens
+function toggleList(listId) {
+    var list = document.getElementById(listId);
+    // Alterna a visibilidade da lista
+    list.style.display = list.style.display === 'block' ? 'none' : 'block';
+}
+
+// Função para filtrar os itens com base na pesquisa
+function filterItems(searchInputId, listId) {
+    var searchInput = document.getElementById(searchInputId);
+    var list = document.getElementById(listId);
+    var items = list.getElementsByTagName('li');
+    
+    var searchText = searchInput.value.toLowerCase();
+    
+    // Mostrar ou ocultar itens conforme o texto de busca
+    Array.from(items).forEach(function(item) {
+        var descricao = item.getAttribute('data-descricao').toLowerCase();
+        if (descricao.indexOf(searchText) > -1) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+
+// Ordenar a lista de itens alfabeticamente
+function sortItems(listId) {
+    var list = document.getElementById(listId);
+    var items = Array.from(list.getElementsByTagName('li'));
+    
+    items.sort(function(a, b) {
+        var textA = a.getAttribute('data-descricao').toLowerCase();
+        var textB = b.getAttribute('data-descricao').toLowerCase();
+        return textA.localeCompare(textB);
+    });
+    
+    items.forEach(function(item) {
+        list.appendChild(item); // Reanexar os itens ordenados
+    });
+}
+
+// Chamar a função de ordenação quando a página carregar
+window.onload = function() {
+    sortItems('lista-entrada');
+    sortItems('lista-saida');
+};
+
+// Adicionar evento de busca
+document.getElementById('search-entrada').addEventListener('input', function() {
+    filterItems('search-entrada', 'lista-entrada');
+});
+
+document.getElementById('search-saida').addEventListener('input', function() {
+    filterItems('search-saida', 'lista-saida');
+});
+
+// Fechar a lista de itens quando o input perder o foco
+document.getElementById('search-entrada').addEventListener('blur', function() {
+    setTimeout(function() { 
+        document.getElementById('lista-entrada').style.display = 'none';
+    }, 200); // Adiciona um pequeno delay para permitir o clique na lista
+});
+
+document.getElementById('search-saida').addEventListener('blur', function() {
+    setTimeout(function() { 
+        document.getElementById('lista-saida').style.display = 'none';
+    }, 200); // Adiciona um pequeno delay para permitir o clique na lista
+});
+
+// Função para preencher os campos de entrada
+document.getElementById('lista-entrada').addEventListener('click', function(event) {
+    if (event.target && event.target.matches('.item-estoque')) {
+        var materialId = event.target.getAttribute('data-id');
+        var descricao = event.target.getAttribute('data-descricao');
+        
+        // Preenche o campo de pesquisa com o texto do item clicado
+        document.getElementById('search-entrada').value = descricao;
+        
+        // Preenche o campo oculto com o material_id
+        document.getElementById('material_id_entrada').value = materialId;
+        
+        // Fechar a lista de itens após a seleção
+        document.getElementById('lista-entrada').style.display = 'none';
+    }
+});
+
+// Função para preencher os campos de saída
+document.getElementById('lista-saida').addEventListener('click', function(event) {
+    if (event.target && event.target.matches('.item-estoque')) {
+        var materialId = event.target.getAttribute('data-id');
+        var descricao = event.target.getAttribute('data-descricao');
+        
+        // Preenche o campo de pesquisa com o texto do item clicado
+        document.getElementById('search-saida').value = descricao;
+        
+        // Preenche o campo oculto com o material_id
+        document.getElementById('material_id_saida').value = materialId;
+        
+        // Fechar a lista de itens após a seleção
+        document.getElementById('lista-saida').style.display = 'none';
+    }
+});
+
+</script>
+
+</body>
+</html>

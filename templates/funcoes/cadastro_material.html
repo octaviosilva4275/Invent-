@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Materiais</title>
+    <link rel="stylesheet" href="/static/styles/cadastro-materias.css">
+    <script src="/static/darkmode js/darkmode.js"></script>
+    <link rel="stylesheet" href="/static/styles/medias/media-cadastro-materias.css">
+</head>
+<body>
+<main>
+    {% include '/dashboard/dashboard.html' %}
+    
+    <div class="darkmode">
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon" >
+        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+    </div>
+    
+    <section class="material">
+        <div class="campo-material">
+            <form class="form-material" method="POST" action="{{ url_for('cadastro_material') }}">
+                <h1 class="titulo-material">Cadastro de Materiais</h1>
+
+                <input class="input-material" name="nome_produto" type="text" placeholder="Nome do produto" required>
+                <input class="input-material" name="descricao_produto" type="text" placeholder="Descrição do produto" required>
+                
+                <div class="estoques">
+                    <input class="input-material" name="estoque_minimo" type="number" placeholder="Estoque mínimo" required>
+                    <input class="input-material" name="codigo_produto" type="number" placeholder="Código Produto" required>
+                </div>
+                
+                <select class="select-categoria" name="categoria" required>
+                    <option value="">Categoria</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria }}">{{ categoria }}</option>
+                    {% endfor %}
+                </select>
+                
+                <button class="btn-material" type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

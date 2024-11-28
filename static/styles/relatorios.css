@@ -1,0 +1,235 @@
+:root {
+    --branco: #f4f4f4;
+    --dark: #04050D;
+    --fundo: #465E8C;
+    --fundodark: black;
+    --fonte: #000;
+    --fontedark: #fff;
+    --fundotabela: #192340CC;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--branco);
+    color: var(--fonte);
+}
+
+.container {
+    max-width: 60%;
+    margin: auto;
+    margin-top: 30px;
+    background: #a8b4cc;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    text-align: center;
+    color: #333;
+}
+
+button {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: var(--fundo);
+    color: var(--branco);
+    border: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #3b4f72;
+}
+
+select {
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.tabela table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabela th, .tabela td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    color: #fff;
+}
+
+.tabela th {
+    background-color: #99a5bd;
+}
+
+.tabela td {
+    background-color: var(--fundotabela);
+}
+
+canvas.meu-canvas {
+    height: auto !important; /* Sobrescreve a altura inline */
+    width: 100% !important; /* Sobrescreve a largura inline */
+    box-sizing: border-box !important; /* Garantir que não seja alterado */
+    display: block !important;
+}
+
+
+.dark-mode {
+    background-color: var(--fundodark);
+    color: var(--fontedark);
+}
+
+.dark-mode .container {
+    background-color: var(--fundo);
+    color: var(--fontedark);
+}
+
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    left: 95%;
+    top: 5px;
+    width: 40px;
+    height: 40px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    h1, h2, h3 {
+        font-size: 1.5rem;
+    }
+
+    button {
+        width: 90%;
+        font-size: 14px;
+    }
+
+    select {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    .tabela th, .tabela td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .darkmode img {
+        left: 90%;
+        width: 35px;
+        height: 35px;
+    }
+    
+}
+
+@media (max-width: 480px) {
+    h1, h2, h3 {
+        font-size: 1.2rem;
+    }
+
+    button {
+        width: 100%;
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    select {
+        width: 100%;
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .tabela th, .tabela td {
+        font-size: 10px;
+        padding: 5px;
+    }
+
+    .darkmode img {
+        left: 85%;
+        width: 30px;
+        height: 30px;
+    }
+    .container {
+        max-width: 100%;
+        margin-top:0px;
+        border-radius: 0px;
+    }
+
+}
+
+
+body.light-mode {
+    background-color: var(--branco);
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--fundodark);
+}
+
+
+.dark-mode h2{
+    color: var(--branco);
+}
+
+.none {
+    display: none;
+}
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    left: 97%;
+    top: 0;
+    width: 40px;
+    height: 40px;
+    margin: 5px 5px;
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.dark-mode button{
+    background-color: rgba(25, 35, 64, 1);
+}
+
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+.dark-mode .container-solicitacao {
+background-color: #465E8C;
+}
+
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+.dark-mode .titulo-solicitacao {
+    color: white;
+}
+
+
+.dark-mode h1, h2, h3 {
+    color: var(--branco);
+}
