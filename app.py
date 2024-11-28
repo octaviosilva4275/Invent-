@@ -30,64 +30,20 @@ app.secret_key = 'teste'
 EMAIL_USER = os.getenv('EMAIL_USER')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
-# Código para autenticação
-# account_sid = "ACc1f8fd89246833c6ec94946e9addeb12"
-# auth_token = "72fd4f9768bcbe85fbbe65d0093280af"
-
-
-
-# client = Client(account_sid, auth_token)
-
-
-# Codigo para autentificação
-
-# account_sid = "ACc1f8fd89246833c6ec94946e9addeb12"
-
-# auth_token = "72fd4f9768bcbe85fbbe65d0093280af"
-# client = Client(account_sid, auth_token)
-
-# message = client.messages.create(
-#     to="+5516992360708",
-#     from_="+12542216778",
-#     body=f'Mensagem enviada')
-# print(message.sid)
-
-# def verificar_tabela():
-#     try:
-#         conexao = mysql.connector.connect(
-#             host=os.getenv('MYSQL_HOST'),
-#             user=os.getenv('MYSQL_USER'),
-#             password=os.getenv('MYSQL_PASSWORD'),
-#             database=os.getenv('MYSQL_DB'),
-#             port=int(os.getenv('MYSQL_PORT'))
-#         )
-#         cursor = conexao.cursor()
-#         cursor.execute("SHOW TABLES")
-#         tables = cursor.fetchall()
-#         print("Tabelas no banco de dados:")
-#         for table in tables:
-#             print(table[0])
-#         cursor.close()
-#         conexao.close()
-#     except mysql.connector.Error as err:
-#         print(f"Erro: {err}")
-
-# verificar_tabela()
-
 
 
 def conectar_banco_dados():
     try:
         print("Tentando conectar ao banco de dados remoto...")
         conexao = mysql.connector.connect(
-            host='inventcc.mysql.database.azure.com',
-            user='invent@inventcc',
-            password='SENAI2024.',
-            database='almoxarifado',
-            # host='localhost',
-            # user='tcc',
-            # password='123',
+            # host='inventcc.mysql.database.azure.com',
+            # user='invent@inventcc',
+            # password='SENAI2024.',
             # database='almoxarifado',
+            host='localhost',
+            user='tcc',
+            password='123',
+            database='almoxarifado',
         )
         print("Conexão estabelecida com sucesso!")
         return conexao

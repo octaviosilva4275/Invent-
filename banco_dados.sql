@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     sn VARCHAR(100) NOT NULL UNIQUE,
     nome VARCHAR(100),
     email VARCHAR(100) UNIQUE,
-    senha VARCHAR(100),a
+    senha VARCHAR(100),
     cargo VARCHAR(100)
 );
 

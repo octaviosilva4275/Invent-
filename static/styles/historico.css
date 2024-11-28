@@ -124,6 +124,12 @@ body.dark-mode {
     background-color: #c70000;
     width: 250px;
     font-size: 20px;
+    text-align: center;
+}
+
+.estoque-minimo a{
+    text-decoration: none;
+    color: white;
 }
 
 .estoque-minimo::after {
@@ -152,7 +158,10 @@ body.dark-mode {
     font-size: 2.5rem;
     margin-top: 10px;
     margin-right: 180px;
+    padding-left: 20px;
 }
+
+
 
 .container-historico {
     background-color: #16203a; 

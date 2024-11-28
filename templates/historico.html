@@ -21,17 +21,21 @@
         <div class="container-caixas">
             <!-- Red Box -->
             <div class="caixa estoque-minimo">
+                <a href="{{ url_for('estoque_minimo') }}">
                 <div>Estoque mínimo</div>
-                <span>X</span>
+                <span>{{ estoque_minimo }} Itens</span>
+            </a>
+            </a>
             </div>
 
             <!-- Green Box -->
             <div class="caixa saidas">
                 <div>Saídas</div>
-                <span>X</span>
+                <span>{{ total_retirados }} Itens</span>
             </div>
         </div>
 
+        {% for item in historico_hoje %}
         <!-- Panel -->
         <div class="container-historico">
             <!-- Panel Header -->
@@ -44,15 +48,16 @@
                 <div>
                     <span># Solicitante</span>
                     <div class="circle"></div>
-                    <div>User 01</div>
+                    <div>{{ item.usuario }}</div>
                 </div>
                 <div class="divider"></div>
                 <div>
                     <span>Data</span>
-                    <div class="date">12 / 04 / 2024</div>
+                    <div class="date">{{ item.data_atualizacao.strftime('%H:%M:%S') if item.data_atualizacao else 'N/A' }}</div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </main>
 
 </body>
