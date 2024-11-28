@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="/static/styles/requisicoes.css">
     <script src="/static/darkmode js/darkmode.js"></script>
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
-
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <title>Requisição de Materiais</title>
 </head>
@@ -16,9 +15,14 @@
     <div id="tutorial-overlay">
         {% for step in range(1, 6) %}
         <div class="tutorial-message step-{{ step }}" {% if step != 1 %} style="display: none;" {% endif %}>
-            <p>{% if step == 1 %} Selecione o material desejado aqui. {% elif step == 2 %} Informe a quantidade desejada neste campo.
-            {% elif step == 3 %} Adicione uma observação, se necessário. {% elif step == 4 %} Clique aqui para enviar sua requisição.
-            {% elif step == 5 %} Aqui estão suas requisições feitas. {% endif %}</p>
+            <p>
+                {% if step == 1 %} Selecione o material desejado aqui. 
+                {% elif step == 2 %} Informe a quantidade desejada neste campo.
+                {% elif step == 3 %} Adicione uma observação, se necessário. 
+                {% elif step == 4 %} Clique aqui para enviar sua requisição. 
+                {% elif step == 5 %} Aqui estão suas requisições feitas. 
+                {% endif %}
+            </p>
             <button class="next-step">{% if step < 5 %} Próximo {% else %} Fechar Tutorial {% endif %}</button>
         </div>
         {% endfor %}
@@ -40,11 +44,18 @@
                         <input type="text" id="search-entrada" class="search-estoque" placeholder="Pesquise o item..." onclick="toggleList('lista-entrada')" autocomplete="off">
                         <input type="hidden" id="material_id_entrada" name="material_id">
                         <ul id="lista-entrada" class="lista-estoque" style="display: none;">
-                            {% for material in materiais %}
-                                <li class="item-estoque" data-id="{{ material.id }}" data-descricao="{{ material.descricao }}" data-quantidade="{{ material.quantidade }}">
-                                    {{ material.descricao }} - Disponível: {{ material.quantidade }}
-                                </li>
-                            {% endfor %}
+                            {% if materiais %}
+                                {% for material in materiais %}
+                                    <li class="item-estoque"
+                                        data-id="{{ material.id }}"
+                                        data-descricao="{{ material.descricao }}"
+                                        data-quantidade="{{ material.quantidade_disponivel }}">
+                                        {{ material.descricao }} - Disponível: {{ material.quantidade_disponivel }}
+                                    </li>
+                                {% endfor %}
+                            {% else %}
+                                <li>Não há materiais disponíveis.</li>
+                            {% endif %}
                         </ul>
                     </div>
     
@@ -71,7 +82,7 @@
                                 <th>MATERIAL</th>
                                 <th>QUANTIDADE</th>
                                 <th>STATUS</th>
-                                <th>ULTIMA ATUALIZAÇÃO</th>
+                                <th>ÚLTIMA ATUALIZAÇÃO</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -84,7 +95,7 @@
                                     <td class="{% if requisicao.status == 'Solicitado' %}status-solicitado{% elif requisicao.status == 'Disponivel para retirada' %}status-disponivel{% elif requisicao.status == 'Aguardando reposição' %}status-aguardando{% elif requisicao.status == 'Retirado' %}status-retirado{% else %}status-desconhecido{% endif %}">
                                         {{ requisicao.status }}
                                     </td>
-                                    <td>{{ requisicao.data_atualizacao }}</td>
+                                    <td>{{ requisicao.data_atualizacao or 'N/A' }}</td>
                                 </tr>
                                 {% endfor %}
                             {% else %}
@@ -98,14 +109,9 @@
             </div>
         </form>
     </section>
-    
-
-
-
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-    $(document).ready(function () {
         // Tutorial
         if (!sessionStorage.getItem('tutorialCompleted')) {
             let currentStep = 0;
@@ -151,116 +157,105 @@
             $('.search-estoque, textarea, .btn-requisicoes, table').removeClass('disabled-tutorial');
         }
 
-
-    // Função para atualizar a tabela com base no filtro de status
-    function atualizarTabela(statusFilter = '') {
-        $.ajax({
-            url: "/api/minhas_requisicoes",  // URL para buscar as requisições filtradas
-            type: 'GET',
-            success: function (data) {
-                let tableBody = $('#minhas-requisicoes-table tbody');
-                tableBody.empty();  // Limpa a tabela antes de adicionar as novas linhas
-                let filteredData = data.filter(function (requisicao) {
-                    if (statusFilter === '') return true;  // Se não houver filtro, mostra todas
-                    return requisicao.status === statusFilter;  // Filtra pelo status
-                });
-                if (filteredData.length > 0) {
-                    filteredData.forEach(function (requisicao) {
-                        let row = '<tr>' +
-                            '<td>' + requisicao.id + '</td>' +
-                            '<td>' + requisicao.material + '</td>' +
-                            '<td>' + requisicao.quantidade + '</td>' +
-                            '<td>' + requisicao.status + '</td>' +
-                            '<td>' + requisicao.data_atualizacao + '</td>' +
-                            '</tr>';
-                        tableBody.append(row);  // Adiciona as linhas filtradas na tabela
-                    });
-                } else {
-                    tableBody.append('<tr><td colspan="5">Nenhuma requisição encontrada com o filtro aplicado.</td></tr>');
-                }
-            }
-        });
-    }
-});
-
-// Função para alternar a visibilidade da lista de itens
+        // Função para alternar a visibilidade da lista de itens
+       // Função para alternar a visibilidade da lista de itens
 function toggleList(listId) {
     var list = document.getElementById(listId);
     list.style.display = list.style.display === 'block' ? 'none' : 'block';
 }
 
-// Função para filtrar os itens com base na pesquisa
-function filterItems(searchInputId, listId) {
-    var searchInput = document.getElementById(searchInputId);
-    var list = document.getElementById(listId);
-    var items = list.getElementsByTagName('li');
-    
-    var searchText = searchInput.value.toLowerCase();
-    
-    // Mostrar ou ocultar itens conforme o texto de busca
-    Array.from(items).forEach(function(item) {
-        var descricao = item.getAttribute('data-descricao').toLowerCase();
-        if (descricao.indexOf(searchText) > -1) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-}
-
-// Ordenar a lista de itens alfabeticamente
-function sortItems(listId) {
-    var list = document.getElementById(listId);
-    var items = Array.from(list.getElementsByTagName('li'));
-    
-    items.sort(function(a, b) {
-        var textA = a.getAttribute('data-descricao').toLowerCase();
-        var textB = b.getAttribute('data-descricao').toLowerCase();
-        return textA.localeCompare(textB);
-    });
-    
-    items.forEach(function(item) {
-        list.appendChild(item); // Reanexar os itens ordenados
-    });
-}
-
-// Chamar a função de ordenação quando a página carregar
-window.onload = function() {
-    sortItems('lista-entrada');
-};
-
-// Adicionar evento de busca
-document.getElementById('search-entrada').addEventListener('input', function() {
-    filterItems('search-entrada', 'lista-entrada');
-});
-
-
-// Fechar a lista de itens quando o input perder o foco
-document.getElementById('search-entrada').addEventListener('blur', function() {
-    setTimeout(function() { 
-        document.getElementById('lista-entrada').style.display = 'none';
-    }, 200); // Adiciona um pequeno delay para permitir o clique na lista
-});
-
-
+// Adicionar evento de clique na lista de materiais
 document.getElementById('lista-entrada').addEventListener('click', function(event) {
-        if (event.target && event.target.matches('.item-estoque')) {
-            var materialId = event.target.getAttribute('data-id');
-            var descricao = event.target.getAttribute('data-descricao');
-            var quantidade = event.target.getAttribute('data-quantidade');
-            
-            // Concatenar descrição e quantidade no campo de pesquisa
-            var textoExibido = `${descricao} - Disponível: ${quantidade}`;
-            document.getElementById('search-entrada').value = textoExibido;
-            
-            // Preencher o campo oculto com o material_id
-            document.getElementById('material_id_entrada').value = materialId;
-            
-            // Fechar a lista de itens após a seleção
-            document.getElementById('lista-entrada').style.display = 'none';
-        }
-    });
+    if (event.target && event.target.matches('.item-estoque')) {
+        var materialId = event.target.getAttribute('data-id');
+        var descricao = event.target.getAttribute('data-descricao');
+        var quantidade = event.target.getAttribute('data-quantidade');
+        
+        // Atualizar o campo de pesquisa com a descrição do item
+        var textoExibido = `${descricao} - Disponível: ${quantidade}`;
+        document.getElementById('search-entrada').value = textoExibido;
+        
+        // Preencher o campo oculto com o material_id
+        document.getElementById('material_id_entrada').value = materialId;
+        
+        // Preencher o campo de quantidade com a quantidade do material selecionado
+        // document.getElementById('quantidade').value = quantidade;
+        
+        // Fechar a lista de itens após a seleção
+        document.getElementById('lista-entrada').style.display = 'none';
+    }
+});
 
+
+        // Função para filtrar os itens com base na pesquisa
+        function filterItems(searchInputId, listId) {
+            var searchInput = document.getElementById(searchInputId);
+            var list = document.getElementById(listId);
+            var items = list.getElementsByTagName('li');
+            
+            var searchText = searchInput.value.toLowerCase();
+            
+            // Mostrar ou ocultar itens conforme o texto de busca
+            Array.from(items).forEach(function(item) {
+                var descricao = item.getAttribute('data-descricao').toLowerCase();
+                if (descricao.indexOf(searchText) > -1) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Ordenar a lista de itens alfabeticamente
+        function sortItems(listId) {
+            var list = document.getElementById(listId);
+            var items = Array.from(list.getElementsByTagName('li'));
+            
+            items.sort(function(a, b) {
+                var textA = a.getAttribute('data-descricao').toLowerCase();
+                var textB = b.getAttribute('data-descricao').toLowerCase();
+                return textA.localeCompare(textB);
+            });
+            
+            items.forEach(function(item) {
+                list.appendChild(item); // Reanexar os itens ordenados
+            });
+        }
+
+        // Chamar a função de ordenação quando a página carregar
+        window.onload = function() {
+            sortItems('lista-entrada');
+        };
+
+        // Adicionar evento de busca
+        document.getElementById('search-entrada').addEventListener('input', function() {
+            filterItems('search-entrada', 'lista-entrada');
+        });
+
+        // Fechar a lista de itens quando o input perder o foco
+        document.getElementById('search-entrada').addEventListener('blur', function() {
+            setTimeout(function() { 
+                document.getElementById('lista-entrada').style.display = 'none';
+            }, 200); // Adiciona um pequeno delay para permitir o clique na lista
+        });
+
+        document.getElementById('lista-entrada').addEventListener('click', function(event) {
+            if (event.target && event.target.matches('.item-estoque')) {
+                var materialId = event.target.getAttribute('data-id');
+                var descricao = event.target.getAttribute('data-descricao');
+                var quantidade = event.target.getAttribute('data-quantidade');
+                
+                // Concatenar descrição e quantidade no campo de pesquisa
+                var textoExibido = `${descricao} - Disponível: ${quantidade}`;
+                document.getElementById('search-entrada').value = textoExibido;
+                
+                // Preencher o campo oculto com o material_id
+                document.getElementById('material_id_entrada').value = materialId;
+                
+                // Fechar a lista de itens após a seleção
+                document.getElementById('lista-entrada').style.display = 'none';
+            }
+        });
 
     </script>
 </body>
