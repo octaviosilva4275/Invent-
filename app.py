@@ -88,7 +88,7 @@ def login():
             if usuario['cargo'] == 'admin':
                 return redirect(url_for('admin'))
             elif usuario['cargo'] == 'almoxarifado':
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('historico'))
             else:
                 return redirect(url_for('requisicao_material'))
         else:
