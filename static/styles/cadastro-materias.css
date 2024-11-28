@@ -35,60 +35,6 @@ body {
     height: 100%;
 }
 
-:root{
-    --cinza: #ffffff;
-    --dark: #04050D;
-    --fundo : #aab5ca;
-    --fundodark  : #465E8C;
-    --fonte : #000;
-    --fontedark : #fff;
-}
-
-
-body.light-mode {
-    background-color: var(--cinza);
-    color: var(--fonte);
-}
-body.dark-mode {
-    background-color: var(--dark);
-    color: var(--fontedark)
-}
-.none {
-    display: none;
-}
-.darkmode img {
-    cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    margin: 5px 5px;
-}
-
-.darkmode img.none {
-    opacity: 0; /* Ícone oculto */
-    transform: scale(0.8); /* Reduz um pouco o tamanho */
-}
-
-.darkmode .sol-icon{
-    background-color: var(--fontedark);
-}
-
-
-
-/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
-body.dark-mode {
-    background-color: var(--dark);
-    color: var(--fontedark);
-}
-
-.dark-mode #sol-icon {
-    filter: brightness(0) invert(1); 
-}
-
-.dark-mode .campo-material{
-    background-color: var(--fundodark);
-}
 .material {
     display: flex;
     justify-content: center;
