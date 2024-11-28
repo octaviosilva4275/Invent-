@@ -36,14 +36,14 @@ def conectar_banco_dados():
     try:
         print("Tentando conectar ao banco de dados remoto...")
         conexao = mysql.connector.connect(
-            host='inventcc.mysql.database.azure.com',
-            user='invent@inventcc',
-            password='SENAI2024.',
-            database='almoxarifado',
-            # host='localhost',
-            # user='tcc',
-            # password='123',
+            # host='inventcc.mysql.database.azure.com',
+            # user='invent@inventcc',
+            # password='SENAI2024.',
             # database='almoxarifado',
+            host='localhost',
+            user='tcc',
+            password='123',
+            database='almoxarifado',
         )
         print("Conexão estabelecida com sucesso!")
         return conexao
@@ -54,7 +54,7 @@ def conectar_banco_dados():
 
 @app.route('/')
 def solicitante():
-    return render_template('login/login.html')
+    return render_template('banner.html')
 
 
 # ---------------------------------------------------- LOGIN ----------------------------------------------------
@@ -96,7 +96,6 @@ def login():
             return redirect(url_for('solicitante'))
 
     return render_template('login/login.html')
-
 
 
 
