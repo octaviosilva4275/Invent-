@@ -36,14 +36,14 @@ def conectar_banco_dados():
     try:
         print("Tentando conectar ao banco de dados remoto...")
         conexao = mysql.connector.connect(
-            # host='inventcc.mysql.database.azure.com',
-            # user='invent@inventcc',
-            # password='SENAI2024.',
-            # database='almoxarifado',
-            host='localhost',
-            user='tcc',
-            password='123',
+            host='inventcc.mysql.database.azure.com',
+            user='invent@inventcc',
+            password='SENAI2024.',
             database='almoxarifado',
+            # host='localhost',
+            # user='tcc',
+            # password='123',
+            # database='almoxarifado',
         )
         print("Conexão estabelecida com sucesso!")
         return conexao
@@ -88,7 +88,7 @@ def login():
             if usuario['cargo'] == 'admin':
                 return redirect(url_for('admin'))
             elif usuario['cargo'] == 'almoxarifado':
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('historico'))
             else:
                 return redirect(url_for('requisicao_material'))
         else:
@@ -743,12 +743,19 @@ def requisicao_material():
     cursor = conexao.cursor(dictionary=True)
     try:
         cursor.execute("""
-            SELECT m.id, m.descricao, COALESCE(SUM(e.quantidade), 0) as quantidade
-            FROM materials m
-            LEFT JOIN estoque e ON m.id = e.material_id
-            GROUP BY m.id
-            ORDER BY m.descricao ASC
-        """)
+                SELECT 
+                    m.id, 
+                    m.descricao, 
+                    m.codigo_produto, 
+                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) AS total_entrada,
+                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS total_saida,
+                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) - 
+                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_disponivel
+                FROM materials m
+                LEFT JOIN estoque e ON m.id = e.material_id
+                GROUP BY m.id
+                ORDER BY m.descricao ASC
+            """)
         materiais = cursor.fetchall()
 
 

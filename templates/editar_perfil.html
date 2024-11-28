@@ -1,71 +1,122 @@
 <<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Perfil</title>
-    <link rel="stylesheet" href="/static/styles/editar-perfil.css">
-    <script src="/static/javascript/darkmode.js"></script>
-    
+    <html lang="pt-BR">
 
-   
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editar Perfil</title>
+        <link rel="stylesheet" href="/static/styles/editar-perfil.css">
+        <script src="/static/javascript/darkmode.js"></script>
 
- 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-</head>
-<body>
-    {% include '/dashboard/dashboard.html' %}
-    <div class="darkmode">
-        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
-        <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
-    </div>
 
-    <div class="container-editar">
-        <h1 class="titulo-editar">Editar Perfil</h1>
-        
 
-        <form method="POST">
-            <div class="form-editar">
-                <label for="sn">Código SN:</label>
-                <input type="text" id="sn" name="sn" value="{{ usuario.sn }}" readonly>
-            </div>
-            <div class="form-editar">
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" value="{{ usuario.nome }}" required>
-            </div>
-            <div class="form-editar">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
-            </div>
-            <div class="form-editar">
-                <label for="senha">Nova Senha:</label>
-                <input type="password" id="senha" name="senha" placeholder="Deixe vazio para não alterar">
-            </div>
-            <div class="form-editar">
-                <label for="confirmar_senha">Confirmar Senha:</label>
-                <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Repita a nova senha">
-            </div>
-            <button type="submit" class="btn-editar">Salvar Alterações</button>
-            <a href="{{ url_for('dashboard') }}" class="btn-cancel">Cancelar</a>
-        </form>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('form');
-            const senha = document.getElementById('senha');
-            const confirmarSenha = document.getElementById('confirmar_senha');
-            
-            form.addEventListener('submit', function(event) {
-                if (senha.value !== confirmarSenha.value) {
-                    event.preventDefault(); // Impede o envio do formulário
-                    alert('As senhas não coincidem!'); // Exibe um alerta
-                    confirmarSenha.focus(); // Foca no campo de confirmar senha
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    </head>
+
+    <body>
+        {% include '/dashboard/dashboard.html' %}
+        <div class="darkmode">
+            <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
+            <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
+        </div>
+
+        <div class="container-editar">
+            <h1 class="titulo-editar">Editar Perfil</h1>
+
+
+            <form method="POST">
+                <div class="form-editar">
+                    <label for="sn">Código SN:</label>
+                    <input type="text" id="sn" name="sn" value="{{ usuario.sn }}" readonly>
+                </div>
+                <div class="form-editar">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" value="{{ usuario.nome }}" required>
+                </div>
+                <div class="form-editar">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
+                </div>
+
+                <div class="form-editar">
+                    <label for="senha_atual">Senha Atual:</label>
+                    <input type="password" id="senha_atual" name="senha_atual" placeholder="Digite sua senha atual"
+                        required>
+                    <span class="error-message" id="senha_atual-error"></span>
+                </div>
+
+                <div class="form-editar">
+                    <label for="senha">Nova Senha:</label>
+                    <input type="password" id="senha" name="senha" placeholder="Deixe vazio para não alterar">
+                </div>
+                <div class="form-editar">
+                    <label for="confirmar_senha">Confirmar Senha:</label>
+                    <input type="password" id="confirmar_senha" name="confirmar_senha"
+                        placeholder="Repita a nova senha">
+                </div>
+                <button type="submit" class="btn-editar">Salvar Alterações</button>
+                <a href="{{ url_for('historico') }}" class="btn-cancel">Cancelar</a>
+            </form>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.querySelector('form');
+                const senha = document.getElementById('senha');
+                const confirmarSenha = document.getElementById('confirmar_senha');
+
+                form.addEventListener('submit', function (event) {
+                    if (senha.value !== confirmarSenha.value) {
+                        event.preventDefault(); // Impede o envio do formulário
+                        alert('As senhas não coincidem!'); // Exibe um alerta
+                        confirmarSenha.focus(); // Foca no campo de confirmar senha
+                    }
+                });
+            });
+            document.getElementById("edit-profile-form").addEventListener("submit", function (event) {
+                const senhaAtual = document.getElementById("senha_atual").value.trim();
+                const novaSenha = document.getElementById("senha").value.trim();
+                const confirmarSenha = document.getElementById("confirmar_senha").value.trim();
+                let valid = true;
+
+                // Limpa mensagens de erro
+                const senhaAtualError = document.getElementById("senha_atual-error");
+                const novaSenhaError = document.getElementById("senha-error");
+                const confirmarSenhaError = document.getElementById("confirmar_senha-error");
+
+                senhaAtualError.textContent = "";
+                novaSenhaError.textContent = "";
+                confirmarSenhaError.textContent = "";
+
+                // Verifica se a nova senha tem pelo menos 8 caracteres
+                if (novaSenha && novaSenha.length < 8) {
+                    novaSenhaError.textContent = "A nova senha deve ter no mínimo 8 caracteres.";
+                    valid = false;
+                }
+
+                // Verifica se as novas senhas coincidem
+                if (novaSenha && novaSenha !== confirmarSenha) {
+                    confirmarSenhaError.textContent = "As novas senhas não coincidem.";
+                    valid = false;
+                }
+
+                // Verifica se a senha atual foi fornecida ao tentar trocar a senha
+                if (novaSenha && !senhaAtual) {
+                    senhaAtualError.textContent = "Por favor, insira a senha atual para trocá-la.";
+                    valid = false;
+                }
+
+                // Impede o envio se houver erros
+                if (!valid) {
+                    event.preventDefault();
                 }
             });
-        });
-    </script>
-    
-</body>
-</html>
+
+        </script>
+
+    </body>
+
+    </html>
