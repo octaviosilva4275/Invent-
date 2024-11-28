@@ -7,89 +7,86 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <script src="/static/javascript/darkmode.js"></script>
+    <style>
+        :root {
+            --cinza: #ffffff;
+            --dark: #04050D;
+            --fundo: #aab5ca;
+            --fundodark: #465E8C;
+            --fonte: #000; /* Preto para modo claro */
+            --fontedark: #fff; /* Branco para modo escuro */
+            --fundoresponsivo: #DBE7FF;
+        }
+
+        .mt-5, .my-5 {
+            margin-top: 3rem!important;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(70, 94, 140, 0.51);
+            padding: 50px;
+            border-radius: 30px;
+            max-width: 900px;
+            width: 100%;
+            height: auto;
+        }
+
+        body.dark-mode {
+            background-color: var(--dark);
+            color: var(--fontedark);
+        }
+
+        /* Configuração das cores para o modo claro */
+        .table td, .table th {
+            color: var(--fonte); /* Preto no modo claro */
+        }
+
+        /* Configuração das cores para o modo escuro */
+        body.dark-mode .table td, body.dark-mode .table th {
+            color: var(--fontedark); /* Branco no modo escuro */
+        }
+
+        .none {
+            display: none;
+        }
+
+        .darkmode img {
+            cursor: pointer;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            right: 10px; 
+            top: 10px; 
+            margin: 5px; 
+        }
+
+        .darkmode img.none {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .darkmode .sol-icon {
+            background-color: var(--fontedark);
+        }
+
+        .dark-mode #sol-icon {
+            filter: brightness(0) invert(1); 
+        }
+
+        .dark-mode .campo-material {
+            background-color: var(--fundodark);
+        }
+
+        .dark-mode .titulo-material {
+            color: var(--fontedark);
+        }
+    </style>
 </head>
-<style>
-    :root{
-    --cinza: #ffffff;
-    --dark: #04050D;
-    --fundo : #aab5ca;
-    --fundodark  : #465E8C;
-    --fonte : #000;
-    --fontedark : #fff;
-    --fundoresponsivo : #DBE7FF;
-}
-
-
-.mt-5, .my-5 {
-    margin-top: 3rem!important;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(70, 94, 140, 0.51);
-    padding: 50px;
-    border-radius: 30px;
-    max-width: 900px;
-    width: 100%;
-    height: auto;
-}
-
-body.dark-mode {
-    background-color: var(--dark);
-    color: var(--fontedark)
-}
-.none {
-    display: none;
-}
-
-
-.darkmode img {
-    cursor: pointer;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    right: 10px; 
-    top: 10px; 
-    margin: 5px; 
-}
-
-
-.darkmode img.none {
-    opacity: 0; /* Ícone oculto */
-    transform: scale(0.8); /* Reduz um pouco o tamanho */
-}
-
-.darkmode .sol-icon{
-    background-color: var(--fontedark);
-}
-
-/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
-body.dark-mode {
-    background-color: var(--dark);
-    color: var(--fontedark);
-}
-
-.dark-mode #sol-icon {
-    filter: brightness(0) invert(1); 
-}
-
-.dark-mode .campo-material{
-    background-color: var(--fundodark);
-}
-
-.dark-mode .titulo-material{
-    color: var(--fontedark);
-}
-
-.dark-mode .table td, .table th {
-    color: #fff;
-}
-</style>
-
 <body>
 
     {% include '/dashboard/dashboard.html' %}
     <div class="darkmode">
-        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon" >
+        <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
         <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
     </div>
 
@@ -103,7 +100,7 @@ body.dark-mode {
                         <th>ID</th>
                         <th>Descrição</th>
                         <th>Estoque Mínimo</th>
-                        <th onclick="ordenarTabela(3)">Quantidade Atual</th> <!-- Clique para ordenar -->
+                        <th onclick="ordenarTabela(3)">Quantidade Atual</th>
                     </tr>
                 </thead>
                 <tbody>
