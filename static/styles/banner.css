@@ -59,6 +59,7 @@ body, html {
     margin-top: 20px;
     transition: background-color 0.3s ease;
     z-index: 9999;
+    text-decoration: none;
 }
 
 .continuarBtn:hover {
