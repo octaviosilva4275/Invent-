@@ -157,17 +157,27 @@ body.dark-mode {
 .caixa span {
     font-size: 2.5rem;
     margin-top: 10px;
-    margin-right: 180px;
+    margin-right: 150px;
     padding-left: 20px;
+    width: 130px;
 }
 
+.caixa a span {
+    font-size: 2.5rem;
+    margin-top: 10px;
+    margin-right: 150px;
+    padding-left: 20px;
+    width: 130px;
+    display: flex;
+}
 
 
 .container-historico {
     background-color: #16203a; 
     border-radius: 20px;
     width: 60%;
-    height: 50vh;
+    height: auto;
+
     padding: 30px;
     color: white;
     margin-top: -10px;
@@ -223,4 +233,20 @@ body.dark-mode {
 .divider {
     border-left: 1px solid rgba(255, 255, 255, 0.1);
     height: 50px;
+}
+
+
+.status-solicitado{
+    color: #dfdfdf;
+}
+
+.status-disponivel{
+    color: green;
+}
+
+.status-aguardando{
+    color: red;
+}
+.status-retirado{
+    color: #e2e2e2;
 }

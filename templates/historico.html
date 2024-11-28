@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interface Corrigida</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/historico.css') }}">
-    <link rel="stylesheet" href="/static/styles/historico.css">
     <link rel="stylesheet" href="/static/styles/medias/media-historico.css">
     <script src="/static/javascript/darkmode.js"></script>
-    l
 </head>
 <body>
     {% include '/dashboard/dashboard.html' %}
@@ -22,43 +20,51 @@
             <!-- Red Box -->
             <div class="caixa estoque-minimo">
                 <a href="{{ url_for('estoque_minimo') }}">
-                <div>Estoque mínimo</div>
-                <span>{{ estoque_minimo }} Itens</span>
-            </a>
-            </a>
+                    <div class="action-estoque-minimo">Estoque mínimo</div>
+                    <span class="action-estoque-minimo-quantidade">{{ estoque_minimo }} Itens</span>
+                </a>
             </div>
 
             <!-- Green Box -->
             <div class="caixa saidas">
-                <div>Saídas</div>
-                <span>{{ total_retirados }} Itens</span>
+                <div class="action-saidas">Saídas</div>
+                <span class="action-saidas-quantidade">{{ total_retirados }} Itens</span>
             </div>
         </div>
 
-        {% for item in historico_hoje %}
         <!-- Panel -->
         <div class="container-historico">
             <!-- Panel Header -->
-            <div class="header-historico">
+            <div class="header-historico action-historico">
                 Histórico
             </div>
-
+            {% for item in historico_hoje %}
             <!-- Panel Content -->
-            <div class="painel-solicitante">
-                <div>
+            <div class="painel-solicitante action-painel">
+                <div class="action-solicitante">
                     <span># Solicitante</span>
                     <div class="circle"></div>
-                    <div>{{ item.usuario }}</div>
+                    <div class="action-usuario">{{ item.usuario }}</div>
                 </div>
                 <div class="divider"></div>
-                <div>
+                <div class="action-status">
+                    <span>Status</span>
+                    <!-- Adiciona a classe específica conforme o status -->
+                    <div class="status {{ 'status-solicitado' if item.status == 'Solicitado' else '' }}
+                                 {{ 'status-disponivel' if item.status == 'Disponivel para retirada' else '' }}
+                                 {{ 'status-aguardando' if item.status == 'Aguardando reposição' else '' }}
+                                 {{ 'status-retirado' if item.status == 'Retirado' else '' }}">
+                        {{ item.status }}
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="action-data">
                     <span>Data</span>
                     <div class="date">{{ item.data_atualizacao.strftime('%H:%M:%S') if item.data_atualizacao else 'N/A' }}</div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </main>
-
 </body>
 </html>
