@@ -3,20 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
     <title>Interface Corrigida</title>
     <link rel="stylesheet" href="/static/styles/historico.css">
     <script src="/static/historico.js"></script>
 </head>
 <body>
-=======
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/historico.css') }}">
-    <link rel="stylesheet" href="/static/styles/medias/media-historico.css">
-    <script src="/static/javascript/darkmode.js"></script>
-</head>
-<body>
     {% include '/dashboard/dashboard.html' %}
->>>>>>> f9cc7f8fa9f7f5cf90e6a27e1b1aaf7f19c60778
     <main>
         <div class="darkmode">
             <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
@@ -26,33 +18,20 @@
         <div class="container-caixas">
             <!-- Red Box -->
             <div class="caixa estoque-minimo">
-<<<<<<< HEAD
                 <div>Estoque mínimo</div>
                 <span>X</span>
-=======
-                <a href="{{ url_for('estoque_minimo') }}">
-                    <div class="action-estoque-minimo">Estoque mínimo</div>
-                    <span class="action-estoque-minimo-quantidade">{{ estoque_minimo }} Itens</span>
-                </a>
->>>>>>> f9cc7f8fa9f7f5cf90e6a27e1b1aaf7f19c60778
             </div>
 
             <!-- Green Box -->
             <div class="caixa saidas">
-<<<<<<< HEAD
                 <div>Saídas</div>
                 <span>X</span>
-=======
-                <div class="action-saidas">Saídas</div>
-                <span class="action-saidas-quantidade">{{ total_retirados }} Itens</span>
->>>>>>> f9cc7f8fa9f7f5cf90e6a27e1b1aaf7f19c60778
             </div>
         </div>
 
         <!-- Panel -->
         <div class="container-historico">
             <!-- Panel Header -->
-<<<<<<< HEAD
             <div class="header-historico">
                 Histórico
             </div>
@@ -75,7 +54,6 @@
 
 </body>
 </html>
-=======
             <div class="header-historico action-historico">
                 Histórico
             </div>
@@ -109,4 +87,3 @@
     </main>
 </body>
 </html>
->>>>>>> f9cc7f8fa9f7f5cf90e6a27e1b1aaf7f19c60778
