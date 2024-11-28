@@ -1,0 +1,78 @@
+/* Estilos gerais */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Banner */
+.banner {
+    position: relative;
+    background-color: #001f3f; /* Azul marinho */
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: transform 1s ease-in-out;
+}
+
+/* Caixinhas com imagem de caixa */
+.caixinha {
+    position: absolute;
+    top: -100px;
+    background-image: url('/static/img/caixa.gif'); /* Substitua 'caixa.png' pelo caminho correto da imagem */
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 50px;
+    opacity: 0.8;
+    animation: fall linear infinite; /* Loop infinito */
+}
+
+/* Animação de queda */
+@keyframes fall {
+    0% {
+        top: -100px;
+    }
+    100% {
+        top: 100vh;
+    }
+}
+
+
+
+/* Estilos do botão */
+.continuarBtn{
+    padding: 10px 20px;
+    background-color:rgba(70, 94, 140, 1);
+    color: #001f3f;
+    border: none;
+    border-radius: 50px;
+    color: aliceblue;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+    z-index: 9999;
+}
+
+.continuarBtn:hover {
+    background-color:rgb(101, 125, 168); /* Cor de destaque no hover */
+    transform: scale(1.10);
+}
+
+/* Estilo do conteúdo */
+.conteudo {
+    display: none;
+    padding: 20px;
+}
+
+/* Transição do banner */
+.subindo {
+    transform: translateY(-100%);
+}
