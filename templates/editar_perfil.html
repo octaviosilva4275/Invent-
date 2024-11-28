@@ -72,6 +72,45 @@
                 }
             });
         });
+        document.getElementById("edit-profile-form").addEventListener("submit", function(event) {
+    const senhaAtual = document.getElementById("senha_atual").value.trim();
+    const novaSenha = document.getElementById("senha").value.trim();
+    const confirmarSenha = document.getElementById("confirmar_senha").value.trim();
+    let valid = true;
+
+    // Limpa mensagens de erro
+    const senhaAtualError = document.getElementById("senha_atual-error");
+    const novaSenhaError = document.getElementById("senha-error");
+    const confirmarSenhaError = document.getElementById("confirmar_senha-error");
+
+    senhaAtualError.textContent = "";
+    novaSenhaError.textContent = "";
+    confirmarSenhaError.textContent = "";
+
+    // Verifica se a nova senha tem pelo menos 8 caracteres
+    if (novaSenha && novaSenha.length < 8) {
+        novaSenhaError.textContent = "A nova senha deve ter no mínimo 8 caracteres.";
+        valid = false;
+    }
+
+    // Verifica se as novas senhas coincidem
+    if (novaSenha && novaSenha !== confirmarSenha) {
+        confirmarSenhaError.textContent = "As novas senhas não coincidem.";
+        valid = false;
+    }
+
+    // Verifica se a senha atual foi fornecida ao tentar trocar a senha
+    if (novaSenha && !senhaAtual) {
+        senhaAtualError.textContent = "Por favor, insira a senha atual para trocá-la.";
+        valid = false;
+    }
+
+    // Impede o envio se houver erros
+    if (!valid) {
+        event.preventDefault();
+    }
+});
+
     </script>
     
 </body>
