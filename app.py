@@ -363,6 +363,10 @@ def admin():
     conexao = conectar_banco_dados()
     cursor = conexao.cursor(dictionary=True)
 
+        # Buscar todos os usuários
+    cursor.execute("SELECT * FROM users")
+    usuarios = cursor.fetchall()
+
     # Obter o nome do usuário logado
     cursor.execute("SELECT nome FROM users WHERE id = %s", (session['user_id'],))
     usuario_logado = cursor.fetchone()
@@ -385,9 +389,7 @@ def admin():
         conexao.commit()
         flash('Usuário atualizado com sucesso!', 'success')
 
-    # Buscar todos os usuários
-    cursor.execute("SELECT * FROM users")
-    usuarios = cursor.fetchall()
+
 
     cursor.close()
     conexao.close()

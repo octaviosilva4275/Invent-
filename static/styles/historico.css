@@ -237,16 +237,16 @@ body.dark-mode {
 
 
 .status-solicitado{
-    color: #dfdfdf;
+    color: #ffd000;
 }
 
 .status-disponivel{
-    color: green;
+    color: rgb(49, 231, 49);
 }
 
 .status-aguardando{
     color: red;
 }
 .status-retirado{
-    color: #e2e2e2;
+    color: #a0a0a0;
 }

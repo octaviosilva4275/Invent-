@@ -1,0 +1,227 @@
+/* Responsividade para dispositivos móveis e tablets */
+@media (max-width: 1024px) {
+    /* Fundo azul claro */
+    body {
+        background-color: rgba(219, 231, 255, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px;
+    }
+
+    /* Título "Gerenciamento" fora do container */
+    .titulo-responsivo {
+        display: block; /* Mostra o título no responsivo */
+        font-size: 2.5rem;
+        margin-top: 70px;
+        font-weight: bold;
+        text-align: center;
+        color: #000;
+        margin-top: 60px;
+    }
+
+    /* Ocultar tabelas no responsivo */
+
+    .tabela-solicitacao {
+        display: none;
+    }
+
+       
+    .gerenciamento h2 {
+        font-size: 1.9em;
+        color: #000000;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+
+
+    .gerenciamento{
+        display: flex;
+        flex-direction: column;
+        background-color:  rgba(70, 94, 140, 0.51); /* Azul claro */
+        border-radius: 25px;
+        padding: 40px;
+        margin-bottom: 20px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        width: 95%; /* O container ocupa quase toda a largura */
+        max-width: 800px; /* Largura máxima aumentada */
+    }
+
+    /* Ajustes dos containers */
+    .container-responsivo {
+        display: flex; /* Ativo no responsivo */
+        flex-direction: column;
+        gap: 30px; /* Espaçamento maior entre os campos */
+        padding: 0;
+        background: none;
+
+    }
+
+    /* Linhas ocupando o container todo */
+    .linha {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 15px; /* Espaçamento entre os grupos */
+        padding: 10px 0;
+        width: 100%; /* Largura completa do container */
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .linha:last-child {
+        border-bottom: none;
+    }
+
+    /* Estilo dos rótulos e valores */
+    .label {
+        font-size: 1.6rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px; /* Espaço entre o rótulo e o valor */
+        text-align: left;
+    }
+
+    .valor {
+        font-size: 1.5rem;
+        color: #555;
+        text-align: left;
+        word-wrap: break-word; /* Quebra texto longo */
+    }
+
+    .select-usuario {
+        display: block;
+        margin: 0 auto; /* Centraliza horizontalmente */
+        margin-top: 15px; /* Espaçamento superior */
+        margin-bottom: 30px; /* Espaçamento inferior */
+        width: 90%; /* Largura ajustada para o layout responsivo */
+        max-width: 400px; /* Define uma largura máxima */
+        padding: 10px;
+        font-size: 1.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+    /* Botões lado a lado */
+    .botoes {
+        display: flex;
+        justify-content: space-between; /* Espaçamento entre os botões */
+        gap: 10px; /* Espaço entre os botões */
+        margin-top: 20px;
+        width: 100%; /* Ocupa toda a largura do container */
+    }
+
+    .aprovado,
+    .excluir,
+    .excluir-usuario {
+        font-size: 1.3rem;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #fff;
+        width: 48%; /* Cada botão ocupa metade da largura com espaço entre eles */
+    }
+
+    .aprovado {
+        background-color:rgba(25, 35, 64, 1); /* Azul escuro */
+    }
+
+    .excluir {
+        background-color:rgba(25, 35, 64, 1); /* Vermelho */
+    }
+
+    .excluir-usuario {
+        background-color:rgba(25, 35, 64, 1); /* Vermelho */
+    }
+
+    .botao-usuario{
+        display: flex;
+        justify-content: space-between; /* Espaçamento entre os botões */
+        margin-top: 20px;
+        width: 100%; /* Ocupa toda a largura do container */
+    }
+
+        /* Indica que a linha é clicável */
+    .toggle-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .toggle-info {
+        margin-left: auto; /* Empurra o ícone para a extrema direita */
+        font-size: 1.5rem; /* Tamanho ajustável para o toggle */
+        color: #000000; /* Cor para harmonizar com o design */
+        cursor: pointer; /* Indicador visual de clique */
+    }
+    
+    /* Transição suave para exibição dos detalhes */
+    .detalhes {
+        overflow: hidden;
+        transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+    }
+
+    /* Esconde detalhes por padrão */
+    .detalhes[style="display: none;"] {
+        max-height: 0;
+        opacity: 0;
+    }
+
+    /* Exibe os detalhes */
+    .detalhes[style="display: block;"] {
+        max-height: 500px; /* Ajuste conforme necessário */
+        opacity: 1;
+    }
+
+}
+
+
+
+
+@media (max-width: 768px) {
+    .botão-usuario {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px; /* Espaçamento entre os botões */
+        margin-top: 10px;
+    }
+
+    .botão-usuario button {
+        flex: 1; /* Botões ocupam espaços iguais */
+        font-size: 14px; /* Ajusta tamanho do texto */
+        padding: 10px; /* Expande área clicável */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        height: 100%;
+    }
+
+
+
+    .editar-usuario:hover, .excluir-usuario:hover {
+        opacity: 0.9; /* Efeito hover */
+    }
+}
+@media (max-width: 480px) {
+    .modal-dialog {
+        width: 90%; /* Ajusta a largura do modal */
+        max-width: none;
+        margin: 20px auto;
+    }
+
+    .modal-body .form-control {
+        font-size: 14px; /* Fonte menor para os campos */
+    }
+
+    .modal-header, .modal-footer {
+        flex-wrap: wrap; /* Permite que os botões se ajustem */
+    }
+
+    .modal-footer .btn {
+        width: 100%; /* Botões ocupam toda a largura */
+        margin-bottom: 10px; /* Espaço entre eles */
+    }
+}

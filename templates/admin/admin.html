@@ -1,82 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interface Almoxarifado</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/static/styles/admin.css">
+    <link rel="stylesheet" href="/static/styles/medias/media-admin.css">
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
+
+
     <script src="/static/javascript/darkmode.js"></script>
 </head>
+
 <body>
     {% include '/dashboard/dashboard.html' %}
+
     <div class="darkmode">
         <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
         <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
     </div>
 
+    <!-- Título adicional para mobile/tablets -->
+    <div class="titulo-responsivo">Gerenciamento</div>
+
     <!-- Primeira sessão: Solicitação para Almoxarife -->
     <div class="gerenciamento">
         <h2>Solicitação para Almoxarife</h2>
-        {% set usuarios_nao_verificados = usuarios | selectattr('cargo', 'equalto', 'almoxarifado-nao-verificado') | list %}
-
-        {% if usuarios_nao_verificados %}
-            <table class="tabela-solicitacao" id="tabelaUsuarios">
-                <thead>
-                    <tr>
-                        <th>Nome do Solicitante</th>
-                        <th>Código SN</th>
-                        <th>Email</th>
-                        <th>Id</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for usuario in usuarios_nao_verificados %}
-                    <tr data-usuario-id="{{ usuario.id }}">
-                        <td>{{ usuario.nome }}</td>
-                        <td>{{ usuario.sn }}</td>
-                        <td>{{ usuario.email }}</td>
-                        <td>{{ usuario.id }}</td>
-                        <td>
-                            <!-- Formulário para Aprovar -->
-                            <form action="{{ url_for('aprovar_usuario') }}" method="POST">
-                                <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                                <button class="aprovado" type="submit">APROVAR</button>
-                            </form>
-
-                            <!-- Formulário para Excluir -->
-                            <form action="{{ url_for('excluir_usuario') }}" method="POST">
-                                <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                                <button class="excluir" type="submit">EXCLUIR</button>
-                            </form>
-
-                            <!-- Botão para Editar -->
-                            <button class="editar" onclick="openModal({{ usuario.id }}, '{{ usuario.nome }}', '{{ usuario.email }}', '{{ usuario.sn }}', '{{ usuario.cargo }}')">EDITAR</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p style="font-size: 16px;">Não há solicitações pendentes para Almoxarifado.</p>
-        {% endif %}
-    </div>
-
-    <!-- Segunda sessão: Gerenciar Usuários -->
-    <div class="gerenciamento">
-        <h2>Gerenciar Usuários</h2>
-
-        <!-- Select para escolher o usuário -->
-        <select class="select-usuario" id="selectUsuario" onchange="filtrarUsuariosTabela()">
-            <option value="">Usuario desejado</option>
-            {% for usuario in usuarios %}
-                <option value="{{ usuario.id }}">{{ usuario.nome }}</option>
-            {% endfor %}
-        </select>
-        
-        <table class="tabela-solicitacao" id="tabelaUsuarios">
+        <!-- Verifica se existem solicitantes -->
+        {% if solicitacoes %}
+        <table class="tabela-solicitacao">
             <thead>
                 <tr>
                     <th>Nome do Solicitante</th>
@@ -87,99 +43,239 @@
                 </tr>
             </thead>
             <tbody>
-                {% for usuario in usuarios %}
-                <tr data-usuario-id="{{ usuario.id }}">
-                    <td>{{ usuario.nome }}</td> <!-- Exibindo o nome do usuário -->
-                    <td>{{ usuario.sn }}</td> <!-- Exibindo o código SN -->
-                    <td>{{ usuario.email }}</td> <!-- Exibindo o email -->
-                    <td>{{ usuario.id }}</td> <!-- Exibindo o ID -->
+                {% for solicitante in solicitacoes %}
+                <tr>
+                    <td>{{ solicitante.nome }}</td>
+                    <td>{{ solicitante.sn }}</td>
+                    <td>{{ solicitante.email }}</td>
+                    <td>{{ solicitante.id }}</td>
                     <td>
-                        <!-- Formulário para Excluir -->
-                        <form action="{{ url_for('excluir_usuario') }}" method="POST">
-                            <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                            <button class="excluir" type="submit">EXCLUIR</button>
-                        </form>
-
-                        <!-- Botão para Editar -->
-                        <button class="editar" onclick="openModal({{ usuario.id }}, '{{ usuario.nome }}', '{{ usuario.email }}', '{{ usuario.sn }}', '{{ usuario.cargo }}')">EDITAR</button>
+                        <div class="btn-gerenciar">
+                            <button class="aprovado">APROVAR</button>
+                            <button class="excluir">EXCLUIR</button>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <!-- Mensagem exibida caso a lista esteja vazia -->
+        <p class="sem-dados">Nenhuma solicitação disponível no momento.</p>
+        {% endif %}
+    </div>
+    
+
+        <!-- Container responsivo para mobile/tablets -->
+        {% for solicitante in solicitacoes %}
+        <div class="container-responsivo">
+            <div class="linha toggle-header">
+                <span class="label">Nome do Solicitante: {{ solicitante.nome }}</span>
+                <span class="toggle-info">▼</span>
+            </div>
+            <div class="detalhes" style="display: none;">
+                <div class="linha">
+                    <span class="label">Código SN:</span>
+                    <span class="valor">{{ solicitante.sn }}</span>
+                </div>
+                <div class="linha">
+                    <span class="label">Email:</span>
+                    <span class="valor">{{ solicitante.email }}</span>
+                </div>
+                <div class="linha">
+                    <span class="label">Id:</span>
+                    <span class="valor">{{ solicitante.id }}</span>
+                </div>
+                <div class="botoes">
+                    <button class="aprovado">Aprovar</button>
+                    <button class="excluir">Excluir</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
-    <!-- Modal de edição -->
-    <div id="editModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2>Editar Perfil</h2>
-            <form id="editForm" action="{{ url_for('editar_usuario') }}" method="POST">
-                <input type="hidden" name="user_id" id="modalUserId">
-                <label for="nome">Nome:</label>
-                <input type="text" name="nome" id="modalNome" required><br><br>
+    <!-- Segunda sessão: Gerenciar Usuários -->
+    <div class="gerenciamento">
+        <h2>Gerenciar Usuários</h2>
+        <select class="select-usuario">
+            <option>Usuário desejado</option>
+            {% for usuario in usuarios %}
+            <option>{{ usuario.nome }}</option>
+            {% endfor %}
+        </select>
 
-                <label for="email">Email:</label>
-                <input type="email" name="email" id="modalEmail" required><br><br>
+        <!-- Tabela apenas para desktop -->
+        <table class="tabela-solicitacao">
+            <thead>
+                <tr>
+                    <th>Nome do Usuário</th>
+                    <th>Código SN</th>
+                    <th>Email</th>
+                    <th>Id</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.sn }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.id }}</td>
+                    <td>
+                        <div class="btn-gerenciar">
+                            <button class="excluir">EXCLUIR</button>
+                            <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal" data-bs-target="#editModal"
+                            data-nome="{{ usuario.nome }}" data-codigo="{{ usuario.sn }}"
+                            data-email="{{ usuario.email }}">
+                            Editar
+                        </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Container responsivo para mobile/tablets -->
+        {% for usuario in usuarios %}
+        <div class="container-responsivo">
+            <div class="linha toggle-header">
+                <span class="label">Nome do Usuário: {{ usuario.nome }}</span>
+                <span class="toggle-info">▼</span>
+            </div>
+            <div class="detalhes" style="display: none;">
+                <div class="linha">
+                    <span class="label">Código SN:</span>
+                    <span class="valor">{{ usuario.sn }}</span>
+                </div>
+                <div class="linha">
+                    <span class="label">Email:</span>
+                    <span class="valor">{{ usuario.email }}</span>
+                </div>
+                <div class="linha">
+                    <span class="label">Id:</span>
+                    <span class="valor">{{ usuario.id }}</span>
+                </div>
+                <div class="botão-usuario">
+                    <button class="excluir-usuario aprovado">Excluir</button>
+                    <button type="button" class="editar-usuario" data-bs-toggle="modal" data-bs-target="#editModal"
+                        data-nome="{{ usuario.nome }}" data-codigo="{{ usuario.sn }}"
+                        data-email="{{ usuario.email }}">
+                        Editar
+                    </button>
 
-                <label for="sn">Código SN:</label>
-                <input type="text" name="sn" id="modalSn"><br><br>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
 
-                <label for="cargo">Cargo:</label>
-                <select name="cargo" id="modalCargo">
-                    <option value="almoxarifado">Almoxarifado</option>
-                    <option value="admin">Admin</option>
-                </select><br><br>
+    </div>
 
-                <label for="senha">Senha:</label>
-                <input type="password" name="senha" id="modalSenha" required><br><br>
-
-                <button type="submit">Salvar Alterações</button>
-            </form>
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Usuário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Formulário de Edição -->
+                    <form id="editForm">
+                        <div class="mb-3">
+                            <label for="nomeUsuario" class="form-label">Nome do Usuário</label>
+                            <input type="text" class="form-control" id="nomeUsuario" placeholder="Digite o nome">
+                        </div>
+                        <div class="mb-3">
+                            <label for="codigoUsuario" class="form-label">Código SN</label>
+                            <input type="text" class="form-control" id="codigoUsuario" placeholder="Digite o código">
+                        </div>
+                        <div class="mb-3">
+                            <label for="emailUsuario" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailUsuario" placeholder="Digite o email">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success" id="saveChanges">Salvar</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // Função para filtrar a tabela de usuários ao selecionar um no select
-        function filtrarUsuariosTabela() {
-            var select = document.getElementById("selectUsuario");
-            var usuarioId = select.value;  // Obter o valor selecionado
-            var rows = document.querySelectorAll("#tabelaUsuarios tbody tr");  // Todas as linhas da tabela
 
-            // Iterar sobre as linhas da tabela
-            rows.forEach(function(row) {
-                // Obter o ID do usuário da linha
-                var rowUsuarioId = row.getAttribute("data-usuario-id");
+        document.getElementById('saveChanges').addEventListener('click', function () {
+            const nome = document.getElementById('nomeUsuario').value;
+            const codigo = document.getElementById('codigoUsuario').value;
+            const email = document.getElementById('emailUsuario').value;
 
-                if (usuarioId === "" || rowUsuarioId === usuarioId) {
-                    row.style.display = "";  // Mostrar a linha
-                } else {
-                    row.style.display = "none";  // Ocultar a linha
-                }
-            });
-        }
-
-        // Função para abrir o modal e preencher os campos com os dados do usuário
-        function openModal(id, nome, email, sn, cargo) {
-            document.getElementById("modalUserId").value = id;
-            document.getElementById("modalNome").value = nome;
-            document.getElementById("modalEmail").value = email;
-            document.getElementById("modalSn").value = sn;
-            document.getElementById("modalCargo").value = cargo;
-            document.getElementById("editModal").style.display = "block";
-        }
-
-        // Função para fechar o modal
-        function closeModal() {
-            document.getElementById("editModal").style.display = "none";
-        }
-
-        // Fechar o modal quando clicar fora do modal
-        window.onclick = function(event) {
-            if (event.target == document.getElementById("editModal")) {
-                closeModal();
+            // Exemplo: Atualizar os dados diretamente no layout
+            const usuarioAtivo = document.querySelector('.container-responsivo.active'); // Marca o usuário ativo para edição
+            if (usuarioAtivo) {
+                usuarioAtivo.querySelector('.label').textContent = `Nome do Usuário: ${nome}`;
+                usuarioAtivo.querySelector('.valor.codigo-sn').textContent = codigo;
+                usuarioAtivo.querySelector('.valor.email').textContent = email;
             }
-        }
+
+            console.log('Dados salvos:', { nome, codigo, email });
+
+            // Fechar o modal após salvar
+            const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
+            modal.hide();
+        });
+
+
+        document.querySelectorAll('.editar-usuario').forEach(button => {
+            button.addEventListener('click', function () {
+                const nome = this.getAttribute('data-nome');
+                const codigo = this.getAttribute('data-codigo');
+                const email = this.getAttribute('data-email');
+
+                // Preencher os campos do modal
+                document.getElementById('nomeUsuario').value = nome;
+                document.getElementById('codigoUsuario').value = codigo;
+                document.getElementById('emailUsuario').value = email;
+
+                // Marca o container como ativo para futura atualização
+                document.querySelectorAll('.container-responsivo').forEach(container => container.classList.remove('active'));
+                this.closest('.container-responsivo').classList.add('active');
+            });
+        });
+
+
+        // Código JS para alternar visibilidade
+        document.querySelectorAll('.toggle-header').forEach(header => {
+            header.addEventListener('click', function () {
+                const detalhes = this.nextElementSibling;
+                const isHidden = detalhes.style.display === 'none' || detalhes.style.display === '';
+                detalhes.style.display = isHidden ? 'block' : 'none';
+                const toggleIcon = this.querySelector('.toggle-info');
+                toggleIcon.textContent = isHidden ? '▲' : '▼';
+            });
+        });
+
+            // Função para filtrar a tabela com base no valor selecionado no <select>
+    const selectUsuario = document.querySelector('.select-usuario');
+    const linhasTabela = document.querySelectorAll('.tabela-solicitacao tbody tr');
+
+    selectUsuario.addEventListener('change', function () {
+        const valorSelecionado = this.value.toLowerCase();
+
+        // Itera sobre cada linha da tabela para verificar se corresponde ao filtro
+        linhasTabela.forEach(linha => {
+            const nomeUsuario = linha.querySelector('td:first-child').textContent.toLowerCase();
+
+            if (valorSelecionado === 'usuário desejado' || nomeUsuario.includes(valorSelecionado)) {
+                linha.style.display = ''; // Mostra a linha
+            } else {
+                linha.style.display = 'none'; // Esconde a linha
+            }
+        });
+    });
     </script>
 </body>
+
 </html>
