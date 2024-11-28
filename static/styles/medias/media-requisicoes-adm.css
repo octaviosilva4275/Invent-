@@ -1,0 +1,159 @@
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+
+    
+    .tabela-solicitacao {
+        display: none;
+    }
+
+    body {
+        background-color: rgba(219, 231, 255, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px;
+        margin: 0;
+    }
+
+    .titulo-solicitacao {
+        font-size: 2.5rem; /* ou 3rem para tablets */
+        text-align: center;
+        color: #000000;
+        position: absolute;
+        top: 80px; /* ou 30px para tablets */
+        left: 50%;
+        transform: translateX(-50%);
+        white-space: nowrap; /* Impede que o texto quebre */
+        overflow: hidden;
+    }
+
+    .container-solicitacao {
+        padding: 20px;
+        border-radius: 20px;
+        width: 95%; /* Quase toda a largura da tela */
+        max-width: 600px;
+        height: 70%; /* Ajusta a altura conforme o conteúdo */
+        margin-top: 80px; /* Espaçamento para que o título não sobreponha */
+    }
+
+    .campo-solicitacao.responsivo {
+        display: flex; /* Ativo no responsivo */
+        flex-direction: column;
+        gap: 30px; /* Espaçamento maior entre os campos */
+        padding: 0;
+        background: none;
+      }
+    
+      .linha {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 0; /* Mais espaçamento vertical */
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    
+      .linha:last-child {
+        border-bottom: none;
+      }
+    
+      .linha .label {
+        font-size: 1.8rem; /* Aumenta o tamanho da fonte */
+        font-weight: bold;
+        color: #333;
+      }
+    
+      .linha .valor {
+        font-size: 1.5rem; /* Aumenta o tamanho da fonte */
+        color: #555;
+        text-align: right;
+      }
+    
+      .botoes {
+        display: flex;
+        gap: 15px; /* Maior espaçamento entre os botões */
+        justify-content: center;
+        margin-top: 15px;
+      }
+    
+      .btn-aprovar,
+      .btn-aguardo {
+        flex: 1;
+        font-size: 1.1rem; /* Aumenta a fonte dos botões */
+        padding: 12px 15px; /* Mais espaçamento interno nos botões */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #fff;
+      }
+    
+      .btn-aprovar {
+        background-color: #0044cc;
+      }
+    
+      .btn-aguardo {
+        background-color: #6c757d;
+      }
+    }
+
+
+/* Responsividade para tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+
+        
+    .tabela-solicitacao {
+        display: none;
+    }
+
+    body {
+        background-color: #dce4f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+        margin: 0;
+    }
+
+    .campo-solicitacao.responsivo {
+        display: flex;
+        flex-direction: column;
+        gap: 30px; /* Espaçamento maior entre os campos */
+        padding: 0;
+        background: none;
+      }
+    
+      .linha {
+        padding: 18px 0; /* Mais espaçamento vertical */
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+      }
+    
+      .linha:last-child {
+        border-bottom: none;
+      }
+    
+      .linha .label {
+        font-size: 1.9rem; /* Fonte maior */
+        font-weight: bold;
+        color: #333;
+      }
+    
+      .linha .valor {
+        font-size: 1.8rem; /* Fonte maior */
+        color: #555;
+        text-align: right;
+      }
+    
+      .botoes {
+        gap: 20px; /* Mais espaçamento entre os botões */
+        margin-top: 20px;
+      }
+    
+      .btn-aprovar,
+      .btn-aguardo {
+        font-size: 1.2rem; /* Aumenta a fonte dos botões */
+        padding: 14px 18px; /* Mais espaçamento interno nos botões */
+      }
+   
+}
