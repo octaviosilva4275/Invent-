@@ -148,21 +148,19 @@ input[type="password"]:focus {
 }
 
 .btn-editar {
-        width: 100%;
-        max-width: 600px;
-        padding: 15px;
-        border: none;
-        border-radius: 15px;
-        color: #fff;
-        font-size: 16px;
-        cursor: pointer;
-        margin-top: -17px;
-        background-color: rgba(25, 35, 64, 1);
-        transition: all 0.3s ease;
-        margin-left: 134px;
-        align-items: center;
-    }
+    width: 100%;
+    max-width: 1100;
+    padding: 15px;
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: -17px;
+    background-color: rgba(25, 35, 64, 1);
+    transition: all 0.3s ease;
 
+}
 
 
 .btn-editar:hover {
