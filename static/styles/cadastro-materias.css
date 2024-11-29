@@ -37,7 +37,7 @@ body {
 
 :root{
     --cinza: #ffffff;
-    --dark: #04050D;
+    --bgdark: #161616;
     --fundo : #aab5ca;
     --fundodark  : #465E8C;
     --fonte : #000;
@@ -48,7 +48,7 @@ body {
 
 
 body.dark-mode {
-    background-color: var(--dark);
+    background-color: var(--bgdark);
     color: var(--fontedark)
 }
 .none {
@@ -79,7 +79,7 @@ body.dark-mode {
 
 /* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
 body.dark-mode {
-    background-color: var(--dark);
+    background-color: var(--bgdark);
     color: var(--fontedark);
 }
 

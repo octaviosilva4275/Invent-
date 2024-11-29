@@ -1,8 +1,8 @@
 :root {
     --branco: #f4f4f4;
-    --dark: #04050D;
+    --dark: #161616;
     --fundo: #465E8C;
-    --fundodark: black;
+    --fundodark: #161616;
     --fonte: #000;
     --fontedark: #fff;
     --fundotabela: #192340CC;
@@ -87,6 +87,11 @@ canvas.meu-canvas {
     width: 100% !important; /* Sobrescreve a largura inline */
     box-sizing: border-box !important; /* Garantir que não seja alterado */
     display: block !important;
+}
+
+.dark-mode #graficoEstoque{
+    color: white;
+    background: #d6f1fb;
 }
 
 
