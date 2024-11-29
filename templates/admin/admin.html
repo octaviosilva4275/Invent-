@@ -32,81 +32,8 @@
         <h2>Solicitação para Almoxarife</h2>
         <!-- Verifica se existem solicitantes -->
         {% if solicitacoes %}
-        <table class="tabela-solicitacao">
-            <thead>
-                <tr>
-                    <th>Nome do Solicitante</th>
-                    <th>Código SN</th>
-                    <th>Email</th>
-                    <th>Id</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for solicitante in solicitacoes %}
-                <tr>
-                    <td>{{ solicitante.nome }}</td>
-                    <td>{{ solicitante.sn }}</td>
-                    <td>{{ solicitante.email }}</td>
-                    <td>{{ solicitante.id }}</td>
-                    <td>
-                        <div class="btn-gerenciar">
-                            <button class="aprovado">APROVAR</button>
-                            <button class="excluir">EXCLUIR</button>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <!-- Mensagem exibida caso a lista esteja vazia -->
-        <p class="sem-dados">Nenhuma solicitação disponível no momento.</p>
-        {% endif %}
-    </div>
-    
-
-        <!-- Container responsivo para mobile/tablets -->
-        {% for solicitante in solicitacoes %}
-        <div class="container-responsivo">
-            <div class="linha toggle-header">
-                <span class="label">Nome do Solicitante: {{ solicitante.nome }}</span>
-                <span class="toggle-info">▼</span>
-            </div>
-            <div class="detalhes" style="display: none;">
-                <div class="linha">
-                    <span class="label">Código SN:</span>
-                    <span class="valor">{{ solicitante.sn }}</span>
-                </div>
-                <div class="linha">
-                    <span class="label">Email:</span>
-                    <span class="valor">{{ solicitante.email }}</span>
-                </div>
-                <div class="linha">
-                    <span class="label">Id:</span>
-                    <span class="valor">{{ solicitante.id }}</span>
-                </div>
-                <div class="botoes">
-                    <button class="aprovado">Aprovar</button>
-                    <button class="excluir">Excluir</button>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-
-    <!-- Segunda sessão: Gerenciar Usuários -->
-    <div class="gerenciamento">
-        <h2>Gerenciar Usuários</h2>
-        <select class="select-usuario">
-            <option>Usuário desejado</option>
-            {% for usuario in usuarios %}
-            <option>{{ usuario.nome }}</option>
-            {% endfor %}
-        </select>
-
-        <!-- Tabela apenas para desktop -->
-        <table class="tabela-solicitacao">
+        <!-- Tabela de usuários -->
+        <table class="tabela-solicitacao"> <!-- Adicionado o ID aqui -->
             <thead>
                 <tr>
                     <th>Nome do Usuário</th>
@@ -126,49 +53,123 @@
                     <td>
                         <div class="btn-gerenciar">
                             <button class="excluir">EXCLUIR</button>
-                            <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal" data-bs-target="#editModal"
-                            data-nome="{{ usuario.nome }}" data-codigo="{{ usuario.sn }}"
-                            data-email="{{ usuario.email }}">
-                            Editar
-                        </button>
+                            <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
+                                data-bs-target="#editModal" data-nome="{{ usuario.nome }}"
+                                data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}">
+                                Editar
+                            </button>
                         </div>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <!-- Container responsivo para mobile/tablets -->
-        {% for usuario in usuarios %}
-        <div class="container-responsivo">
-            <div class="linha toggle-header">
-                <span class="label">Nome do Usuário: {{ usuario.nome }}</span>
-                <span class="toggle-info">▼</span>
-            </div>
-            <div class="detalhes" style="display: none;">
-                <div class="linha">
-                    <span class="label">Código SN:</span>
-                    <span class="valor">{{ usuario.sn }}</span>
-                </div>
-                <div class="linha">
-                    <span class="label">Email:</span>
-                    <span class="valor">{{ usuario.email }}</span>
-                </div>
-                <div class="linha">
-                    <span class="label">Id:</span>
-                    <span class="valor">{{ usuario.id }}</span>
-                </div>
-                <div class="botão-usuario">
-                    <button class="excluir-usuario aprovado">Excluir</button>
-                    <button type="button" class="editar-usuario" data-bs-toggle="modal" data-bs-target="#editModal"
-                        data-nome="{{ usuario.nome }}" data-codigo="{{ usuario.sn }}"
-                        data-email="{{ usuario.email }}">
-                        Editar
-                    </button>
 
-                </div>
+        {% else %}
+        <!-- Mensagem exibida caso a lista esteja vazia -->
+        <p class="sem-dados">Nenhuma solicitação disponível no momento.</p>
+        {% endif %}
+    </div>
+
+
+    <!-- Container responsivo para mobile/tablets -->
+    {% for solicitante in solicitacoes %}
+    <div class="container-responsivo">
+        <div class="linha toggle-header">
+            <span class="label">Nome do Solicitante: {{ solicitante.nome }}</span>
+            <span class="toggle-info">▼</span>
+        </div>
+        <div class="detalhes" style="display: none;">
+            <div class="linha">
+                <span class="label">Código SN:</span>
+                <span class="valor">{{ solicitante.sn }}</span>
+            </div>
+            <div class="linha">
+                <span class="label">Email:</span>
+                <span class="valor">{{ solicitante.email }}</span>
+            </div>
+            <div class="linha">
+                <span class="label">Id:</span>
+                <span class="valor">{{ solicitante.id }}</span>
+            </div>
+            <div class="botoes">
+                <button class="aprovado">Aprovar</button>
+                <button class="excluir">Excluir</button>
             </div>
         </div>
-        {% endfor %}
+    </div>
+    {% endfor %}
+    </div>
+
+    <!-- Segunda sessão: Gerenciar Usuários -->
+    <div class="gerenciamento">
+        <h2>Gerenciar Usuários</h2>
+        <div class="form-group">
+            <label for="pesquisaUsuario">Pesquise o Usuário:</label>
+            <input type="text" id="pesquisaUsuario" class="form-control" placeholder="Digite o nome do usuário">
+        </div>
+
+        <!-- Tabela apenas para desktop -->
+        <table class="tabela-solicitacao" id="tabelaUsuarios">
+            <thead>
+                <tr>
+                    <th>Nome do Usuário</th>
+                    <th>Código SN</th>
+                    <th>Email</th>
+                    <th>Id</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.sn }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.id }}</td>
+                    <td>
+                        <div class="btn-gerenciar">
+                            <button class="excluir">EXCLUIR</button>
+                            <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
+                                data-bs-target="#editModal" data-nome="{{ usuario.nome }}"
+                                data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}">
+                                Editar
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% for usuario in usuarios %}
+<div class="container-responsivo">
+    <div class="linha toggle-header">
+        <span class="label">Nome do Usuário: {{ usuario.nome }}</span>
+        <span class="toggle-info">▼</span>
+    </div>
+    <div class="detalhes" style="display: none;">
+        <div class="linha">
+            <span class="label">Código SN:</span>
+            <span class="valor">{{ usuario.sn }}</span>
+        </div>
+        <div class="linha">
+            <span class="label">Email:</span>
+            <span class="valor">{{ usuario.email }}</span>
+        </div>
+        <div class="linha">
+            <span class="label">Id:</span>
+            <span class="valor">{{ usuario.id }}</span>
+        </div>
+        <div class="botão-usuario">
+            <button class="excluir-usuario aprovado">Excluir</button>
+            <button type="button" class="editar-usuario" data-bs-toggle="modal" data-bs-target="#editModal"
+                data-nome="{{ usuario.nome }}" data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}">
+                Editar
+            </button>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
     </div>
 
@@ -206,14 +207,12 @@
     </div>
 
     <script>
-
         document.getElementById('saveChanges').addEventListener('click', function () {
             const nome = document.getElementById('nomeUsuario').value;
             const codigo = document.getElementById('codigoUsuario').value;
             const email = document.getElementById('emailUsuario').value;
 
-            // Exemplo: Atualizar os dados diretamente no layout
-            const usuarioAtivo = document.querySelector('.container-responsivo.active'); // Marca o usuário ativo para edição
+            const usuarioAtivo = document.querySelector('.container-responsivo.active');
             if (usuarioAtivo) {
                 usuarioAtivo.querySelector('.label').textContent = `Nome do Usuário: ${nome}`;
                 usuarioAtivo.querySelector('.valor.codigo-sn').textContent = codigo;
@@ -222,11 +221,89 @@
 
             console.log('Dados salvos:', { nome, codigo, email });
 
-            // Fechar o modal após salvar
             const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
             modal.hide();
         });
 
+        document.getElementById("pesquisaUsuario").addEventListener("input", filtrarUsuarios);
+
+        function filtrarUsuarios() {
+            var input, filtro, tabela, tr, td, i, txtValue;
+            input = document.getElementById("pesquisaUsuario");
+            filtro = input.value.toUpperCase();
+            tabela = document.getElementById("tabelaUsuarios");
+            tr = tabela.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filtro) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        
+
+        document.getElementById("pesquisaUsuario").addEventListener("input", filtrarUsuarios);
+
+        function filtrarUsuarios() {
+            var input, filtro, tabela, tr, td, i, txtValue;
+            input = document.getElementById("pesquisaUsuario");
+            filtro = input.value.toUpperCase();
+            tabela = document.getElementById("tabelaUsuarios");
+            tr = tabela.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filtro) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        
+
+        function filtrarUsuarios() {
+    var input, filtro, tabela, tr, responsivo, containers, i, txtValue;
+
+    // Obter o valor de pesquisa
+    input = document.getElementById("pesquisaUsuario");
+    filtro = input.value.toUpperCase();
+
+    // Filtrar na tabela (Desktop)
+    tabela = document.getElementById("tabelaUsuarios");
+    if (tabela) {
+        tr = tabela.getElementsByTagName("tr");
+        for (i = 1; i < tr.length; i++) { // Ignorar cabeçalho
+            const td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                tr[i].style.display = txtValue.toUpperCase().indexOf(filtro) > -1 ? "" : "none";
+            }
+        }
+    }
+
+    // Filtrar no container responsivo (Mobile)
+    containers = document.querySelectorAll(".container-responsivo");
+    containers.forEach(container => {
+        const nomeLabel = container.querySelector(".label").textContent || "";
+        if (nomeLabel.toUpperCase().indexOf(filtro) > -1) {
+            container.style.display = "block";
+        } else {
+            container.style.display = "none";
+        }
+    });
+}
 
         document.querySelectorAll('.editar-usuario').forEach(button => {
             button.addEventListener('click', function () {
@@ -234,19 +311,15 @@
                 const codigo = this.getAttribute('data-codigo');
                 const email = this.getAttribute('data-email');
 
-                // Preencher os campos do modal
                 document.getElementById('nomeUsuario').value = nome;
                 document.getElementById('codigoUsuario').value = codigo;
                 document.getElementById('emailUsuario').value = email;
 
-                // Marca o container como ativo para futura atualização
                 document.querySelectorAll('.container-responsivo').forEach(container => container.classList.remove('active'));
                 this.closest('.container-responsivo').classList.add('active');
             });
         });
 
-
-        // Código JS para alternar visibilidade
         document.querySelectorAll('.toggle-header').forEach(header => {
             header.addEventListener('click', function () {
                 const detalhes = this.nextElementSibling;
@@ -256,25 +329,6 @@
                 toggleIcon.textContent = isHidden ? '▲' : '▼';
             });
         });
-
-            // Função para filtrar a tabela com base no valor selecionado no <select>
-    const selectUsuario = document.querySelector('.select-usuario');
-    const linhasTabela = document.querySelectorAll('.tabela-solicitacao tbody tr');
-
-    selectUsuario.addEventListener('change', function () {
-        const valorSelecionado = this.value.toLowerCase();
-
-        // Itera sobre cada linha da tabela para verificar se corresponde ao filtro
-        linhasTabela.forEach(linha => {
-            const nomeUsuario = linha.querySelector('td:first-child').textContent.toLowerCase();
-
-            if (valorSelecionado === 'usuário desejado' || nomeUsuario.includes(valorSelecionado)) {
-                linha.style.display = ''; // Mostra a linha
-            } else {
-                linha.style.display = 'none'; // Esconde a linha
-            }
-        });
-    });
     </script>
 </body>
 

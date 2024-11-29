@@ -250,3 +250,9 @@ body.dark-mode {
 .darkmode img {
     left: 96.7vw;
 }
+
+
+.toggle-header{
+    display: none;
+}
+
