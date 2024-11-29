@@ -1,0 +1,38 @@
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    body {
+        background-color: #dce6f1; /* Azul claro para o fundo no mobile */
+        font-size: 50%; /* Reduz o tamanho base da fonte para dispositivos menores */
+    }
+
+    .container-editar {
+        width: 90%; /* Reduz a largura do container */
+        padding: 30px; /* Ajusta o padding para ficar proporcional no mobile */
+        margin: 30px auto; /* Reduz a margem superior */
+        border-radius: 20px; /* Ajusta os cantos arredondados */
+    }
+
+    .titulo-editar {
+        font-size: 28px; /* Reduz o tamanho da fonte do título */
+    }
+
+    .form-group {
+        margin: 5px auto; /* Reduz a margem dos grupos de formulário */
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        font-size: 12px; /* Reduz o tamanho da fonte dos inputs */
+        padding: 12px; /* Ajusta o padding */
+    }
+
+    .btn-editar {
+        font-size: 14px; /* Reduz o tamanho da fonte do botão */
+        padding: 12px; /* Ajusta o padding */
+    }
+
+    .btn-cancel {
+        font-size: 16px; /* Ajusta o tamanho da fonte */
+    }
+}
