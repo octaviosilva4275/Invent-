@@ -1,20 +1,11 @@
--- Primeira instrução INSERT
 INSERT INTO users (sn, nome, email, senha, cargo) VALUES
     ("11", "Fernanda", "administrador@sp.senai.br", "senha123", "admin"),
     ("22", "Patricia", "patricia.senai@sp.senai.br", "senha123", "almoxarifado"),
     ("33", "Alex Stocco", "octavio.freitas4275@gmail.com", "senha123", "tecnologia-da-informacao");
 
--- Segunda instrução INSERT (somente sn e nome para Naiara)
-INSERT INTO users (sn, nome) VALUES
-    ("44", "Naiara");
 
-
-
--- Inserção de exemplo para tabela de usuários
-INSERT INTO users (sn, nome, email, senha, cargo) VALUES 
-('11', 'Admin', 'admin@example.com', 'senha123', 'admin'),
-('22', 'Funcionario', 'funcionario@example.com', 'senha123', 'funcionario'),
-('33', 'Octavio', 'octavio@gmail.com', 'senha123', 'almoxarifado');
+INSERT INTO users (sn, nome) VALUES 
+	("44", "Naiara");
 
 -- Inserção de exemplo para tabela de materiais com código_produto único
 INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, codigo_produto) VALUES 
@@ -143,40 +134,3 @@ INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VAL
 (29, 3, 'saida', 2),
 (30, 4, 'saida', 2);
 
-
--- Inserção de requisições com diferentes status
-INSERT INTO requisicoes (material_id, usuario_id, quantidade, status, observacao) VALUES
-(1, 2, 10, 'Solicitado', 'Necessário para manutenção geral'),
-(2, 2, 5, 'Disponivel para retirada', 'Substituição de martelos quebrados'),
-(3, 2, 2, 'Aguardando reposição', 'Para organização de arquivos'),
-(4, 2, 3, 'Retirado', 'Uso nas salas de aula'),
-(5, 2, 4, 'Solicitado', 'Reposição de material de escritório'),
-(6, 3, 5, 'Disponivel para retirada', 'Usado para amarrar materiais de limpeza'),
-(7, 3, 2, 'Aguardando reposição', 'Reabastecimento de fita crepe'),
-(8, 3, 1, 'Retirado', 'Fita para etiquetas'),
-(9, 2, 2, 'Solicitado', 'Para uso em pacotes'),
-(10, 2, 1, 'Disponivel para retirada', 'Fita para lacre'),
-(11, 3, 10, 'Aguardando reposição', 'Fita dupla face para projetos'),
-(12, 2, 4, 'Retirado', 'Uso em gravações'),
-(13, 2, 5, 'Solicitado', 'Reabastecimento de DVDs'),
-(14, 3, 6, 'Disponivel para retirada', 'CDs para armazenamento de documentos'),
-(15, 2, 1, 'Aguardando reposição', 'Estilete para cortar materiais'),
-(16, 3, 2, 'Retirado', 'Usado para armazenamento de dados'),
-(17, 2, 4, 'Solicitado', 'Canetas para sala de aula'),
-(18, 2, 10, 'Disponivel para retirada', 'Plástico para arquivar documentos'),
-(19, 3, 6, 'Aguardando reposição', 'Caderno para atividades de sala'),
-(20, 2, 3, 'Retirado', 'Pastas para arquivamento de documentos'),
-(21, 2, 1, 'Solicitado', 'Uso na sala de aula para lousa'),
-(22, 3, 2, 'Disponivel para retirada', 'Giz para quadro'),
-(23, 2, 5, 'Aguardando reposição', 'Corretivo para uso geral'),
-(24, 3, 5, 'Retirado', 'Lápis para atividades educacionais'),
-(25, 2, 5, 'Solicitado', 'Fita para adesivação de documentos'),
-(26, 3, 4, 'Disponivel para retirada', 'Material para correção de documentos'),
-(27, 2, 6, 'Aguardando reposição', 'Canetas coloridas para organização'),
-(28, 3, 4, 'Retirado', 'Apontadores para sala de aula'),
-(29, 2, 3, 'Solicitado', 'Cola para uso de projetos'),
-(30, 3, 1, 'Disponivel para retirada', 'Grampo para encadernação'),
-(31, 2, 2, 'Aguardando reposição', 'Lápis para atividades de escrita'),
-(32, 3, 4, 'Retirado', 'Canetas para uso de documentos'),
-(33, 2, 3, 'Solicitado', 'Marca-texto para revisão de material'),
-(34, 3, 5, 'Disponivel para retirada', 'Canetas para destaque de informações');
