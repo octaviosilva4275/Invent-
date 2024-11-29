@@ -182,54 +182,39 @@
 }
 
 
-/* Responsividade para notebooks (1024px a 1366px) */
-@media (min-width: 1024px) and (max-width: 1366px) {
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+    /* Ajustes gerais para notebooks */
     .material {
-        height: 100%; /* Ajusta para ocupar a altura total */
-        padding: 20px; /* Adiciona um leve padding para evitar cortes */
+        margin-top: 20px;
+        padding: 20px;
+        height: auto; /* Permite flexibilidade na altura */
     }
 
     .campo-material {
-        max-width: 800px; /* Limita a largura para centralizar melhor */
-        width: 90%; /* Ajusta a largura relativa para notebooks */
-        padding: 50px; /* Mantém o mesmo padding do desktop */
-        height: auto; /* Permite que a altura se ajuste ao conteúdo */
+        padding: 40px;
+        max-width: 800px; /* Reduz o tamanho para telas menores */
+        height: auto; /* Ajusta dinamicamente a altura */
     }
 
     .titulo-material {
-        font-size: 3.5rem; /* Mantém o tamanho proporcional ao desktop */
-        margin-bottom: 60px; /* Espaçamento igual ao desktop */
+        font-size: 3rem; /* Tamanho da fonte reduzido */
+        margin-top: -30px;
     }
 
-    .form-material {
-        width: 100%; /* Garante que o formulário ocupe toda a largura disponível */
-        text-align: left;
-    }
-
-    .input-material[type="text"],
-    .input-material[type="number"] {
-        font-size: 1.4rem; /* Mantém o tamanho proporcional */
-        padding: 15px; /* Mesmo padding do desktop */
-        margin: 10px 0;
-    }
-
+    .input-material[type="text"], 
+    .input-material[type="number"], 
     .select-categoria {
-        padding: 15px;
-        font-size: 1.4rem;
+        font-size: 1.4rem; /* Ajusta o tamanho do texto */
+        padding: 12px; /* Reduz o padding */
     }
 
-    .estoques {
-        flex-direction: row; /* Mantém os campos lado a lado */
-        justify-content: space-between;
-    }
-
-    .input-material[type="number"] {
-        width: 48%; /* Mesmo espaçamento entre os campos */
+    .estoques .input-material[type="number"] {
+        width: 49%; /* Melhor espaçamento entre os campos */
     }
 
     .btn-material {
-        font-size: 1.6rem; /* Mantém o texto proporcional ao desktop */
-        padding: 15px;
-        margin-top: 90px;
+        font-size: 1.5rem; /* Tamanho do botão ajustado */
+        padding: 12px;
+        margin-top: 70px; /* Reduz a distância vertical */
     }
 }

@@ -237,3 +237,45 @@
         max-height: 180px; /* Ajusta a altura máxima para listas */
     }
 }
+
+/* Media query para notebooks (1024px a 1366px) */
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .estoque {
+        flex-direction: column;
+        padding: 20px;
+        justify-content: space-around; /* Melhor distribuição vertical */
+    }
+
+    .campo-estoque {
+        max-width: 900px; /* Reduz a largura máxima para adaptar a telas menores */
+        padding: 40px;
+        height: auto; /* Ajusta a altura para evitar excesso de espaço */
+    }
+
+    .titulo-estoque {
+        font-size: 3rem; /* Reduz o tamanho da fonte do título */
+    }
+
+    .search-estoque, .quant, #search-entrada {
+        font-size: 1.4rem; /* Ajusta o tamanho do texto dos inputs */
+        padding: 10px; /* Reduz o padding para inputs */
+    }
+
+    .btn-estoque {
+        width: 30%; /* Aumenta a largura do botão */
+        font-size: 1.6rem; /* Ajusta o tamanho do texto */
+    }
+
+    .search-container {
+        margin: 5px 0; /* Ajusta a margem para reduzir espaços */
+    }
+
+    .lista-estoque {
+        font-size: 1.4rem; /* Ajusta o tamanho da fonte da lista */
+    }
+
+    .entrada, .saida {
+        margin-top: 20px; /* Reduz o espaço entre seções */
+    }
+}
+
