@@ -18,7 +18,7 @@ INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, codigo
 ('FITA CREPE 18X50M', 'consumiveis', 'Prateleira B1', 25, 5007),
 ('FITA CREPE 24X50M', 'consumiveis', 'Prateleira B1', 25, 5008),
 ('FITA CREPE 48X50M', 'consumiveis', 'Prateleira B2', 25, 5009),
-('FITA LARGA 48X45M', 'consumiveis', 'Prateleira B2', 25, 5025),
+('FITA LARGA 48X45M', 'consumiveis', 'Prateleira B2', 25, 5010),
 ('FITA LARGA 45X45M', 'consumiveis', 'Prateleira B3', 25, 5011),
 ('FITA DUPLA FACE', 'consumiveis', 'Prateleira B3', 25, 5012),
 ('DUREX 12X30M', 'consumiveis', 'Prateleira C1', 25, 5013),
