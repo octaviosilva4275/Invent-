@@ -393,7 +393,6 @@ body.dark-mode {
     right: 10px; /* Ajuste a posição horizontal conforme necessário */
     transform: translateY(-70%);
     padding: 8px 15px;
-    border: 2px solid black;
     border-radius: 50px;
     cursor: pointer;
     background-color: #f9f9f9; /* Cor de fundo opcional */
