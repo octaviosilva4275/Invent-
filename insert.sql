@@ -1,3 +1,14 @@
+-- Primeira instrução INSERT
+INSERT INTO users (sn, nome, email, senha, cargo) VALUES
+    ("11", "Fernanda", "administrador@sp.senai.br", "senha123", "admin"),
+    ("22", "Patricia", "patricia.senai@sp.senai.br", "senha123", "almoxarifado"),
+    ("33", "Alex Stocco", "octavio.freitas4275@gmail.com", "senha123", "tecnologia-da-informacao");
+
+-- Segunda instrução INSERT (somente sn e nome para Naiara)
+INSERT INTO users (sn, nome) VALUES
+    ("44", "Naiara");
+
+
 
 -- Inserção de exemplo para tabela de usuários
 INSERT INTO users (sn, nome, email, senha, cargo) VALUES 

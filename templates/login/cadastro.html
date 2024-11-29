@@ -13,6 +13,7 @@
 </head>
 <body> 
 <main> <!-- Conteúdo principal -->
+    {% include 'componentes.html' %}
     <div class="container-geral"> <!-- Contêiner geral -->
         <div class="darkmode"> <!-- Alternância entre modos claro e escuro -->
             <img src="{{ url_for('static', filename='img/login-img/lua.png') }}" alt="Modo Escuro" id="lua-icon"> 
@@ -51,7 +52,7 @@
                             <option value="automobilistica">Automobilística</option>
                             <option value="madeira-mobiliario">Madeira e Mobiliário</option>
                             <option value="gestao">Gestão</option>
-                            <option value="almoxarifado">Almoxarifado</option>
+                            <option value="almoxarifado-nao-verificado">Almoxarifado</option>
                             <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
                             <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
                             <option value="alimentos-bebidas">Alimentos e Bebidas</option>

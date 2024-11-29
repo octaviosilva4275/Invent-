@@ -198,6 +198,7 @@ def cadastro():
             cursor.execute(query_update, (email, area, senha, sn))
             conexao.commit()
             flash('Cadastro realizado com sucesso!', 'success')
+            return redirect(url_for('login'))
         else:
             flash('Usuário inexistente.', 'error')
 
