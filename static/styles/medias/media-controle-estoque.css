@@ -194,3 +194,46 @@
         margin-top: 20px;
     }
 }
+
+
+
+/* Responsividade para notebooks (1024px a 1366px) */
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .estoque {
+        height: 100vh; /* Mantém altura total da viewport */
+        padding: 20px; /* Ajusta o padding geral */
+    }
+
+    .campo-estoque {
+        max-width: 700px; /* Reduz ligeiramente a largura máxima */
+        width: 80%; /* Ajusta largura para centralizar melhor */
+        padding: 30px; /* Diminui o padding interno */
+        height: auto; /* Permite que a altura seja dinâmica com base no conteúdo */
+    }
+
+    .titulo-estoque {
+        font-size: 3.2rem; /* Reduz o tamanho do título */
+        margin-bottom: 30px; /* Diminui o espaço entre o título e o conteúdo */
+    }
+
+    .search-estoque,
+    .quant,
+    #search-entrada {
+        font-size: 1.3rem; /* Ajuste sutil no tamanho do texto */
+        padding: 12px; /* Padding reduzido para inputs */
+    }
+
+    .btn-estoque {
+        width: 30%; /* Mantém largura semelhante ao desktop */
+        font-size: 1.4rem; /* Ajuste proporcional ao texto */
+        padding: 10px; /* Padding consistente */
+    }
+
+    .btn-estoque:hover {
+        transform: scale(1.05); /* Mantém o efeito hover */
+    }
+
+    .lista-estoque {
+        max-height: 180px; /* Ajusta a altura máxima para listas */
+    }
+}
