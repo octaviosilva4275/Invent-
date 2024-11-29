@@ -101,6 +101,16 @@
 <button id="start-tour" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px;">Iniciar Tour</button>
 
 <script>
+    // Função para alternar a visibilidade da lista
+    function toggleList(listId) {
+        var list = document.getElementById(listId);
+        if (list.style.display === 'none' || list.style.display === '') {
+            list.style.display = 'block';  // Exibir a lista
+        } else {
+            list.style.display = 'none';   // Ocultar a lista
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         console.log("Página carregada, inicializando scripts...");
         
@@ -150,91 +160,98 @@
             console.warn("Lista de entrada 'lista-entrada' não encontrada.");
         }
 
+        console.log("Página carregada, inicializando scripts...");
 
-    console.log("Página carregada, inicializando scripts...");
-
-    // Função para iniciar o tutorial
-    function iniciarTutorial() {
-        introJs().setOptions({
-            steps: [
-                {
-                    element: '#search-entrada', 
-                    intro: 'Clique aqui para pesquisar o item que você deseja requisitar. Digite o nome do item.'
-                },
-                {
-                    element: '#quantidade', 
-                    intro: 'Digite a quantidade do item que você deseja requisitar.'
-                },
-                {
-                    element: '#observacao', 
-                    intro: 'Adicione uma observação, caso queira incluir mais informações sobre a requisição.'
-                },
-                {
-                    element: '.btn-requisicoes', 
-                    intro: 'Clique aqui para enviar sua requisição.'
-                },
-                {
-                    element: '#minhas-requisicoes-table', 
-                    intro: 'Aqui você pode visualizar suas requisições pendentes.'
-                }
-            ],
-            showProgress: true,
-            showBullets: false,
-            nextLabel: 'Próximo',
-            prevLabel: 'Anterior',
-            skipLabel: 'Sair',
-            doneLabel: 'Concluir',
-        }).start();
-    }
-
-    // Verificar se o tutorial já foi exibido nesta sessão
-    if (!sessionStorage.getItem('tutorial_exibido')) {
-        console.log("Tutorial não foi exibido nesta sessão. Iniciando...");
-        sessionStorage.setItem('tutorial_exibido', 'true');
-        iniciarTutorial(); // Iniciar automaticamente
-    } else {
-        console.log("Tutorial já foi exibido nesta sessão.");
-    }
-
-    // Configurar evento para o botão iniciar tutorial
-    const botaoTour = document.getElementById('start-tour');
-    if (botaoTour) {
-        botaoTour.addEventListener('click', function () {
-            console.log("Botão de iniciar tutorial foi clicado.");
-            iniciarTutorial(); // Iniciar manualmente
-        });
-    } else {
-        console.warn("Botão 'start-tour' não encontrado.");
-    }
-
-    // Restante do seu código existente...
-
-
-    // Exibe ou oculta a lista de itens
-    function toggleList(listId) {
-        const list = document.getElementById(listId);
-        if (list) {
-            list.style.display = list.style.display === 'block' ? 'none' : 'block';
-            console.log(`Lista ${listId} agora está:`, list.style.display);
-        } else {
-            console.error(`Lista ${listId} não encontrada.`);
+        // Função para iniciar o tutorial
+        function iniciarTutorial() {
+            introJs().setOptions({
+                steps: [
+                    {
+                        element: '#search-entrada', 
+                        intro: 'Clique aqui para pesquisar o item que você deseja requisitar. Digite o nome do item.'
+                    },
+                    {
+                        element: '#quantidade', 
+                        intro: 'Digite a quantidade do item que você deseja requisitar.'
+                    },
+                    {
+                        element: '#observacao', 
+                        intro: 'Adicione uma observação, caso queira incluir mais informações sobre a requisição.'
+                    },
+                    {
+                        element: '.btn-requisicoes', 
+                        intro: 'Clique aqui para enviar sua requisição.'
+                    },
+                    {
+                        element: '#minhas-requisicoes-table', 
+                        intro: 'Aqui você pode visualizar suas requisições pendentes.'
+                    }
+                ],
+                showProgress: true,
+                showBullets: false,
+                nextLabel: 'Próximo',
+                prevLabel: 'Anterior',
+                skipLabel: 'Sair',
+                doneLabel: 'Concluir',
+            }).start();
         }
-    }
 
-    // Ordena os itens da lista com base na descrição
+        // Verificar se o tutorial já foi exibido nesta sessão
+        if (!sessionStorage.getItem('tutorial_exibido')) {
+            console.log("Tutorial não foi exibido nesta sessão. Iniciando...");
+            sessionStorage.setItem('tutorial_exibido', 'true');
+            iniciarTutorial(); // Iniciar automaticamente
+        } else {
+            console.log("Tutorial já foi exibido nesta sessão.");
+        }
+
+        // Configurar evento para o botão iniciar tutorial
+        const botaoTour = document.getElementById('start-tour');
+        if (botaoTour) {
+            botaoTour.addEventListener('click', function () {
+                console.log("Botão de iniciar tutorial foi clicado.");
+                iniciarTutorial(); // Iniciar manualmente
+            });
+        } else {
+            console.warn("Botão 'start-tour' não encontrado.");
+        }
+    });
+
+    // Função para ordenar a lista de itens
     function sortItems(listId) {
-        const list = document.getElementById(listId);
-        if (!list) return;
+        var list = document.getElementById(listId);
+        var items = Array.from(list.getElementsByTagName('li'));
 
-        const items = Array.from(list.children);
-        items.sort((a, b) => 
-            a.getAttribute('data-descricao').localeCompare(b.getAttribute('data-descricao'))
-        );
+        items.sort(function(a, b) {
+            var textA = a.getAttribute('data-descricao').toLowerCase();
+            var textB = b.getAttribute('data-descricao').toLowerCase();
+            return textA.localeCompare(textB);
+        });
 
-        items.forEach(item => list.appendChild(item)); // Reanexa os itens ordenados à lista
-        console.log(`Itens da lista ${listId} ordenados com sucesso.`);
+        items.forEach(function(item) {
+            list.appendChild(item); // Reanexar os itens ordenados
+        });
     }
-})
+
+    // Função para filtrar os itens com base na pesquisa
+    function filterItems(searchInputId, listId) {
+        var searchInput = document.getElementById(searchInputId);
+        var list = document.getElementById(listId);
+        var items = list.getElementsByTagName('li');
+
+        var searchText = searchInput.value.toLowerCase();
+
+        // Mostrar ou ocultar itens conforme o texto de busca
+        Array.from(items).forEach(function(item) {
+            var descricao = item.getAttribute('data-descricao').toLowerCase();
+            if (descricao.indexOf(searchText) > -1) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
 </script>
+
 </body>
 </html>
