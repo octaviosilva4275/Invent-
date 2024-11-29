@@ -134,3 +134,13 @@ INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) VAL
 (29, 3, 'saida', 2),
 (30, 4, 'saida', 2);
 
+
+
+-- Inserção de requisições com diferentes status
+INSERT INTO requisicoes (material_id, usuario_id, quantidade, status, observacao) VALUES
+(1, 2, 10, 'Solicitado', 'Necessário para manutenção geral'),
+(2, 2, 5, 'Disponivel para retirada', 'Substituição de martelos quebrados'),
+(3, 2, 2, 'Aguardando reposição', 'Para organização de arquivos'),
+(4, 2, 3, 'Retirado', 'Uso nas salas de aula'),
+(5, 2, 4, 'Solicitado', 'Reposição de material de escritório'),
+(6, 3, 5, 'Disponivel para retirada', 'Usado para amarrar materiais de limpeza');

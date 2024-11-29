@@ -150,41 +150,66 @@
             console.warn("Lista de entrada 'lista-entrada' não encontrada.");
         }
 
-        // Evento de clique no botão de iniciar o tutorial
-        document.getElementById('start-tour').addEventListener('click', function() {
-            introJs().setOptions({
-                steps: [
-                    {
-                        element: '#search-entrada', 
-                        intro: 'Clique aqui para pesquisar o item que você deseja requisitar. Digite o nome do item.'
-                    },
-                    {
-                        element: '#quantidade', 
-                        intro: 'Digite a quantidade do item que você deseja requisitar.'
-                    },
-                    {
-                        element: '#observacao', 
-                        intro: 'Adicione uma observação, caso queira incluir mais informações sobre a requisição.'
-                    },
-                    {
-                        element: '.btn-requisicoes', 
-                        intro: 'Clique aqui para enviar sua requisição.'
-                    },
-                    {
-                        element: '#minhas-requisicoes-table', 
-                        intro: 'Aqui você pode visualizar suas requisições pendentes.'
-                    }
-                ],
-                showProgress: true, // Mostra a barra de progresso
-                showBullets: false, // Remove os bullets (números)
-                nextLabel: 'Próximo', // Rótulo do botão "Próximo"
-                prevLabel: 'Anterior', // Rótulo do botão "Anterior"
-                skipLabel: 'Sair', // Rótulo do botão "Sair"
-                doneLabel: 'Concluir', // Rótulo do botão "Concluir"
-            }).start(); // Inicia o tour
+
+    console.log("Página carregada, inicializando scripts...");
+
+    // Função para iniciar o tutorial
+    function iniciarTutorial() {
+        introJs().setOptions({
+            steps: [
+                {
+                    element: '#search-entrada', 
+                    intro: 'Clique aqui para pesquisar o item que você deseja requisitar. Digite o nome do item.'
+                },
+                {
+                    element: '#quantidade', 
+                    intro: 'Digite a quantidade do item que você deseja requisitar.'
+                },
+                {
+                    element: '#observacao', 
+                    intro: 'Adicione uma observação, caso queira incluir mais informações sobre a requisição.'
+                },
+                {
+                    element: '.btn-requisicoes', 
+                    intro: 'Clique aqui para enviar sua requisição.'
+                },
+                {
+                    element: '#minhas-requisicoes-table', 
+                    intro: 'Aqui você pode visualizar suas requisições pendentes.'
+                }
+            ],
+            showProgress: true,
+            showBullets: false,
+            nextLabel: 'Próximo',
+            prevLabel: 'Anterior',
+            skipLabel: 'Sair',
+            doneLabel: 'Concluir',
+        }).start();
+    }
+
+    // Verificar se o tutorial já foi exibido nesta sessão
+    if (!sessionStorage.getItem('tutorial_exibido')) {
+        console.log("Tutorial não foi exibido nesta sessão. Iniciando...");
+        sessionStorage.setItem('tutorial_exibido', 'true');
+        iniciarTutorial(); // Iniciar automaticamente
+    } else {
+        console.log("Tutorial já foi exibido nesta sessão.");
+    }
+
+    // Configurar evento para o botão iniciar tutorial
+    const botaoTour = document.getElementById('start-tour');
+    if (botaoTour) {
+        botaoTour.addEventListener('click', function () {
+            console.log("Botão de iniciar tutorial foi clicado.");
+            iniciarTutorial(); // Iniciar manualmente
         });
-    });
-    
+    } else {
+        console.warn("Botão 'start-tour' não encontrado.");
+    }
+
+    // Restante do seu código existente...
+
+
     // Exibe ou oculta a lista de itens
     function toggleList(listId) {
         const list = document.getElementById(listId);
@@ -209,6 +234,7 @@
         items.forEach(item => list.appendChild(item)); // Reanexa os itens ordenados à lista
         console.log(`Itens da lista ${listId} ordenados com sucesso.`);
     }
+})
 </script>
 </body>
 </html>
