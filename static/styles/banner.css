@@ -33,7 +33,9 @@ body, html {
     opacity: 0.8;
     animation: fall linear infinite; /* Loop infinito */
 }
-
+.saudacao{
+font-size: 40px;
+}
 /* Animação de queda */
 @keyframes fall {
     0% {
