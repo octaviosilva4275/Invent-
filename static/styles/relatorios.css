@@ -42,7 +42,7 @@ button {
     background-color: var(--fundo);
     color: var(--branco);
     border: none;
-    border-radius: 5px;
+    border-radius: 15px;
     transition: all 0.3s ease;
 }
 

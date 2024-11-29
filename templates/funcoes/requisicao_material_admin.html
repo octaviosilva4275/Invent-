@@ -39,7 +39,7 @@
                                 <th>Observação</th>
                                 <th>Ultima Atualização</th>
                                 <th>Quantidade</th>
-                                <th>Ações</th>
+                                <th>AÇÕES</th>
                             </tr>
                         </thead>
                         <tbody id="tabela-corpo">
@@ -55,7 +55,7 @@
                                     <div class="btn-solicitacao">
                                         {% if requisicao.status == 'Retirado' %}
                                             <a href="{{ url_for('relatorios') }}" class="btn btn-primary">
-                                                VER RELATORIO
+                                                VER RELATÓRIO
                                             </a>
                                         {% else %}
                                             <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
@@ -64,7 +64,7 @@
                                                 data-material="{{ requisicao.material }}"
                                                 data-quantidade="{{ requisicao.quantidade }}"
                                                 data-estoque="{{ requisicao.quantidade_estoque }}">
-                                                Ações
+                                                AÇÕES
                                             </button>
                                         
                                         {% endif %}
