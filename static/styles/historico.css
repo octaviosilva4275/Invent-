@@ -387,3 +387,21 @@ body.dark-mode {
 .modal-body label{
     font-size: 14px;
 }
+
+.btn-filtro {
+    position: absolute;
+    right: 10px; /* Ajuste a posição horizontal conforme necessário */
+    transform: translateY(-70%);
+    padding: 8px 15px;
+    border: 2px solid black;
+    border-radius: 50px;
+    cursor: pointer;
+    background-color: #f9f9f9; /* Cor de fundo opcional */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    font-weight: bold;
+}
+
+.btn-filtro:hover {
+    background-color: black;
+    color: white;
+}
