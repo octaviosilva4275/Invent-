@@ -88,7 +88,7 @@ def login():
             if usuario['cargo'] == 'admin':
                 return redirect(url_for('admin'))
             elif usuario['cargo'] == 'almoxarifado':
-                return redirect(url_for('historico'))
+                return redirect(url_for('pg_inicial'))
             else:
                 return redirect(url_for('requisicao_material'))
         else:
@@ -97,8 +97,31 @@ def login():
 
     return render_template('login/login.html')
 
+@app.route('/pg_inicial')
+def pg_inicial():
+    # Conectando ao banco de dados
+    conexao = conectar_banco_dados()
+    usuario_id = session.get('user_id')  # Obtendo o ID do usuário da sessão
 
+    if usuario_id:
+        # Buscando informações do usuário no banco de dados
+        cursor = conexao.cursor(dictionary=True)  # Usando 'dictionary=True' para obter resultados como dicionário
+        cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
+        usuario = cursor.fetchone()
+        
+        if usuario:
+            # Caso o usuário exista no banco de dados, envia as informações para o template
+            return render_template('index.html', usuario=usuario)
+        else:
+            flash('Usuário não encontrado.', 'error')
+            return redirect(url_for('login'))
+    else:
+        flash('Você precisa estar logado para acessar esta página.', 'error')
+        return redirect(url_for('login'))
 
+    # Fechando o cursor e a conexão com o banco de dados
+    cursor.close()
+    conexao.close()
 
 
 
