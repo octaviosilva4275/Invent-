@@ -152,7 +152,7 @@ option {
 }
 
 .btn-requisicoes:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgb(41, 55, 99);
     transform: scale(1.05);
 }
 
