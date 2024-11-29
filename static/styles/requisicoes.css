@@ -569,19 +569,19 @@ body.dark-mode table {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #007bff;
+    background-color: #465E8C;
     color: white;
     border: none;
-    border-radius: 50%;
+    border-radius: 30px;
     padding: 15px;
-    font-size: 18px;
+    font-size: 15px;
     cursor: pointer;
     z-index: 9999;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 #start-tour:hover {
-    background-color: #0056b3;
+    background-color: #192340CC;
     transform: scale(1.1);
 }
 
@@ -589,7 +589,7 @@ body.dark-mode table {
 /* Estilo para o botão de "Fechar" do tutorial (se houver) */
 .introjs-skipbutton {
     background-color: transparent !important;
-    color: #007bff !important;
+    color: #192340 !important;
     font-size: 14px;
     border: none;
     cursor: pointer;
@@ -599,12 +599,12 @@ body.dark-mode table {
 }
 
 .introjs-skipbutton:hover {
-    color: #0056b3 !important;
+    color: #192340 !important;
 }
 
 /* Estilo das bolinhas de progresso (se você tiver) */
 .introjs-progressbar {
-    background-color: #007bff !important;
+    background-color: #192340 !important;
     height: 4px !important;
     border-radius: 2px;
 }
