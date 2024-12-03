@@ -11,6 +11,8 @@ from contextlib import closing
 # from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
 
+import hashlib
+
 # EMAIL
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -36,14 +38,14 @@ def conectar_banco_dados():
     try:
         print("Tentando conectar ao banco de dados remoto...")
         conexao = mysql.connector.connect(
-host='inventcc.mysql.database.azure.com',
-            user='invent@inventcc',
-            password='SENAI2024.',
+# host='inventcc.mysql.database.azure.com',
+#             user='invent@inventcc',
+#             password='SENAI2024.',
+#             database='almoxarifado',
+            host='localhost',
+            user='tcc',
+            password='123',
             database='almoxarifado',
-            # host='localhost',
-            # user='tcc',
-            # password='123',
-            # database='almoxarifado',
         )
         print("Conexão estabelecida com sucesso!")
         return conexao
@@ -196,10 +198,67 @@ def editar_perfil():
     
     return render_template('editar_perfil.html', usuario=usuario)
 
+def gerar_hash_senha(senha):
+    return hashlib.sha256(senha.encode()).hexdigest()
+
+
+@app.route('/cadastrar_usuario', methods=['POST'])
+def cadastrar_usuario():
+    dados = request.json
+    sn = dados.get('sn')
+    nome = dados.get('nome')
+
+    if not sn or not nome:
+        flash('SN e Nome são obrigatórios.', 'error')
+        return jsonify({'success': False})
+
+    conexao = conectar_banco_dados()
+    if conexao:
+        try:
+            cursor = conexao.cursor()
+
+            # Verificar se o SN já existe
+            query_verificar = "SELECT COUNT(*) FROM users WHERE sn = %s"
+            cursor.execute(query_verificar, (sn,))
+            if cursor.fetchone()[0] > 0:
+                flash('SN já cadastrado. Escolha outro.', 'error')
+                return jsonify({'success': False})
+
+            # Inserir o novo usuário
+            query_inserir = "INSERT INTO users (sn, nome) VALUES (%s, %s)"
+            cursor.execute(query_inserir, (sn, nome))
+            conexao.commit()
+
+            flash('Usuário cadastrado com sucesso!', 'success')
+            return jsonify({'success': True})
+        except Error as e:
+            print(f"Erro ao cadastrar usuário: {e}")
+            flash('Erro ao cadastrar usuário. Tente novamente.', 'error')
+            return jsonify({'success': False})
+        finally:
+            cursor.close()
+            conexao.close()
+    else:
+        flash('Falha na conexão com o banco de dados.', 'error')
+        return jsonify({'success': False})
 
 
 
 
+@app.route('/cadastrar_usuario', methods=['POST'])
+def cadastrar_usuario_endpoint():
+    try:
+        data = request.get_json()
+        sn = data.get("sn")
+        nome = data.get("nome")
+
+
+        # Chamar função de cadastro
+        mensagem = cadastrar_usuario(sn, nome)
+
+        return jsonify({"mensagem": mensagem}), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400
 
 
 @app.route('/cadastro', methods=['GET', 'POST'])

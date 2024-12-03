@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/requisicoes-adm.css') }}">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-requisicoes-adm.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-requisicoes-adm.css') }}">
 </head>
+
 <body>
     {% include '/dashboard/dashboard.html' %}
     <main>
@@ -20,29 +22,24 @@
             <img src="/static/img/lua.png" alt="Modo Escuro" id="lua-icon">
             <img src="/static/img/sol.png" alt="Modo Claro" class="none" id="sol-icon">
         </div>
-
         <section class="solicitacao">
-            <div class="container-solicitacao">
-                <h1 class="titulo-solicitacao">Solicitação de Pedido
-                    <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#filtroModal">
-                        Filtros
-                    </button>
-                </h1>
-
+            <div class="container-solicitacao" id="desktop">
+                <h1 class="titulo-solicitacao">Solicitação de pedido</h1>
                 <div class="campo-solicitacao">
-                    <table class="tabela-solicitacao table table-bordered">
+                    <!-- Primeira tabela -->
+                    <table class="tabela-solicitacao">
                         <thead>
                             <tr>
                                 <th>Nome do Solicitante</th>
                                 <th>Produto</th>
                                 <th>Status</th>
                                 <th>Observação</th>
-                                <th>Ultima Atualização</th>
+                                <th>Ultima atualização</th>
                                 <th>Quantidade</th>
-                                <th>AÇÕES</th>
+                                <th>Ação</th>
                             </tr>
                         </thead>
-                        <tbody id="tabela-corpo">
+                        <tbody  id="tabela-corpo">
                             {% for requisicao in requisicoes %}
                             <tr class="requisicao" data-nome="{{ requisicao.usuario | lower }}" data-produto="{{ requisicao.material | lower }}" data-status="{{ requisicao.status | lower }}">
                                 <td>{{ requisicao.usuario }}</td>
@@ -57,69 +54,118 @@
                                             <a href="{{ url_for('relatorios') }}" class="btn btn-primary">
                                                 VER RELATÓRIO
                                             </a>
+
                                         {% else %}
-                                            <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
-                                            <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
-                                                data-id="{{ requisicao.id }}"
-                                                data-material="{{ requisicao.material }}"
-                                                data-quantidade="{{ requisicao.quantidade }}"
-                                                data-estoque="{{ requisicao.quantidade_estoque }}">
-                                                AÇÕES
-                                            </button>
-                                        
-                                        {% endif %}
+                                        <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
+                                        <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
+                                            data-id="{{ requisicao.id }}"
+                                            data-material="{{ requisicao.material }}"
+                                            data-quantidade="{{ requisicao.quantidade }}"
+                                            data-estoque="{{ requisicao.quantidade_estoque }}">
+                                            AÇÕES
+                                        </button>
+                                    
+                                    {% endif %}
+
                                     </div>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
-                </div>
-            </div>
 
-<!-- Modal de Filtro -->
-<div class="modal fade" id="filtroModal" tabindex="-1" role="dialog" aria-labelledby="filtroModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="filtroModalLabel">Filtros</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                </div>
+
+
+
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="filtro-nome">Nome do Solicitante</label>
-                    <input type="text" class="form-control" id="filtro-nome" placeholder="Filtrar por nome">
+            {% for requisicao in requisicoes %}
+            <div class="container-solicitacao" id="mobile">
+                <h1 class="titulo-solicitacao">Solicitação de pedido</h1>
+            <div class="campo-solicitacao responsivo">
+                <div class="linha">
+                    <span class="label">Nome do Solicitante</span>
+                    <span class="valor">{{ requisicao.usuario }}</span>
                 </div>
-                <div class="form-group">
-                    <label for="filtro-produto">Produto</label>
-                    <input type="text" class="form-control" id="filtro-produto" placeholder="Filtrar por produto">
+                <div class="linha">
+                    <span class="label">Produto</span>
+                    <span class="valor">{{ requisicao.material }}</span>
                 </div>
-                <div class="form-group">
-                    <label for="filtro-status">Status</label>
-                    <select class="form-control" id="filtro-status">
-                        <option value="">Selecione</option>
-                        <option value="solicitado">Solicitado</option>
-                        <option value="disponivel para retirada">Disponível para Retirada</option>
-                        <option value="aguardando reposição">Aguardando Reposição</option>
-                        <option value="retirado">Retirado</option>
-                    </select>
-                    
+                <div class="linha">
+                    <span class="label">Status</span>
+                    <span class="valor">{{ requisicao.status }}</span>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" id="limpar-filtros">Limpar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary" id="filtro-aplicar">Aplicar Filtro</button>
+                <div class="linha">
+                    <span class="label">Quantidade</span>
+                    <span class="valor">{{ requisicao.quantidade }}</span>
+                </div>
+                <div class="linha botoes">
+                    {% if requisicao.status == 'Retirado' %}
+                        <a href="{{ url_for('relatorios') }}" class="btn btn-primary">
+                            VER RELATÓRIO
+                        </a>
+                    {% else %}
+                        <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
+                        <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
+                            data-id="{{ requisicao.id }}"
+                            data-material="{{ requisicao.material }}"
+                            data-quantidade="{{ requisicao.quantidade }}"
+                            data-estoque="{{ requisicao.quantidade_estoque }}">
+                            AÇÕES
+                        </button>
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-</div>
+        {% endfor %}
+        </section>
+
+
+        <!-- Modal de Filtro -->
+        <div class="modal fade" id="filtroModal" tabindex="-1" role="dialog" aria-labelledby="filtroModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="filtroModalLabel">Filtros</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="filtro-nome">Nome do Solicitante</label>
+                            <input type="text" class="form-control" id="filtro-nome" placeholder="Filtrar por nome">
+                        </div>
+                        <div class="form-group">
+                            <label for="filtro-produto">Produto</label>
+                            <input type="text" class="form-control" id="filtro-produto"
+                                placeholder="Filtrar por produto">
+                        </div>
+                        <div class="form-group">
+                            <label for="filtro-status">Status</label>
+                            <select class="form-control" id="filtro-status">
+                                <option value="">Selecione</option>
+                                <option value="solicitado">Solicitado</option>
+                                <option value="disponivel para retirada">Disponível para Retirada</option>
+                                <option value="aguardando reposição">Aguardando Reposição</option>
+                                <option value="retirado">Retirado</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="limpar-filtros">Limpar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" id="filtro-aplicar">Aplicar Filtro</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
-<!-- Modal de Ações -->
+        <!-- Modal de Ações -->
 <div class="modal fade" id="acaoModal" tabindex="-1" role="dialog" aria-labelledby="acaoModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -159,31 +205,31 @@
     </div>
 </div>
 
-<!-- Modal de Carregamento -->
-<div class="modal" tabindex="-1" id="loadingModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Aguarde...</h5>
+        <!-- Modal de Carregamento -->
+        <div class="modal" tabindex="-1" id="loadingModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Aguarde...</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Estamos processando a sua solicitação. Isso pode levar alguns segundos.</p>
+                        <div class="spinner-border" role="status">
+                            <span class="sr-only">Carregando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <p>Estamos processando a sua solicitação. Isso pode levar alguns segundos.</p>
-          <div class="spinner-border" role="status">
-            <span class="sr-only">Carregando...</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
         </section>
     </main>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Função para adicionar classes de status às linhas da tabela
-            $('tr.requisicao').each(function() {
+            $('tr.requisicao').each(function () {
                 var status = $(this).find('td:nth-child(3)').text().trim().toLowerCase();
                 switch (status) {
                     case 'solicitado':
@@ -204,12 +250,12 @@
             });
     
             // Função para aplicar os filtros
-            $('#filtro-aplicar').click(function() {
+            $('#filtro-aplicar').click(function () {
                 var nome = $('#filtro-nome').val().toLowerCase();
                 var produto = $('#filtro-produto').val().toLowerCase();
                 var status = $('#filtro-status').val().toLowerCase();
     
-                $('#tabela-corpo tr').each(function() {
+                $('.tabela-solicitacao tbody tr').each(function () {
                     var tr_nome = $(this).data('nome');
                     var tr_produto = $(this).data('produto');
                     var tr_status = $(this).data('status');
@@ -229,18 +275,18 @@
                 $('.modal-backdrop').remove();
             });
     
-            $('#limpar-filtros').click(function() {
+            $('#limpar-filtros').click(function () {
                 $('#filtro-nome').val('');
                 $('#filtro-produto').val('');
                 $('#filtro-status').val('');
-                $('#tabela-corpo tr').show();
+                $('.tabela-solicitacao tbody tr').show();
             });
     
-            $('#acaoForm').submit(function(e) {
+            $('#acaoForm').submit(function (e) {
                 e.preventDefault();
                 var id = $('#requisicao_id').val();
                 var status = $('#acao-status').val();
-                
+    
                 var estoque = parseInt($('#modal-estoque').text().split(": ")[1]);
                 var quantidade = parseInt($('#modal-quantidade').text().split(": ")[1]);
     
@@ -256,7 +302,7 @@
                         id: id,
                         status: status
                     },
-                    success: function(response) {
+                    success: function (response) {
                         $('#acaoModal').modal('hide');
                         location.reload();
                     }
@@ -269,7 +315,7 @@
                 var material = button.data('material');
                 var quantidade = button.data('quantidade');
                 var estoque = button.data('estoque');
-    
+                
                 $('#acaoModal #requisicao_id').val(requisicaoId);
                 $('#acaoModal #modal-material').text('Material: ' + material);
                 $('#acaoModal #modal-quantidade').text('Quantidade: ' + quantidade);
@@ -278,10 +324,10 @@
                 $('#acaoModal').modal('show');
             });
     
-            $('#confirmar-acao').on('click', function() {
+            $('#confirmar-acao').on('click', function () {
                 var requisicaoId = $('#requisicao_id').val();
                 var acaoStatus = $('#acao-status').val();
-                
+    
                 $('#loadingModal').modal('show');
     
                 $.ajax({
@@ -292,17 +338,17 @@
                         requisicao_id: requisicaoId,
                         acao: acaoStatus
                     }),
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             alert('Ação confirmada com sucesso!');
                         } else {
-                            
+                            alert('Erro ao confirmar a ação.');
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         alert('Erro na requisição AJAX: ' + error);
                     },
-                    complete: function() {
+                    complete: function () {
                         $('#loadingModal').modal('hide');
                         location.reload(); // Atualiza a página após a ação ser confirmada
                     }
@@ -313,7 +359,9 @@
         });
     </script>
     
-    
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

@@ -104,6 +104,11 @@
     <!-- Segunda sessão: Gerenciar Usuários -->
     <div class="gerenciamento">
         <h2>Gerenciar Usuários</h2>
+        <!-- Botão para abrir o modal de cadastro -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastroModal">
+            Cadastrar Novo Usuário
+        </button>
+
         <div class="form-group">
             <label for="pesquisaUsuario">Pesquise o Usuário:</label>
             <input type="text" id="pesquisaUsuario" class="form-control" placeholder="Digite o nome do usuário">
@@ -205,6 +210,36 @@
             </div>
         </div>
     </div>
+
+<!-- Modal de Cadastro -->
+<div class="modal fade" id="cadastroModal" tabindex="-1" aria-labelledby="cadastroModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cadastroModalLabel">Cadastrar Novo Usuário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulário de Cadastro -->
+                <form id="cadastroForm">
+                    <div class="mb-3">
+                        <label for="nomeNovoUsuario" class="form-label">Nome do Usuário</label>
+                        <input type="text" class="form-control" id="nomeNovoUsuario" placeholder="Digite o nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="codigoNovoUsuario" class="form-label">Código SN</label>
+                        <input type="text" class="form-control" id="codigoNovoUsuario" placeholder="Digite o código" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="salvarNovoUsuario">Salvar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <script>
         document.getElementById('saveChanges').addEventListener('click', function () {
@@ -329,6 +364,45 @@
                 toggleIcon.textContent = isHidden ? '▲' : '▼';
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('salvarNovoUsuario').addEventListener('click', async function () {
+        const nome = document.getElementById('nomeNovoUsuario').value;
+        const codigo = document.getElementById('codigoNovoUsuario').value;
+
+        if (!nome || !codigo) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
+        try {
+            const response = await fetch("/cadastrar_usuario", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sn: codigo,
+                    nome: nome,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Atualiza a página para exibir a mensagem flash
+                window.location.reload();
+            } else {
+                // Atualiza a página para exibir a mensagem flash de erro
+                window.location.reload();
+            }
+        } catch (error) {
+            alert('Ocorreu um erro ao tentar cadastrar o usuário.');
+            console.error(error);
+        }
+    });
+});
+
     </script>
 </body>
 
