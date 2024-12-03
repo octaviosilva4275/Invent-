@@ -175,7 +175,9 @@
         max-height: 500px; /* Ajuste conforme necessário */
         opacity: 1;
     }
-
+    .btn-editar{
+        padding: 10px;
+    }
 }
 
 
@@ -206,6 +208,9 @@
     }
 }
 @media (max-width: 480px) {
+    body{
+        margin-top: -20px;
+    }
     .modal-dialog {
         width: 90%; /* Ajusta a largura do modal */
         max-width: none;
@@ -223,5 +228,9 @@
     .modal-footer .btn {
         width: 100%; /* Botões ocupam toda a largura */
         margin-bottom: 10px; /* Espaço entre eles */
+    }
+    .cadastrar-user {
+        font-size: 0.9em; /* Ajuste de tamanho */
+        padding: 8px 15px; /* Ajuste no padding */
     }
 }

@@ -35,105 +35,47 @@ body {
     height: 100%;
 }
 
-:root {
-    --branco: #f4f4f4;
-    --bgdark: #161616;
-    --fundo: #465E8C;
-    --fundodark: #192340;
-    --fonte: #000;
-    --fontedark: #fff;
-    --fundotabela: #192340CC;
-}
-
-
-
-
 .requisicoes {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
+    width: 100vw;
     height: 100%;
-
-
+    background-color: var(--branco);
 }
-
-
 
 .container-requisicoes {
     background-color: rgba(70, 94, 140, 0.51);
     padding: 50px;
     border-radius: 30px;
-    width: 900px;
-    height: 100%;
+    max-width: 900px;
+    width: 100%;
+    height: auto;
 
-}
-
-option {
-    font-size: 14px;
 }
 
 .titulo-requisicoes {
     font-size: 3.5rem;
     text-align: center;
-    margin-bottom: 40px;
-    /* Ajustado para posicionar melhor o título */
+    margin-bottom: 40px; /* Ajustado para posicionar melhor o título */
 }
 
 .form-requisicoes {
     margin-bottom: 15px;
     font-size: 1.9;
-    z-index: 999;
 }
 
-/* Define o estilo das labels em branco para o tutorial */
-.tutorial-active .form-requisicoes label {
-    color: white !important;
-
-}
-
-/* Estilo padrão para labels */
-.form-requisicoes label,
-#item {
-    color: black;
-    /* Cor original fora do tutorial */
-    font-size: large;
+.form-requisicoes label, #item {
+    font-size:large;
     margin-bottom: 5px;
-    outline: transparent;
-
 }
 
-.form-requisicoes label.highlight {
-    color: white !important;
-    font-size: large;
-    margin-bottom: 5px;
-    outline: transparent;
-}
-
-.form-requisicoes input,
-.form-requisicoes select,
-.form-requisicoes textarea.highlight,
-.search-estoque {
+.form-requisicoes input,.search-estoque,  .form-requisicoes textarea {
     width: 100%;
     padding: 10px;
     font-weight: bolder;
     border-radius: 10px;
-    background-color: white;
-    /* pointer-events: none !important; */
-
-}
-
-
-
-.form-requisicoes input,
-.form-requisicoes select,
-.form-requisicoes textarea {
-    width: 100%;
-    padding: 10px;
-    font-weight: bolder;
-    border-radius: 10px;
-    background-color: white;
-    font-size: 13px;
 }
 
 .form-resquisicoes textarea {
@@ -152,15 +94,15 @@ option {
 }
 
 .btn-requisicoes:hover {
-    background-color: rgb(41, 55, 99);
+    background-color: rgba(25, 35, 64, 0.8);
     transform: scale(1.05);
 }
 
-.minhas-requisicoes {
+.minhas-requisicoes{
     margin-top: 50px;
 }
 
-.titulo-pendente {
+.titulo-pendente{
     font-size: 2rem;
     margin-bottom: 20px;
 }
@@ -169,11 +111,10 @@ table {
     width: 100%;
     background-color: rgba(70, 94, 140, 0.61);
     color: rgb(0, 0, 0);
-    border-radius: 10px;
-    outline: none;
+    border-radius: 20px;
 }
 
-th {
+th{
     font-size: 1.5rem;
     padding: 8px;
     text-align: center;
@@ -185,141 +126,39 @@ td {
     font-size: 1.3rem;
 }
 
-/* Estilos para o Tutorial Overlay */
-#tutorial-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    /* Fundo mais escuro para melhorar o contraste */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    /* Coloca o overlay acima de todos os elementos */
-}
-
-.tutorial-message {
-    position: relative;
-    background-color: #fff;
-    color: #333;
-    padding: 20px;
-    border-radius: 15px;
-    max-width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-size: 1.6rem;
+/* Título responsivo (aparece apenas no mobile) */
+.titulo-mobile {
+    display: none; /* Oculto por padrão */
+    font-size: 2rem;
     font-weight: bold;
-    z-index: 1100;
-    /* Coloca a mensagem do tutorial acima do overlay */
-}
-
-.tutorial-message p {
-    margin-bottom: 15px;
-}
-
-.tutorial-message .next-step {
-    background-color: #192340;
-    color: #fff;
-    padding: 8px 16px;
-    font-size: 1.5rem;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.tutorial-message .next-step:hover {
-    background-color: rgba(25, 35, 64, 0.8);
-    transform: scale(1.05);
+    color: #000;
+    text-align: center;
+    margin-top: 20px;
 }
 
 
-/* Destaque para os campos do tutorial */
-/* Ajusta o texto e o placeholder dos inputs destacados */
-.highlight {
-    position: relative;
-    outline: 3px solid #ffeb3b;
-    /* Destaque com contorno amarelo */
-    border-radius: 8px;
-    z-index: 1100;
 
 
-    color: #000000;
-    /* Ajusta a cor do texto */
+
+option {
+    font-size: 14px;
 }
 
-.btn-requisicoes.highlight {
-    color: #ffffff !important;
-    /* Força a cor do texto a permanecer branca */
-}
-
-/* Estilo específico para o placeholder do input em destaque */
-.highlight::placeholder {
-    color: #333;
-    /* Cor mais escura para o placeholder */
-    opacity: 1;
-    /* Garante que o placeholder seja visível */
-
-}
-
-/* Ajusta o label do campo destacado para maior visibilidade */
-
-
-.disabled-tutorial.highlight {
-    /* pointer-events: none; */
-    opacity: 1;
-}
-
-/* Destaque especial para tabelas no tutorial */
-.highlight-table {
-    outline: 3px solid #4CAF50;
-    /* Cor de destaque para tabela */
-    border-radius: 8px;
-    background-color: rgba(76, 175, 80, 0.1);
-    /* Fundo suave */
-}
-
-.step-1 {
-    margin-top: -450px;
-
-}
-
-.step-2 {
-    margin-top: -450px;
-
-}
-
-.step-3 {
-    margin-top: -300px;
-
-}
-
-.step-4{
-    margin-top: -410px;
-}
-
-.step-5 {
-    z-index: 9999;
-    margin-top: -802px;
-
-}
-
-#material_id {
+.form-requisicoes input,
+.search-estoque,
+.form-requisicoes select,
+.form-requisicoes textarea {
+    width: 100%;
+    padding: 10px;
+    font-weight: bolder;
+    border-radius: 10px;
     background-color: white;
+    font-size: 13px;
 }
 
-/* Desativa inputs e textarea durante o tutorial */
-input.disabled-tutorial textarea.disabled-tutorial,
-select.disabled-tutorial,
-button.disabled-tutorial {
-    /* pointer-events: none !important; */
-    opacity: 1 !important;
-    /* Torna o elemento visualmente diferente para indicar desativação */
+.form-resquisicoes textarea {
+    resize: vertical;
 }
-
 
 
 /* Cores para cada status */

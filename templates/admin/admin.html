@@ -12,7 +12,7 @@
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <script src="{{ url_for('static', filename='darkmode js/darkmode.js') }}" defer></script>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/static/javascript/darkmode.js"></script>
 </head>
 
@@ -105,7 +105,7 @@
     <div class="gerenciamento">
         <h2>Gerenciar Usuários</h2>
         <!-- Botão para abrir o modal de cadastro -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#cadastroModal">
+        <button type="button" class="cadastrar-user" data-bs-toggle="modal" data-bs-target="#cadastroModal">
             Cadastrar Novo Usuário
         </button>
 
@@ -147,34 +147,34 @@
             </tbody>
         </table>
         {% for usuario in usuarios %}
-<div class="container-responsivo">
-    <div class="linha toggle-header">
-        <span class="label">Nome do Usuário: {{ usuario.nome }}</span>
-        <span class="toggle-info">▼</span>
-    </div>
-    <div class="detalhes" style="display: none;">
-        <div class="linha">
-            <span class="label">Código SN:</span>
-            <span class="valor">{{ usuario.sn }}</span>
+        <div class="container-responsivo">
+            <div class="linha toggle-header">
+                <span class="label">Nome do Usuário: {{ usuario.nome }}</span>
+                <span class="toggle-info">▼</span>
+            </div>
+            <div class="detalhes" style="display: none;">
+                <div class="linha">
+                    <span class="label">Código SN:</span>
+                    <span class="valor">{{ usuario.sn }}</span>
+                </div>
+                <div class="linha">
+                    <span class="label">Email:</span>
+                    <span class="valor">{{ usuario.email }}</span>
+                </div>
+                <div class="linha">
+                    <span class="label">Id:</span>
+                    <span class="valor">{{ usuario.id }}</span>
+                </div>
+                <div class="botão-usuario">
+                    <button class="excluir-usuario excluir aprovado" data-user-id="{{ usuario.id }}">Excluir</button>
+                    <button type="button" class="btn-editar" data-bs-toggle="modal" data-bs-target="#editModal"
+                        data-nome="{{ usuario.nome }}" data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}">
+                        Editar
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="linha">
-            <span class="label">Email:</span>
-            <span class="valor">{{ usuario.email }}</span>
-        </div>
-        <div class="linha">
-            <span class="label">Id:</span>
-            <span class="valor">{{ usuario.id }}</span>
-        </div>
-        <div class="botão-usuario">
-            <button class="excluir-usuario aprovado">Excluir</button>
-            <button type="button" class="editar-usuario" data-bs-toggle="modal" data-bs-target="#editModal"
-                data-nome="{{ usuario.nome }}" data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}">
-                Editar
-            </button>
-        </div>
-    </div>
-</div>
-{% endfor %}
+        {% endfor %}
 
     </div>
 
@@ -281,7 +281,113 @@
                 }
             }
         }
+    // Adicionando evento de clique no botão EXCLUIR
+    document.querySelectorAll('.excluir').forEach(button => {
+        button.addEventListener('click', function () {
+            const userId = this.closest('tr').querySelector('td:nth-child(4)').textContent; // Obtendo o ID do usuário
 
+            // Exibindo o alerta de confirmação
+            Swal.fire({
+                title: "Tem certeza?",
+                text: "Você não poderá reverter isso!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim, excluir!",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar a requisição para excluir o usuário
+                    excluirUsuario(userId);
+                }
+            });
+        });
+    });
+
+    // Função para enviar a requisição de exclusão ao servidor
+    async function excluirUsuario(userId) {
+        try {
+            const response = await fetch('/excluir_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'user_id': userId
+                })
+            });
+
+            const data = await response.json();
+
+            // Mensagem de sucesso ou erro com base na resposta
+            if (data.success) {
+                Swal.fire('Excluído!', 'O usuário foi excluído.', 'success').then(() => {
+                    window.location.reload();  // Atualiza a página após a exclusão
+                });
+            } else {
+                Swal.fire('Erro!', 'Ocorreu um erro ao excluir o usuário.', 'error');
+            }
+        } catch (error) {
+            console.error('Erro ao excluir o usuário:', error);
+            Swal.fire('Erro!', 'Ocorreu um erro inesperado.', 'error');
+        }
+    }
+
+    // MOBILEEEEEE
+
+      // Adicionando evento de clique no botão EXCLUIR para mobile
+      document.querySelectorAll('.excluir-usuario').forEach(button => {
+        button.addEventListener('click', function () {
+            const userId = this.getAttribute('data-user-id'); // Obtendo o ID do usuário do botão
+
+            // Exibindo o alerta de confirmação
+            Swal.fire({
+                title: "Tem certeza?",
+                text: "Você não poderá reverter isso!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim, excluir!",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Enviar a requisição para excluir o usuário
+                    excluirUsuario(userId);
+                }
+            });
+        });
+    });
+
+    // Função para enviar a requisição de exclusão ao servidor
+    async function excluirUsuario(userId) {
+        try {
+            const response = await fetch('/excluir_usuario', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'user_id': userId
+                })
+            });
+
+            const data = await response.json();
+
+            // Mensagem de sucesso ou erro com base na resposta
+            if (data.success) {
+                Swal.fire('Excluído!', 'O usuário foi excluído.', 'success').then(() => {
+                    window.location.reload();  // Atualiza a página após a exclusão
+                });
+            } else {
+                Swal.fire('Erro!', 'Ocorreu um erro ao excluir o usuário.', 'error');
+            }
+        } catch (error) {
+            console.error('Erro ao excluir o usuário:', error);
+            Swal.fire('Erro!', 'Ocorreu um erro inesperado.', 'error');
+        }
+    }
         
 
         document.getElementById("pesquisaUsuario").addEventListener("input", filtrarUsuarios);

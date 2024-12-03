@@ -1,0 +1,193 @@
+/* Responsividade para tablets (largura entre 768px e 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .titulo-requisicoes {
+       display: none; /* Esconde o título do desktop */
+   }
+
+   /* Fundo azul claro */
+   body {
+       background-color: rgba(219, 231, 255, 1); /* Azul claro */
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: flex-start;
+       padding: 20px;
+   }
+
+   /* Ajusta o título mobile */
+   .titulo-mobile {
+       display: block; /* Mostra o título no responsivo */
+       font-size: 2.5rem;
+       margin-top: 180px;
+       font-weight: bold;
+       text-align: center;
+       color: #000;
+   }
+
+
+   .container-requisicoes {
+       max-width: 700px; /* Reduz a largura */
+       padding: 30px;
+       height: auto; /* Permite altura dinâmica */
+       display: flex;
+       flex-direction: column; /* Ajusta elementos em coluna */
+       gap: 20px; /* Espaçamento entre form e tabela */
+       
+   }
+
+   /* Campo do formulário de requisições */
+   .campo-requisicoes {
+       display: flex;
+       flex-direction: column;
+       gap: 15px;
+       background-color: none; /* Fundo transparente */
+       border-radius: 15px;
+       padding: 20px;
+   }
+
+   .form-requisicoes input,
+   .form-requisicoes textarea {
+       font-size: 1.5rem; /* Ajuste da fonte */
+       padding: 8px;
+   }
+
+   .btn-requisicoes {
+       font-size: 1.4rem;
+       padding: 12px;
+   }
+
+   /* Tabela em formato de lista */
+   table, thead, tbody, th, td, tr {
+       display: block;
+       width: 100%;
+   }
+
+   thead tr {
+       display: none; /* Oculta os cabeçalhos da tabela */
+   }
+
+   tbody tr {
+       margin-bottom: 25px; /* Espaçamento entre "linhas" da tabela */
+       border-bottom: 1px solid #ccc;
+   }
+
+   td {
+       font-size: 1.4rem;
+       text-align: left;
+       padding: 8px 10px; /* Aumenta o espaçamento entre os itens da tabela */
+   }
+
+   td:before {
+       content: attr(data-label); /* Usa os atributos data-label para simular cabeçalhos */
+       font-weight: bold;
+       display: block;
+   }
+}
+
+/* Responsividade para dispositivos móveis (largura até 768px) */
+@media  (max-width: 768px) {
+   .titulo-requisicoes {
+       display: none; /* Esconde o título do desktop */
+   }
+
+   /* Fundo azul claro */
+   body {
+       background-color: rgba(219, 231, 255, 1); /* Azul claro */
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       justify-content: flex-start;
+       padding: 20px;
+   }
+
+   /* Ajusta o título mobile */
+   .titulo-mobile {
+       display: block; /* Mostra o título no responsivo */
+       font-size: 2.5rem;
+       margin-top: 180px;
+       font-weight: bold;
+       text-align: center;
+       color: #000;
+   }
+
+   /* Container principal das requisições */
+   .container-requisicoes {
+      display: flex;
+       flex-direction: column;
+       background-color:  rgba(70, 94, 140, 0.51); /* Azul claro */
+       border-radius: 0px;
+       padding: 40px;
+       margin-bottom: 10px;
+       box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+       width: 100%; /* O container ocupa quase toda a largura */
+       max-width: 800px; /* Largura máxima aumentada */
+       margin-top: 10%;
+       height: auto;
+       margin: auto auto -15%;
+   }
+   
+
+   /* Campo do formulário de requisições */
+   .campo-requisicoes {
+       display: flex;
+       flex-direction: column;
+       gap: 15px;
+       background-color: none; /* Fundo transparente */
+       border-radius: 15px;
+       padding: 20px;
+   }
+
+   .form-requisicoes input,
+   .form-requisicoes textarea {
+       font-size: 1.5rem; /* Ajuste da fonte */
+       padding: 8px;
+   }
+
+   .btn-requisicoes {
+       font-size: 1.4rem;
+       padding: 12px;
+   }
+
+   /* Tabela em formato de lista */
+   table, thead, tbody, th, td, tr {
+       display: block;
+       width: 100%;
+   }
+
+   thead tr {
+       display: none; /* Oculta os cabeçalhos da tabela */
+   }
+
+   tbody tr {
+       margin-bottom: 20px; /* Aumenta o espaçamento entre "linhas" da tabela */
+       border-bottom: 1px solid #ccc;
+   }
+
+   td {
+       font-size: 1.4rem;
+       text-align: left;
+       padding: 10px 10px; /* Aumenta o espaçamento entre os itens da tabela */
+   }
+
+   td:before {
+       content: attr(data-label); /* Usa os atributos data-label para simular cabeçalhos */
+       font-weight: bold;
+       display: block;
+   }
+}
+
+
+/* Responsividade para dispositivos móveis muito pequenos (largura até 480px) */
+@media (max-width: 480px) {
+   .titulo-mobile {
+       display: block; /* Garante que o título será exibido */
+       font-size: 2rem; /* Reduz o tamanho da fonte para caber melhor na tela */
+       margin-top: 350px; /* Ajusta a margem superior para centralizar o título */
+       padding: 0 10px; /* Adiciona espaçamento nas laterais */
+       text-align: center;
+       color: #000;
+   }
+   body{
+    margin-top: -20px;
+   }
+}

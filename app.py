@@ -38,14 +38,14 @@ def conectar_banco_dados():
     try:
         print("Tentando conectar ao banco de dados remoto...")
         conexao = mysql.connector.connect(
-# host='inventcc.mysql.database.azure.com',
-#             user='invent@inventcc',
-#             password='SENAI2024.',
-#             database='almoxarifado',
-            host='localhost',
-            user='tcc',
-            password='123',
+            host='inventcc.mysql.database.azure.com',
+            user='invent@inventcc',
+            password='SENAI2024.',
             database='almoxarifado',
+            # host='localhost',
+            # user='tcc',
+            # password='123',
+            # database='almoxarifado',
         )
         print("Conexão estabelecida com sucesso!")
         return conexao
@@ -519,19 +519,21 @@ def excluir_usuario():
         cursor.execute(query_delete_user, (user_id,))
         conexao.commit()
 
-        flash('Usuário excluído com sucesso!', 'success')
+        return jsonify({'success': True, 'message': 'Usuário excluído com sucesso!'})
+
     except mysql.connector.errors.IntegrityError as e:
         flash('Não é possível excluir o usuário. Existem registros associados.', 'error')
         conexao.rollback()
+        return jsonify({'success': False, 'message': 'Não é possível excluir o usuário. Existem registros associados.'})
     except Exception as e:
         print(f"Erro inesperado: {e}")  # Log do erro
         flash('Erro ao excluir o usuário.', 'error')
         conexao.rollback()
+        return jsonify({'success': False, 'message': 'Erro ao excluir o usuário.'})
     finally:
         cursor.close()
         conexao.close()
 
-    return redirect(url_for('admin'))
 
 
 @app.route('/editar_usuario', methods=['POST', 'GET'])
