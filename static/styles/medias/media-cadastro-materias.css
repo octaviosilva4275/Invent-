@@ -94,7 +94,7 @@
         border-radius: 25px;
         width: 90%;
         max-width: 800px;
-        height: 70%; /* Altura se ajusta ao conteúdo */
+        height: auto; /* Altura se ajusta ao conteúdo */
         margin-top: 20px; /* Adiciona um espaçamento entre o título e o formulário */
     }
 
