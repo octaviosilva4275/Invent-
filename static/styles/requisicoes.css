@@ -15,6 +15,16 @@
     font-family: 'Amatic SC', sans-serif;
 }
 
+:root{
+    --cinza: #ffffff;
+    --bgdark: #161616;
+    --fundo : #aab5ca;
+    --fundodark  : #465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+    --fundoresponsivo : #DBE7FF;
+}
+
 /* 
    Normalização do HTML e body
    - Define a largura e altura como 100% da viewport.
@@ -42,7 +52,7 @@ body {
     flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
     width: 100vw;
     height: auto;
-    background-color: var(--branco);
+
 }
 
 .container-requisicoes {
@@ -326,6 +336,8 @@ body.dark-mode {
     height: 40px;
 }
 
+
+
 .darkmode img.none {
     opacity: 0;
     /* Ícone oculto */
@@ -349,7 +361,7 @@ body.dark-mode {
 }
 
 
-.dark-mode .container-requisicoes {
+.dark-mode #minhas-requisicoes-table {
     background-color: var(--fundo);
 }
 

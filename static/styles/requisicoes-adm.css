@@ -55,7 +55,7 @@ body {
     flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
     width: 100vw;
     height: 100vh;
-    background-color: var(--branco);
+
 }
 
 .container-solicitacao {
@@ -172,10 +172,16 @@ body {
     font-weight: bold;
 }
 
-
-body.darkmode {
+.html .darkmode{
     background-color: var(--bgdark);
-    color: var(--fontedark)
+}
+
+body.dark-mode {
+    background-color: var(--bgdark);
+}
+
+.dark-mode .titulo-solicitacao{
+    color: var(--fontedark);
 }
 
 
@@ -206,12 +212,16 @@ body.darkmode {
     color: var(--fontedark);
 }
 
-.dark-mode #sol-icon {
+.darkmode #sol-icon {
     filter: brightness(0) invert(1); 
 }
 
 .darkmode .campo-material{
     background-color: var(--fundodark);
+}
+
+.darkmode .tabela-solicitacao{
+    color: var(--bgdark);
 }
 
 .darkmode .titulo-material{
