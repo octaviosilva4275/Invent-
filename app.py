@@ -19,6 +19,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
+
 import secrets
 from datetime import datetime, timedelta
 
@@ -77,7 +78,7 @@ def login():
         conexao.close()
 
         if usuario:
-            if usuario['cargo'] == 'almoxarifado-nao-verificado':
+            if usuario['cargo'].endswith('-nao-verificado'):
                 return redirect(url_for('espera'))
             
             session['logged_in'] = True
@@ -264,30 +265,34 @@ def cadastrar_usuario_endpoint():
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():
     if request.method == 'POST':
+        # Obtém os dados do formulário
+        nome = request.form['nome']  # Agora obtendo o nome
         sn = request.form['sn']
-        email = request.form['email']
-        area = request.form['areas-senai']
+        email = request.form['email']  # Você pode manter o email, mas não usá-lo para verificação
         senha = request.form['senha']
+        area = request.form['areas-senai']  # Agora obtendo a variável 'area'
 
+        # Conecta ao banco de dados
         conexao = conectar_banco_dados()
         cursor = conexao.cursor(dictionary=True)
 
-        cursor.execute("SELECT * FROM users WHERE sn = %s", (sn,))
-        usuario_existente = cursor.fetchone()
-
-        if usuario_existente:
-            query_update = "UPDATE users SET email = %s, cargo = %s, senha = %s WHERE sn = %s"
-            cursor.execute(query_update, (email, area, senha, sn))
-            conexao.commit()
-            flash('Cadastro realizado com sucesso!', 'success')
-            return redirect(url_for('login'))
-        else:
-            flash('Usuário inexistente.', 'error')
+        # Insere os dados diretamente no banco, incluindo o nome, área (cargo), e senha
+        query_insert = """
+            INSERT INTO users (nome, sn, email, cargo, senha) 
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        # Aqui estamos inserindo o nome, sn, email, cargo (que vem de 'area' no frontend), e senha
+        cursor.execute(query_insert, (nome, sn, email, area, senha))
+        conexao.commit()
 
         cursor.close()
         conexao.close()
 
+        flash('Cadastro realizado com sucesso!', 'success')
+        return redirect(url_for('login'))
+
     return render_template('login/cadastro.html')
+
 
 
 
@@ -439,7 +444,7 @@ def cadastro_material():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
+    if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin', '']:
         flash('Acesso negado. Você não tem permissão para acessar esta página.', 'error')
         return redirect(url_for('solicitante'))
 
@@ -458,7 +463,7 @@ def admin():
         user_id = request.form.get('user_id')
         nome = request.form.get('nome')
         email = request.form.get('email')
-        sn = request.form.get('sn', '')  # Atribui um valor padrão vazio se 'sn' não estiver presente
+        sn = request.form.get('sn', '')
         cargo = request.form.get('cargo')
         senha = request.form.get('senha')
 
@@ -485,9 +490,17 @@ def aprovar_usuario():
     conexao = conectar_banco_dados()
     cursor = conexao.cursor()
 
-    # Atualiza o cargo do usuário para 'almoxarifado'
-    query_update = "UPDATE users SET cargo = 'almoxarifado' WHERE id = %s"
-    cursor.execute(query_update, (user_id,))
+    # Obtém o cargo atual do usuário
+    query_select = "SELECT cargo FROM users WHERE id = %s"
+    cursor.execute(query_select, (user_id,))
+    cargo_atual = cursor.fetchone()[0]
+
+    # Remove o sufixo '-nao-verificado' do cargo
+    novo_cargo = cargo_atual.replace('-nao-verificado', '')
+
+    # Atualiza o cargo do usuário para o novo valor
+    query_update = "UPDATE users SET cargo = %s WHERE id = %s"
+    cursor.execute(query_update, (novo_cargo, user_id))
     conexao.commit()
 
     cursor.close()

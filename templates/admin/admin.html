@@ -30,45 +30,50 @@
     <!-- Primeira sessão: Solicitação para Almoxarife -->
     <div class="gerenciamento">
         <h2>Solicitação para Almoxarife</h2>
-        <!-- Verifica se existem solicitantes -->
+        <!-- Verifica se existem solicitantes não verificados -->
         {% if solicitacoes %}
-        <!-- Tabela de usuários -->
-        <table class="tabela-solicitacao"> <!-- Adicionado o ID aqui -->
-            <thead>
-                <tr>
-                    <th>Nome do Usuário</th>
-                    <th>Código SN</th>
-                    <th>Email</th>
-                    <th>Id</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.nome }}</td>
-                    <td>{{ usuario.sn }}</td>
-                    <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.id }}</td>
-                    <td>
-                        <div class="btn-gerenciar">
-                            <button class="excluir">EXCLUIR</button>
-                            <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
-                                data-bs-target="#editModal" data-nome="{{ usuario.nome }}"
-                                data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}">
-                                Editar
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
+            <!-- Tabela de usuários -->
+            <table class="tabela-solicitacao">
+                <thead>
+                    <tr>
+                        <th>Nome do Usuário</th>
+                        <th>Código SN</th>
+                        <th>Email</th>
+                        <th>Id</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitante in solicitacoes %}
+                        <!-- Filtra apenas as solicitações "não verificadas" -->
+                        {% if '-nao-verificado' in solicitante.cargo %}
+                        <tr>
+                            <td>{{ solicitante.nome }}</td>
+                            <td>{{ solicitante.sn }}</td>
+                            <td>{{ solicitante.email }}</td>
+                            <td>{{ solicitante.id }}</td>
+                            <td>
+                                <div class="btn-gerenciar">
+                                    <button class="excluir">EXCLUIR</button>
+                                    <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
+                                        data-bs-target="#editModal" data-nome="{{ solicitante.nome }}"
+                                        data-codigo="{{ solicitante.sn }}" data-email="{{ solicitante.email }}">
+                                        Editar
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <!-- Mensagem exibida caso a lista esteja vazia -->
+            <p class="sem-dados">Nenhuma solicitação disponível no momento.</p>
+        {% endif %}
+        
         </table>
 
-        {% else %}
-        <!-- Mensagem exibida caso a lista esteja vazia -->
-        <p class="sem-dados">Nenhuma solicitação disponível no momento.</p>
-        {% endif %}
     </div>
 
 

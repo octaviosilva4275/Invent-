@@ -28,6 +28,12 @@
                         <img src="{{ url_for('static', filename='img/login-img/Inventlogo.png') }}" alt="">
                         <h2>Cadastro</h2>
                     </div>
+
+                    <div class="input-cadastro">
+                        <input type="text" id="nome" name="nome" autocomplete="off" required>
+                        <span>Nome</span>
+                    </div>
+
                     <div class="input-cadastro">
                         <input type="text" id="sn" name="sn" autocomplete="off" required>
                         <span>Código SN</span>
@@ -46,16 +52,16 @@
                     <div class="input-cadastro"> <!-- Seleção de áreas -->
                         <select id="areas-senai" name="areas-senai" required> <!-- Menu suspenso -->
                             <option value="">Selecione uma área</option> <!-- Opção padrão -->
-                            <option value="eletroeletronica">Eletroeletrônica</option> <!-- Opções -->
-                            <option value="metalmecanica">Metalmecânica</option>
-                            <option value="metalurgia">Metalurgia</option>
-                            <option value="automobilistica">Automobilística</option>
-                            <option value="madeira-mobiliario">Madeira e Mobiliário</option>
-                            <option value="gestao">Gestão</option>
+                            <option value="eletroeletronica-nao-verificado">Eletroeletrônica</option> <!-- Opções -->
+                            <option value="metalmecanica-nao-verificado">Metalmecânica</option>
+                            <option value="metalurgia-nao-verificado">Metalurgia</option>
+                            <option value="automobilistica-nao-verificado">Automobilística</option>
+                            <option value="madeira-mobiliario-nao-verificado">Madeira e Mobiliário</option>
+                            <option value="gestao-nao-verificado">Gestão</option>
                             <option value="almoxarifado-nao-verificado">Almoxarifado</option>
-                            <option value="tecnologia-da-informacao">Tecnologia da Informação</option>
-                            <option value="meio-ambiente-seguranca">Meio Ambiente e Segurança</option>
-                            <option value="alimentos-bebidas">Alimentos e Bebidas</option>
+                            <option value="tecnologia-da-informacao-nao-verificado">Tecnologia da Informação</option>
+                            <option value="meio-ambiente-seguranca-nao-verificado">Meio Ambiente e Segurança</option>
+                            <option value="alimentos-bebidas-nao-verificado">Alimentos e Bebidas</option>
                         </select>
                     </div>
 
