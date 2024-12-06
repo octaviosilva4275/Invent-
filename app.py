@@ -34,6 +34,7 @@ EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 
 
+
 def conectar_banco_dados():
     try:
         print("Tentando conectar ao banco de dados remoto...")
