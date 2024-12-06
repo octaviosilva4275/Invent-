@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aguardando Liberação</title>
     <link rel="stylesheet" href="/espera.css">
-    <script src="/icone.js"></script>
+    <script src="/static/javascript/darkmode.js"></script>
     <style>
         * {
     margin: 0;
@@ -57,8 +57,11 @@ body.dark-mode {
     width: 40px;
     height: 40px;
     margin: 5px 17px 8px 12px;
-
+    right: 0;  /* Adicionando essa linha para posicionar a imagem à direita */
 }
+
+
+
 @media (prefers-color-scheme: dark) {
     .img-espera img {
         content: url('/imagem-esperadark.gif'); /* Imagem para o modo escuro */
