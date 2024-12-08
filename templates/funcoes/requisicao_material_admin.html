@@ -468,9 +468,9 @@ $(document).ready(function () {
                     }),
                     success: function (response) {
                         if (response.success) {
-                            alert('Ação confirmada com sucesso!');
+                            console.log('Ação confirmada com sucesso!');
                         } else {
-                            alert('Erro ao confirmar a ação.');
+                            console.log('Erro ao confirmar a ação.');
                         }
                     },
                     error: function (xhr, status, error) {

@@ -12,6 +12,7 @@ from contextlib import closing
 from azure.storage.blob import BlobServiceClient
 
 import hashlib
+import threading
 
 # EMAIL
 import smtplib
@@ -845,6 +846,34 @@ def requisicao_material():
             cursor.execute(inserir, (material_id, usuario_id, quantidade, observacao))
             conexao.commit()
             flash('Requisição de material enviada com sucesso!', 'success')
+
+            # Obter a descrição do material requisitado
+            cursor.execute("SELECT descricao FROM materials WHERE id = %s", (material_id,))
+            material = cursor.fetchone()
+            nome_produto = material[0] if material else "Produto não encontrado"  # Acessando o valor corretamente pela tupla
+
+            # Obter os e-mails de todos os usuários com cargo "almoxarifado"
+            cursor.execute("SELECT email FROM users WHERE cargo = 'almoxarifado'")
+            emails_almoxarifado = cursor.fetchall()
+
+            # Enviar e-mails de forma assíncrona
+            if emails_almoxarifado:
+                assunto = f'Aviso: Nova Requisição Criada - {nome_produto}'
+                corpo = f"""
+                <p>Olá,</p>
+                <p>Uma nova requisição foi registrada no sistema:</p>
+                <ul>
+                    <li><strong>Produto:</strong> {nome_produto}</li>
+                    <li><strong>Quantidade:</strong> {quantidade}</li>
+                    <li><strong>Observação:</strong> {observacao}</li>
+                </ul>
+                <p>Por favor, acesse o sistema para visualizar os detalhes e tomar as ações necessárias.</p>
+                """
+                enviar_emails_assincronos(emails_almoxarifado, assunto, corpo)  # Chama a função para enviar os e-mails de forma assíncrona
+
+            else:
+                print("Nenhum usuário com cargo 'almoxarifado' encontrado para envio de e-mails.")
+
         except Exception as e:
             print("Erro ao criar requisição:", e)
             flash('Ocorreu um erro ao enviar a requisição. Por favor, tente novamente mais tarde.', 'error')
@@ -856,22 +885,21 @@ def requisicao_material():
     # Lógica para exibir o formulário e as requisições do usuário
     cursor = conexao.cursor(dictionary=True)
     try:
-        cursor.execute("""
-                SELECT 
-                    m.id, 
-                    m.descricao, 
-                    m.codigo_produto, 
-                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) AS total_entrada,
-                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS total_saida,
-                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) - 
-                    COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_disponivel
-                FROM materials m
-                LEFT JOIN estoque e ON m.id = e.material_id
-                GROUP BY m.id
-                ORDER BY m.descricao ASC
-            """)
+        cursor.execute(""" 
+            SELECT 
+                m.id, 
+                m.descricao, 
+                m.codigo_produto, 
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) AS total_entrada,
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS total_saida,
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) - 
+                COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS quantidade_disponivel
+            FROM materials m
+            LEFT JOIN estoque e ON m.id = e.material_id
+            GROUP BY m.id
+            ORDER BY m.descricao ASC
+        """)
         materiais = cursor.fetchall()
-
 
         if usuario_id:
             cursor.execute("SELECT * FROM users WHERE id = %s", (usuario_id,))
@@ -917,7 +945,6 @@ def requisicao_material():
         cursor.close()
         conexao.close()
 
-    print("Renderizando template com materiais:", materiais)
     return render_template('funcoes/requisicao_material.html', 
                         materiais=materiais, 
                         minhas_requisicoes=minhas_requisicoes, 
@@ -971,7 +998,17 @@ def requisicao_material_admin():
 
 
 
+def enviar_emails_assincronos(emails, assunto, corpo):
+    def enviar():
+        if isinstance(emails, str):  # Caso só tenha um email
+            enviar_email_almoxarifado(emails, assunto, corpo)
+        else:
+            for email_data in emails:
+                enviar_email_almoxarifado(email_data[0], assunto, corpo)  # Envia os e-mails
 
+    # Cria um thread para enviar os e-mails de forma assíncrona
+    thread = threading.Thread(target=enviar)
+    thread.start()
 
 
 
@@ -1215,15 +1252,15 @@ def atualizar_requisicao():
             usuario_id = requisicao[2]  # ID do usuário que fez a requisição
 
             # Calcula o estoque atual disponível para o material solicitado
-            cursor.execute("""
+            cursor.execute(""" 
                 SELECT SUM(quantidade) FROM estoque 
-                WHERE material_id = %s AND tipo_movimentacao = 'entrada'
+                WHERE material_id = %s AND tipo_movimentacao = 'entrada' 
             """, (material_id,))
             total_entradas = cursor.fetchone()[0] or 0  # Se não houver entradas, usa 0
 
-            cursor.execute("""
+            cursor.execute(""" 
                 SELECT SUM(quantidade) FROM estoque 
-                WHERE material_id = %s AND tipo_movimentacao = 'saida'
+                WHERE material_id = %s AND tipo_movimentacao = 'saida' 
             """, (material_id,))
             total_saidas = cursor.fetchone()[0] or 0  # Se não houver saídas, usa 0
 
@@ -1240,15 +1277,13 @@ def atualizar_requisicao():
                     cursor.execute("UPDATE requisicoes SET status = 'Disponivel para retirada' WHERE id = %s", (requisicao_id,))
 
                     # Registra a saída do material (movimentação de saída)
-                    cursor.execute("""
+                    cursor.execute(""" 
                         INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) 
-                        VALUES (%s, %s, 'saida', %s)
+                        VALUES (%s, %s, 'saida', %s) 
                     """, (material_id, quantidade_requisitada, usuario_id))
 
-                    # Não atualiza diretamente o estoque na tabela de materiais, apenas registra a saída
                     flash('Material disponível para retirada e estoque atualizado com sucesso!', 'success')
                 else:
-                    # Caso o estoque não seja suficiente
                     flash('Estoque insuficiente para esta ação. Verifique a quantidade disponível.', 'error')
 
             elif acao == 'Retirado':
@@ -1256,7 +1291,6 @@ def atualizar_requisicao():
                     # Atualiza o status da requisição para "Retirado"
                     cursor.execute("UPDATE requisicoes SET status = 'Retirado' WHERE id = %s", (requisicao_id,))
 
-                    
                     flash('Material retirado e estoque atualizado com sucesso!', 'success')
                 else:
                     flash('Estoque insuficiente para esta ação. Verifique a quantidade disponível.', 'error')
@@ -1265,7 +1299,6 @@ def atualizar_requisicao():
                         'estoque_atual': estoque_atual,
                         'quantidade_requisitada': quantidade_requisitada
                     }), 400
-
 
             elif acao == 'Aguardando reposição':
                 cursor.execute("UPDATE requisicoes SET status = 'Aguardando reposição' WHERE id = %s", (requisicao_id,))
@@ -1294,11 +1327,10 @@ def atualizar_requisicao():
                 corpo = f"""
                 <p>A requisição referente ao produto <span class="strong-text">"{nome_produto}"</span> foi atualizada para <span class="strong-text">"{acao}"</span>.</p>
                 """
-                print("Enviando")
-                enviar_email_almoxarifado(email_usuario, assunto, corpo)
+                enviar_emails_assincronos(email_usuario, assunto, corpo)  # Envia e-mail de forma assíncrona
             else:
                 print("Usuário não encontrado para a requisição.")
-            
+
             return jsonify({'message': 'Requisição atualizada com sucesso'}), 200
 
     except Exception as e:
