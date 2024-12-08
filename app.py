@@ -145,11 +145,11 @@ def editar_perfil():
     usuario_id = session.get('user_id')
 
     if request.method == 'POST':
-        nome = request.form['nome']
-        email = request.form['email']
-        senha_atual = request.form['senha_atual']
-        nova_senha = request.form['senha']
-        confirmar_senha = request.form['confirmar_senha']
+        nome = request.form.get('nome')
+        email = request.form.get('email')
+        senha_atual = request.form.get('senha_atual')
+        nova_senha = request.form.get('senha')
+        confirmar_senha = request.form.get('confirmar_senha')
 
         cursor = conexao.cursor()
 
@@ -158,32 +158,27 @@ def editar_perfil():
             cursor.execute("SELECT senha FROM users WHERE id = %s", (usuario_id,))
             senha_bd = cursor.fetchone()[0]
 
-            # Verifica a senha atual
             if not senha_atual or senha_atual != senha_bd:
                 flash('A senha atual está incorreta.', 'error')
                 cursor.close()
                 conexao.close()
                 return redirect(url_for('editar_perfil'))
 
-            # Verifica se a nova senha tem pelo menos 8 caracteres
             if len(nova_senha) < 8:
                 flash('A nova senha deve ter pelo menos 8 caracteres.', 'error')
                 cursor.close()
                 conexao.close()
                 return redirect(url_for('editar_perfil'))
 
-            # Verifica se a nova senha coincide com a confirmação
             if nova_senha != confirmar_senha:
                 flash('As novas senhas não coincidem.', 'error')
                 cursor.close()
                 conexao.close()
                 return redirect(url_for('editar_perfil'))
 
-            # Atualiza a senha no banco de dados
             cursor.execute("UPDATE users SET nome = %s, email = %s, senha = %s WHERE id = %s", 
                            (nome, email, nova_senha, usuario_id))
         else:
-            # Atualiza somente o nome e o email, sem mudar a senha
             cursor.execute("UPDATE users SET nome = %s, email = %s WHERE id = %s", 
                            (nome, email, usuario_id))
 
@@ -201,67 +196,12 @@ def editar_perfil():
     
     return render_template('editar_perfil.html', usuario=usuario)
 
+
 def gerar_hash_senha(senha):
     return hashlib.sha256(senha.encode()).hexdigest()
 
 
-@app.route('/cadastrar_usuario', methods=['POST'])
-def cadastrar_usuario():
-    dados = request.json
-    sn = dados.get('sn')
-    nome = dados.get('nome')
 
-    if not sn or not nome:
-        flash('SN e Nome são obrigatórios.', 'error')
-        return jsonify({'success': False})
-
-    conexao = conectar_banco_dados()
-    if conexao:
-        try:
-            cursor = conexao.cursor()
-
-            # Verificar se o SN já existe
-            query_verificar = "SELECT COUNT(*) FROM users WHERE sn = %s"
-            cursor.execute(query_verificar, (sn,))
-            if cursor.fetchone()[0] > 0:
-                flash('SN já cadastrado. Escolha outro.', 'error')
-                return jsonify({'success': False})
-
-            # Inserir o novo usuário
-            query_inserir = "INSERT INTO users (sn, nome) VALUES (%s, %s)"
-            cursor.execute(query_inserir, (sn, nome))
-            conexao.commit()
-
-            flash('Usuário cadastrado com sucesso!', 'success')
-            return jsonify({'success': True})
-        except Error as e:
-            print(f"Erro ao cadastrar usuário: {e}")
-            flash('Erro ao cadastrar usuário. Tente novamente.', 'error')
-            return jsonify({'success': False})
-        finally:
-            cursor.close()
-            conexao.close()
-    else:
-        flash('Falha na conexão com o banco de dados.', 'error')
-        return jsonify({'success': False})
-
-
-
-
-@app.route('/cadastrar_usuario', methods=['POST'])
-def cadastrar_usuario_endpoint():
-    try:
-        data = request.get_json()
-        sn = data.get("sn")
-        nome = data.get("nome")
-
-
-        # Chamar função de cadastro
-        mensagem = cadastrar_usuario(sn, nome)
-
-        return jsonify({"mensagem": mensagem}), 200
-    except Exception as e:
-        return jsonify({"erro": str(e)}), 400
 
 
 @app.route('/cadastro', methods=['GET', 'POST'])
@@ -485,6 +425,65 @@ def admin():
     conexao.close()
 
     return render_template('admin/admin.html', usuarios=usuarios, usuario=usuario_logado)
+
+
+@app.route('/cadastrar_usuario', methods=['POST'])
+def cadastrar_usuario():
+    dados = request.json
+    sn = dados.get('sn')
+    nome = dados.get('nome')
+
+    if not sn or not nome:
+        flash('SN e Nome são obrigatórios.', 'error')
+        return jsonify({'success': False})
+
+    conexao = conectar_banco_dados()
+    if conexao:
+        try:
+            cursor = conexao.cursor()
+
+            # Verificar se o SN já existe
+            query_verificar = "SELECT COUNT(*) FROM users WHERE sn = %s"
+            cursor.execute(query_verificar, (sn,))
+            if cursor.fetchone()[0] > 0:
+                flash('SN já cadastrado. Escolha outro.', 'error')
+                return jsonify({'success': False})
+
+            # Inserir o novo usuário
+            query_inserir = "INSERT INTO users (sn, nome) VALUES (%s, %s)"
+            cursor.execute(query_inserir, (sn, nome))
+            conexao.commit()
+
+            flash('Usuário cadastrado com sucesso!', 'success')
+            return jsonify({'success': True})
+        except Error as e:
+            print(f"Erro ao cadastrar usuário: {e}")
+            flash('Erro ao cadastrar usuário. Tente novamente.', 'error')
+            return jsonify({'success': False})
+        finally:
+            cursor.close()
+            conexao.close()
+    else:
+        flash('Falha na conexão com o banco de dados.', 'error')
+        return jsonify({'success': False})
+
+
+
+
+@app.route('/cadastrar_usuario', methods=['POST'])
+def cadastrar_usuario_endpoint():
+    try:
+        data = request.get_json()
+        sn = data.get("sn")
+        nome = data.get("nome")
+
+
+        # Chamar função de cadastro
+        mensagem = cadastrar_usuario(sn, nome)
+
+        return jsonify({"mensagem": mensagem}), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 400
 
 @app.route('/aprovar_usuario', methods=['POST'])
 def aprovar_usuario():
