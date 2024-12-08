@@ -79,3 +79,10 @@ font-size: 40px;
 .subindo {
     transform: translateY(-100%);
 }
+
+
+@media (max-width: 468px){
+    .container-dashboard-header{
+        margin-top: 20px;
+    }
+}

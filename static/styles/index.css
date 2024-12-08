@@ -152,3 +152,62 @@ a{
     text-decoration: none;
     color: white;
 }
+
+@media(max-width:468px){
+    .container-dashboard-header{
+        margin-top: 20px;
+    }
+}
+
+:root{
+    --cinza: #ffffff;
+    --dark: #161616;
+    --fundo : #aab5ca;
+    --fundodark :#465E8C;
+    --fonte : #000;
+    --fontedark : #fff;
+}
+body.light-mode {
+    color: var(--fonte);
+}
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark)
+}
+.none {
+    display: none;
+}
+
+.darkmode img {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    right: 10px; /* Posiciona a imagem no lado direito */
+    top: 10px; /* Ajusta a distância da parte superior */
+}
+
+.darkmode img.none {
+    opacity: 0; /* Ícone oculto */
+    transform: scale(0.8); /* Reduz um pouco o tamanho */
+}
+
+.darkmode .sol-icon{
+    background-color: var(--fontedark);
+}
+
+.dark-mode #sol-icon {
+    filter: brightness(0) invert(1); 
+}
+
+/* Certifique-se de que essas regras estejam no final do seu CSS para garantir que sejam aplicadas corretamente */
+body.dark-mode {
+    background-color: var(--dark);
+    color: var(--fontedark);
+}
+
+.dark-mode .campo-estoque{
+    background-color: var(--fundodark);
+}

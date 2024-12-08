@@ -264,8 +264,11 @@ body{
 #modo-escuro-mobile{
       display: none;
     }
-@media (max-width: 468px) {
-    .darkmode {
+
+
+
+@media (max-width: 468px){
+  .darkmode {
         display: flex;             /* Exibe o contêiner com flexbox */
         align-items: center;       /* Alinha as imagens verticalmente */
         justify-content: flex-end; /* Alinha as imagens à direita */
@@ -277,7 +280,35 @@ body{
     .darkmode #lua-icon, .darkmode #sol-icon{
       display: none;
     }
+  body{
+    margin-top: -20px;
+  }
+
+
+  #desktop{
+    display: none;
+  }
+  #mobile{
+    display: block;
+  }
+  .darkmode img {
+    left: 20px;
+    font-size: 14px;
+    filter: invert(100%);
+    width: 32px;
+    height: 32px;
+  }
+  li#modo-escuro-mobile a{
+    margin-left: 20px;
+  }
+  .darkmode .sol-icon{
+    background-color: transparent;
+  }
+  .darkmode img{
+    top: auto;
+  }
 }
+
 
 
   </style>

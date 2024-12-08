@@ -177,6 +177,10 @@ canvas.meu-canvas {
         border-radius: 0px;
     }
 
+        .container-dashboard-header{
+            margin-top: 20px;
+        }
+
 }
 
 

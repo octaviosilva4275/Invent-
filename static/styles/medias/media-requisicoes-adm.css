@@ -172,4 +172,17 @@
   #mobile{
     display: block;
   }
+  .darkmode img {
+    left: 20px;
+    font-size: 14px;
+    filter: invert(100%);
+    width: 32px;
+    height: 32px;
+  }
+  li#modo-escuro-mobile a{
+    margin-left: 20px;
+  }
+  .darkmode .sol-icon{
+    background-color: transparent;
+  }
 }
