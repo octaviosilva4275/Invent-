@@ -1,11 +1,14 @@
 INSERT INTO users (sn, nome, email, senha, cargo) VALUES
-    ("11", "Fernanda", "administrador@sp.senai.br", "senha123", "admin"),
-    ("22", "Patricia", "patricia.senai@sp.senai.br", "senha123", "almoxarifado"),
-    ("33", "Alex Stocco", "octavio.freitas4275@gmail.com", "senha123", "tecnologia-da-informacao");
+    ("0000001", "Fernanda", "administrador@sp.senai.br", "senha123", "admin"),
+    ("0000002", "Patricia", "patricia.senai@sp.senai.br", "senha123", "almoxarifado"),
+    ("0000003", "Alex Stocco", "octavio.freitas4275@gmail.com", "senha123", "tecnologia-da-informacao"),
+    ("0000005", "Ivo C. Neto", "ivo.neto@sp.senai.br", "senha123", "tecnologia-da-informacao"),
+    ("0000006", "Hercules", "hercules@sp.senai.br", "senha123", "metalmecanica"),
+    ("0000007", "José Barbosa", "jose.barbosa@sp.senai.br", "senha123", "gestao");
 
 
 INSERT INTO users (sn, nome) VALUES 
-	("44", "Naiara");
+	("0000004", "Naiara");
 
 -- Inserção de exemplo para tabela de materiais com código_produto único
 INSERT INTO materials (descricao, categoria, localizacao, estoque_minimo, codigo_produto) VALUES 

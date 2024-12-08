@@ -24,7 +24,10 @@
         </div>
         <section class="solicitacao">
             <div class="container-solicitacao" id="desktop">
-                <h1 class="titulo-solicitacao">Solicitação de pedido</h1>
+                <h1 class="titulo-solicitacao">Solicitação de pedido</h1>     
+                <button class="btn btn-info" data-toggle="modal" data-target="#filtroModal">Abrir Filtro</button>     
+                <button type="button" class="btn btn-warning" id="limpar-filtro" style="display: none;">Limpar Filtro</button>
+      
                 <div class="campo-solicitacao">
                     <!-- Primeira tabela -->
                     <table class="tabela-solicitacao">
@@ -121,48 +124,46 @@
         </section>
 
 
-        <!-- Modal de Filtro -->
-        <div class="modal fade" id="filtroModal" tabindex="-1" role="dialog" aria-labelledby="filtroModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="filtroModalLabel">Filtros</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+            <!-- Modal de Filtro -->
+    <div class="modal fade" id="filtroModal" tabindex="-1" role="dialog" aria-labelledby="filtroModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filtroModalLabel">Filtros</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="filtro-nome">Nome do Solicitante</label>
+                        <input type="text" class="form-control" id="filtro-nome" placeholder="Filtrar por nome">
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="filtro-nome">Nome do Solicitante</label>
-                            <input type="text" class="form-control" id="filtro-nome" placeholder="Filtrar por nome">
-                        </div>
-                        <div class="form-group">
-                            <label for="filtro-produto">Produto</label>
-                            <input type="text" class="form-control" id="filtro-produto"
-                                placeholder="Filtrar por produto">
-                        </div>
-                        <div class="form-group">
-                            <label for="filtro-status">Status</label>
-                            <select class="form-control" id="filtro-status">
-                                <option value="">Selecione</option>
-                                <option value="solicitado">Solicitado</option>
-                                <option value="disponivel para retirada">Disponível para Retirada</option>
-                                <option value="aguardando reposição">Aguardando Reposição</option>
-                                <option value="retirado">Retirado</option>
-                            </select>
+                    <div class="form-group">
+                        <label for="filtro-produto">Produto</label>
+                        <input type="text" class="form-control" id="filtro-produto" placeholder="Filtrar por produto">
+                    </div>
+                    <div class="form-group">
+                        <label for="filtro-status">Status</label>
+                        <select class="form-control" id="filtro-status">
+                            <option value="">Selecione</option>
+                            <option value="solicitado">Solicitado</option>
+                            <option value="disponivel para retirada">Disponível para Retirada</option>
+                            <option value="aguardando reposição">Aguardando Reposição</option>
+                            <option value="retirado">Retirado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" id="reiniciar-filtros">Limpar Filtros</button>
 
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" id="limpar-filtros">Limpar</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary" id="filtro-aplicar">Aplicar Filtro</button>
-                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-danger" id="limpar-retirados">Limpar Retirados</button>
+                    <button type="button" class="btn btn-primary" id="aplicar-filtros">Aplicar Filtros</button>
                 </div>
             </div>
         </div>
-
+    </div>
 
 
         <!-- Modal de Ações -->
@@ -227,60 +228,187 @@
     </main>
 
     <script>
-        $(document).ready(function () {
-            // Função para adicionar classes de status às linhas da tabela
-            $('tr.requisicao').each(function () {
-                var status = $(this).find('td:nth-child(3)').text().trim().toLowerCase();
-                switch (status) {
-                    case 'solicitado':
-                        $(this).find('td:nth-child(3)').addClass('status-solicitado');
-                        break;
-                    case 'disponivel para retirada':
-                        $(this).find('td:nth-child(3)').addClass('status-disponivel');
-                        break;
-                    case 'aguardando reposição':
-                        $(this).find('td:nth-child(3)').addClass('status-aguardando');
-                        break;
-                    case 'retirado':
-                        $(this).find('td:nth-child(3)').addClass('status-retirado');
-                        break;
-                    default:
-                        console.warn('Status desconhecido:', status);
-                }
-            });
-    
-            // Função para aplicar os filtros
-            $('#filtro-aplicar').click(function () {
-                var nome = $('#filtro-nome').val().toLowerCase();
-                var produto = $('#filtro-produto').val().toLowerCase();
-                var status = $('#filtro-status').val().toLowerCase();
-    
-                $('.tabela-solicitacao tbody tr').each(function () {
-                    var tr_nome = $(this).data('nome');
-                    var tr_produto = $(this).data('produto');
-                    var tr_status = $(this).data('status');
-    
-                    if (
-                        (nome === '' || tr_nome.indexOf(nome) > -1) &&
-                        (produto === '' || tr_produto.indexOf(produto) > -1) &&
-                        (status === '' || tr_status.indexOf(status) > -1)
-                    ) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-    
-                $('#filtroModal').modal('hide');
-                $('.modal-backdrop').remove();
-            });
-    
-            $('#limpar-filtros').click(function () {
-                $('#filtro-nome').val('');
-                $('#filtro-produto').val('');
-                $('#filtro-status').val('');
-                $('.tabela-solicitacao tbody tr').show();
-            });
+$(document).ready(function () {
+    // Função para adicionar classes de status às linhas da tabela
+    $('tr.requisicao').each(function () {
+        var status = $(this).find('td:nth-child(3)').text().trim().toLowerCase();
+        switch (status) {
+            case 'solicitado':
+                $(this).find('td:nth-child(3)').addClass('status-solicitado');
+                break;
+            case 'disponivel para retirada':
+                $(this).find('td:nth-child(3)').addClass('status-disponivel');
+                break;
+            case 'aguardando reposição':
+                $(this).find('td:nth-child(3)').addClass('status-aguardando');
+                break;
+            case 'retirado':
+                $(this).find('td:nth-child(3)').addClass('status-retirado');
+                break;
+            default:
+                console.warn('Status desconhecido:', status);
+        }
+    });
+
+    // Função para verificar se algum filtro foi aplicado
+    function verificarFiltros() {
+        var nome = $('#filtro-nome').val();
+        var produto = $('#filtro-produto').val();
+        var status = $('#filtro-status').val();
+        var retirado = localStorage.getItem('filtro-retirado') === 'true';
+
+        if (nome || produto || status || retirado) {
+            $('#limpar-filtro').show();  // Mostrar botão "Limpar Filtro" se algum filtro for aplicado
+        } else {
+            $('#limpar-filtro').hide();  // Esconder botão "Limpar Filtro" se não houver filtros
+        }
+    }
+
+    // Recuperar filtros do localStorage (se existirem)
+    var nomeFiltro = localStorage.getItem('filtro-nome');
+    var produtoFiltro = localStorage.getItem('filtro-produto');
+    var statusFiltro = localStorage.getItem('filtro-status');
+    var retiradoFiltro = localStorage.getItem('filtro-retirado') === 'true';
+
+    // Aplicar os filtros recuperados, se houverem
+    if (nomeFiltro) $('#filtro-nome').val(nomeFiltro);
+    if (produtoFiltro) $('#filtro-produto').val(produtoFiltro);
+    if (statusFiltro) $('#filtro-status').val(statusFiltro);
+
+    // Se o filtro de "retirados" estiver ativo, ocultar essas linhas
+    if (retiradoFiltro) {
+        $('.tabela-solicitacao tbody tr').each(function () {
+            var tr_status = $(this).data('status') || '';
+            if (tr_status === 'retirado') {
+                $(this).hide();
+            }
+        });
+    }
+
+    // Monitorar alterações nos campos de filtro
+    $('#filtro-nome, #filtro-produto, #filtro-status').on('input change', function () {
+        // Salvar os filtros no localStorage
+        localStorage.setItem('filtro-nome', $('#filtro-nome').val());
+        localStorage.setItem('filtro-produto', $('#filtro-produto').val());
+        localStorage.setItem('filtro-status', $('#filtro-status').val());
+
+        // Aplicar os filtros
+        aplicarFiltros();
+    });
+
+    // Aplicar os filtros na tabela
+    function aplicarFiltros() {
+        var nome = $('#filtro-nome').val().toLowerCase();
+        var produto = $('#filtro-produto').val().toLowerCase();
+        var status = $('#filtro-status').val().toLowerCase();
+        var retirado = localStorage.getItem('filtro-retirado') === 'true';
+
+        $('.tabela-solicitacao tbody tr').each(function () {
+            var tr_nome = $(this).data('nome') || '';
+            var tr_produto = $(this).data('produto') || '';
+            var tr_status = $(this).data('status') || '';
+
+            var exibir =
+                (!nome || tr_nome.includes(nome)) &&
+                (!produto || tr_produto.includes(produto)) &&
+                (!status || tr_status === status);
+
+            // Se o filtro de "retirados" estiver ativo, esconder as linhas com esse status
+            if (retirado && tr_status === 'retirado') {
+                $(this).hide();
+            } else {
+                $(this).toggle(exibir);
+            }
+        });
+
+        // Verificar se algum filtro foi aplicado
+        verificarFiltros();
+    }
+
+    // Reiniciar os filtros
+    $('#reiniciar-filtros').click(function () {
+        // Limpa os campos de filtro
+        $('#filtro-nome').val('');
+        $('#filtro-produto').val('');
+        $('#filtro-status').val('');
+
+        // Remover filtros do localStorage
+        localStorage.removeItem('filtro-nome');
+        localStorage.removeItem('filtro-produto');
+        localStorage.removeItem('filtro-status');
+        localStorage.removeItem('filtro-retirado');
+
+        // Exibe todas as linhas da tabela
+        $('.tabela-solicitacao tbody tr').show();
+
+        // Esconde o botão "Limpar Filtro"
+        $('#limpar-filtro').hide();
+
+        // Fecha o modal
+        $('#filtroModal').modal('hide');
+        $('.modal-backdrop').remove();
+    });
+
+    // Limpar os filtros
+    $('#limpar-filtro').click(function () {
+        // Limpa os campos de filtro
+        $('#filtro-nome').val('');
+        $('#filtro-produto').val('');
+        $('#filtro-status').val('');
+
+        // Exibe todas as linhas da tabela
+        $('.tabela-solicitacao tbody tr').show();
+
+        // Esconde o botão "Limpar Filtro"
+        $('#limpar-filtro').hide();
+
+        // Remover filtros do localStorage
+        localStorage.removeItem('filtro-nome');
+        localStorage.removeItem('filtro-produto');
+        localStorage.removeItem('filtro-status');
+        localStorage.removeItem('filtro-retirado');
+
+        // Fecha o modal
+        $('#filtroModal').modal('hide');
+        $('.modal-backdrop').remove();
+    });
+
+    // Verificar se os filtros estão preenchidos ao carregar a página
+    verificarFiltros();
+
+    // Monitorar alterações nos campos de filtro para atualizar o botão "Limpar Filtro"
+    $('#filtro-nome, #filtro-produto, #filtro-status').on('input change', function () {
+        verificarFiltros();
+    });
+
+    // Limpa somente os "Retirados"
+    $('#limpar-retirados').click(function () {
+        $('.tabela-solicitacao tbody tr').each(function () {
+            var tr_status = $(this).data('status') || '';
+            if (tr_status === 'retirado') {
+                $(this).hide();
+            }
+        });
+
+        // Armazenar o filtro de "retirados" no localStorage
+        localStorage.setItem('filtro-retirado', 'true');
+
+        // Exibir o botão de "Limpar Filtro"
+        verificarFiltros();
+
+        // Fecha o modal
+        $('#filtroModal').modal('hide');
+        $('.modal-backdrop').remove();
+    });
+
+    // Aplica outros filtros
+    $('#aplicar-filtros').click(function () {
+        aplicarFiltros();
+        $('#filtroModal').modal('hide');
+        $('.modal-backdrop').remove();
+    });
+
+
     
             $('#acaoForm').submit(function (e) {
                 e.preventDefault();

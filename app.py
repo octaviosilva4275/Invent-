@@ -550,38 +550,52 @@ def excluir_usuario():
 
 
 
-@app.route('/editar_usuario', methods=['POST', 'GET'])
+
+@app.route('/editar_usuario', methods=['POST'])
 def editar_usuario():
-    user_id = request.form['user_id']  # Obtém o ID do usuário a ser editado
+    try:
+        user_id = request.form['user_id']  # Obtém o ID do usuário a ser editado
 
-    # Conectar ao banco de dados
-    conexao = conectar_banco_dados()
-    cursor = conexao.cursor(dictionary=True)
+        # Conectar ao banco de dados
+        conexao = conectar_banco_dados()
+        cursor = conexao.cursor(dictionary=True)
 
-    if request.method == 'POST':
         # Captura os dados atualizados do formulário de edição
         nome = request.form.get('nome')
         email = request.form.get('email')
         sn = request.form.get('sn', '')  # Atribui um valor vazio caso o SN não seja enviado
-        cargo = request.form.get('cargo')
-        senha = request.form.get('senha')
+        cargo = request.form.get('cargo')  # Se o campo cargo existir, inclua
+        senha = request.form.get('senha')  # Se o campo senha existir, inclua
+
+        # Verifique se todos os dados necessários foram fornecidos
+        if not nome or not email or not sn:
+            flash('Todos os campos obrigatórios devem ser preenchidos.', 'danger')
+            return redirect(url_for('editar_usuario', user_id=user_id))
 
         # Atualiza as informações do usuário no banco de dados
-        query_update = "UPDATE users SET nome = %s, email = %s, sn = %s, cargo = %s, senha = %s WHERE id = %s"
-        cursor.execute(query_update, (nome, email, sn, cargo, senha, user_id))
+        query_update = "UPDATE users SET nome = %s, email = %s, sn = %s WHERE id = %s"
+        cursor.execute(query_update, (nome, email, sn, user_id))
+
+        # Verifique se a linha foi realmente alterada
+        if cursor.rowcount == 0:
+            flash('Nenhum usuário encontrado para atualizar com esse ID.', 'danger')
+        else:
+            flash('Usuário atualizado com sucesso!', 'success')
+
         conexao.commit()
 
-        flash('Usuário atualizado com sucesso!', 'success')
-        return redirect(url_for('admin'))  # Redireciona para a página de administração após a atualização
+        # Fechar a conexão
+        cursor.close()
+        conexao.close()
 
-    # Busca os dados do usuário para preencher no formulário
-    cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-    usuario = cursor.fetchone()
+    except Exception as e:
+        flash(f'Ocorreu um erro: {str(e)}', 'danger')
 
-    cursor.close()
-    conexao.close()
+    # Redireciona de volta para a página de edição, para que o usuário veja a mensagem
+    return redirect(url_for('editar_usuario', user_id=user_id))
 
-    return render_template('editar_usuario.html', usuario=usuario)
+
+
 
 
 # ---------------------------------------------------- CONTROLE DE ESTOQUE ----------------------------------------------------
@@ -943,7 +957,7 @@ def requisicao_material_admin():
             FROM requisicoes r
             JOIN materials m ON r.material_id = m.id
             JOIN users u ON r.usuario_id = u.id
-            WHERE r.status != 'aprovada' AND DATE(r.data_atualizacao) = CURDATE()
+            WHERE r.status != 'aprovada' AND r.data_atualizacao >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
             ORDER BY r.status DESC 
         """)
 

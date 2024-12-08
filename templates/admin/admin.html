@@ -31,50 +31,45 @@
     <div class="gerenciamento">
         <h2>Solicitação para Almoxarife</h2>
         <!-- Verifica se existem solicitantes não verificados -->
-        {% if solicitacoes %}
-            <!-- Tabela de usuários -->
-            <table class="tabela-solicitacao">
-                <thead>
+    
+        <!-- Tabela de usuários -->
+        <table class="tabela-solicitacao">
+            <thead>
+                <tr>
+                    <th>Nome do Usuário</th>
+                    <th>Código SN</th>
+                    <th>Email</th>
+                    <th>Cargo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios if '-nao-verificado' in usuario.cargo %}
                     <tr>
-                        <th>Nome do Usuário</th>
-                        <th>Código SN</th>
-                        <th>Email</th>
-                        <th>Id</th>
-                        <th>Ações</th>
+                        <td>{{ usuario.nome }}</td>
+                        <td>{{ usuario.sn }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.cargo }}</td>
+                        <td>
+                            <div class="btn-gerenciar">
+                                <button class="excluir">EXCLUIR</button>
+                                <form method="POST" action="{{ url_for('aprovar_usuario') }}">
+                                    <input type="hidden" name="user_id" value="{{ usuario.id }}">
+                                    <button type="submit" class="btn-approve">Aprovar</button>
+                                </form>
+                            </div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for solicitante in solicitacoes %}
-                        <!-- Filtra apenas as solicitações "não verificadas" -->
-                        {% if '-nao-verificado' in solicitante.cargo %}
-                        <tr>
-                            <td>{{ solicitante.nome }}</td>
-                            <td>{{ solicitante.sn }}</td>
-                            <td>{{ solicitante.email }}</td>
-                            <td>{{ solicitante.id }}</td>
-                            <td>
-                                <div class="btn-gerenciar">
-                                    <button class="excluir">EXCLUIR</button>
-                                    <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
-                                        data-bs-target="#editModal" data-nome="{{ solicitante.nome }}"
-                                        data-codigo="{{ solicitante.sn }}" data-email="{{ solicitante.email }}">
-                                        Editar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <!-- Mensagem exibida caso a lista esteja vazia -->
-            <p class="sem-dados">Nenhuma solicitação disponível no momento.</p>
-        {% endif %}
-        
+                {% else %}
+                    <!-- Mensagem exibida caso a lista esteja vazia -->
+                    <tr>
+                        <td colspan="5" class="sem-dados">Nenhuma solicitação disponível no momento.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
-
     </div>
+    
 
 
     <!-- Container responsivo para mobile/tablets -->
@@ -94,8 +89,8 @@
                 <span class="valor">{{ solicitante.email }}</span>
             </div>
             <div class="linha">
-                <span class="label">Id:</span>
-                <span class="valor">{{ solicitante.id }}</span>
+                <span class="label">Cargo:</span>
+                <span class="valor">{{ solicitante.Cargo }}</span>
             </div>
             <div class="botoes">
                 <button class="aprovado">Aprovar</button>
@@ -126,7 +121,7 @@
                     <th>Nome do Usuário</th>
                     <th>Código SN</th>
                     <th>Email</th>
-                    <th>Id</th>
+                    <th>Cargo</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -136,15 +131,17 @@
                     <td>{{ usuario.nome }}</td>
                     <td>{{ usuario.sn }}</td>
                     <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.cargo }}</td>
                     <td>
                         <div class="btn-gerenciar">
                             <button class="excluir">EXCLUIR</button>
                             <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
-                                data-bs-target="#editModal" data-nome="{{ usuario.nome }}"
-                                data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}">
+                                data-bs-target="#editModal" data-nome="{{ usuario.nome }}" 
+                                data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}" 
+                                data-id="{{ usuario.id }}" onclick="openModal(this)">
                                 Editar
                             </button>
+                        
                         </div>
                     </td>
                 </tr>
@@ -182,39 +179,50 @@
         {% endfor %}
 
     </div>
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar Usuário</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Spinner dentro do Modal -->
+                <div id="loadingSpinner" class="d-none">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                </div>
 
-    <!-- Modal Bootstrap -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Editar Usuário</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Formulário de Edição -->
-                    <form id="editForm">
-                        <div class="mb-3">
-                            <label for="nomeUsuario" class="form-label">Nome do Usuário</label>
-                            <input type="text" class="form-control" id="nomeUsuario" placeholder="Digite o nome">
-                        </div>
-                        <div class="mb-3">
-                            <label for="codigoUsuario" class="form-label">Código SN</label>
-                            <input type="text" class="form-control" id="codigoUsuario" placeholder="Digite o código">
-                        </div>
-                        <div class="mb-3">
-                            <label for="emailUsuario" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="emailUsuario" placeholder="Digite o email">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="saveChanges">Salvar</button>
-                </div>
+                <!-- Formulário de Edição -->
+                <form id="editForm" method="POST" action="{{ url_for('editar_usuario') }}">
+                    <input type="hidden" id="editUserId" name="user_id">  <!-- ID do usuário -->
+                    <div class="mb-3">
+                        <label for="nomeUsuario" class="form-label">Nome do Usuário</label>
+                        <input type="text" class="form-control" id="nomeUsuario" name="nome" placeholder="Digite o nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="codigoUsuario" class="form-label">Código SN</label>
+                        <input type="text" class="form-control" id="codigoUsuario" name="sn" placeholder="Digite o código" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailUsuario" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="emailUsuario" name="email" placeholder="Digite o email" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="saveChanges">Salvar</button>
             </div>
         </div>
     </div>
+</div>
+
+
+
+
 
 <!-- Modal de Cadastro -->
 <div class="modal fade" id="cadastroModal" tabindex="-1" aria-labelledby="cadastroModalLabel" aria-hidden="true">
@@ -247,23 +255,69 @@
 
 
     <script>
-        document.getElementById('saveChanges').addEventListener('click', function () {
-            const nome = document.getElementById('nomeUsuario').value;
-            const codigo = document.getElementById('codigoUsuario').value;
-            const email = document.getElementById('emailUsuario').value;
+function openModal(button) {
+    const userId = button.getAttribute('data-id');
+    const nome = button.getAttribute('data-nome');
+    const email = button.getAttribute('data-email');
+    const sn = button.getAttribute('data-codigo');
 
-            const usuarioAtivo = document.querySelector('.container-responsivo.active');
-            if (usuarioAtivo) {
-                usuarioAtivo.querySelector('.label').textContent = `Nome do Usuário: ${nome}`;
-                usuarioAtivo.querySelector('.valor.codigo-sn').textContent = codigo;
-                usuarioAtivo.querySelector('.valor.email').textContent = email;
-            }
+    // Preenche o modal com as informações do usuário
+    document.getElementById('editUserId').value = userId;  // Atribui o userId corretamente
+    document.getElementById('nomeUsuario').value = nome;
+    document.getElementById('codigoUsuario').value = sn;
+    document.getElementById('emailUsuario').value = email;
 
-            console.log('Dados salvos:', { nome, codigo, email });
+    // Exibe o modal
+    $('#editModal').modal('show');
+}
 
-            const modal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
-            modal.hide();
-        });
+document.getElementById('saveChanges').addEventListener('click', function () {
+    // Pega os valores dos campos
+    const nome = document.getElementById('nomeUsuario').value;
+    const codigo = document.getElementById('codigoUsuario').value;
+    const email = document.getElementById('emailUsuario').value;
+    const userId = document.getElementById('editUserId').value;  // ID do usuário
+
+    // Exibe o spinner de carregamento
+    document.getElementById('loadingSpinner').classList.remove('d-none');
+
+    // Envia os dados via POST para o backend
+    fetch('/editar_usuario', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'user_id': userId,
+            'nome': nome,
+            'email': email,
+            'sn': codigo
+        })
+    })
+    .then(response => response.text())  // Mudando para text(), pois a resposta é HTML com flash
+    .then(data => {
+        // Esconde o spinner após a resposta
+        document.getElementById('loadingSpinner').classList.add('d-none');
+
+        // Após o processamento, redireciona para a página correta (a mesma página de administração)
+        window.location.href = '/admin';  // Ou qualquer página onde você espera ver a mensagem
+    })
+    .catch(error => {
+        // Esconde o spinner em caso de erro
+        document.getElementById('loadingSpinner').classList.add('d-none');
+        console.error('Erro:', error);
+        alert('Ocorreu um erro ao salvar os dados');
+    });
+});
+
+
+
+
+
+
+
+
+
 
         document.getElementById("pesquisaUsuario").addEventListener("input", filtrarUsuarios);
 
@@ -461,8 +515,7 @@
                 document.getElementById('codigoUsuario').value = codigo;
                 document.getElementById('emailUsuario').value = email;
 
-                document.querySelectorAll('.container-responsivo').forEach(container => container.classList.remove('active'));
-                this.closest('.container-responsivo').classList.add('active');
+
             });
         });
 
