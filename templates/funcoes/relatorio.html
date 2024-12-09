@@ -88,37 +88,42 @@
             {% endif %}
 
 
-
             {% if tipo_relatorio == 'estoque' %}
-                <canvas id="graficoEstoque"></canvas>
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const ctx = document.getElementById('graficoEstoque').getContext('2d');
-                        const dados = {
-                            labels: [{% for item in relatorio %}'{{ item.Material }}',{% endfor %}],
-                            datasets: [{
-                                label: 'Quantidade em Estoque',
-                                data: [{% for item in relatorio %}{{ item.Quantidade }},{% endfor %}],
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }]
-                        };
-                        const grafico = new Chart(ctx, {
-                            type: 'bar',
-                            data: dados,
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
+            <canvas id="graficoEstoque"></canvas>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const ctx = document.getElementById('graficoEstoque').getContext('2d');
+                    
+                    // Extrair os dados do relatório para o gráfico
+                    const materiais = [{% for item in relatorio %}'{{ item.Material }}',{% endfor %}];
+                    const quantidades = [{% for item in relatorio %}{{ item.QuantidadeAtual }},{% endfor %}];
+        
+                    const dados = {
+                        labels: materiais,
+                        datasets: [{
+                            label: 'Quantidade em Estoque',
+                            data: quantidades,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    };
+        
+                    const grafico = new Chart(ctx, {
+                        type: 'bar',  // Tipo de gráfico
+                        data: dados,
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
                                 }
                             }
-                        });
+                        }
                     });
-                </script>
-
-            {% endif %}
+                });
+            </script>
+        {% endif %}
+        
 
             {% if tipo_relatorio == 'movimentacao' %}
                 <canvas id="graficoMovimentacao"></canvas>

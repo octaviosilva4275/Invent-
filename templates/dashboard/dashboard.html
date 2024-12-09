@@ -417,15 +417,17 @@ body{
     <div class="user-account">
         <div class="user-profile">
           <img src="{{ url_for('static', filename='img/user.png') }}" style="background-color: white;" alt="logo" />
-              <div class="user-detail">
-                  {% if session.get('logged_in') %}
-                    <h3>{{ usuario['nome'] }}</h3>
-                    <span>{{ session['user_cargo'] }}</span>
-                  {% else %}
-                    <h3>Usuário não logado</h3>
-                    <span> </span>
-                  {% endif %}
+          <div class="user-detail">
+            {% if session.get('logged_in') %}
+              <h3>{{ usuario['nome'].split(' ')[0] }}</h3>  <!-- Pega apenas o primeiro nome -->
+              <span>{{ session['user_cargo'] | replace('-', ' ') | capitalize }}</span>
+            {% else %}
+              <h3>Usuário não logado</h3>
+              <span> </span>
+            {% endif %}
           </div>
+          
+          
         </div>
         </div>
       </footer>

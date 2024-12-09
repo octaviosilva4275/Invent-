@@ -18,7 +18,7 @@
 
 :root{
     --cinza: #ffffff;
-    --bgdark: #161616;
+    --bgdark: #04050D;
     --fundo : #aab5ca;
     --fundodark  : #465E8C;
     --fonte : #000;
@@ -52,10 +52,23 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column; /* Adicionado para alinhar os elementos em coluna */
+    flex-direction: column; /* Adicionando para alinhar os elementos em coluna */
     width: 100vw;
     height: 100vh;
+    z-index: 0;
+}
 
+
+
+
+.btn-info{
+    background-color: #161616;
+    border: none;
+    margin-left: auto;
+}
+
+.btn-info:hover{
+    background-color: #353535;
 }
 
 .container-solicitacao {
@@ -74,7 +87,50 @@ body {
     font-size: 3.5rem;
     text-align: center;
     margin-bottom: 40px; /* Ajustado para posicionar melhor o título */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Permite posicionar os botões dentro do título */
 }
+
+.container-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 15px;
+}
+
+
+/* Container para os inputs */
+.d-flex {
+    display: flex;
+    justify-content: space-between; /* Espaço entre o select e o link */
+    gap: 10px; /* Espaço entre os elementos */
+}
+
+/* Estilo do texto "Limpar Retirados" */
+.limpar-retirados {
+    color: #d9534f; /* Cor de texto vermelha */
+    font-size: 1rem;
+    cursor: pointer; /* Indica que o item é interativo */
+    align-self: flex-end; /* Alinha o texto ao final */
+    margin-top: 25px; /* Distância do campo */
+    transition: color 0.3s ease;
+}
+
+/* Efeito de hover */
+.limpar-retirados:hover {
+    color: #c9302c; /* Cor de hover mais escura */
+    text-decoration: underline; /* Sublinha ao passar o mouse */
+}
+
+/* Para quando o link estiver desabilitado */
+.limpar-retirados.disabled {
+    color: #e0e0e0; /* Cor cinza quando desabilitado */
+    cursor: not-allowed; /* Cursor para indicar que não é clicável */
+}
+
 
 /* Container da tabela */
 .campo-solicitacao {
@@ -148,9 +204,8 @@ body {
 
 .btn-primary{
     display: block;
-    width: 100px;
+    width: auto;
     padding: 5px;
-    margin-bottom: 5px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -251,4 +306,8 @@ body.darkmode {
 
 #mobile{
     display: none;
+}
+
+.lua-icon, .sol-icon{
+    z-index: 999;
 }

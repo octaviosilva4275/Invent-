@@ -1,8 +1,8 @@
 :root {
     --branco: #f4f4f4;
-    --dark: #161616;
+    --dark: #04050D;
     --fundo: #465E8C;
-    --fundodark: #161616;
+    --fundodark: #04050D;
     --fonte: #000;
     --fontedark: #fff;
     --fundotabela: #192340CC;
@@ -239,6 +239,6 @@ background-color: #465E8C;
 }
 
 
-.dark-mode h1, h2, h3 {
+.dark-mode h1, h2 {
     color: var(--branco);
 }

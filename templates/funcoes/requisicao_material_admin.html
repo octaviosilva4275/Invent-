@@ -6,13 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solicitação de Pedido</title>
 
-    <script src="/static/javascript/darkmode.js"></script>
+
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/requisicoes-adm.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-requisicoes-adm.css') }}">
+    <script src="/static/javascript/darkmode.js"></script>
+
 </head>
 
 <body>
@@ -24,10 +26,16 @@
         </div>
         <section class="solicitacao">
             <div class="container-solicitacao" id="desktop">
-                <h1 class="titulo-solicitacao">Solicitação de pedido</h1>     
-                <button class="btn btn-info" data-toggle="modal" data-target="#filtroModal">Abrir Filtro</button>     
-                <button type="button" class="btn btn-warning" id="limpar-filtro" style="display: none;">Limpar Filtro</button>
-      
+   
+                <div class="titulo-solicitacao">
+                    <h1>Solicitação de pedido</h1>  
+                    <div class="container-btn">
+                        <button class="btn btn-info" data-toggle="modal" data-target="#filtroModal">Abrir Filtro</button>     
+                        <button type="button" class="btn btn-warning" id="limpar-filtro" style="display: none;">Limpar Filtro</button>
+                    </div>
+                </div>
+  
+        
                 <div class="campo-solicitacao">
                     <!-- Primeira tabela -->
                     <table class="tabela-solicitacao">
@@ -59,7 +67,7 @@
                                             </a>
 
                                         {% else %}
-                                        <button class="btn-aprovar" onclick="atualizarStatus({{ requisicao.id }}, 'aprovada')">APROVAR</button>
+
                                         <button class="btn-aguardo" data-toggle="modal" data-target="#acaoModal"
                                             data-id="{{ requisicao.id }}"
                                             data-material="{{ requisicao.material }}"
@@ -152,13 +160,22 @@
                             <option value="aguardando reposição">Aguardando Reposição</option>
                             <option value="retirado">Retirado</option>
                         </select>
+
                     </div>
+
+<!-- Checkbox para "Limpar Retirados" -->
+<div class="form-group">
+    <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input limpar-retirados" id="limpar-retirados">
+        <label class="custom-control-label" for="limpar-retirados">Limpar Retirados</label>
+    </div>
+</div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" id="reiniciar-filtros">Limpar Filtros</button>
+
 
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-danger" id="limpar-retirados">Limpar Retirados</button>
+                    
                     <button type="button" class="btn btn-primary" id="aplicar-filtros">Aplicar Filtros</button>
                 </div>
             </div>

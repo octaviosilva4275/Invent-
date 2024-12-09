@@ -4,6 +4,9 @@
        display: none; /* Esconde o título do desktop */
    }
 
+   form{
+    margin-top: 0px;
+}
    /* Fundo azul claro */
    body {
        background-color: rgba(219, 231, 255, 1); /* Azul claro */
@@ -89,6 +92,10 @@
    .titulo-requisicoes {
        display: none; /* Esconde o título do desktop */
    }
+
+   form{
+    margin-top: 0px;
+}
 
    /* Fundo azul claro */
    body {
@@ -190,4 +197,7 @@
    body{
     margin-top: -20px;
    }
+   form{
+    margin-top: 0px;
+}
 }

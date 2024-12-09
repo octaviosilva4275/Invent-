@@ -51,6 +51,7 @@
 
 #lua-icon, #sol-icon {
     transition: opacity 0.3s ease;
+    cursor: pointer;
 }
 
 .none {

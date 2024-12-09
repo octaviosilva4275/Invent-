@@ -1,9 +1,19 @@
+@media(max-width: 1920px){
+  .modal-content{
+    margin-top: 35px;
+    transform: scale(1.2);
+  }
+}
+
 /* Responsividade para dispositivos móveis */
 @media (max-width: 768px) {
   .solicitacao{
     height: auto;
   }
+  .modal-content{
 
+    transform: scale(1);
+  }
 
   body {
       background-color: rgba(219, 231, 255, 1);
@@ -20,12 +30,15 @@
       text-align: center;
       color: #000000;
       position: absolute;
-      top: 120px; /* ou 30px para tablets */
+      top: 20px; /* ou 30px para tablets */
       left: 50%;
       transform: translateX(-50%);
       white-space: nowrap; /* Impede que o texto quebre */
       overflow: hidden;
   }
+
+
+  
 
   .container-solicitacao {
       padding: 20px;
@@ -114,6 +127,9 @@
   .tabela-solicitacao {
       display: none;
   }
+  .modal-content{
+    transform: scale(1);
+  }
 
   body {
       background-color: #dce4f0;
@@ -172,6 +188,10 @@
 @media (max-width: 468px){
   body{
     margin-top: -20px;
+  }
+  .modal-content{
+
+    transform: scale(1);
   }
   .container-dashboard{
     top: 41px;

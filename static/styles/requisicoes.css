@@ -17,7 +17,7 @@
 
 :root{
     --cinza: #ffffff;
-    --bgdark: #161616;
+    --bgdark: #04050D;
     --fundo : #aab5ca;
     --fundodark  : #465E8C;
     --fonte : #000;
@@ -69,6 +69,10 @@ body {
     font-size: 3.5rem;
     text-align: center;
     margin-bottom: 40px; /* Ajustado para posicionar melhor o título */
+}
+
+form{
+    margin-top: 13vh;
 }
 
 .form-requisicoes {

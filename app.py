@@ -1290,6 +1290,12 @@ def atualizar_requisicao():
                     # Atualiza o status da requisição para "Retirado"
                     cursor.execute("UPDATE requisicoes SET status = 'Retirado' WHERE id = %s", (requisicao_id,))
 
+                    # Subtrai a quantidade do material do estoque
+                    cursor.execute(""" 
+                        INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) 
+                        VALUES (%s, %s, 'saida', %s) 
+                    """, (material_id, quantidade_requisitada, usuario_id))
+
                     flash('Material retirado e estoque atualizado com sucesso!', 'success')
                 else:
                     flash('Estoque insuficiente para esta ação. Verifique a quantidade disponível.', 'error')
@@ -1301,16 +1307,6 @@ def atualizar_requisicao():
 
             elif acao == 'Aguardando reposição':
                 cursor.execute("UPDATE requisicoes SET status = 'Aguardando reposição' WHERE id = %s", (requisicao_id,))
-
-            elif acao == 'aprovar':
-                cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
-                estoque_atual = cursor.fetchone()
-                if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
-                    nova_quantidade = estoque_atual[0] - quantidade_requisitada
-                    cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
-                    cursor.execute("UPDATE requisicoes SET status = 'aprovada', data_atualizacao = NOW() WHERE id = %s", (requisicao_id,))
-                else:
-                    cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
 
             conexao.commit()
 
@@ -1443,18 +1439,24 @@ def relatorios():
 
     if request.method == 'POST':
         tipo_relatorio = request.form['tipo_relatorio']
+        periodo_inicio = request.form.get('periodo_inicio')
+        periodo_fim = request.form.get('periodo_fim')
 
         try:
             if tipo_relatorio == 'estoque':
                 cursor.execute("""
-                    SELECT m.descricao AS Material, COALESCE(SUM(e.quantidade), 0) AS Quantidade
+                    SELECT m.descricao AS Material,
+                           COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END), 0) - 
+                           COALESCE(SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END), 0) AS QuantidadeAtual
                     FROM materials m
                     LEFT JOIN estoque e ON m.id = e.material_id
+                    WHERE (%s IS NULL OR e.data_movimentacao >= %s)
+                      AND (%s IS NULL OR e.data_movimentacao <= %s)
                     GROUP BY m.id
-                    ORDER BY m.descricao ASC  -- Ordena os materiais em ordem alfabética
-                """)
+                    ORDER BY m.descricao ASC
+                """, (periodo_inicio, periodo_inicio, periodo_fim, periodo_fim))
                 relatorio = cursor.fetchall()
-                relatorio_titulo = "Relatório de Estoque"
+                relatorio_titulo = "Relatório de Estoque Atual"
 
             elif tipo_relatorio == 'movimentacao':
                 cursor.execute("""
@@ -1464,7 +1466,9 @@ def relatorios():
                     FROM estoque e
                     JOIN materials m ON e.material_id = m.id
                     JOIN users u ON e.usuario_id = u.id
-                """)
+                    WHERE (%s IS NULL OR e.data_movimentacao >= %s)
+                      AND (%s IS NULL OR e.data_movimentacao <= %s)
+                """, (periodo_inicio, periodo_inicio, periodo_fim, periodo_fim))
                 relatorio = cursor.fetchall()
                 relatorio_titulo = "Relatório de Movimentação"
 
@@ -1484,15 +1488,29 @@ def relatorios():
                            SUM(CASE WHEN e.tipo_movimentacao = 'entrada' THEN e.quantidade ELSE 0 END) AS TotalEntrada,
                            SUM(CASE WHEN e.tipo_movimentacao = 'saida' THEN e.quantidade ELSE 0 END) AS TotalSaida
                     FROM estoque e
+                    WHERE (%s IS NULL OR e.data_movimentacao >= %s)
+                      AND (%s IS NULL OR e.data_movimentacao <= %s)
                     GROUP BY MONTH(e.data_movimentacao)
-                """)
+                    ORDER BY MONTH(e.data_movimentacao)
+                """, (periodo_inicio, periodo_inicio, periodo_fim, periodo_fim))
                 relatorio = cursor.fetchall()
                 relatorio_titulo = "Movimentação Mensal"
                 
                 # Converte os números dos meses para nome em português
+                meses_portugues = {
+                    1: 'Janeiro', 2: 'Fevereiro', 3: 'Março', 4: 'Abril', 5: 'Maio', 6: 'Junho',
+                    7: 'Julho', 8: 'Agosto', 9: 'Setembro', 10: 'Outubro', 11: 'Novembro', 12: 'Dezembro'
+                }
+                
+                # Garantir que todos os meses do ano apareçam no relatório
+                meses_relatorio = {i: {'Mes': meses_portugues.get(i, str(i)), 'TotalEntrada': 0, 'TotalSaida': 0} for i in range(1, 13)}
+                
                 for item in relatorio:
                     mes_numero = item['Mes']
-                    item['Mes'] = meses_portugues.get(mes_numero, str(mes_numero))  # Converte para português ou mantém o número caso não haja
+                    meses_relatorio[mes_numero]['TotalEntrada'] = item['TotalEntrada']
+                    meses_relatorio[mes_numero]['TotalSaida'] = item['TotalSaida']
+                
+                relatorio = list(meses_relatorio.values())
 
         except mysql.connector.Error as err:
             flash(f"Erro ao gerar relatório: {err}", 'error')
@@ -1506,6 +1524,7 @@ def relatorios():
                            relatorio_titulo=relatorio_titulo, 
                            tipo_relatorio=tipo_relatorio, 
                            usuario=usuario)
+
 
 
 
