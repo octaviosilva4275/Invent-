@@ -36,7 +36,7 @@
         width: 95%; /* Quase toda a largura da tela */
         max-width: 600px;
         height: 60%; /* Ajusta a altura conforme o conteúdo */
-        margin-top: 40px; /* Adiciona um espaçamento entre o título e o formulário */
+        margin-top: -20px;
     }
 
     .input-material[type="text"],
@@ -152,7 +152,6 @@
         width: 95%;
         max-width: 800px; /* Ajustado para tablets também */
         height: 60%; 
-        margin-top: 40px;
     }
 
     .input-material[type="text"],

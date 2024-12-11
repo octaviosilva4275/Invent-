@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/cadastro-materiais.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/medias/media-cadastro-materiais.css') }}">
     <script src="/static/javascript/darkmode.js"></script>
+    <link rel="icon" href="/static/img/login-img/Inventlogo.png">
 </head>
 <body>
 <main>
@@ -33,14 +34,42 @@
                 <select class="select-categoria" name="categoria" required>
                     <option value="">Categoria</option>
                     {% for categoria in categorias %}
-                        <option value="{{ categoria }}">{{ categoria }}</option>
+                        <option value="{{ categoria | replace(' ', '_') }}">{{ categoria | replace('_', ' ') | capitalize }}</option>
                     {% endfor %}
                 </select>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 
                 <button class="btn-material" type="submit">Cadastrar</button>
             </form>
         </div>
     </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Pega todos os elementos <option> dentro do <select> com a classe 'select-categoria'
+    const categorias = document.querySelectorAll('.select-categoria option');
+
+    // Itera sobre cada opção
+    categorias.forEach(function(option) {
+        // Atualiza o valor do atributo value para substituir todos os espaços por underscores
+        const originalValue = option.value; // Pega o valor original
+        const formattedValue = originalValue.replace(/ /g, '_').toLowerCase(); // Substitui todos os espaços por underscores
+        option.setAttribute('value', formattedValue); // Atualiza o valor da opção
+    });
+});
+
+</script>
+
+    
 </main>
 </body>
 </html>

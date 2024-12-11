@@ -50,7 +50,7 @@ body.dark-mode {
     color: var(--fontedark)
 }
 
-.dark-mode #lista-entrada{
+.dark-mode #lista-entrada, #lista-saida{
     color: #000;
 }
 

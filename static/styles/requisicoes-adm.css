@@ -82,6 +82,10 @@ body {
     margin-bottom: 20px;
 }
 
+.dark-mode .container-solicitacao {
+    background-color: #465E8C;
+}
+
 /* Título */
 .titulo-solicitacao {
     font-size: 3.5rem;

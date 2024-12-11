@@ -65,6 +65,10 @@ body {
 
 }
 
+.dark-mode .container-requisicoes{
+    background-color: #465E8C;
+}
+
 .titulo-requisicoes {
     font-size: 3.5rem;
     text-align: center;
@@ -366,7 +370,7 @@ body.dark-mode {
 
 
 .dark-mode #minhas-requisicoes-table {
-    background-color: var(--fundo);
+    background-color: #7991bd;
 }
 
 body.dark-mode table {

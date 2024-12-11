@@ -44,7 +44,8 @@
                 </tr>
             </thead>
             <tbody>
-                {% for usuario in usuarios if '-nao-verificado' in usuario.cargo %}
+                {% for usuario in usuarios if usuario.cargo and '-nao-verificado' in usuario.cargo %}
+
                     <tr>
                         <td>{{ usuario.nome }}</td>
                         <td>{{ usuario.sn }}</td>
@@ -128,26 +129,26 @@
             <tbody>
                 {% for usuario in usuarios %}
                 <tr>
-                    <td>{{ usuario.nome }}</td>
-                    <td>{{ usuario.sn }}</td>
-                    <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.cargo }}</td>
+                    <td>{{ usuario.nome if usuario.nome is not none else 'Nome não fornecido' }}</td>
+                    <td>{{ usuario.sn if usuario.sn is not none else 'Código não fornecido' }}</td>
+                    <td>{{ usuario.email if usuario.email is not none else 'Email não fornecido' }}</td>
+                    <td>{{ usuario.cargo if usuario.cargo is not none else 'Cargo não fornecido' }}</td>
                     <td>
                         <div class="btn-gerenciar">
                             <button class="excluir" data-id="{{ usuario.id }}">EXCLUIR</button>
                             <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
-                                data-bs-target="#editModal" data-nome="{{ usuario.nome }}" 
-                                data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}" 
-                                data-id="{{ usuario.id }}" onclick="openModal(this)">
+                                    data-bs-target="#editModal" data-nome="{{ usuario.nome }}" 
+                                    data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}" 
+                                    data-id="{{ usuario.id }}" onclick="openModal(this)">
                                 Editar
                             </button>
                         </div>
                     </td>
                 </tr>
                 {% endfor %}
-                
             </tbody>
         </table>
+        
         {% for usuario in usuarios %}
         <div class="container-responsivo">
             <div class="linha toggle-header">
