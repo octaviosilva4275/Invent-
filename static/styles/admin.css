@@ -16,7 +16,7 @@
 }
 :root{
     --cinza: #ffffff;
-    --dark: #161616;
+    --dark: #04050D;
     --fundo : #465E8C;
     --fundodark  :#192340;
     --fonte : #000;
@@ -261,8 +261,12 @@ body.dark-mode {
 }
 
 .aprovado {
-    background-color: rgba(25, 35, 64, 1);
+    background-color: #28a745;
     color: #fff;
+}
+.aprovado:hover{
+    background-color: #1d7932;
+    transform: scale(1.02);
 }
 
 .excluir {
@@ -270,10 +274,7 @@ body.dark-mode {
     color: #fff;
 }
 
-.aprovado:hover {
-    background-color: rgba(25, 35, 64, 0.8);
-    transform: scale(1.05);
-}
+
 
 .excluir:hover {
     background-color: rgba(25, 35, 64, 0.8);
@@ -333,3 +334,4 @@ body.dark-mode {
     left: 50%;
     transform: translate(-50%, -50%);
 }
+

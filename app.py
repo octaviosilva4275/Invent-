@@ -208,32 +208,61 @@ def gerar_hash_senha(senha):
 def cadastro():
     if request.method == 'POST':
         # Obtém os dados do formulário
-        nome = request.form['nome']  # Agora obtendo o nome
+        nome = request.form['nome']  # Obtendo o nome
         sn = request.form['sn']
         email = request.form['email']  # Você pode manter o email, mas não usá-lo para verificação
         senha = request.form['senha']
-        area = request.form['areas-senai']  # Agora obtendo a variável 'area'
+        area = request.form['areas-senai']  # Obtendo a variável 'area'
 
         # Conecta ao banco de dados
         conexao = conectar_banco_dados()
         cursor = conexao.cursor(dictionary=True)
 
-        # Insere os dados diretamente no banco, incluindo o nome, área (cargo), e senha
-        query_insert = """
-            INSERT INTO users (nome, sn, email, cargo, senha) 
-            VALUES (%s, %s, %s, %s, %s)
-        """
-        # Aqui estamos inserindo o nome, sn, email, cargo (que vem de 'area' no frontend), e senha
-        cursor.execute(query_insert, (nome, sn, email, area, senha))
-        conexao.commit()
+        try:
+            # Insere os dados diretamente no banco, incluindo o nome, área (cargo), e senha
+            query_insert = """
+                INSERT INTO users (nome, sn, email, cargo, senha) 
+                VALUES (%s, %s, %s, %s, %s)
+            """
+            cursor.execute(query_insert, (nome, sn, email, area, senha))
+            conexao.commit()
 
-        cursor.close()
-        conexao.close()
+            # Após o cadastro, envia e-mails para os usuários com cargo 'almoxarifado'
+            cursor.execute("SELECT email FROM users WHERE cargo = 'almoxarifado'")
+            emails_almoxarifado = cursor.fetchall()
 
-        flash('Cadastro realizado com sucesso!', 'success')
-        return redirect(url_for('login'))
+            if emails_almoxarifado:
+                assunto = f'Aviso: Novo Usuário Cadastrado - {nome}'
+                corpo = f"""
+                <p>Olá,</p>
+                <p>Um novo usuário foi cadastrado no sistema:</p>
+                <ul>
+                    <li><strong>Nome:</strong> {nome}</li>
+                    <li><strong>SN:</strong> {sn}</li>
+                    <li><strong>Email:</strong> {email}</li>
+                    <li><strong>Cargo:</strong> {area}</li>
+                </ul>
+                <p>Por favor, acesse o sistema para visualizar os detalhes e tomar as ações necessárias.</p>
+                """
+                enviar_emails_assincronos(emails_almoxarifado, assunto, corpo)  # Função para enviar os e-mails de forma assíncrona
+
+            else:
+                print("Nenhum usuário com cargo 'almoxarifado' encontrado para envio de e-mails.")
+
+            flash('Cadastro realizado com sucesso!', 'success')
+            return redirect(url_for('login'))
+
+        except Exception as e:
+            print(f"Erro ao cadastrar usuário: {e}")
+            flash('Erro ao realizar o cadastro.', 'error')
+            conexao.rollback()
+
+        finally:
+            cursor.close()
+            conexao.close()
 
     return render_template('login/cadastro.html')
+
 
 
 
@@ -512,8 +541,12 @@ def aprovar_usuario():
 
 @app.route('/excluir_usuario', methods=['POST'])
 def excluir_usuario():
-    user_id = request.form['user_id']
-    print(f"Tentando excluir usuário com ID: {user_id}")  # Log para debug
+    user_id = request.form.get('user_id')  # Obtém o ID do usuário (como string)
+    print(f"Tentando excluir usuário com ID: {user_id}")  # Log para verificar se o ID está correto
+
+    if not user_id:
+        return jsonify({'success': False, 'message': 'ID do usuário não fornecido.'})
+    
     conexao = conectar_banco_dados()
     cursor = conexao.cursor()
 
@@ -907,7 +940,8 @@ def requisicao_material():
             cursor.execute("""
                 SELECT 
                     r.id,
-                    m.descricao as material,
+                    m.descricao AS material,
+                    m.codigo_produto,  -- Adicionando o campo codigo_produto
                     r.quantidade,
                     r.status,
                     r.data_atualizacao

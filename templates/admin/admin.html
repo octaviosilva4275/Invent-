@@ -29,7 +29,7 @@
 
     <!-- Primeira sessão: Solicitação para Almoxarife -->
     <div class="gerenciamento">
-        <h2>Solicitação para Almoxarife</h2>
+        <h2>Aprovação de Cadastro</h2>
         <!-- Verifica se existem solicitantes não verificados -->
     
         <!-- Tabela de usuários -->
@@ -52,10 +52,10 @@
                         <td>{{ usuario.cargo }}</td>
                         <td>
                             <div class="btn-gerenciar">
-                                <button class="excluir">EXCLUIR</button>
+                                <button class="excluir" data-id="{{ usuario.id }}">EXCLUIR</button>
                                 <form method="POST" action="{{ url_for('aprovar_usuario') }}">
                                     <input type="hidden" name="user_id" value="{{ usuario.id }}">
-                                    <button type="submit" class="btn-approve">Aprovar</button>
+                                    <button type="submit" class="aprovado">Aprovar</button>
                                 </form>
                             </div>
                         </td>
@@ -134,18 +134,18 @@
                     <td>{{ usuario.cargo }}</td>
                     <td>
                         <div class="btn-gerenciar">
-                            <button class="excluir">EXCLUIR</button>
+                            <button class="excluir" data-id="{{ usuario.id }}">EXCLUIR</button>
                             <button type="button" class="editar-usuario btn-editar" data-bs-toggle="modal"
                                 data-bs-target="#editModal" data-nome="{{ usuario.nome }}" 
                                 data-codigo="{{ usuario.sn }}" data-email="{{ usuario.email }}" 
                                 data-id="{{ usuario.id }}" onclick="openModal(this)">
                                 Editar
                             </button>
-                        
                         </div>
                     </td>
                 </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
         {% for usuario in usuarios %}
@@ -396,28 +396,29 @@ document.getElementById('saveChanges').addEventListener('click', function () {
     // MOBILEEEEEE
 
       // Adicionando evento de clique no botão EXCLUIR para mobile
-      document.querySelectorAll('.excluir-usuario').forEach(button => {
-        button.addEventListener('click', function () {
-            const userId = this.getAttribute('data-user-id'); // Obtendo o ID do usuário do botão
+      document.querySelectorAll('.excluir').forEach(button => {
+    button.addEventListener('click', function () {
+        const userId = this.getAttribute('data-id'); // Obtendo o ID corretamente
 
-            // Exibindo o alerta de confirmação
-            Swal.fire({
-                title: "Tem certeza?",
-                text: "Você não poderá reverter isso!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Sim, excluir!",
-                cancelButtonText: "Cancelar"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Enviar a requisição para excluir o usuário
-                    excluirUsuario(userId);
-                }
-            });
+        // Exibindo o alerta de confirmação
+        Swal.fire({
+            title: "Tem certeza?",
+            text: "Você não poderá reverter isso!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Sim, excluir!",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Enviar a requisição para excluir o usuário
+                excluirUsuario(userId);
+            }
         });
     });
+});
+
 
     // Função para enviar a requisição de exclusão ao servidor
     async function excluirUsuario(userId) {

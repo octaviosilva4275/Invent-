@@ -54,4 +54,9 @@
     .container-dashboard-header{
         margin-top: 20px;
     }
+    .btn-filtro {
+        padding: 0px;
+        right: auto;
+        margin: 20px;
+    }
 }

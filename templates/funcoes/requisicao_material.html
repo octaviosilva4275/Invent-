@@ -78,7 +78,7 @@
                             {% if minhas_requisicoes %}
                                 {% for requisicao in minhas_requisicoes %}
                                 <tr>
-                                    <td>{{ requisicao.id }}</td>
+                                    <td>{{ requisicao.codigo_produto }}</td>
                                     <td>{{ requisicao.material }}</td>
                                     <td>{{ requisicao.quantidade }}</td>
                                     <td class="status-{{ requisicao.status | lower | replace(' ', '-') }}">

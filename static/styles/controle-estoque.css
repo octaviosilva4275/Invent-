@@ -49,6 +49,11 @@ body.dark-mode {
     background-color: var(--dark);
     color: var(--fontedark)
 }
+
+.dark-mode #lista-entrada{
+    color: #000;
+}
+
 .none {
     display: none;
 }

@@ -30,7 +30,7 @@
       text-align: center;
       color: #000000;
       position: absolute;
-      top: 20px; /* ou 30px para tablets */
+      top: 95px; /* ou 30px para tablets */
       left: 50%;
       transform: translateX(-50%);
       white-space: nowrap; /* Impede que o texto quebre */
