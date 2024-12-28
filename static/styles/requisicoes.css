@@ -329,11 +329,7 @@ button.disabled-tutorial {
     /* Cor laranja para "Solicitado" */
 }
 
-.status-disponivel {
-    color: #45cf8a;
-    font-weight: 600;
-    /* Cor verde para "Disponível para retirada" */
-}
+
 
 .status-aguardando {
     color: #d9534f;
@@ -351,6 +347,16 @@ button.disabled-tutorial {
     color: #999;
     font-weight: 600;
     /* Cor para status desconhecido */
+}
+
+.status-aguardando-reposição{
+    color: #d9534f;
+    font-weight: 600;
+}
+
+.status-disponivel-para-retirada{
+    color: #45cf8a;
+    font-weight: 600;
 }
 
 tr {
@@ -522,4 +528,83 @@ body.dark-mode table {
 
 .dark-mode ul{
     color: rgb(0, 0, 0);
+}
+
+
+
+/* Estilos do Intro.js */
+.introjs-tooltip {
+    background-color: #fff !important;
+    color: #333 !important;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.introjs-tooltiptext {
+    color: #333 !important;
+    font-size: 14px;
+}
+
+/* Estilo das setas */
+.introjs-arrow {
+    border-color: #fff !important;
+}
+
+/* Estilo do destaque (highlight) nos elementos */
+.introjs-helperLayer {
+    background-color: rgba(190, 255, 12, 0.1) !important;
+    z-index: 9999;
+}
+
+.introjs-helperLayer .introjs-hint {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Estilo do botão para iniciar o tutorial */
+#start-tour {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 9999;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#start-tour:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+
+/* Estilo para o botão de "Fechar" do tutorial (se houver) */
+.introjs-skipbutton {
+    background-color: transparent !important;
+    color: #007bff !important;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.introjs-skipbutton:hover {
+    color: #0056b3 !important;
+}
+
+/* Estilo das bolinhas de progresso (se você tiver) */
+.introjs-progressbar {
+    background-color: #007bff !important;
+    height: 4px !important;
+    border-radius: 2px;
 }

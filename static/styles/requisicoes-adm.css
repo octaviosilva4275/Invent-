@@ -67,25 +67,26 @@ html {
 }
 
 /* Cores para cada status */
-.status-solicitado {
+.status-solicitado, .solicitado-color {
 color: #f0ad4e;  /* Cor laranja para "Solicitado" */
 
 }
 
-.status-disponivel {
+.status-disponivel, .disponivel-color {
    color: #45cf8a;  /* Cor azul para "Disponível para retirada" */
 
 }
 
-.status-aguardando {
+.status-aguardando, .aguardando-color{
 color: #d9534f;  /* Cor vermelha para "Aguardando reposição" */
 
 }
 
-.status-retirado {
+.status-retirado, .retirado-color {
     color: #cacaca;  /* Cor verde para "Retirado" */
-
 }
+
+
 
 option{
     font-size: 15px;

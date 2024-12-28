@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS do Intro.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intro.js/minified/introjs.min.css">
     <link rel="stylesheet" href="/static/styles/requisicoes.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/lodash/lodash.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <!-- JS do Intro.js -->
+    <script src="https://cdn.jsdelivr.net/npm/intro.js/minified/intro.min.js"></script>
     <link rel="icon" href="/static/img/login-img/Inventlogo.png">
+    <script src="/static/javascript/darkmode.js"></script>
     <title>Requisição de Materiais</title>
 </head>
 <body>
@@ -95,103 +97,118 @@
         </form>
     </section>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("Página carregada, inicializando scripts...");
-            
-            // Ordenar itens da lista ao carregar
-            try {
-                sortItems('lista-entrada');
-                console.log("Itens da lista ordenados com sucesso.");
-            } catch (error) {
-                console.error("Erro ao ordenar itens:", error);
-            }
-    
-            // Configurar eventos
-            const searchInput = document.getElementById('search-entrada');
-            if (searchInput) {
-                searchInput.addEventListener('input', function () {
-                    console.log("Texto digitado no campo de pesquisa:", searchInput.value);
-                    filterItems('search-entrada', 'lista-entrada');
-                });
-    
-                searchInput.addEventListener('blur', function () {
-                    setTimeout(() => {
-                        console.log("Campo perdeu o foco. Escondendo lista...");
-                        document.getElementById('lista-entrada').style.display = 'none';
-                    }, 200);
-                });
-            } else {
-                console.warn("Campo de pesquisa 'search-entrada' não encontrado.");
-            }
-    
-            const listaEntrada = document.getElementById('lista-entrada');
-            if (listaEntrada) {
-                listaEntrada.addEventListener('click', function (event) {
-                    if (event.target.matches('.item-estoque')) {
-                        const descricao = event.target.getAttribute('data-descricao');
-                        const quantidade = event.target.getAttribute('data-quantidade');
-                        const materialId = event.target.getAttribute('data-id');
-    
-                        console.log("Item selecionado:", { descricao, quantidade, materialId });
-    
-                        document.getElementById('search-entrada').value = `${descricao} - Disponível: ${quantidade}`;
-                        document.getElementById('material_id_entrada').value = materialId;
-    
-                        listaEntrada.style.display = 'none';
-                    }
-                });
-            } else {
-                console.warn("Lista de entrada 'lista-entrada' não encontrada.");
-            }
-        });
-    
-        // Exibe ou oculta a lista de itens
-        function toggleList(listId) {
-            const list = document.getElementById(listId);
-            if (list) {
-                list.style.display = list.style.display === 'block' ? 'none' : 'block';
-                console.log(`Lista ${listId} agora está:`, list.style.display);
-            } else {
-                console.error(`Lista ${listId} não encontrada.`);
-            }
+    <!-- Botão para iniciar o tour -->
+<button id="start-tour" class="btn btn-primary" style="position: fixed; bottom: 20px; right: 20px;">Iniciar Tour</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("Página carregada, inicializando scripts...");
+        
+        // Ordenar itens da lista ao carregar
+        try {
+            sortItems('lista-entrada');
+            console.log("Itens da lista ordenados com sucesso.");
+        } catch (error) {
+            console.error("Erro ao ordenar itens:", error);
         }
-    
-        // Filtra itens na lista com base no texto de entrada
-        function filterItems(searchInputId, listId) {
-            const searchText = document.getElementById(searchInputId).value.toLowerCase();
-            const list = document.getElementById(listId);
-            const items = list ? list.getElementsByTagName('li') : [];
-    
-            if (!list) {
-                console.error(`Lista ${listId} não encontrada para filtrar itens.`);
-                return;
-            }
-    
-            Array.from(items).forEach(item => {
-                const descricao = item.getAttribute('data-descricao').toLowerCase();
-                const visible = descricao.includes(searchText);
-                item.style.display = visible ? 'block' : 'none';
-                console.log(`Item "${descricao}" visível: ${visible}`);
+
+        // Configurar eventos
+        const searchInput = document.getElementById('search-entrada');
+        if (searchInput) {
+            searchInput.addEventListener('input', function () {
+                console.log("Texto digitado no campo de pesquisa:", searchInput.value);
+                filterItems('search-entrada', 'lista-entrada');
             });
+
+            searchInput.addEventListener('blur', function () {
+                setTimeout(() => {
+                    console.log("Campo perdeu o foco. Escondendo lista...");
+                    document.getElementById('lista-entrada').style.display = 'none';
+                }, 200);
+            });
+        } else {
+            console.warn("Campo de pesquisa 'search-entrada' não encontrado.");
         }
-    
-        // Ordena os itens da lista alfabeticamente
-        function sortItems(listId) {
-            const list = document.getElementById(listId);
-            if (!list) {
-                console.error(`Lista ${listId} não encontrada para ordenar itens.`);
-                return;
-            }
-    
-            const items = Array.from(list.getElementsByTagName('li'));
-            items.sort((a, b) =>
-                a.getAttribute('data-descricao').localeCompare(b.getAttribute('data-descricao'))
-            ).forEach(item => list.appendChild(item));
-    
-            console.log(`Itens da lista ${listId} ordenados.`);
+
+        const listaEntrada = document.getElementById('lista-entrada');
+        if (listaEntrada) {
+            listaEntrada.addEventListener('click', function (event) {
+                if (event.target.matches('.item-estoque')) {
+                    const descricao = event.target.getAttribute('data-descricao');
+                    const quantidade = event.target.getAttribute('data-quantidade');
+                    const materialId = event.target.getAttribute('data-id');
+
+                    console.log("Item selecionado:", { descricao, quantidade, materialId });
+
+                    document.getElementById('search-entrada').value = `${descricao} - Disponível: ${quantidade}`;
+                    document.getElementById('material_id_entrada').value = materialId;
+
+                    listaEntrada.style.display = 'none';
+                }
+            });
+        } else {
+            console.warn("Lista de entrada 'lista-entrada' não encontrada.");
         }
-    </script>
+
+        // Evento de clique no botão de iniciar o tutorial
+        document.getElementById('start-tour').addEventListener('click', function() {
+            introJs().setOptions({
+                steps: [
+                    {
+                        element: '#search-entrada', 
+                        intro: 'Clique aqui para pesquisar o item que você deseja requisitar. Digite o nome do item.'
+                    },
+                    {
+                        element: '#quantidade', 
+                        intro: 'Digite a quantidade do item que você deseja requisitar.'
+                    },
+                    {
+                        element: '#observacao', 
+                        intro: 'Adicione uma observação, caso queira incluir mais informações sobre a requisição.'
+                    },
+                    {
+                        element: '.btn-requisicoes', 
+                        intro: 'Clique aqui para enviar sua requisição.'
+                    },
+                    {
+                        element: '#minhas-requisicoes-table', 
+                        intro: 'Aqui você pode visualizar suas requisições pendentes.'
+                    }
+                ],
+                showProgress: true, // Mostra a barra de progresso
+                showBullets: false, // Remove os bullets (números)
+                nextLabel: 'Próximo', // Rótulo do botão "Próximo"
+                prevLabel: 'Anterior', // Rótulo do botão "Anterior"
+                skipLabel: 'Sair', // Rótulo do botão "Sair"
+                doneLabel: 'Concluir', // Rótulo do botão "Concluir"
+            }).start(); // Inicia o tour
+        });
+    });
     
+    // Exibe ou oculta a lista de itens
+    function toggleList(listId) {
+        const list = document.getElementById(listId);
+        if (list) {
+            list.style.display = list.style.display === 'block' ? 'none' : 'block';
+            console.log(`Lista ${listId} agora está:`, list.style.display);
+        } else {
+            console.error(`Lista ${listId} não encontrada.`);
+        }
+    }
+
+    // Ordena os itens da lista com base na descrição
+    function sortItems(listId) {
+        const list = document.getElementById(listId);
+        if (!list) return;
+
+        const items = Array.from(list.children);
+        items.sort((a, b) => 
+            a.getAttribute('data-descricao').localeCompare(b.getAttribute('data-descricao'))
+        );
+
+        items.forEach(item => list.appendChild(item)); // Reanexa os itens ordenados à lista
+        console.log(`Itens da lista ${listId} ordenados com sucesso.`);
+    }
+</script>
 </body>
 </html>

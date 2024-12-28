@@ -93,7 +93,7 @@ def login():
                 return redirect(url_for('requisicao_material'))
         else:
             flash('Credenciais inválidas. Por favor, tente novamente.', 'error')
-            return redirect(url_for('solicitante'))
+            return redirect(url_for('login'))
 
     return render_template('login/login.html')
 
