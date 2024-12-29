@@ -180,152 +180,140 @@
         </section>
     </main>
 
-<script>
-    $(document).ready(function() {
-    // Função para adicionar classes de status às linhas da tabela
-    $('tr.requisicao').each(function() {
-        var status = $(this).find('td:nth-child(3)').text().trim().toLowerCase();
-        switch (status) {
-            case 'solicitado':
-                $(this).find('td:nth-child(3)').addClass('status-solicitado');
-                break;
-            case 'disponivel para retirada':
-                $(this).find('td:nth-child(3)').addClass('status-disponivel');
-                break;
-            case 'aguardando reposição':
-                $(this).find('td:nth-child(3)').addClass('status-aguardando');
-                break;
-            case 'retirado':
-                $(this).find('td:nth-child(3)').addClass('status-retirado');
-                break;
-            default:
-                console.warn('Status desconhecido:', status);
-        }
-    });
-
-    // Aplicação de classes de status com base no texto
-    $('tr.requisicao').each(function() {
-        var status = $(this).find('td:eq(2)').text().toLowerCase();
-        $(this).addClass(status.replace(/\s+/g, '-'));
-    });
-
-
-// Função para aplicar os filtros
-$('#filtro-aplicar').click(function() {
-    var nome = $('#filtro-nome').val().toLowerCase();
-    var produto = $('#filtro-produto').val().toLowerCase();
-    var status = $('#filtro-status').val().toLowerCase();
-
-    $('#tabela-corpo tr').each(function() {
-        var tr_nome = $(this).data('nome');
-        var tr_produto = $(this).data('produto');
-        var tr_status = $(this).data('status');
-
-        if (
-            (nome === '' || tr_nome.indexOf(nome) > -1) &&
-            (produto === '' || tr_produto.indexOf(produto) > -1) &&
-            (status === '' || tr_status.indexOf(status) > -1)
-        ) {
-            $(this).show();
-        } else {
-            $(this).hide();
-        }
-    });
-
-    // Fechar o modal após aplicar os filtros
-    $('#filtroModal').modal('hide');
-
-    // Remover manualmente o backdrop se ele não desaparecer
-    $('.modal-backdrop').remove();
-});
-
-    $('#limpar-filtros').click(function() {
-    // Limpa os campos de filtro
-    $('#filtro-nome').val('');
-    $('#filtro-produto').val('');
-    $('#filtro-status').val('');
+    <script>
+        $(document).ready(function() {
+            // Função para adicionar classes de status às linhas da tabela
+            $('tr.requisicao').each(function() {
+                var status = $(this).find('td:nth-child(3)').text().trim().toLowerCase();
+                switch (status) {
+                    case 'solicitado':
+                        $(this).find('td:nth-child(3)').addClass('status-solicitado');
+                        break;
+                    case 'disponivel para retirada':
+                        $(this).find('td:nth-child(3)').addClass('status-disponivel');
+                        break;
+                    case 'aguardando reposição':
+                        $(this).find('td:nth-child(3)').addClass('status-aguardando');
+                        break;
+                    case 'retirado':
+                        $(this).find('td:nth-child(3)').addClass('status-retirado');
+                        break;
+                    default:
+                        console.warn('Status desconhecido:', status);
+                }
+            });
     
-    // Exibe todas as linhas na tabela novamente
-    $('#tabela-corpo tr').show();
-});
-
-    $('#acaoForm').submit(function(e) {
-        e.preventDefault();
-        var id = $('#requisicao_id').val();
-        var status = $('#acao-status').val();
-        $.ajax({
-            url: '/atualizar_status',
-            method: 'POST',
-            data: {
-                id: id,
-                status: status
-            },
-            success: function(response) {
+            // Função para aplicar os filtros
+            $('#filtro-aplicar').click(function() {
+                var nome = $('#filtro-nome').val().toLowerCase();
+                var produto = $('#filtro-produto').val().toLowerCase();
+                var status = $('#filtro-status').val().toLowerCase();
+    
+                $('#tabela-corpo tr').each(function() {
+                    var tr_nome = $(this).data('nome');
+                    var tr_produto = $(this).data('produto');
+                    var tr_status = $(this).data('status');
+    
+                    if (
+                        (nome === '' || tr_nome.indexOf(nome) > -1) &&
+                        (produto === '' || tr_produto.indexOf(produto) > -1) &&
+                        (status === '' || tr_status.indexOf(status) > -1)
+                    ) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+    
+                $('#filtroModal').modal('hide');
+                $('.modal-backdrop').remove();
+            });
+    
+            $('#limpar-filtros').click(function() {
+                $('#filtro-nome').val('');
+                $('#filtro-produto').val('');
+                $('#filtro-status').val('');
+                $('#tabela-corpo tr').show();
+            });
+    
+            $('#acaoForm').submit(function(e) {
+                e.preventDefault();
+                var id = $('#requisicao_id').val();
+                var status = $('#acao-status').val();
+                
+                var estoque = parseInt($('#modal-estoque').text().split(": ")[1]);
+                var quantidade = parseInt($('#modal-quantidade').text().split(": ")[1]);
+    
+                if (status === 'Disponivel para retirada' && estoque < quantidade) {
+                    alert('Estoque insuficiente para esta ação. Verifique a quantidade disponível.');
+                    return false;
+                }
+    
+                $.ajax({
+                    url: '/atualizar_status',
+                    method: 'POST',
+                    data: {
+                        id: id,
+                        status: status
+                    },
+                    success: function(response) {
+                        $('#acaoModal').modal('hide');
+                        location.reload();
+                    }
+                });
+            });
+    
+            $('#tabela-corpo').on('click', '.btn-aguardo', function() {
+                var button = $(this);
+                var requisicaoId = button.data('id');
+                var material = button.data('material');
+                var quantidade = button.data('quantidade');
+                var estoque = button.data('estoque');
+    
+                $('#acaoModal #requisicao_id').val(requisicaoId);
+                $('#acaoModal #modal-material').text('Material: ' + material);
+                $('#acaoModal #modal-quantidade').text('Quantidade: ' + quantidade);
+                $('#acaoModal #modal-estoque').text('Estoque: ' + estoque);
+    
+                $('#acaoModal').modal('show');
+            });
+    
+            $('#confirmar-acao').on('click', function() {
+                var requisicaoId = $('#requisicao_id').val();
+                var acaoStatus = $('#acao-status').val();
+                
+                $('#loadingModal').modal('show');
+    
+                $.ajax({
+                    url: '/atualizar_requisicao',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        requisicao_id: requisicaoId,
+                        acao: acaoStatus
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Ação confirmada com sucesso!');
+                        } else {
+                            
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Erro na requisição AJAX: ' + error);
+                    },
+                    complete: function() {
+                        $('#loadingModal').modal('hide');
+                        location.reload(); // Atualiza a página após a ação ser confirmada
+                    }
+                });
+    
                 $('#acaoModal').modal('hide');
-                location.reload();
-            }
+            });
         });
-    });
-
-    // Evento para abrir o modal de ação e preencher os dados
-    $('#tabela-corpo').on('click', '.btn-aguardo', function() {
-        var button = $(this);
-        
-        var requisicaoId = button.data('id');
-        var material = button.data('material');
-        var quantidade = button.data('quantidade');
-        var estoque = button.data('estoque');
-        
-        // Preenche os campos do modal
-        $('#acaoModal #requisicao_id').val(requisicaoId);
-        $('#acaoModal #modal-material').text('Material: ' + material);
-        $('#acaoModal #modal-quantidade').text('Quantidade: ' + quantidade);
-        $('#acaoModal #modal-estoque').text('Estoque: ' + estoque);
-        
-        // Exibe o modal
-        $('#acaoModal').modal('show');
-    });
-
-    $('#confirmar-acao').on('click', function() {
-    var requisicaoId = $('#requisicao_id').val();
-    var acaoStatus = $('#acao-status').val();  // Pega o status selecionado
+    </script>
     
-    // Exibe o modal de carregamento
-    $('#loadingModal').modal('show');
-
-    // Realiza a atualização do status via AJAX
-    $.ajax({
-        url: '/atualizar_requisicao',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            requisicao_id: requisicaoId,
-            acao: acaoStatus  // Envia a nova ação para o backend
-        }),
-        success: function(response) {
-            if (response.success) {
-                alert('Ação confirmada com sucesso!');
-                location.reload();  // Atualiza a página para refletir a mudança
-            } else {
-                alert('Erro ao confirmar ação');
-            }
-        },
-        error: function(xhr, status, error) {
-            alert('Erro na requisição AJAX: ' + error);
-        },
-        complete: function() {
-            // Fecha o modal de carregamento
-            $('#loadingModal').modal('hide');
-        }
-    });
-
-    // Fecha o modal de Ação
-    $('#acaoModal').modal('hide');
-});
-
-});
-
-</script>
+    
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

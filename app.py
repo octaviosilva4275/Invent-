@@ -1079,7 +1079,7 @@ def redefinir_senha():
             return redirect(url_for('redefinir_senha', token=token))  # Redireciona de volta para o formulário
         
         
-@app.route('/atualizar_requisicao', methods=['POST'])  
+@app.route('/atualizar_requisicao', methods=['POST'])
 def atualizar_requisicao():
     if 'user_cargo' not in session or session['user_cargo'] not in ['almoxarifado', 'admin']:
         return redirect(url_for('solicitante'))
@@ -1101,40 +1101,65 @@ def atualizar_requisicao():
             quantidade_requisitada = requisicao[1]
             usuario_id = requisicao[2]  # ID do usuário que fez a requisição
 
-        # Atualizar o status conforme a ação
-        if acao == 'Solicitado':
-            cursor.execute("UPDATE requisicoes SET status = 'Solicitado' WHERE id = %s", (requisicao_id,))
-        
-        elif acao == 'Disponivel para retirada':
-            # Verifica o estoque antes de atualizar
-            cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
-            estoque_atual = cursor.fetchone()
+            # Calcula o estoque atual disponível para o material solicitado
+            cursor.execute("""
+                SELECT SUM(quantidade) FROM estoque 
+                WHERE material_id = %s AND tipo_movimentacao = 'entrada'
+            """, (material_id,))
+            total_entradas = cursor.fetchone()[0] or 0  # Se não houver entradas, usa 0
 
-            if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
-                cursor.execute("UPDATE requisicoes SET status = 'Disponivel para retirada' WHERE id = %s", (requisicao_id,))
-            else:
-                return jsonify({'error': 'Estoque insuficiente para marcar como disponível para retirada.'}), 400
-        
-        elif acao == 'Aguardando reposição':
-            cursor.execute("UPDATE requisicoes SET status = 'Aguardando reposição' WHERE id = %s", (requisicao_id,))
-        
-        elif acao == 'Retirado':
-            if requisicao:
-                quantidade_retirada = requisicao[1]
+            cursor.execute("""
+                SELECT SUM(quantidade) FROM estoque 
+                WHERE material_id = %s AND tipo_movimentacao = 'saida'
+            """, (material_id,))
+            total_saidas = cursor.fetchone()[0] or 0  # Se não houver saídas, usa 0
 
-                # Verifica o estoque antes de atualizar
-                if estoque_atual and estoque_atual[0] >= quantidade_retirada:
-                    cursor.execute("UPDATE requisicoes SET status = 'Retirado' WHERE id = %s", (requisicao_id,))
-                    nova_quantidade = estoque_atual[0] - quantidade_retirada
-                    cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
+            estoque_atual = total_entradas - total_saidas
+
+            # Atualizar o status conforme a ação
+            if acao == 'Solicitado':
+                cursor.execute("UPDATE requisicoes SET status = 'Solicitado' WHERE id = %s", (requisicao_id,))
+                flash('Material solicitado e estoque atualizado com sucesso!', 'success')
+
+            elif acao == 'Disponivel para retirada':
+                if estoque_atual >= quantidade_requisitada:
+                    # Atualiza o status da requisição
+                    cursor.execute("UPDATE requisicoes SET status = 'Disponivel para retirada' WHERE id = %s", (requisicao_id,))
+
+                    # Registra a saída do material (movimentação de saída)
+                    cursor.execute("""
+                        INSERT INTO estoque (material_id, quantidade, tipo_movimentacao, usuario_id) 
+                        VALUES (%s, %s, 'saida', %s)
+                    """, (material_id, quantidade_requisitada, usuario_id))
+
+                    # Não atualiza diretamente o estoque na tabela de materiais, apenas registra a saída
+                    flash('Material disponível para retirada e estoque atualizado com sucesso!', 'success')
                 else:
-                    return jsonify({'error': 'Estoque insuficiente para retirar o material.'}), 400
+                    # Caso o estoque não seja suficiente
+                    flash('Estoque insuficiente para esta ação. Verifique a quantidade disponível.', 'error')
 
-        elif acao == 'aprovar':
-            if requisicao:
+            elif acao == 'Retirado':
+                if estoque_atual >= quantidade_requisitada:
+                    # Atualiza o status da requisição para "Retirado"
+                    cursor.execute("UPDATE requisicoes SET status = 'Retirado' WHERE id = %s", (requisicao_id,))
+
+                    
+                    flash('Material retirado e estoque atualizado com sucesso!', 'success')
+                else:
+                    flash('Estoque insuficiente para esta ação. Verifique a quantidade disponível.', 'error')
+                    return jsonify({
+                        'error': 'Estoque insuficiente para retirar o material.',
+                        'estoque_atual': estoque_atual,
+                        'quantidade_requisitada': quantidade_requisitada
+                    }), 400
+
+
+            elif acao == 'Aguardando reposição':
+                cursor.execute("UPDATE requisicoes SET status = 'Aguardando reposição' WHERE id = %s", (requisicao_id,))
+
+            elif acao == 'aprovar':
                 cursor.execute("SELECT quantidade FROM estoque WHERE material_id = %s", (material_id,))
                 estoque_atual = cursor.fetchone()
-
                 if estoque_atual and estoque_atual[0] >= quantidade_requisitada:
                     nova_quantidade = estoque_atual[0] - quantidade_requisitada
                     cursor.execute("UPDATE estoque SET quantidade = %s WHERE material_id = %s", (nova_quantidade, material_id))
@@ -1142,44 +1167,35 @@ def atualizar_requisicao():
                 else:
                     cursor.execute("UPDATE requisicoes SET status = 'pendente' WHERE id = %s", (requisicao_id,))
 
-        conexao.commit()
+            conexao.commit()
 
-        # Recuperar o nome do produto e e-mail do usuário que fez a requisição
-        try:
+            # Recuperar o nome do produto e e-mail do usuário que fez a requisição
             cursor.execute("SELECT email FROM users WHERE id = %s", (usuario_id,))
             usuario = cursor.fetchone()
             if usuario:
-                # Recuperar nome do produto
                 cursor.execute("SELECT descricao FROM materials WHERE id = %s", (material_id,))
                 material = cursor.fetchone()
-                if material:
-                    nome_produto = material[0]  # Nome do produto relacionado à requisição
-                else:
-                    nome_produto = "Produto não encontrado"
-
-                email_usuario = usuario[0]  # E-mail do usuário relacionado à requisição
+                nome_produto = material[0] if material else "Produto não encontrado"
+                email_usuario = usuario[0]
                 assunto = f'Aviso: Atualização de Requisição - {nome_produto}'
                 corpo = f"""
                 <p>A requisição referente ao produto <span class="strong-text">"{nome_produto}"</span> foi atualizada para <span class="strong-text">"{acao}"</span>.</p>
-
                 """
-
-                
-                # Enviar o e-mail
+                print("Enviando")
                 enviar_email_almoxarifado(email_usuario, assunto, corpo)
             else:
                 print("Usuário não encontrado para a requisição.")
-        except Exception as email_error:
-            print(f"Erro ao tentar enviar o e-mail: {email_error}")  # Ignora erro de envio
+            
+            return jsonify({'message': 'Requisição atualizada com sucesso'}), 200
 
     except Exception as e:
-        print('Erro ao atualizar requisição:', e)
-        return jsonify({'error': 'Erro ao atualizar requisição'}), 500
+        conexao.rollback()
+        return jsonify({'error': str(e)}), 500
+
     finally:
         cursor.close()
         conexao.close()
 
-    return jsonify({'success': 'Status atualizado com sucesso'})
 
 
 
@@ -1363,7 +1379,7 @@ def logout():
     session.clear()
     # Redireciona para a página de login após o logout
     flash('Você foi desconectado com sucesso.', 'success')
-    return redirect(url_for('solicitante'))
+    return redirect(url_for('login'))
 
 
 
